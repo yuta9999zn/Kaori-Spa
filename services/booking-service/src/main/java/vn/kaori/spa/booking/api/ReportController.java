@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import vn.kaori.spa.shared.api.ApiResponse;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -145,6 +147,111 @@ public class ReportController {
                 ((Number) r[1]).longValue(),
                 (BigDecimal) r[2]
         )).toList());
+    }
+
+    // ─── Expenses ───────────────────────────────────────────────────────────
+
+    public record ExpenseBreakdownRow(String category, BigDecimal amount, int pct) {}
+    public record ExpenseSummaryDto(BigDecimal totalAmount, List<ExpenseBreakdownRow> breakdown) {}
+
+    /**
+     * SUM expenses per category for a branch over a date window. {@code pct}
+     * is rounded to the nearest percent of {@code totalAmount}. When the
+     * window is empty an envelope with {@code totalAmount = 0} and an empty
+     * breakdown is returned.
+     */
+    @GetMapping("/expenses")
+    @PreAuthorize("hasAnyRole('BRANCH_MANAGER','ORG_OWNER','TENANT_OWNER','ACCOUNTANT')")
+    @SuppressWarnings("unchecked")
+    public ApiResponse<ExpenseSummaryDto> expenses(
+            @RequestParam UUID tenantId,
+            @RequestParam(required = false) UUID branchId,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to
+    ) {
+        List<Object[]> rows = em.createNativeQuery("""
+            SELECT category,
+                   COALESCE(SUM(amount), 0) AS amount
+            FROM booking.expense
+            WHERE tenant_id = :tenantId
+              AND (:branchId IS NULL OR branch_id = :branchId)
+              AND occurred_at >= :from
+              AND occurred_at <  :toExclusive
+            GROUP BY category
+            ORDER BY amount DESC
+            """)
+            .setParameter("tenantId", tenantId)
+            .setParameter("branchId", branchId)
+            .setParameter("from", from.atStartOfDay())
+            .setParameter("toExclusive", to.plusDays(1).atStartOfDay())
+            .getResultList();
+
+        BigDecimal total = BigDecimal.ZERO;
+        for (Object[] r : rows) total = total.add((BigDecimal) r[1]);
+
+        List<ExpenseBreakdownRow> breakdown = new ArrayList<>(rows.size());
+        for (Object[] r : rows) {
+            BigDecimal amt = (BigDecimal) r[1];
+            int pct = total.signum() == 0
+                    ? 0
+                    : amt.multiply(BigDecimal.valueOf(100))
+                         .divide(total, 0, RoundingMode.HALF_UP)
+                         .intValue();
+            breakdown.add(new ExpenseBreakdownRow((String) r[0], amt, pct));
+        }
+        return ApiResponse.ok(new ExpenseSummaryDto(total, breakdown));
+    }
+
+    // ─── Yearly revenue rollup ──────────────────────────────────────────────
+
+    public record YearlyMonthRow(int month, BigDecimal revenue) {}
+    public record YearlyRevenueDto(int year, List<YearlyMonthRow> months) {}
+
+    /**
+     * 12-row monthly revenue rollup for the calendar year. Missing months
+     * are zero-filled so the FE can render a fixed 12-bar chart.
+     */
+    @GetMapping("/revenue/yearly")
+    @PreAuthorize("hasAnyRole('BRANCH_MANAGER','ORG_OWNER','TENANT_OWNER','ACCOUNTANT')")
+    @SuppressWarnings("unchecked")
+    public ApiResponse<YearlyRevenueDto> yearly(
+            @RequestParam UUID tenantId,
+            @RequestParam(required = false) UUID branchId,
+            @RequestParam int year
+    ) {
+        LocalDate from = LocalDate.of(year, 1, 1);
+        LocalDate toExclusive = LocalDate.of(year + 1, 1, 1);
+
+        List<Object[]> rows = em.createNativeQuery("""
+            SELECT EXTRACT(MONTH FROM (i.start_at AT TIME ZONE 'Asia/Ho_Chi_Minh'))::int AS m,
+                   COALESCE(SUM(i.price), 0) AS revenue
+            FROM booking.booking_items i
+            JOIN booking.bookings b ON b.id = i.booking_id
+            WHERE b.tenant_id = :tenantId
+              AND (:branchId IS NULL OR b.branch_id = :branchId)
+              AND b.status IN ('done', 'in_progress', 'confirmed')
+              AND i.cancelled_at IS NULL
+              AND i.start_at >= :from
+              AND i.start_at <  :toExclusive
+            GROUP BY m
+            ORDER BY m
+            """)
+            .setParameter("tenantId", tenantId)
+            .setParameter("branchId", branchId)
+            .setParameter("from", from.atStartOfDay())
+            .setParameter("toExclusive", toExclusive.atStartOfDay())
+            .getResultList();
+
+        BigDecimal[] perMonth = new BigDecimal[12];
+        for (int i = 0; i < 12; i++) perMonth[i] = BigDecimal.ZERO;
+        for (Object[] r : rows) {
+            int m = ((Number) r[0]).intValue();
+            if (m >= 1 && m <= 12) perMonth[m - 1] = (BigDecimal) r[1];
+        }
+
+        List<YearlyMonthRow> months = new ArrayList<>(12);
+        for (int i = 0; i < 12; i++) months.add(new YearlyMonthRow(i + 1, perMonth[i]));
+        return ApiResponse.ok(new YearlyRevenueDto(year, months));
     }
 
     /** dow = 0..6 (Mon..Sun), hour = 0..23. */

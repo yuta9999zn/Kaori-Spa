@@ -101,40 +101,40 @@
     "preview": { "title": "모듈 미리보기", "capabilities": "주요 기능", "cap1Title": "온라인 포털", "cap1Desc": "24시간 운영되는 화이트라벨 고객 예약 페이지.", "cap2Title": "스마트 스케줄링", "cap2Desc": "중복 예약을 방지하고 직원의 빈 시간대를 자동으로 처리합니다.", "cap3Title": "리마인더", "cap3Desc": "이메일과 SMS 자동 알림으로 노쇼를 줄입니다." }
   },
   "analytics": {
-    "title": "Platform analytics",
-    "subtitle": "Cross-tenant aggregates from tenant-service.",
-    "kpi": { "tenants": "Tenants", "branches": "Branches", "users": "Users", "active": "Active tenants (30d)" },
-    "kpiActiveHint": "Wired when booking-service ships tenant-scoped reads.",
-    "recent": { "title": "Newest tenants", "code": "Code", "name": "Name", "orgs": "Orgs", "branches": "Branches", "createdAt": "Created", "empty": "No tenants yet." },
-    "charts": { "soonTitle": "Charts coming soon", "soonHint": "Revenue, staff and branch comparisons require analytics-service / billing data not yet shipped." },
-    "errors": { "load": "Failed to load platform overview." }
+    "title": "플랫폼 분석",
+    "subtitle": "tenant-service 기반 테넌트 전체 집계 데이터.",
+    "kpi": { "tenants": "테넌트", "branches": "지점", "users": "사용자", "active": "활성 테넌트 (30일)" },
+    "kpiActiveHint": "booking-service가 테넌트 범위 읽기 API를 제공하면 연결됩니다.",
+    "recent": { "title": "신규 테넌트", "code": "코드", "name": "이름", "orgs": "조직", "branches": "지점", "createdAt": "생성일", "empty": "아직 테넌트가 없습니다." },
+    "charts": { "soonTitle": "차트 준비 중", "soonHint": "매출, 인력, 지점 비교에는 아직 제공되지 않은 analytics-service / 결제 데이터가 필요합니다." },
+    "errors": { "load": "플랫폼 개요를 불러오지 못했습니다." }
   },
   "integration": {
     "title": "Webhooks",
-    "subtitle": "Push domain events to external systems (Zalo, Make.com, n8n…).",
-    "actions": { "add": "Add webhook", "addDisabledHint": "Coming soon", "toggle": "Toggle" },
-    "status": { "active": "Active", "paused": "Paused" },
-    "deliveries": { "title": "Recent deliveries", "empty": "No deliveries yet." },
-    "errors": { "load": "Failed to load webhooks." },
-    "empty": "No webhooks configured."
+    "subtitle": "도메인 이벤트를 외부 시스템(Zalo, Make.com, n8n 등)으로 전송합니다.",
+    "actions": { "add": "Webhook 추가", "addDisabledHint": "곧 제공", "toggle": "켜기/끄기" },
+    "status": { "active": "활성", "paused": "일시 중지" },
+    "deliveries": { "title": "최근 전송 내역", "empty": "전송 내역이 없습니다." },
+    "errors": { "load": "Webhook 목록을 불러오지 못했습니다." },
+    "empty": "구성된 Webhook이 없습니다."
   },
   "onboarding": {
-    "title": "Tenant onboarding",
-    "subtitle": "Walk through the canonical setup steps for this tenant.",
-    "currentStep": "Current step",
-    "actions": { "advance": "Advance to next", "complete": "Mark complete", "loading": "Loading…" },
-    "steps": { "welcome": "Welcome", "org": "Organization", "branch": "Branch", "team": "Team", "done": "Done" },
-    "stepStatus": { "completed": "Completed", "current": "Current", "pending": "Pending" },
-    "completedAt": "Completed at",
-    "startedAt": "Started at",
-    "errors": { "load": "Failed to load onboarding state.", "advance": "Failed to advance step.", "complete": "Failed to mark complete." }
+    "title": "테넌트 온보딩",
+    "subtitle": "이 테넌트의 표준 설정 단계를 순서대로 진행합니다.",
+    "currentStep": "현재 단계",
+    "actions": { "advance": "다음 단계로", "complete": "완료로 표시", "loading": "로딩 중…" },
+    "steps": { "welcome": "환영", "org": "조직", "branch": "지점", "team": "팀", "done": "완료" },
+    "stepStatus": { "completed": "완료됨", "current": "진행 중", "pending": "대기" },
+    "completedAt": "완료 시각",
+    "startedAt": "시작 시각",
+    "errors": { "load": "온보딩 상태를 불러오지 못했습니다.", "advance": "다음 단계로 진행하지 못했습니다.", "complete": "완료로 표시하지 못했습니다." }
   },
   "orgSettings": {
-    "title": "Organization settings",
-    "subtitle": "Read-only overview of organizations under this tenant.",
-    "todoEdit": "Editing organization details is not yet available — the backend PUT endpoint hasn't shipped.",
-    "list": { "title": "Organizations", "empty": "No organizations yet." },
-    "fields": { "code": "Code", "slug": "Slug", "name": "Name", "primaryLocale": "Primary locale", "id": "ID" },
-    "errors": { "load": "Failed to load organizations." }
+    "title": "조직 설정",
+    "subtitle": "이 테넌트에 속한 조직을 읽기 전용으로 표시합니다.",
+    "todoEdit": "조직 상세 편집은 아직 사용할 수 없습니다 — 백엔드 PUT 엔드포인트가 출시되지 않았습니다.",
+    "list": { "title": "조직 목록", "empty": "아직 조직이 없습니다." },
+    "fields": { "code": "코드", "slug": "슬러그", "name": "이름", "primaryLocale": "기본 언어", "id": "ID" },
+    "errors": { "load": "조직 목록을 불러오지 못했습니다." }
   }
 }

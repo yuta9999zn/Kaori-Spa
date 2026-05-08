@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.kaori.spa.shared.api.ApiResponse;
+import vn.kaori.spa.shared.audit.Audited;
 import vn.kaori.spa.shared.error.AppException;
 import vn.kaori.spa.shared.error.ErrorCodes;
 import vn.kaori.spa.shared.security.TenantContext;
@@ -32,6 +33,17 @@ public class OrgController {
             @NotBlank String slug,
             @NotBlank String nameVi,
             String primaryLocale
+    ) {}
+
+    /**
+     * Partial update payload for an organization. All fields are optional —
+     * unset fields are ignored. {@code slug} is only applied if it is not
+     * already in use by another organization.
+     */
+    public record UpdateOrgReq(
+            Map<String, String> name,
+            String primaryLocale,
+            String slug
     ) {}
 
     @GetMapping
@@ -65,6 +77,35 @@ public class OrgController {
         o.setSlug(req.slug());
         o.setPrimaryLocale(req.primaryLocale() == null ? "vi" : req.primaryLocale());
         o.getName().put("vi", req.nameVi());
+        return ApiResponse.ok(toDto(repo.save(o)));
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('TENANT_OWNER','SUPER_ADMIN')")
+    @Audited(action = "org.update", entityType = "org", entityIdExpression = "#id")
+    public ApiResponse<OrgDto> update(@PathVariable UUID id, @Valid @RequestBody UpdateOrgReq req) {
+        UUID tid = TenantContext.requireTenantId();
+        Organization o = repo.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCodes.NOT_FOUND, HttpStatus.NOT_FOUND, "Org not found"));
+        // Tenant scope guard — never let one tenant mutate another's org.
+        if (!tid.equals(o.getTenantId())) {
+            throw new AppException(ErrorCodes.NOT_FOUND, HttpStatus.NOT_FOUND, "Org not found");
+        }
+
+        if (req.name() != null && !req.name().isEmpty()) {
+            o.getName().putAll(req.name());
+        }
+        if (req.primaryLocale() != null && !req.primaryLocale().isBlank()) {
+            o.setPrimaryLocale(req.primaryLocale());
+        }
+        if (req.slug() != null && !req.slug().isBlank() && !req.slug().equals(o.getSlug())) {
+            repo.findBySlug(req.slug()).ifPresent(other -> {
+                if (!other.getId().equals(o.getId())) {
+                    throw new AppException(ErrorCodes.CONFLICT, HttpStatus.CONFLICT, "Slug already exists");
+                }
+            });
+            o.setSlug(req.slug());
+        }
         return ApiResponse.ok(toDto(repo.save(o)));
     }
 

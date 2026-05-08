@@ -6,7 +6,9 @@ import {
   BarChart3, TrendingUp, Sparkles, ShoppingBag, Receipt, Download,
   FileSpreadsheet, Calendar, PieChart, Loader2
 } from 'lucide-react';
-import { useDailyRevenue, useTopServices } from '@/lib/hooks';
+import {
+  useDailyRevenue, useTopServices, useExpenses, useYearlyRevenue
+} from '@/lib/hooks';
 
 export default function ReportView() {
   const t = useTranslations('report');
@@ -17,14 +19,22 @@ export default function ReportView() {
   const { data: daily, loading } = useDailyRevenue(year, activeMonth);
   const { data: top } = useTopServices('month', 10);
 
+  // Date range for the active month (ISO yyyy-mm-dd) — used by /v1/reports/expenses.
+  const monthFrom = `${year}-${String(activeMonth).padStart(2, '0')}-01`;
+  const monthTo   = `${year}-${String(activeMonth).padStart(2, '0')}-${String(
+    new Date(year, activeMonth, 0).getDate()
+  ).padStart(2, '0')}`;
+  const { data: expenseSummary } = useExpenses({ from: monthFrom, to: monthTo });
+  const { data: yearlyData }     = useYearlyRevenue(year);
+
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
   // Aggregate KPIs from daily rows.
   const total     = (daily ?? []).reduce((s, d) => s + Number(d.revenue ?? 0), 0);
   const services  = total; // backend doesn't split service vs cosmetic — use total.
   const cosmetics = 0;
-  // Expenses are not yet exposed by an endpoint; show "—".
-  const expenses  = 0;
+  const expenses  = Number(expenseSummary?.totalAmount ?? 0);
+  const expenseRows = expenseSummary?.breakdown ?? [];
   const profit    = total - expenses;
   const deltaPct  = 0;
 
@@ -45,9 +55,12 @@ export default function ReportView() {
     total: fmtVnd(Number(d.revenue))
   }));
 
-  // Yearly chart not yet wired (would need 12× monthly rollups).
-  // Show current month aggregate vs flat fallback.
-  const yearly = months.map(m => m === activeMonth ? Math.round(total / 1_000_000) : 0);
+  // Yearly: 12-month rollup from /v1/reports/revenue/yearly.
+  // Backend always returns 12 entries; values rendered in millions for compactness.
+  const yearly = months.map(m => {
+    const row = yearlyData?.months.find(r => r.month === m);
+    return row ? Math.round(Number(row.revenue) / 1_000_000) : 0;
+  });
   const maxYearly = Math.max(1, ...yearly);
 
   return (
@@ -191,6 +204,21 @@ export default function ReportView() {
               <PlRow label={`  ${t('pl.cosmeticsLine')}`} value={fmtMillions(cosmetics)} muted />
               <tr><td colSpan={2} className="py-1"><hr className="border-brand-cream" /></td></tr>
               <PlRow label={t('pl.expenses')} value={`-${fmtMillions(expenses)}`} bold accent="text-red-500" />
+              {expenseRows.length === 0 && (
+                <tr>
+                  <td colSpan={2} className="py-1 text-xs text-brand-textmuted text-center">
+                    Chưa có chi phí
+                  </td>
+                </tr>
+              )}
+              {expenseRows.map(row => (
+                <PlRow
+                  key={row.category}
+                  label={`  ${expenseLabel(t, row.category)} (${row.pct}%)`}
+                  value={`-${fmtMillions(Number(row.amount))}`}
+                  muted
+                />
+              ))}
             </tbody>
           </table>
           <div className="mt-4 pt-3 border-t border-brand-cream flex justify-between items-center">
@@ -199,10 +227,6 @@ export default function ReportView() {
               {fmtMillions(profit)}
             </span>
           </div>
-          <p className="mt-3 text-[10px] text-brand-textmuted">
-            {/* TODO(M2): expenses breakdown awaiting accounting service */}
-            Expenses breakdown chưa khả dụng (accounting service M2).
-          </p>
         </article>
 
         <article className="kpi-card">
@@ -259,10 +283,6 @@ export default function ReportView() {
             </div>
           ))}
         </div>
-        <p className="mt-3 text-[10px] text-brand-textmuted">
-          {/* TODO(M2): yearly summary endpoint */}
-          Chỉ hiển thị tháng đang xem; rollup 12 tháng cần endpoint /v1/reports/revenue/monthly (M2).
-        </p>
       </section>
     </>
   );
@@ -273,6 +293,21 @@ function fmtVnd(n: number) {
 }
 function fmtMillions(n: number) {
   return `${(n / 1_000_000).toFixed(1)}M ₫`;
+}
+
+/**
+ * Translate an expense category key. Falls back to the raw category string
+ * if no `expense.<category>` translation is registered for the active
+ * locale (BE may add new categories before FE catalogues them).
+ */
+function expenseLabel(t: ReturnType<typeof useTranslations>, category: string): string {
+  const key = `expense.${category}`;
+  try {
+    const v = t(key as 'expense.towels');
+    return v && v !== key ? v : category;
+  } catch {
+    return category;
+  }
 }
 
 function KpiCard({

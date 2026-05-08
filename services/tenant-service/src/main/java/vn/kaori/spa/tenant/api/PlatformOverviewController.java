@@ -56,10 +56,13 @@ public class PlatformOverviewController {
         long userCount   = countOrZero(
                 "SELECT COUNT(*) FROM auth.users WHERE deleted_at IS NULL");
 
-        // TODO(active-tenants): the booking schema isn't owned by tenant-service
-        // yet, and a cross-service join is overkill for this widget. Surface 0
-        // for now; revisit when booking-service exposes a tenant-scoped read.
-        long activeTenantsLast30d = 0L;
+        // Cross-schema query — booking-service owns booking.bookings but the
+        // schemas live in the same database, so we can read it directly here
+        // without a cross-service hop. "Active" = had at least one booking
+        // created in the last 30 days.
+        long activeTenantsLast30d = countOrZero(
+                "SELECT COUNT(DISTINCT tenant_id) FROM booking.bookings " +
+                        "WHERE created_at >= now() - interval '30 days'");
 
         List<TenantSummary> recent = jdbc.query(
                 """

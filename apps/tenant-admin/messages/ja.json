@@ -101,40 +101,40 @@
     "preview": { "title": "モジュールプレビュー", "capabilities": "主な機能", "cap1Title": "オンラインポータル", "cap1Desc": "ホワイトラベル対応の 24 時間予約ページ。", "cap2Title": "スマートスケジューリング", "cap2Desc": "重複予約を防ぎ、スタッフの空き時間を自動調整します。", "cap3Title": "リマインダー", "cap3Desc": "メール・SMS の自動リマインドで無断キャンセルを削減します。" }
   },
   "analytics": {
-    "title": "Platform analytics",
-    "subtitle": "Cross-tenant aggregates from tenant-service.",
-    "kpi": { "tenants": "Tenants", "branches": "Branches", "users": "Users", "active": "Active tenants (30d)" },
-    "kpiActiveHint": "Wired when booking-service ships tenant-scoped reads.",
-    "recent": { "title": "Newest tenants", "code": "Code", "name": "Name", "orgs": "Orgs", "branches": "Branches", "createdAt": "Created", "empty": "No tenants yet." },
-    "charts": { "soonTitle": "Charts coming soon", "soonHint": "Revenue, staff and branch comparisons require analytics-service / billing data not yet shipped." },
-    "errors": { "load": "Failed to load platform overview." }
+    "title": "プラットフォーム分析",
+    "subtitle": "tenant-service から取得したテナント横断の集計データ。",
+    "kpi": { "tenants": "テナント", "branches": "店舗", "users": "ユーザー", "active": "稼働中テナント (30日)" },
+    "kpiActiveHint": "booking-service がテナント単位の読取 API を提供した時点で接続されます。",
+    "recent": { "title": "新規テナント", "code": "コード", "name": "名称", "orgs": "組織", "branches": "店舗", "createdAt": "作成日", "empty": "テナントはまだありません。" },
+    "charts": { "soonTitle": "チャートは近日公開", "soonHint": "売上・スタッフ・店舗の比較には未提供の analytics-service / 請求データが必要です。" },
+    "errors": { "load": "プラットフォーム概要を読み込めませんでした。" }
   },
   "integration": {
     "title": "Webhooks",
-    "subtitle": "Push domain events to external systems (Zalo, Make.com, n8n…).",
-    "actions": { "add": "Add webhook", "addDisabledHint": "Coming soon", "toggle": "Toggle" },
-    "status": { "active": "Active", "paused": "Paused" },
-    "deliveries": { "title": "Recent deliveries", "empty": "No deliveries yet." },
-    "errors": { "load": "Failed to load webhooks." },
-    "empty": "No webhooks configured."
+    "subtitle": "ドメインイベントを外部システム (Zalo、Make.com、n8n など) に送信します。",
+    "actions": { "add": "Webhook を追加", "addDisabledHint": "近日公開", "toggle": "オン/オフ" },
+    "status": { "active": "稼働中", "paused": "一時停止" },
+    "deliveries": { "title": "最近の配信", "empty": "配信履歴はまだありません。" },
+    "errors": { "load": "Webhook 一覧を読み込めませんでした。" },
+    "empty": "Webhook はまだ設定されていません。"
   },
   "onboarding": {
-    "title": "Tenant onboarding",
-    "subtitle": "Walk through the canonical setup steps for this tenant.",
-    "currentStep": "Current step",
-    "actions": { "advance": "Advance to next", "complete": "Mark complete", "loading": "Loading…" },
-    "steps": { "welcome": "Welcome", "org": "Organization", "branch": "Branch", "team": "Team", "done": "Done" },
-    "stepStatus": { "completed": "Completed", "current": "Current", "pending": "Pending" },
-    "completedAt": "Completed at",
-    "startedAt": "Started at",
-    "errors": { "load": "Failed to load onboarding state.", "advance": "Failed to advance step.", "complete": "Failed to mark complete." }
+    "title": "テナントオンボーディング",
+    "subtitle": "このテナントの標準セットアップ手順を順に進めます。",
+    "currentStep": "現在のステップ",
+    "actions": { "advance": "次のステップへ", "complete": "完了としてマーク", "loading": "読み込み中…" },
+    "steps": { "welcome": "ようこそ", "org": "組織", "branch": "店舗", "team": "チーム", "done": "完了" },
+    "stepStatus": { "completed": "完了", "current": "現在", "pending": "未着手" },
+    "completedAt": "完了日時",
+    "startedAt": "開始日時",
+    "errors": { "load": "オンボーディング状態を読み込めませんでした。", "advance": "次のステップに進めませんでした。", "complete": "完了としてマークできませんでした。" }
   },
   "orgSettings": {
-    "title": "Organization settings",
-    "subtitle": "Read-only overview of organizations under this tenant.",
-    "todoEdit": "Editing organization details is not yet available — the backend PUT endpoint hasn't shipped.",
-    "list": { "title": "Organizations", "empty": "No organizations yet." },
-    "fields": { "code": "Code", "slug": "Slug", "name": "Name", "primaryLocale": "Primary locale", "id": "ID" },
-    "errors": { "load": "Failed to load organizations." }
+    "title": "組織設定",
+    "subtitle": "このテナント配下の組織を読み取り専用で表示します。",
+    "todoEdit": "組織詳細の編集はまだ利用できません — バックエンドの PUT エンドポイントが未提供です。",
+    "list": { "title": "組織一覧", "empty": "組織はまだありません。" },
+    "fields": { "code": "コード", "slug": "スラッグ", "name": "名称", "primaryLocale": "主要言語", "id": "ID" },
+    "errors": { "load": "組織一覧を読み込めませんでした。" }
   }
 }

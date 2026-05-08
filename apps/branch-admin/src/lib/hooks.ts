@@ -446,6 +446,62 @@ export function useTopServices(period: 'today' | 'week' | 'month' | 'year' = 'mo
   }, [period, limit]);
 }
 
+// ─── Reports: expenses ─────────────────────────────────────────────────────
+
+export interface ExpenseBreakdownRow {
+  category: string;
+  amount: number;
+  pct: number;
+}
+
+export interface ExpenseSummaryDto {
+  totalAmount: number;
+  breakdown: ExpenseBreakdownRow[];
+}
+
+/**
+ * SUM of expenses grouped by category for a date window. `from`/`to` are
+ * ISO yyyy-mm-dd. Backend zero-fills nothing — empty windows return an
+ * empty `breakdown` and `totalAmount = 0`.
+ */
+export function useExpenses(args: { from: string; to: string; branchId?: string }) {
+  return useFetch<ExpenseSummaryDto>(() => {
+    const params = new URLSearchParams({
+      tenantId: ctx.tenantId,
+      from: args.from,
+      to:   args.to
+    });
+    const bid = args.branchId ?? ctx.branchId;
+    if (bid) params.set('branchId', bid);
+    return api<ExpenseSummaryDto>(`/v1/reports/expenses?${params}`);
+  }, [args.from, args.to, args.branchId ?? ctx.branchId]);
+}
+
+// ─── Reports: yearly rollup ────────────────────────────────────────────────
+
+export interface YearlyMonthRow {
+  month: number;     // 1..12
+  revenue: number;
+}
+
+export interface YearlyRevenueDto {
+  year: number;
+  months: YearlyMonthRow[];
+}
+
+/** 12-month revenue rollup for a calendar year. Always returns 12 entries. */
+export function useYearlyRevenue(year: number, branchId?: string) {
+  return useFetch<YearlyRevenueDto>(() => {
+    const params = new URLSearchParams({
+      tenantId: ctx.tenantId,
+      year:     String(year)
+    });
+    const bid = branchId ?? ctx.branchId;
+    if (bid) params.set('branchId', bid);
+    return api<YearlyRevenueDto>(`/v1/reports/revenue/yearly?${params}`);
+  }, [year, branchId ?? ctx.branchId]);
+}
+
 // ─── Bookings list ─────────────────────────────────────────────────────────
 // Backend exposes GET /v1/bookings as a paged list (booking-service). The old
 // /v1/search-based stop-gap (`useBookingSearch`) has been removed.

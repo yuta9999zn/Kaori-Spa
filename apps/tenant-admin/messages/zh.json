@@ -101,40 +101,40 @@
     "preview": { "title": "模块预览", "capabilities": "核心能力", "cap1Title": "在线门户", "cap1Desc": "全天候(24/7)运行的白标预约页面。", "cap2Title": "智能排程", "cap2Desc": "防止重复预约,自动管理员工空档。", "cap3Title": "提醒", "cap3Desc": "邮件和短信自动提醒,降低爽约率。" }
   },
   "analytics": {
-    "title": "Platform analytics",
-    "subtitle": "Cross-tenant aggregates from tenant-service.",
-    "kpi": { "tenants": "Tenants", "branches": "Branches", "users": "Users", "active": "Active tenants (30d)" },
-    "kpiActiveHint": "Wired when booking-service ships tenant-scoped reads.",
-    "recent": { "title": "Newest tenants", "code": "Code", "name": "Name", "orgs": "Orgs", "branches": "Branches", "createdAt": "Created", "empty": "No tenants yet." },
-    "charts": { "soonTitle": "Charts coming soon", "soonHint": "Revenue, staff and branch comparisons require analytics-service / billing data not yet shipped." },
-    "errors": { "load": "Failed to load platform overview." }
+    "title": "平台分析",
+    "subtitle": "来自 tenant-service 的跨租户汇总数据。",
+    "kpi": { "tenants": "租户", "branches": "门店", "users": "用户", "active": "活跃租户(30 天)" },
+    "kpiActiveHint": "待 booking-service 提供按租户读取接口后接入。",
+    "recent": { "title": "最新租户", "code": "编号", "name": "名称", "orgs": "组织", "branches": "门店", "createdAt": "创建时间", "empty": "暂无租户。" },
+    "charts": { "soonTitle": "图表即将上线", "soonHint": "营收、员工与门店对比需要 analytics-service / 账单数据,目前尚未提供。" },
+    "errors": { "load": "无法加载平台总览。" }
   },
   "integration": {
     "title": "Webhooks",
-    "subtitle": "Push domain events to external systems (Zalo, Make.com, n8n…).",
-    "actions": { "add": "Add webhook", "addDisabledHint": "Coming soon", "toggle": "Toggle" },
-    "status": { "active": "Active", "paused": "Paused" },
-    "deliveries": { "title": "Recent deliveries", "empty": "No deliveries yet." },
-    "errors": { "load": "Failed to load webhooks." },
-    "empty": "No webhooks configured."
+    "subtitle": "将领域事件推送至外部系统(Zalo、Make.com、n8n 等)。",
+    "actions": { "add": "添加 Webhook", "addDisabledHint": "即将上线", "toggle": "启用/停用" },
+    "status": { "active": "运行中", "paused": "已暂停" },
+    "deliveries": { "title": "最近投递", "empty": "暂无投递记录。" },
+    "errors": { "load": "无法加载 Webhook 列表。" },
+    "empty": "尚未配置任何 Webhook。"
   },
   "onboarding": {
-    "title": "Tenant onboarding",
-    "subtitle": "Walk through the canonical setup steps for this tenant.",
-    "currentStep": "Current step",
-    "actions": { "advance": "Advance to next", "complete": "Mark complete", "loading": "Loading…" },
-    "steps": { "welcome": "Welcome", "org": "Organization", "branch": "Branch", "team": "Team", "done": "Done" },
-    "stepStatus": { "completed": "Completed", "current": "Current", "pending": "Pending" },
-    "completedAt": "Completed at",
-    "startedAt": "Started at",
-    "errors": { "load": "Failed to load onboarding state.", "advance": "Failed to advance step.", "complete": "Failed to mark complete." }
+    "title": "租户入门",
+    "subtitle": "依次完成该租户的标准初始化步骤。",
+    "currentStep": "当前步骤",
+    "actions": { "advance": "进入下一步", "complete": "标记完成", "loading": "加载中…" },
+    "steps": { "welcome": "欢迎", "org": "组织", "branch": "门店", "team": "团队", "done": "完成" },
+    "stepStatus": { "completed": "已完成", "current": "进行中", "pending": "待处理" },
+    "completedAt": "完成时间",
+    "startedAt": "开始时间",
+    "errors": { "load": "无法加载入门状态。", "advance": "无法进入下一步。", "complete": "无法标记为已完成。" }
   },
   "orgSettings": {
-    "title": "Organization settings",
-    "subtitle": "Read-only overview of organizations under this tenant.",
-    "todoEdit": "Editing organization details is not yet available — the backend PUT endpoint hasn't shipped.",
-    "list": { "title": "Organizations", "empty": "No organizations yet." },
-    "fields": { "code": "Code", "slug": "Slug", "name": "Name", "primaryLocale": "Primary locale", "id": "ID" },
-    "errors": { "load": "Failed to load organizations." }
+    "title": "组织设置",
+    "subtitle": "以只读模式查看该租户下的组织。",
+    "todoEdit": "暂不支持编辑组织详情 —— 后端 PUT 接口尚未上线。",
+    "list": { "title": "组织列表", "empty": "暂无组织。" },
+    "fields": { "code": "编号", "slug": "Slug", "name": "名称", "primaryLocale": "主要语言", "id": "ID" },
+    "errors": { "load": "无法加载组织列表。" }
   }
 }

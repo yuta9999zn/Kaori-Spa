@@ -3,6 +3,7 @@ package vn.kaori.spa.tenant.api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,9 +15,13 @@ import vn.kaori.spa.tenant.audit.AuditEvent;
 import vn.kaori.spa.tenant.audit.AuditEventRepository;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Read-only access to mirrored audit events. Writes happen inside
@@ -36,14 +41,15 @@ import java.util.UUID;
 public class AuditEventController {
 
     private final AuditEventRepository repo;
+    private final JdbcTemplate jdbc;
 
     public record AuditEventDto(
             UUID id,
             Instant ts,
             UUID tenantId,
             UUID actorId,
-            // TODO: cross-service join with auth-service to resolve actor display name.
-            // For now FE renders "—" when null.
+            // Resolved via a batched cross-schema lookup against
+            // auth.users / auth.user_profiles — see resolveActorNames().
             String actorName,
             String action,
             String entityType,
@@ -85,8 +91,49 @@ public class AuditEventController {
                 PageRequest.of(safePage, safeSize)
         );
 
-        List<AuditEventDto> items = result.getContent().stream().map(this::toDto).toList();
+        Set<UUID> actorIds = result.getContent().stream()
+                .map(AuditEvent::getActorId)
+                .filter(java.util.Objects::nonNull)
+                .collect(Collectors.toSet());
+        Map<UUID, String> actorNames = resolveActorNames(actorIds);
+
+        List<AuditEventDto> items = result.getContent().stream()
+                .map(e -> toDto(e, actorNames.get(e.getActorId())))
+                .toList();
         return ApiResponse.ok(new PagedResult<>(items, result.getTotalElements(), safePage, safeSize));
+    }
+
+    /**
+     * Cross-schema batch lookup: tenant.audit_event references actor by id,
+     * but the canonical user record lives in auth.users (+ optional profile).
+     * Both schemas live in the same DB so a single LEFT JOIN is enough; we
+     * fall through name → email → phone via COALESCE.
+     */
+    private Map<UUID, String> resolveActorNames(Collection<UUID> actorIds) {
+        if (actorIds == null || actorIds.isEmpty()) {
+            return Map.of();
+        }
+        String inClause = actorIds.stream()
+                .map(id -> "?")
+                .collect(Collectors.joining(","));
+        String sql = "SELECT u.id, COALESCE(p.full_name, u.email, u.phone) AS actor_name " +
+                "FROM auth.users u " +
+                "LEFT JOIN auth.user_profiles p ON p.user_id = u.id " +
+                "WHERE u.id IN (" + inClause + ")";
+        Map<UUID, String> out = new HashMap<>();
+        jdbc.query(sql, ps -> {
+            int i = 1;
+            for (UUID id : actorIds) {
+                ps.setObject(i++, id);
+            }
+        }, rs -> {
+            UUID id = rs.getObject("id", UUID.class);
+            String name = rs.getString("actor_name");
+            if (id != null) {
+                out.put(id, name);
+            }
+        });
+        return out;
     }
 
     /**
@@ -108,13 +155,13 @@ public class AuditEventController {
         return TenantContext.requireTenantId();
     }
 
-    private AuditEventDto toDto(AuditEvent e) {
+    private AuditEventDto toDto(AuditEvent e, String actorName) {
         return new AuditEventDto(
                 e.getId(),
                 e.getTs(),
                 e.getTenantId(),
                 e.getActorId(),
-                null, // actorName — see TODO above.
+                actorName,
                 e.getAction(),
                 e.getEntityType(),
                 e.getEntityId(),
