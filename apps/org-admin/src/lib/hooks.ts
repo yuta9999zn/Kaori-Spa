@@ -272,3 +272,180 @@ export interface BranchOption {
 export function useMyBranches() {
   return useFetch<BranchOption[]>(() => api<BranchOption[]>('/v1/me/branches'));
 }
+
+// ─── RBAC: Roles ────────────────────────────────────────────────────────────
+
+export type RoleScope = 'tenant' | 'org' | 'branch';
+
+export interface RoleDto {
+  id: string;
+  code: string;
+  name: Record<string, string>;
+  scope: string;
+  isSystem: boolean;
+  permissionCodes: string[];
+}
+
+export interface CreateRoleInput {
+  code: string;
+  name: Record<string, string>;
+  scope: RoleScope;
+  permissionCodes?: string[];
+}
+
+export interface UpdateRoleInput {
+  name?: Record<string, string>;
+  permissionCodes?: string[];
+}
+
+export function useRoles(scope?: RoleScope) {
+  return useFetch<RoleDto[]>(
+    () => api<RoleDto[]>(scope ? `/v1/roles?scope=${scope}` : '/v1/roles'),
+    [scope ?? '']
+  );
+}
+
+export function createRole(input: CreateRoleInput) {
+  return api<RoleDto>('/v1/roles', {
+    method: 'POST',
+    body: JSON.stringify(input)
+  });
+}
+
+export function updateRole(id: string, input: UpdateRoleInput) {
+  return api<RoleDto>(`/v1/roles/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(input)
+  });
+}
+
+export function deleteRole(id: string) {
+  return api<void>(`/v1/roles/${id}`, { method: 'DELETE' });
+}
+
+export function useRolePermissions(roleId: string | null) {
+  return useFetch<string[]>(
+    () => roleId ? api<string[]>(`/v1/roles/${roleId}/permissions`) : Promise.resolve([]),
+    [roleId ?? '']
+  );
+}
+
+export function setRolePermissions(roleId: string, permissionCodes: string[]) {
+  return api<string[]>(`/v1/roles/${roleId}/permissions`, {
+    method: 'PUT',
+    body: JSON.stringify({ permissionCodes })
+  });
+}
+
+// ─── RBAC: Permissions ──────────────────────────────────────────────────────
+
+export interface PermissionDto {
+  id: string;
+  code: string;
+  name: Record<string, string>;
+  group: string;
+}
+
+export function usePermissions() {
+  return useFetch<PermissionDto[]>(() => api<PermissionDto[]>('/v1/permissions'));
+}
+
+export interface CheckPermissionInput {
+  userId: string;
+  action: string;
+  scopeOrgId?: string;
+  scopeBranchId?: string;
+}
+
+export interface CheckPermissionResult {
+  allowed: boolean;
+  matchingRoles: string[];
+  deniedReason: string | null;
+}
+
+export function checkPermission(input: CheckPermissionInput) {
+  return api<CheckPermissionResult>('/v1/permissions/check', {
+    method: 'POST',
+    body: JSON.stringify(input)
+  });
+}
+
+// ─── RBAC: User-role assignments ────────────────────────────────────────────
+
+export interface UserRoleDto {
+  userId: string;
+  userEmail: string;
+  userFullName: string | null;
+  roleId: string;
+  roleCode: string;
+  roleName: Record<string, string>;
+  scopeOrgId: string | null;
+  scopeBranchId: string | null;
+  grantedAt: string;
+}
+
+export interface UserRoleFilter {
+  userId?: string;
+  orgId?: string;
+  branchId?: string;
+}
+
+export function useUserRoles(filter: UserRoleFilter = {}) {
+  return useFetch<UserRoleDto[]>(() => {
+    const qs = new URLSearchParams();
+    if (filter.userId) qs.set('userId', filter.userId);
+    if (filter.orgId) qs.set('orgId', filter.orgId);
+    if (filter.branchId) qs.set('branchId', filter.branchId);
+    const suffix = qs.toString();
+    return api<UserRoleDto[]>(`/v1/user-roles${suffix ? `?${suffix}` : ''}`);
+  }, [filter.userId ?? '', filter.orgId ?? '', filter.branchId ?? '']);
+}
+
+export interface AssignRoleInput {
+  userId: string;
+  roleId: string;
+  scopeOrgId?: string;
+  scopeBranchId?: string;
+}
+
+export function assignRole(input: AssignRoleInput) {
+  return api<UserRoleDto>('/v1/user-roles', {
+    method: 'POST',
+    body: JSON.stringify(input)
+  });
+}
+
+export function revokeUserRole(
+  userId: string,
+  roleId: string,
+  scopeOrgId?: string,
+  scopeBranchId?: string
+) {
+  const qs = new URLSearchParams();
+  if (scopeOrgId) qs.set('scopeOrgId', scopeOrgId);
+  if (scopeBranchId) qs.set('scopeBranchId', scopeBranchId);
+  const suffix = qs.toString();
+  return api<void>(
+    `/v1/user-roles/${userId}/${roleId}${suffix ? `?${suffix}` : ''}`,
+    { method: 'DELETE' }
+  );
+}
+
+// ─── Org members ────────────────────────────────────────────────────────────
+
+export interface MemberDto {
+  userId: string;
+  fullName: string | null;
+  email: string;
+  phone: string | null;
+  status: string;
+  roles: string[];
+  branches: string[];
+}
+
+export function useOrgMembers(orgId: string = ORG_ID) {
+  return useFetch<MemberDto[]>(
+    () => api<MemberDto[]>(`/v1/orgs/${orgId}/members`),
+    [orgId]
+  );
+}

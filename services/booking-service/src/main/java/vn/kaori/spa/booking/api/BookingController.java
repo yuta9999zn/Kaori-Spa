@@ -5,12 +5,16 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.kaori.spa.booking.domain.Booking;
 import vn.kaori.spa.shared.api.ApiResponse;
 import vn.kaori.spa.shared.audit.Audited;
+import vn.kaori.spa.shared.error.AppException;
+import vn.kaori.spa.shared.error.ErrorCodes;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -59,6 +63,73 @@ public class BookingController {
             Instant endAt,
             BigDecimal totalAmount
     ) {}
+
+    public record BookingListItem(
+            UUID id,
+            String code,
+            String status,
+            String source,
+            String customerName,
+            String customerPhone,
+            Instant startAt,
+            Instant endAt,
+            BigDecimal totalAmount,
+            int itemCount
+    ) {}
+
+    public record PagedResult<T>(List<T> items, long total, int page, int size) {}
+
+    /**
+     * Paged list of bookings within a tenant + branch. Replaces the stop-gap
+     * {@code /v1/search} use by branch-admin frontend. All callers MUST pass
+     * both {@code tenantId} and {@code branchId} — the query is hard-scoped.
+     */
+    @GetMapping
+    @PreAuthorize("hasAnyRole('BRANCH_MANAGER','RECEPTIONIST','THERAPIST','ORG_OWNER','TENANT_OWNER','ACCOUNTANT')")
+    public ApiResponse<PagedResult<BookingListItem>> list(
+            @RequestParam UUID tenantId,
+            @RequestParam UUID branchId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) Instant from,
+            @RequestParam(required = false) Instant to,
+            @RequestParam(required = false) String customerPhone,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "startAt,desc") String sort
+    ) {
+        Booking.Status statusEnum = null;
+        if (status != null && !status.isBlank()) {
+            try {
+                statusEnum = Booking.Status.valueOf(status);
+            } catch (IllegalArgumentException ex) {
+                throw new AppException(ErrorCodes.VALIDATION_FAILED, HttpStatus.BAD_REQUEST,
+                        "Unknown booking status: " + status);
+            }
+        }
+        // Wrap LIKE wildcards if caller passed a bare phone fragment.
+        String phonePattern = null;
+        if (customerPhone != null && !customerPhone.isBlank()) {
+            phonePattern = customerPhone.contains("%") ? customerPhone : "%" + customerPhone + "%";
+        }
+
+        // Parse "field,dir" — fall back to startAt desc on bad input.
+        Sort sortSpec;
+        String[] parts = sort.split(",");
+        String field = parts.length > 0 && !parts[0].isBlank() ? parts[0] : "startAt";
+        Sort.Direction dir = parts.length > 1 && "asc".equalsIgnoreCase(parts[1])
+                ? Sort.Direction.ASC : Sort.Direction.DESC;
+        // Whitelist sortable fields to prevent injection of non-existent attributes.
+        if (!List.of("startAt", "createdAt", "totalAmount", "code").contains(field)) {
+            field = "startAt";
+        }
+        sortSpec = Sort.by(dir, field);
+
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        int safePage = Math.max(page, 0);
+        var pageable = PageRequest.of(safePage, safeSize, sortSpec);
+        return ApiResponse.ok(bookingService.listPaged(
+                tenantId, branchId, statusEnum, from, to, phonePattern, pageable));
+    }
 
     @PostMapping
     @Audited(action = "booking.create", entityType = "booking", entityIdExpression = "#req.customerPhone")

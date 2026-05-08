@@ -1,5 +1,7 @@
 package vn.kaori.spa.booking.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -53,6 +55,30 @@ public final class Repositories {
         Optional<Booking> findByTenantIdAndIdempotencyKey(UUID tenantId, String idempotencyKey);
         List<Booking> findAllByBranchIdAndStartAtBetween(UUID branchId, Instant from, Instant to);
         Optional<Booking> findByTenantIdAndCode(UUID tenantId, String code);
+
+        /**
+         * Tenant-scoped paged search for branch-admin booking list. All filters are
+         * optional except tenantId / branchId, which are mandatory to prevent
+         * cross-tenant leakage. {@code status} is matched by enum name; {@code from}
+         * / {@code to} are half-open on {@code startAt}; {@code customerPhone} is
+         * a LIKE pattern (caller is responsible for adding wildcards).
+         */
+        @Query("""
+            SELECT b FROM Booking b
+            WHERE b.tenantId = :tenantId
+              AND b.branchId = :branchId
+              AND (:status IS NULL OR b.status = :status)
+              AND (:from IS NULL OR b.startAt >= :from)
+              AND (:to IS NULL OR b.startAt < :to)
+              AND (:customerPhone IS NULL OR b.customerPhone LIKE :customerPhone)
+        """)
+        Page<Booking> searchPaged(@Param("tenantId") UUID tenantId,
+                                  @Param("branchId") UUID branchId,
+                                  @Param("status") Booking.Status status,
+                                  @Param("from") Instant from,
+                                  @Param("to") Instant to,
+                                  @Param("customerPhone") String customerPhone,
+                                  Pageable pageable);
     }
 
     public interface AttendanceRepository extends JpaRepository<Attendance, UUID> {

@@ -447,43 +447,60 @@ export function useTopServices(period: 'today' | 'week' | 'month' | 'year' = 'mo
 }
 
 // ─── Bookings list ─────────────────────────────────────────────────────────
-// Backend has no GET /v1/bookings list endpoint yet (M1 todo). We use the
-// /v1/search palette as a stop-gap to get *some* booking list for the table.
-// TODO(M1): replace with a proper paged /v1/bookings list filterable by date.
+// Backend exposes GET /v1/bookings as a paged list (booking-service). The old
+// /v1/search-based stop-gap (`useBookingSearch`) has been removed.
 
-export interface BookingSearchHit {
+export interface BookingListItem {
   id: string;
   code: string;
-  customerName: string;
   status: string;
-  time: string; // "DD/MM HH:mm"
+  source: string;
+  customerName: string;
+  customerPhone: string;
+  startAt: string;
+  endAt: string;
+  totalAmount: number;
+  itemCount: number;
 }
 
-export function useBookingSearch(q: string) {
-  return useFetch<BookingSearchHit[]>(async () => {
-    const trimmed = q.trim();
-    if (trimmed.length < 2) return [];
+export interface PagedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export interface UseBookingsArgs {
+  status?: string;
+  from?: string;
+  to?: string;
+  customerPhone?: string;
+  page?: number;
+  size?: number;
+  sort?: string;
+}
+
+export function useBookings(args: UseBookingsArgs = {}) {
+  const {
+    status, from, to, customerPhone,
+    page = 0, size = 20, sort = 'startAt,desc'
+  } = args;
+  return useFetch<PagedResult<BookingListItem>>(() => {
     const params = new URLSearchParams({
       tenantId: ctx.tenantId,
       branchId: ctx.branchId,
-      q: trimmed
+      page: String(page),
+      size: String(size),
+      sort
     });
-    type Hit = { kind: string; id: string; label: string; secondary: string };
-    const hits = await api<Hit[]>(`/v1/search?${params}`);
-    return hits
-      .filter(h => h.kind === 'booking')
-      .map(h => {
-        // secondary = "<customerName> · <status> · <DD/MM HH:mm>"
-        const parts = h.secondary.split(' · ');
-        return {
-          id: h.id,
-          code: h.label,
-          customerName: parts[0] ?? '',
-          status: parts[1] ?? 'unknown',
-          time: parts[2] ?? ''
-        };
-      });
-  }, [q]);
+    if (status) params.set('status', status);
+    if (from) params.set('from', from);
+    if (to) params.set('to', to);
+    if (customerPhone && customerPhone.trim().length > 0) {
+      params.set('customerPhone', customerPhone.trim());
+    }
+    return api<PagedResult<BookingListItem>>(`/v1/bookings?${params}`);
+  }, [status ?? '', from ?? '', to ?? '', customerPhone ?? '', page, size, sort]);
 }
 
 // ─── Customers (paged search) ──────────────────────────────────────────────

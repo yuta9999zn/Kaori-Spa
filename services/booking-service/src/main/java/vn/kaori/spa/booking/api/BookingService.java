@@ -200,6 +200,49 @@ public class BookingService {
         return bookingRepo.findById(b.getId()).orElseThrow();
     }
 
+    /**
+     * Tenant- and branch-scoped paged list for the branch-admin booking page.
+     * Filters are all optional. The result maps each booking to a compact
+     * {@link BookingController.BookingListItem}, including the count of items
+     * per booking (single batch query to avoid N+1).
+     */
+    @Transactional(readOnly = true)
+    public BookingController.PagedResult<BookingController.BookingListItem> listPaged(
+            UUID tenantId, UUID branchId,
+            Booking.Status status, Instant from, Instant to, String customerPhone,
+            org.springframework.data.domain.Pageable pageable) {
+
+        var pageRes = bookingRepo.searchPaged(tenantId, branchId, status, from, to, customerPhone, pageable);
+        var bookings = pageRes.getContent();
+        if (bookings.isEmpty()) {
+            return new BookingController.PagedResult<>(List.of(), pageRes.getTotalElements(),
+                    pageable.getPageNumber(), pageable.getPageSize());
+        }
+
+        // Batch-load item counts for the current page to avoid per-row queries.
+        var bookingIds = bookings.stream().map(Booking::getId).toList();
+        @SuppressWarnings("unchecked")
+        var rows = (List<Object[]>) em.createQuery(
+                        "SELECT i.bookingId, COUNT(i) FROM BookingItem i " +
+                        "WHERE i.bookingId IN :ids GROUP BY i.bookingId")
+                .setParameter("ids", bookingIds)
+                .getResultList();
+        var countByBooking = new java.util.HashMap<UUID, Integer>();
+        for (Object[] r : rows) {
+            countByBooking.put((UUID) r[0], ((Number) r[1]).intValue());
+        }
+
+        var items = bookings.stream().map(b -> new BookingController.BookingListItem(
+                b.getId(), b.getCode(), b.getStatus().name(), b.getSource().name(),
+                b.getCustomerName(), b.getCustomerPhone(),
+                b.getStartAt(), b.getEndAt(), b.getTotalAmount(),
+                countByBooking.getOrDefault(b.getId(), 0)
+        )).toList();
+
+        return new BookingController.PagedResult<>(items, pageRes.getTotalElements(),
+                pageable.getPageNumber(), pageable.getPageSize());
+    }
+
     /** Status timeline read from booking_status_logs (populated by V11 trigger). */
     @PersistenceContext
     private jakarta.persistence.EntityManager em;
