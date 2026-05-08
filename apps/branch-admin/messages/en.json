@@ -112,6 +112,114 @@
     "bedType": { "standard": "Standard", "massage": "Massage", "laser": "Laser", "vip": "VIP" },
     "status": { "active": "Active", "maintenance": "Maintenance", "retired": "Retired" }
   },
+  "service": {
+    "title": "Services",
+    "subtitle": "Manage spa treatments, combo packages, pricing and service catalog across branches.",
+    "create": "New service",
+    "import": "Import",
+    "export": "Export",
+    "search": "Search by service name or code…",
+    "minShort": "min",
+    "durationMin": "{min} min",
+    "mockMostBooked": "Full-body Hair Removal",
+    "filterCategoryAll": "Category: All",
+    "filterStatusAll": "Status: All",
+    "prev": "Previous",
+    "next": "Next",
+    "paginationSummary": "Showing {from}–{to} of {total} services",
+    "kpi": {
+      "total": "Total services",
+      "active": "Active",
+      "inactive": "Inactive",
+      "mostBooked": "Most booked",
+      "avgDuration": "Avg duration"
+    },
+    "columns": {
+      "name": "Service",
+      "category": "Category",
+      "duration": "Duration",
+      "price": "Price",
+      "staff": "Staff",
+      "branches": "Branches",
+      "popularity": "Rating",
+      "status": "Status"
+    },
+    "category": {
+      "massage": "Massage",
+      "facial": "Facial",
+      "hair_removal": "Hair removal",
+      "package": "Package",
+      "body": "Body therapy"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "sort": {
+      "popular": "Sort: Popular",
+      "name": "Sort: Name A-Z",
+      "priceDesc": "Sort: Price high → low",
+      "newest": "Sort: Newest"
+    }
+  },
+  "content": {
+    "title": "Posts & Content",
+    "subtitle": "Manage articles, marketing content and SEO pages across all branches.",
+    "create": "New post",
+    "search": "Search title, slug or keywords…",
+    "filterScopeAll": "Scope: All",
+    "filterStatusAll": "Status: All",
+    "filterDateAny": "Date: Any",
+    "filterLast7": "Last 7 days",
+    "filterLast30": "Last 30 days",
+    "unpublished": "Unpublished",
+    "viewsCount": "{count} views",
+    "prev": "Previous",
+    "next": "Next",
+    "paginationSummary": "Showing {from}–{to} of {total} posts",
+    "kpi": {
+      "total": "Total posts",
+      "published": "Published",
+      "draft": "Drafts",
+      "scheduled": "Scheduled",
+      "avgSeo": "Avg SEO score"
+    },
+    "seoLabel": {
+      "good": "Good",
+      "medium": "Fair",
+      "low": "Needs work"
+    },
+    "columns": {
+      "post": "Post",
+      "scope": "Scope",
+      "author": "Author",
+      "seo": "SEO",
+      "status": "Status",
+      "metrics": "Date & views"
+    },
+    "scope": {
+      "tenant": "Tenant",
+      "branch": "Branch",
+      "service": "Service",
+      "product": "Product",
+      "company": "Company"
+    },
+    "scopeLocation": {
+      "global": "Global (all branches)",
+      "corporate": "Corporate"
+    },
+    "status": {
+      "published": "Published",
+      "scheduled": "Scheduled",
+      "draft": "Draft",
+      "archived": "Archived"
+    },
+    "action": {
+      "preview": "Preview",
+      "edit": "Edit",
+      "delete": "Delete"
+    }
+  },
   "common": {
     "search": "Search",
     "filter": "Filter",

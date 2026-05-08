@@ -33,5 +33,85 @@
     "title": "Audit log",
     "subtitle": "Immutable activity history",
     "columns": { "ts": "Time", "actor": "Actor", "action": "Action", "entity": "Entity", "ip": "IP" }
+  },
+  "domain": {
+    "title": "Domain & booking URL",
+    "subtitle": "Configure how customers access this organization's online booking page and portal.",
+    "actions": { "cancel": "Cancel", "save": "Save changes", "checkAvailability": "Check availability", "disconnect": "Disconnect", "verify": "Verify domain", "renew": "Renew certificate manually", "readDocs": "Read full documentation" },
+    "subdomain": { "title": "Platform subdomain", "subtitle": "Your free default booking address.", "label": "Subdomain name", "suffix": ".kaoriplatform.com", "available": "URL is available and active." },
+    "custom": { "title": "Custom domain", "subtitle": "Connect your own website domain.", "label": "Custom domain URL", "connected": "Connected" },
+    "ssl": { "title": "SSL certificate", "statusLabel": "Status", "statusValue": "Active & secure", "renewIn": "Auto-renews in {days} days" },
+    "security": {
+      "title": "Domain security",
+      "forceHttps": "Force HTTPS",
+      "forceHttpsHint": "Redirect HTTP traffic to secure connection",
+      "redirectOld": "Redirect old URLs",
+      "redirectOldHint": "Forward traffic from platform subdomain",
+      "protection": "Booking page protection",
+      "protectionHint": "Require customer login to view prices"
+    },
+    "links": { "title": "Public booking links", "main": "Main organization page", "copy": "Copy", "open": "Open link" },
+    "guide": {
+      "title": "Setup guide",
+      "subtitle": "Follow these steps to point your custom domain to the platform.",
+      "step1Title": "Add DNS record",
+      "step1Desc": "Log into your domain provider (e.g. GoDaddy, Namecheap) and add a new CNAME record.",
+      "step2Title": "Configure record",
+      "step2Type": "Type",
+      "step2Host": "Host / Name",
+      "step2Value": "Value / Target",
+      "step3Title": "Verify connection",
+      "step3Desc": "Click \"Verify domain\" in the custom domain section. Propagation may take up to 24 hours."
+    },
+    "preview": { "title": "Customer view", "subtitle": "Preview of the active booking portal.", "heading": "Book an appointment", "selectLocation": "Select a location to begin" }
+  },
+  "members": {
+    "title": "Workspace members",
+    "subtitle": "Manage users, staff, and administrators with access to your spa platform.",
+    "actions": { "export": "Export users", "invite": "Invite user", "search": "Search by name or email...", "viewProfile": "View profile", "editRole": "Edit role", "changeBranch": "Change branch", "deactivate": "Deactivate", "reactivate": "Reactivate", "remove": "Remove user", "resendInvite": "Resend invitation" },
+    "kpi": { "total": "Total users", "active": "Active users", "pending": "Pending invites", "admins": "Administrators" },
+    "filters": { "allRoles": "All roles", "allBranches": "All branches", "allStatuses": "All statuses", "sortNewest": "Sort: Newest first", "sortAlpha": "Sort: Alphabetical", "sortRole": "Sort: Role" },
+    "columns": { "member": "Member details", "role": "Role & permissions", "branch": "Assigned branch", "status": "Status", "lastLogin": "Last login", "actions": "Actions" },
+    "roles": { "owner": "Owner", "manager": "Manager", "therapist": "Therapist", "receptionist": "Receptionist", "marketing": "Marketing", "hr": "HR Staff" },
+    "status": { "active": "Active", "invited": "Invited", "suspended": "Suspended", "global": "Global access", "neverLogin": "Never logged in" },
+    "pagination": { "showing": "Showing", "to": "to", "of": "of", "users": "users", "previous": "Previous", "next": "Next" }
+  },
+  "branding": {
+    "title": "Branding & appearance",
+    "subtitle": "Customize how your spa brand appears across the admin dashboard, booking portal, and customer emails.",
+    "actions": { "reset": "Reset to default", "save": "Save branding", "replace": "Replace", "remove": "Remove", "uploadMedia": "Upload media", "uploadImage": "Upload image", "uploadBanner": "Upload banner", "view": "View", "addNew": "Add new" },
+    "logo": { "title": "Logo & icon", "primaryLabel": "Primary logo", "primaryHint": "Displayed on dashboard headers and booking pages. Transparent PNG recommended.", "faviconLabel": "Favicon / app icon", "faviconHint": "Displayed in browser tabs and as a mobile app icon. Square PNG or ICO." },
+    "colors": { "title": "Brand colors", "primary": "Primary color", "primaryHint": "Buttons, active links", "secondary": "Secondary color", "secondaryHint": "Cards, borders", "accent": "Accent color", "accentHint": "Highlights, tags", "background": "Background", "backgroundHint": "App background" },
+    "typography": { "title": "Typography", "heading": "Heading font", "body": "Body font", "headingPreview": "Luxury Spa Experience", "bodyPreview": "Relax. Restore. Rejuvenate. Our premium treatments are designed to elevate your wellbeing and soothe your soul." },
+    "login": { "title": "Login page appearance", "welcome": "Welcome message", "background": "Background image", "overlay": "Overlay color (opacity)" },
+    "booking": { "title": "Booking portal", "pageTitle": "Booking page title", "tagline": "Brand tagline", "banner": "Hero banner image", "bannerHint": "1920x600px recommended" },
+    "email": { "title": "Email templates", "headerLogo": "Email header logo", "headerBg": "Header background color", "footer": "Footer text / disclaimer" },
+    "assets": { "title": "Asset library" },
+    "preview": { "title": "Live preview", "subtitle": "See how your branding appears to users.", "tabBooking": "Booking page", "tabDashboard": "Dashboard", "tabEmail": "Email template", "selectService": "Select service", "bookButton": "Book appointment", "realtime": "Preview updates in real-time" }
+  },
+  "feature": {
+    "title": "Feature modules",
+    "subtitle": "Enable or disable platform modules to perfectly customize your spa's operational capabilities.",
+    "actions": { "reset": "Reset defaults", "configure": "Configure", "viewDetails": "View details", "activate": "Activate add-on", "learnMore": "Learn more", "contactSales": "Contact sales" },
+    "kpi": { "total": "Total modules", "enabled": "Enabled modules", "disabled": "Disabled modules", "addons": "Available add-ons" },
+    "section": { "core": "Core platform modules", "addons": "Premium add-ons" },
+    "status": { "enabled": "Enabled", "disabled": "Disabled", "premium": "Premium feature", "active": "Active" },
+    "modules": {
+      "booking": { "title": "Booking system", "desc": "Allow customers to schedule appointments online and manage your internal calendar." },
+      "services": { "title": "Services & treatments", "desc": "Manage spa treatments, service categories, durations, and pricing rules." },
+      "crm": { "title": "Customer CRM", "desc": "Manage client profiles, visit histories, preferences, and loyalty points." },
+      "staff": { "title": "Staff management", "desc": "Manage employees, track working hours, and assign specialties." },
+      "reports": { "title": "Reports & analytics", "desc": "View business performance insights, revenue, and staff utilization." },
+      "blog": { "title": "Blog CMS", "desc": "Create SEO articles and marketing content for your booking portal." },
+      "marketing": { "title": "Marketing automation", "desc": "Run targeted campaigns, promotions, and automated emails.", "requires": "Requires Customer CRM module" },
+      "inventory": { "title": "Inventory management", "desc": "Track retail products, professional supplies, and stock levels across branches." },
+      "recruitment": { "title": "Recruitment pipeline", "desc": "Manage job postings, applicant tracking, and hiring workflows." }
+    },
+    "addons": {
+      "ai": { "title": "AI marketing assistant", "desc": "Automatically generate email copy, social media posts, and blog articles using advanced AI tailored to your spa brand." },
+      "analytics": { "title": "Advanced analytics pro", "desc": "Unlock deep insights with custom report builders, predictive forecasting, and real-time dashboard exports." },
+      "multiloc": { "title": "Multi-location intelligence", "desc": "Designed for franchises. Compare branch performance, balance staff workloads across locations, and unify global inventory." }
+    },
+    "preview": { "title": "Module preview", "capabilities": "Key capabilities", "cap1Title": "Online portal", "cap1Desc": "White-labeled customer booking page available 24/7.", "cap2Title": "Smart scheduling", "cap2Desc": "Prevents double bookings and manages staff availability gaps automatically.", "cap3Title": "Reminders", "cap3Desc": "Automated email and SMS reminders to reduce no-shows." }
   }
 }

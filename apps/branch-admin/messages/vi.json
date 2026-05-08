@@ -112,6 +112,114 @@
     "bedType": { "standard": "Tiêu chuẩn", "massage": "Massage", "laser": "Laser", "vip": "VIP" },
     "status": { "active": "Hoạt động", "maintenance": "Bảo trì", "retired": "Ngừng" }
   },
+  "service": {
+    "title": "Dịch vụ",
+    "subtitle": "Quản lý liệu trình spa, gói combo, giá và danh mục dịch vụ tại các chi nhánh.",
+    "create": "Tạo dịch vụ",
+    "import": "Nhập danh mục",
+    "export": "Xuất danh mục",
+    "search": "Tìm theo tên hoặc mã dịch vụ…",
+    "minShort": "phút",
+    "durationMin": "{min} phút",
+    "mockMostBooked": "Triệt lông toàn thân nữ",
+    "filterCategoryAll": "Danh mục: Tất cả",
+    "filterStatusAll": "Trạng thái: Tất cả",
+    "prev": "Trước",
+    "next": "Sau",
+    "paginationSummary": "Hiển thị {from}–{to} trong tổng {total} dịch vụ",
+    "kpi": {
+      "total": "Tổng dịch vụ",
+      "active": "Đang hoạt động",
+      "inactive": "Tạm ngừng",
+      "mostBooked": "Đặt nhiều nhất",
+      "avgDuration": "Thời lượng TB"
+    },
+    "columns": {
+      "name": "Tên dịch vụ",
+      "category": "Danh mục",
+      "duration": "Thời lượng",
+      "price": "Giá",
+      "staff": "KTV",
+      "branches": "Chi nhánh",
+      "popularity": "Đánh giá",
+      "status": "Trạng thái"
+    },
+    "category": {
+      "massage": "Massage",
+      "facial": "Chăm sóc da",
+      "hair_removal": "Triệt lông",
+      "package": "Gói combo",
+      "body": "Body therapy"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "inactive": "Tạm ngừng"
+    },
+    "sort": {
+      "popular": "Sắp xếp: Phổ biến",
+      "name": "Sắp xếp: Tên A-Z",
+      "priceDesc": "Sắp xếp: Giá cao → thấp",
+      "newest": "Sắp xếp: Mới nhất"
+    }
+  },
+  "content": {
+    "title": "Bài viết & Nội dung",
+    "subtitle": "Quản lý bài viết, nội dung marketing và trang SEO cho mọi chi nhánh.",
+    "create": "Tạo bài viết",
+    "search": "Tìm theo tiêu đề, slug hoặc từ khoá…",
+    "filterScopeAll": "Phạm vi: Tất cả",
+    "filterStatusAll": "Trạng thái: Tất cả",
+    "filterDateAny": "Ngày: Bất kỳ",
+    "filterLast7": "7 ngày gần nhất",
+    "filterLast30": "30 ngày gần nhất",
+    "unpublished": "Chưa xuất bản",
+    "viewsCount": "{count} lượt xem",
+    "prev": "Trước",
+    "next": "Sau",
+    "paginationSummary": "Hiển thị {from}–{to} trong tổng {total} bài viết",
+    "kpi": {
+      "total": "Tổng bài viết",
+      "published": "Đã xuất bản",
+      "draft": "Bản nháp",
+      "scheduled": "Đã lên lịch",
+      "avgSeo": "Điểm SEO TB"
+    },
+    "seoLabel": {
+      "good": "Tốt",
+      "medium": "Khá",
+      "low": "Cần cải thiện"
+    },
+    "columns": {
+      "post": "Bài viết",
+      "scope": "Phạm vi",
+      "author": "Tác giả",
+      "seo": "SEO",
+      "status": "Trạng thái",
+      "metrics": "Ngày & lượt xem"
+    },
+    "scope": {
+      "tenant": "Bài tenant",
+      "branch": "Bài chi nhánh",
+      "service": "Bài dịch vụ",
+      "product": "Bài sản phẩm",
+      "company": "Bài công ty"
+    },
+    "scopeLocation": {
+      "global": "Toàn hệ thống",
+      "corporate": "Văn phòng"
+    },
+    "status": {
+      "published": "Đã xuất bản",
+      "scheduled": "Đã lên lịch",
+      "draft": "Nháp",
+      "archived": "Lưu trữ"
+    },
+    "action": {
+      "preview": "Xem trước",
+      "edit": "Chỉnh sửa",
+      "delete": "Xoá"
+    }
+  },
   "common": {
     "search": "Tìm kiếm",
     "filter": "Lọc",

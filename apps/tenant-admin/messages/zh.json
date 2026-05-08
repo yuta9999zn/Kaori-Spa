@@ -19,5 +19,85 @@
   "audit": {
     "title": "审计日志", "subtitle": "不可篡改的活动记录",
     "columns": { "ts": "时间", "actor": "操作者", "action": "操作", "entity": "对象", "ip": "IP" }
+  },
+  "domain": {
+    "title": "Tên miền & URL đặt lịch",
+    "subtitle": "Cấu hình cách khách hàng truy cập trang đặt lịch và cổng khách hàng của tổ chức.",
+    "actions": { "cancel": "Huỷ", "save": "Lưu thay đổi", "checkAvailability": "Kiểm tra khả dụng", "disconnect": "Ngắt kết nối", "verify": "Xác minh tên miền", "renew": "Gia hạn chứng chỉ thủ công", "readDocs": "Xem tài liệu đầy đủ" },
+    "subdomain": { "title": "Subdomain nền tảng", "subtitle": "Địa chỉ đặt lịch mặc định miễn phí.", "label": "Tên subdomain", "suffix": ".kaoriplatform.com", "available": "URL khả dụng và đang hoạt động." },
+    "custom": { "title": "Tên miền tuỳ chỉnh", "subtitle": "Kết nối tên miền website riêng của bạn.", "label": "URL tên miền tuỳ chỉnh", "connected": "Đã kết nối" },
+    "ssl": { "title": "Chứng chỉ SSL", "statusLabel": "Trạng thái", "statusValue": "Đang hoạt động & bảo mật", "renewIn": "Tự gia hạn sau {days} ngày" },
+    "security": {
+      "title": "Bảo mật tên miền",
+      "forceHttps": "Bắt buộc HTTPS",
+      "forceHttpsHint": "Chuyển hướng HTTP sang kết nối an toàn",
+      "redirectOld": "Chuyển hướng URL cũ",
+      "redirectOldHint": "Chuyển tiếp lưu lượng từ subdomain nền tảng",
+      "protection": "Bảo vệ trang đặt lịch",
+      "protectionHint": "Yêu cầu khách hàng đăng nhập để xem giá"
+    },
+    "links": { "title": "Liên kết đặt lịch công khai", "main": "Trang chính của tổ chức", "copy": "Sao chép", "open": "Mở liên kết" },
+    "guide": {
+      "title": "Hướng dẫn cài đặt",
+      "subtitle": "Làm theo các bước sau để trỏ tên miền tuỳ chỉnh về nền tảng.",
+      "step1Title": "Thêm bản ghi DNS",
+      "step1Desc": "Đăng nhập nhà cung cấp tên miền (vd: GoDaddy, Namecheap) và thêm bản ghi CNAME mới.",
+      "step2Title": "Cấu hình bản ghi",
+      "step2Type": "Loại",
+      "step2Host": "Host / Tên",
+      "step2Value": "Giá trị / Đích",
+      "step3Title": "Xác minh kết nối",
+      "step3Desc": "Bấm \"Xác minh tên miền\" ở mục Tên miền tuỳ chỉnh. Lan truyền có thể mất tới 24 giờ."
+    },
+    "preview": { "title": "Góc nhìn khách hàng", "subtitle": "Xem trước cổng đặt lịch đang hoạt động.", "heading": "Đặt lịch hẹn", "selectLocation": "Chọn chi nhánh để bắt đầu" }
+  },
+  "members": {
+    "title": "Thành viên không gian làm việc",
+    "subtitle": "Quản lý người dùng, nhân viên và quản trị viên có quyền truy cập nền tảng.",
+    "actions": { "export": "Xuất danh sách", "invite": "Mời người dùng", "search": "Tìm theo tên hoặc email...", "viewProfile": "Xem hồ sơ", "editRole": "Sửa vai trò", "changeBranch": "Đổi chi nhánh", "deactivate": "Vô hiệu hoá", "reactivate": "Kích hoạt lại", "remove": "Xoá người dùng", "resendInvite": "Gửi lại lời mời" },
+    "kpi": { "total": "Tổng người dùng", "active": "Đang hoạt động", "pending": "Đang chờ xác nhận", "admins": "Quản trị viên" },
+    "filters": { "allRoles": "Tất cả vai trò", "allBranches": "Tất cả chi nhánh", "allStatuses": "Tất cả trạng thái", "sortNewest": "Sắp xếp: Mới nhất", "sortAlpha": "Sắp xếp: A-Z", "sortRole": "Sắp xếp: Vai trò" },
+    "columns": { "member": "Thông tin thành viên", "role": "Vai trò & quyền", "branch": "Chi nhánh", "status": "Trạng thái", "lastLogin": "Đăng nhập gần đây", "actions": "Thao tác" },
+    "roles": { "owner": "Chủ sở hữu", "manager": "Quản lý", "therapist": "Kỹ thuật viên", "receptionist": "Lễ tân", "marketing": "Marketing", "hr": "Nhân sự" },
+    "status": { "active": "Hoạt động", "invited": "Đã mời", "suspended": "Tạm khoá", "global": "Truy cập toàn cục", "neverLogin": "Chưa từng đăng nhập" },
+    "pagination": { "showing": "Hiển thị", "to": "đến", "of": "trên", "users": "người dùng", "previous": "Trước", "next": "Tiếp" }
+  },
+  "branding": {
+    "title": "Thương hiệu & giao diện",
+    "subtitle": "Tuỳ biến cách thương hiệu spa hiển thị trên dashboard, cổng đặt lịch và email khách hàng.",
+    "actions": { "reset": "Khôi phục mặc định", "save": "Lưu thương hiệu", "replace": "Thay ảnh", "remove": "Xoá", "uploadMedia": "Tải lên", "uploadImage": "Tải hình ảnh", "uploadBanner": "Tải banner", "view": "Xem", "addNew": "Thêm mới" },
+    "logo": { "title": "Logo & biểu tượng", "primaryLabel": "Logo chính", "primaryHint": "Hiển thị trên header dashboard và trang đặt lịch. Khuyến nghị PNG nền trong suốt.", "faviconLabel": "Favicon / biểu tượng app", "faviconHint": "Hiển thị trên tab trình duyệt và icon app di động. PNG vuông hoặc ICO." },
+    "colors": { "title": "Màu thương hiệu", "primary": "Màu chính", "primaryHint": "Nút bấm, liên kết kích hoạt", "secondary": "Màu phụ", "secondaryHint": "Thẻ, viền", "accent": "Màu nhấn", "accentHint": "Điểm nhấn, nhãn", "background": "Nền", "backgroundHint": "Nền ứng dụng" },
+    "typography": { "title": "Kiểu chữ", "heading": "Font tiêu đề", "body": "Font nội dung", "headingPreview": "Trải nghiệm spa cao cấp", "bodyPreview": "Thư giãn. Phục hồi. Tươi mới. Các liệu trình cao cấp được thiết kế để nâng tầm sức khoẻ và xoa dịu tâm hồn." },
+    "login": { "title": "Giao diện trang đăng nhập", "welcome": "Lời chào", "background": "Ảnh nền", "overlay": "Lớp phủ (độ mờ)" },
+    "booking": { "title": "Cổng đặt lịch", "pageTitle": "Tiêu đề trang đặt lịch", "tagline": "Khẩu hiệu thương hiệu", "banner": "Ảnh banner", "bannerHint": "Khuyến nghị 1920x600px" },
+    "email": { "title": "Mẫu email", "headerLogo": "Logo header email", "headerBg": "Màu nền header", "footer": "Footer / Tuyên bố miễn trừ" },
+    "assets": { "title": "Thư viện tài nguyên" },
+    "preview": { "title": "Xem trước trực tiếp", "subtitle": "Xem thương hiệu hiển thị tới người dùng.", "tabBooking": "Trang đặt lịch", "tabDashboard": "Dashboard", "tabEmail": "Email", "selectService": "Chọn dịch vụ", "bookButton": "Đặt lịch hẹn", "realtime": "Xem trước cập nhật theo thời gian thực" }
+  },
+  "feature": {
+    "title": "Module tính năng",
+    "subtitle": "Bật/tắt các module nền tảng để tuỳ biến năng lực vận hành cho spa của bạn.",
+    "actions": { "reset": "Khôi phục mặc định", "configure": "Cấu hình", "viewDetails": "Xem chi tiết", "activate": "Kích hoạt add-on", "learnMore": "Tìm hiểu thêm", "contactSales": "Liên hệ kinh doanh" },
+    "kpi": { "total": "Tổng module", "enabled": "Đang bật", "disabled": "Đang tắt", "addons": "Add-on khả dụng" },
+    "section": { "core": "Module nền tảng cốt lõi", "addons": "Add-on cao cấp" },
+    "status": { "enabled": "Đang bật", "disabled": "Đang tắt", "premium": "Tính năng cao cấp", "active": "Hoạt động" },
+    "modules": {
+      "booking": { "title": "Hệ thống đặt lịch", "desc": "Cho phép khách đặt hẹn trực tuyến và quản lý lịch nội bộ." },
+      "services": { "title": "Dịch vụ & liệu trình", "desc": "Quản lý liệu trình, danh mục, thời lượng và quy tắc giá." },
+      "crm": { "title": "Customer CRM", "desc": "Quản lý hồ sơ khách, lịch sử ghé thăm, sở thích và điểm thưởng." },
+      "staff": { "title": "Quản lý nhân viên", "desc": "Quản lý nhân sự, theo dõi giờ làm và phân chuyên môn." },
+      "reports": { "title": "Báo cáo & phân tích", "desc": "Xem hiệu suất kinh doanh, doanh thu và mức sử dụng nhân viên." },
+      "blog": { "title": "Blog CMS", "desc": "Tạo bài SEO và nội dung marketing cho cổng đặt lịch." },
+      "marketing": { "title": "Marketing tự động", "desc": "Chạy chiến dịch nhắm mục tiêu, khuyến mãi và email tự động.", "requires": "Cần module Customer CRM" },
+      "inventory": { "title": "Quản lý kho", "desc": "Theo dõi sản phẩm bán lẻ, vật tư chuyên dụng và tồn kho theo chi nhánh." },
+      "recruitment": { "title": "Tuyển dụng", "desc": "Quản lý tin tuyển dụng, theo dõi ứng viên và quy trình tuyển." }
+    },
+    "addons": {
+      "ai": { "title": "Trợ lý marketing AI", "desc": "Tự động sinh nội dung email, bài đăng mạng xã hội và bài blog phù hợp với thương hiệu spa của bạn." },
+      "analytics": { "title": "Analytics Pro nâng cao", "desc": "Mở khoá báo cáo tuỳ biến, dự báo và xuất dashboard theo thời gian thực." },
+      "multiloc": { "title": "Multi-Location Intelligence", "desc": "Dành cho chuỗi: so sánh hiệu suất chi nhánh, cân bằng nhân sự và đồng bộ tồn kho toàn cầu." }
+    },
+    "preview": { "title": "Xem trước module", "capabilities": "Khả năng chính", "cap1Title": "Cổng trực tuyến", "cap1Desc": "Trang đặt lịch white-label hoạt động 24/7.", "cap2Title": "Lập lịch thông minh", "cap2Desc": "Ngăn trùng lịch và tự xử lý khoảng trống của nhân viên.", "cap3Title": "Nhắc lịch", "cap3Desc": "Email và SMS nhắc tự động giảm vắng hẹn." }
   }
 }
