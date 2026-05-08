@@ -393,3 +393,106 @@ export function useStaff() {
     return api<StaffDto[]>(`/v1/staff?${params}`);
   });
 }
+
+// ─── Reports ───────────────────────────────────────────────────────────────
+
+export interface DailyRevenueRow {
+  day: string;          // ISO date (YYYY-MM-DD)
+  revenue: number;
+  bookings: number;
+}
+
+export interface TopServiceRow {
+  serviceCode: string;
+  times: number;
+  revenue: number;
+}
+
+/** Daily revenue rows for a calendar month (1-12). */
+export function useDailyRevenue(year: number, month: number, branchId?: string) {
+  return useFetch<DailyRevenueRow[]>(() => {
+    const first = new Date(Date.UTC(year, month - 1, 1));
+    const last  = new Date(Date.UTC(year, month, 0));
+    const fmt   = (d: Date) => d.toISOString().slice(0, 10);
+    const params = new URLSearchParams({
+      tenantId: ctx.tenantId,
+      from: fmt(first),
+      to:   fmt(last)
+    });
+    if (branchId ?? ctx.branchId) params.set('branchId', branchId ?? ctx.branchId);
+    return api<DailyRevenueRow[]>(`/v1/reports/revenue/daily?${params}`);
+  }, [year, month, branchId ?? ctx.branchId]);
+}
+
+/** Top services in `period` ('today' | 'week' | 'month' | 'year'). */
+export function useTopServices(period: 'today' | 'week' | 'month' | 'year' = 'month', limit = 10) {
+  return useFetch<TopServiceRow[]>(() => {
+    const now  = new Date();
+    const to   = now;
+    let from   = new Date(now);
+    if (period === 'today')      from = now;
+    else if (period === 'week')  from = new Date(now.getTime() - 6  * 86_400_000);
+    else if (period === 'month') from = new Date(now.getFullYear(), now.getMonth(), 1);
+    else                          from = new Date(now.getFullYear(), 0, 1);
+    const fmt = (d: Date) => d.toISOString().slice(0, 10);
+    const params = new URLSearchParams({
+      tenantId: ctx.tenantId,
+      branchId: ctx.branchId,
+      from: fmt(from),
+      to:   fmt(to),
+      limit: String(limit)
+    });
+    return api<TopServiceRow[]>(`/v1/reports/top-services?${params}`);
+  }, [period, limit]);
+}
+
+// ─── Bookings list ─────────────────────────────────────────────────────────
+// Backend has no GET /v1/bookings list endpoint yet (M1 todo). We use the
+// /v1/search palette as a stop-gap to get *some* booking list for the table.
+// TODO(M1): replace with a proper paged /v1/bookings list filterable by date.
+
+export interface BookingSearchHit {
+  id: string;
+  code: string;
+  customerName: string;
+  status: string;
+  time: string; // "DD/MM HH:mm"
+}
+
+export function useBookingSearch(q: string) {
+  return useFetch<BookingSearchHit[]>(async () => {
+    const trimmed = q.trim();
+    if (trimmed.length < 2) return [];
+    const params = new URLSearchParams({
+      tenantId: ctx.tenantId,
+      branchId: ctx.branchId,
+      q: trimmed
+    });
+    type Hit = { kind: string; id: string; label: string; secondary: string };
+    const hits = await api<Hit[]>(`/v1/search?${params}`);
+    return hits
+      .filter(h => h.kind === 'booking')
+      .map(h => {
+        // secondary = "<customerName> · <status> · <DD/MM HH:mm>"
+        const parts = h.secondary.split(' · ');
+        return {
+          id: h.id,
+          code: h.label,
+          customerName: parts[0] ?? '',
+          status: parts[1] ?? 'unknown',
+          time: parts[2] ?? ''
+        };
+      });
+  }, [q]);
+}
+
+// ─── Customers (paged search) ──────────────────────────────────────────────
+// Convenience hook (vs the bare `searchCustomers` action) that subscribes
+// to a query string and re-fetches on change.
+export function useCustomerSearch(q: string, orgId: string) {
+  return useFetch<{ items: CustomerLite[]; total: number }>(async () => {
+    return api<{ items: CustomerLite[]; total: number; page: number; size: number }>(
+      `/v1/customers?orgId=${orgId}&q=${encodeURIComponent(q)}&size=50`
+    );
+  }, [q, orgId]);
+}

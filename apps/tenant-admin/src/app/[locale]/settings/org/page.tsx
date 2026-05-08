@@ -1,3 +1,5 @@
+// TODO(M3+): wire when org-settings endpoints (booking policy, customer modules) ship —
+//            note this page overlaps with the org-admin portal.
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Building, MapPin, Sliders, Headphones, Check, Camera, Calendar, Users } from 'lucide-react';
 

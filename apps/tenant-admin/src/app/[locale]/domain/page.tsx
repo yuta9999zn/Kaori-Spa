@@ -1,3 +1,4 @@
+// TODO(M3+): wire when platform-config service ships custom-domain / SSL endpoints.
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import {
   Link2, Globe, ShieldCheck, Lock, Share2, Clock, Check, RefreshCw,

@@ -1,6 +1,9 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Plus } from 'lucide-react';
 
+// TODO(backend): no auth-service endpoint exposes org member list / role
+// assignments yet. Wire to /v1/auth/users (or new org-members endpoint)
+// once auth-service ships RBAC scope queries.
 export default async function MemberPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   setRequestLocale(locale);

@@ -1,6 +1,10 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Check } from 'lucide-react';
 
+// TODO(backend): RBAC role/permission CRUD is not in scope yet — backend has
+// hard-coded @PreAuthorize("hasRole(...)") checks but no /v1/roles or
+// /v1/permissions endpoints. Page rendered from static data until then.
+
 const ROLES = ['ORG_OWNER', 'BRANCH_MANAGER', 'RECEPTIONIST', 'THERAPIST', 'ACCOUNTANT'];
 const PERMS = [
   { code: 'branch:create',     allow: [true, false, false, false, false] },

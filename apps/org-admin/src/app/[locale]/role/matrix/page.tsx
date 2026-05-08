@@ -1,6 +1,9 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Shield, Save, RotateCcw, Briefcase, Megaphone, PieChart, Settings, Check, ListChecks } from 'lucide-react';
 
+// TODO(backend): role/permission matrix CRUD not implemented in auth-service
+// yet — see /role/page.tsx note. Renders from a static GROUPS array.
+
 type Cell = boolean | 'na';
 type ModuleRow = { key: string; label: string; perms: Cell[] }; // [view, create, edit, delete, manage]
 

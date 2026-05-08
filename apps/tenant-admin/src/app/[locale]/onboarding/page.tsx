@@ -1,3 +1,5 @@
+// TODO(M3+): wizard partially calls /v1/orgs (which works) but also branch / staff
+//            bootstrap endpoints that aren't defined yet — leave wiring to wizard owner.
 import { setRequestLocale } from 'next-intl/server';
 import OnboardingWizard from './OnboardingWizard';
 

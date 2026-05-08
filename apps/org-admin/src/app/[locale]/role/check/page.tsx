@@ -1,6 +1,9 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { ShieldAlert, Sliders, Shield, UserCheck, AlertCircle, CheckCircle2, XCircle, Play } from 'lucide-react';
 
+// TODO(backend): permission-simulation endpoint (POST /v1/permissions/check)
+// + audit-log read endpoint not yet shipped. Page is fully mocked.
+
 export default async function PermissionCheckPage({
   params
 }: {

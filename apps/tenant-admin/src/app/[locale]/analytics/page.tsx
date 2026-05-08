@@ -1,3 +1,4 @@
+// TODO(M3+): wire when ClickHouse-backed analytics-service ships platform KPI endpoints.
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import {
   DollarSign, CalendarCheck, Users, UserCheck, TrendingUp,

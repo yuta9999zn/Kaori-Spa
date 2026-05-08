@@ -1,6 +1,9 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { ShieldCheck, Plus, Search, Users, Clock, AlertTriangle, Building2 } from 'lucide-react';
 
+// TODO(backend): role assignment CRUD endpoints not exposed yet — auth-service
+// needs /v1/role-assignments + scope queries before this page can be wired.
+
 export default async function RoleAssignPage({
   params
 }: {

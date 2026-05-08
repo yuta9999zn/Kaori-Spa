@@ -1,3 +1,4 @@
+// TODO(M3+): wire when platform-config service ships branding/asset endpoints.
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import {
   Image as ImageIcon, Palette, Type, Layout, Calendar, Mail, Grid, RefreshCw, Check, Upload, Plus, Eye, Flower

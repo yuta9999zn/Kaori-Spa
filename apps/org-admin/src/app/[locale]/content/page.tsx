@@ -1,6 +1,9 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { FileText, Plus, Search, CheckCircle, CalendarClock, Tag, CalendarDays, MapPin, Eye, Pencil, Trash2 } from 'lucide-react';
 
+// TODO(backend): no CMS service exists — /v1/content endpoints not planned for
+// M1. Page rendered from static rows until cms-service is scoped.
+
 export default async function ContentPage({
   params
 }: {

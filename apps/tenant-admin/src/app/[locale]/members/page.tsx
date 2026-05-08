@@ -1,3 +1,5 @@
+// TODO(M3+): wire when auth-service ships a platform-wide member listing endpoint
+//            (currently only branch-scoped staff endpoints exist).
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import {
   Users, CheckCircle, MailWarning, Shield, Crown, Search, UserPlus, Download, MoreVertical

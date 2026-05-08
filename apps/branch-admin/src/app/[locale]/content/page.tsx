@@ -44,6 +44,7 @@ export default async function ContentPage({
   setRequestLocale(locale);
   const t = await getTranslations('content');
 
+  // TODO(M3): wire when CMS service ships. No backend exists yet for posts/articles.
   const rows: PostRow[] = [
     {
       title: 'Lợi ích của massage mô sâu',

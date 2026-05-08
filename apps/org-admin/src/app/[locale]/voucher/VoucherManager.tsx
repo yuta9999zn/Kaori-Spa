@@ -1,26 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BadgePercent, Loader2, Plus, Power } from 'lucide-react';
-import { api, ApiError, ctx } from '@/lib/api';
+import { ApiError } from '@/lib/api';
+import {
+  useVouchers, toggleVoucher, createVoucher,
+  type AdminVoucherDto, type CreateVoucherInput
+} from '@/lib/hooks';
 import { cn } from '@/lib/cn';
 
-interface VoucherRow {
-  id: string;
-  code: string;
-  kind: 'PERCENT' | 'FIXED';
-  value: number;
-  capAmount: number | null;
-  minBill: number;
-  validFrom: string;
-  validTo: string;
-  maxUses: number | null;
-  usedCount: number;
-  maxUsesPerCustomer: number;
-  active: boolean;
-}
-
-const SEED: VoucherRow[] = [
+const SEED: AdminVoucherDto[] = [
   { id: 's1', code: 'WELCOME10', kind: 'PERCENT', value: 10, capAmount: 200000, minBill: 0,
     validFrom: new Date().toISOString(), validTo: new Date(Date.now()+90*864e5).toISOString(),
     maxUses: 1000, usedCount: 23, maxUsesPerCustomer: 1, active: true },
@@ -41,30 +30,15 @@ function fmtDate(iso: string) {
 }
 
 export default function VoucherManager() {
-  const [rows, setRows] = useState<VoucherRow[]>(SEED);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data, error, loading, refetch } = useVouchers();
   const [showForm, setShowForm] = useState(false);
 
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      const r = await api<VoucherRow[]>(`/v1/vouchers?orgId=${ctx.orgId}`);
-      setRows(r);
-      setError(null);
-    } catch (e) {
-      setError((e as ApiError).message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const rows = data ?? SEED;
 
-  useEffect(() => { void refresh(); /* eslint-disable-next-line */ }, []);
-
-  const toggle = async (id: string) => {
+  const onToggle = async (id: string) => {
     try {
-      await api(`/v1/vouchers/${id}/toggle`, { method: 'POST' });
-      await refresh();
+      await toggleVoucher(id);
+      await refetch();
     } catch (e) { alert((e as ApiError).message); }
   };
 
@@ -89,9 +63,9 @@ export default function VoucherManager() {
         </div>
       )}
 
-      {showForm && <VoucherForm onCreated={() => { setShowForm(false); refresh(); }} />}
+      {showForm && <VoucherForm onCreated={() => { setShowForm(false); void refetch(); }} />}
 
-      {loading ? (
+      {loading && !data ? (
         <div className="p-8 text-center"><Loader2 className="mx-auto h-5 w-5 animate-spin text-brand-textmuted" /></div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-brand-cream bg-white shadow-soft">
@@ -138,7 +112,7 @@ export default function VoucherManager() {
                       </span>
                     </td>
                     <td data-label="Hành động" className="px-4 py-3 text-center">
-                      <button onClick={() => toggle(r.id)} className="text-brand-textmuted hover:text-brand-gold" aria-label="Toggle">
+                      <button onClick={() => onToggle(r.id)} className="text-brand-textmuted hover:text-brand-gold" aria-label="Toggle">
                         <Power className="h-4 w-4" />
                       </button>
                     </td>
@@ -171,22 +145,18 @@ function VoucherForm({ onCreated }: { onCreated: () => void }) {
   const submit = async () => {
     setBusy(true); setError(null);
     try {
-      await api('/v1/vouchers', {
-        method: 'POST',
-        body: JSON.stringify({
-          tenantId: ctx.tenantId,
-          orgId: ctx.orgId,
-          code: form.code.trim().toUpperCase(),
-          kind: form.kind,
-          value: Number(form.value),
-          capAmount: form.capAmount ? Number(form.capAmount) : null,
-          minBill: form.minBill ? Number(form.minBill) : 0,
-          validFrom: new Date(form.validFrom).toISOString(),
-          validTo: new Date(form.validTo).toISOString(),
-          maxUses: form.maxUses ? Number(form.maxUses) : null,
-          maxUsesPerCustomer: Number(form.maxUsesPerCustomer)
-        })
-      });
+      const input: CreateVoucherInput = {
+        code: form.code.trim().toUpperCase(),
+        kind: form.kind,
+        value: Number(form.value),
+        capAmount: form.capAmount ? Number(form.capAmount) : null,
+        minBill: form.minBill ? Number(form.minBill) : 0,
+        validFrom: new Date(form.validFrom).toISOString(),
+        validTo: new Date(form.validTo).toISOString(),
+        maxUses: form.maxUses ? Number(form.maxUses) : null,
+        maxUsesPerCustomer: Number(form.maxUsesPerCustomer)
+      };
+      await createVoucher(input);
       onCreated();
     } catch (e) { setError((e as ApiError).message); }
     finally { setBusy(false); }

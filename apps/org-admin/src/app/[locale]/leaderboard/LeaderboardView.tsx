@@ -1,35 +1,13 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Trophy, Medal, Award, Loader2, Building2, Users } from 'lucide-react';
-import { api, ApiError, ctx } from '@/lib/api';
+import {
+  useLeaderboardBranches, useLeaderboardStaff,
+  type BranchOrderBy, type StaffOrderBy,
+  type LeaderboardBranchRow, type LeaderboardStaffRow
+} from '@/lib/hooks';
 import { cn } from '@/lib/cn';
-
-interface BranchRow {
-  branchId: string;
-  bookingsDone: number;
-  bookingsNoshow: number;
-  uniqueCustomers: number;
-  revenue: number;
-  avgRating: number;
-  ratingCount: number;
-  repeatPct: number;
-  score: number;
-}
-
-interface StaffRow {
-  staffId: string;
-  staffName: string;
-  staffNickname: string | null;
-  branchId: string;
-  bookingsDone: number;
-  bookingsNoshow: number;
-  uniqueCustomers: number;
-  avgRating: number;
-  ratingCount: number;
-  onTimePct: number;
-  score: number;
-}
 
 const BRANCH_NAMES: Record<string, string> = {
   // Hardcoded fallback so UI is meaningful before any API call lands.
@@ -37,14 +15,14 @@ const BRANCH_NAMES: Record<string, string> = {
   '625': '625 Kim Mã'
 };
 
-const SEED_BRANCHES: BranchRow[] = [
+const SEED_BRANCHES: LeaderboardBranchRow[] = [
   { branchId: '575', bookingsDone: 412, bookingsNoshow: 18, uniqueCustomers: 234,
     revenue: 187_400_000, avgRating: 4.78, ratingCount: 96, repeatPct: 0.62, score: 168.4 },
   { branchId: '625', bookingsDone: 327, bookingsNoshow: 22, uniqueCustomers: 198,
     revenue: 142_900_000, avgRating: 4.61, ratingCount: 71, repeatPct: 0.55, score: 142.1 }
 ];
 
-const SEED_STAFF: StaffRow[] = [
+const SEED_STAFF: LeaderboardStaffRow[] = [
   { staffId: 'st1', staffName: 'Nguyễn Khánh Linh', staffNickname: 'miko', branchId: '575',
     bookingsDone: 142, bookingsNoshow: 3, uniqueCustomers: 89, avgRating: 4.89, ratingCount: 41, onTimePct: 0.96, score: 198.4 },
   { staffId: 'st2', staffName: 'Nguyễn Lan Hương',  staffNickname: 'hương', branchId: '625',
@@ -52,9 +30,6 @@ const SEED_STAFF: StaffRow[] = [
   { staffId: 'st3', staffName: 'Trần Thị Bích',     staffNickname: null,    branchId: '575',
     bookingsDone: 96,  bookingsNoshow: 7, uniqueCustomers: 64, avgRating: 4.65, ratingCount: 28, onTimePct: 0.91, score: 154.2 }
 ];
-
-type OrderBranch = 'score' | 'revenue' | 'rating' | 'bookings';
-type OrderStaff  = 'score' | 'rating' | 'bookings' | 'ontime';
 
 export default function LeaderboardView() {
   const [tab, setTab] = useState<'branches' | 'staff'>('branches');
@@ -97,19 +72,9 @@ function TabButton({ active, onClick, icon: Icon, children }: {
 }
 
 function BranchTab() {
-  const [orderBy, setOrderBy] = useState<OrderBranch>('score');
-  const [rows, setRows] = useState<BranchRow[]>(SEED_BRANCHES);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    api<BranchRow[]>(`/v1/leaderboard/branches?tenantId=${ctx.tenantId}&orderBy=${orderBy}`)
-      .then(r => { if (!cancelled) setRows(r); })
-      .catch(() => { /* keep seed */ })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [orderBy]);
+  const [orderBy, setOrderBy] = useState<BranchOrderBy>('score');
+  const { data, loading } = useLeaderboardBranches(orderBy);
+  const rows = data && data.length > 0 ? data : SEED_BRANCHES;
 
   return (
     <>
@@ -120,7 +85,7 @@ function BranchTab() {
           ['rating', 'Đánh giá'],
           ['bookings', 'Số booking']
         ]} />
-      {loading && rows.length === 0 ? (
+      {loading && !data ? (
         <Loader2 className="mx-auto h-5 w-5 animate-spin text-brand-textmuted my-8" />
       ) : (
         <ul className="space-y-2">
@@ -151,19 +116,9 @@ function BranchTab() {
 }
 
 function StaffTab() {
-  const [orderBy, setOrderBy] = useState<OrderStaff>('score');
-  const [rows, setRows] = useState<StaffRow[]>(SEED_STAFF);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    api<StaffRow[]>(`/v1/leaderboard/staff?tenantId=${ctx.tenantId}&orderBy=${orderBy}`)
-      .then(r => { if (!cancelled) setRows(r); })
-      .catch(() => { /* keep seed */ })
-      .finally(() => { if (!cancelled) setLoading(false); });
-    return () => { cancelled = true; };
-  }, [orderBy]);
+  const [orderBy, setOrderBy] = useState<StaffOrderBy>('score');
+  const { data, loading } = useLeaderboardStaff(orderBy);
+  const rows = data && data.length > 0 ? data : SEED_STAFF;
 
   const byOrder = useMemo(() => rows.slice().sort((a, b) => Number(b.score) - Number(a.score)), [rows]);
 
@@ -176,7 +131,7 @@ function StaffTab() {
           ['bookings', 'Số booking'],
           ['ontime', 'Đúng giờ']
         ]} />
-      {loading && rows.length === 0 ? (
+      {loading && !data ? (
         <Loader2 className="mx-auto h-5 w-5 animate-spin text-brand-textmuted my-8" />
       ) : (
         <ul className="space-y-2">

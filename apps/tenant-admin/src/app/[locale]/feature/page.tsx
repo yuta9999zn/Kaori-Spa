@@ -1,3 +1,4 @@
+// TODO(M3+): wire when platform-config service ships feature-flag / module-toggle endpoints.
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import {
   LayoutGrid, ToggleRight, ToggleLeft, Sparkles, Layers, Zap, RefreshCw, ChevronRight,

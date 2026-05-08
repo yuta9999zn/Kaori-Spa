@@ -1,13 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Calendar, DollarSign, TrendingUp, Loader2, RefreshCw, Flame } from 'lucide-react';
-import { api, ApiError, ctx } from '@/lib/api';
+import { useBranchReport, type BranchSummary } from '@/lib/hooks';
 import AvailabilityHeatmap from '@/components/charts/AvailabilityHeatmap';
-
-interface DailyRevenue { day: string; revenue: number; bookings: number; }
-interface BranchSummary { branchId: string; revenue: number; bookings: number; doneBookings: number; cancelled: number; avgTicket: number; }
-interface TopService { serviceCode: string; times: number; revenue: number; }
 
 const BRANCH_NAMES: Record<string, string> = {
   'nb-kim-ma-575': 'Natural Beauty 575 Kim Mã',
@@ -32,36 +28,12 @@ export default function RevenueReport() {
     const d = new Date(); d.setDate(1); return d.toISOString().slice(0, 10);
   });
   const [to, setTo] = useState(() => today.toISOString().slice(0, 10));
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const [byBranch, setByBranch] = useState<BranchSummary[]>(SEED_BRANCHES);
-  const [daily, setDaily] = useState<DailyRevenue[]>([]);
-  const [topSvc, setTopSvc] = useState<TopService[]>([]);
+  const { data, loading, error, refetch } = useBranchReport({ from, to, topLimit: 8 });
 
-  const load = async () => {
-    setBusy(true);
-    setError(null);
-    try {
-      const [b, d, ts] = await Promise.all([
-        api<BranchSummary[]>(`/v1/reports/revenue/by-branch?tenantId=${ctx.tenantId}&from=${from}&to=${to}`),
-        api<DailyRevenue[]>(`/v1/reports/revenue/daily?tenantId=${ctx.tenantId}&from=${from}&to=${to}`),
-        api<TopService[]>(`/v1/reports/top-services?tenantId=${ctx.tenantId}&from=${from}&to=${to}&limit=8`)
-      ]);
-      setByBranch(b);
-      setDaily(d);
-      setTopSvc(ts);
-    } catch (e) {
-      setError((e as ApiError).message);
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  useEffect(() => {
-    void load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const byBranch = data?.byBranch && data.byBranch.length > 0 ? data.byBranch : SEED_BRANCHES;
+  const daily = data?.daily ?? [];
+  const topSvc = data?.topServices ?? [];
 
   const totals = byBranch.reduce(
     (acc, r) => ({
@@ -95,8 +67,8 @@ export default function RevenueReport() {
             <input type="date" value={to} onChange={e => setTo(e.target.value)}
               className="rounded-full border border-brand-cream bg-white px-3 py-1.5 text-xs" />
           </label>
-          <button onClick={load} disabled={busy} className="btn-primary disabled:opacity-50">
-            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+          <button onClick={() => void refetch()} disabled={loading} className="btn-primary disabled:opacity-50">
+            {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
             Tải lại
           </button>
         </div>
@@ -104,7 +76,7 @@ export default function RevenueReport() {
 
       {error && (
         <div className="mb-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          API offline — demo data. ({error})
+          API offline — demo data. ({error.message})
         </div>
       )}
 

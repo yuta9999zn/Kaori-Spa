@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   Clock, UserCheck, Phone, CheckCircle2, X, Plus, Sparkles,
-  Calendar, AlertCircle
+  Calendar, Loader2
 } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { cn } from '@/lib/cn';
+import { useAttendance, checkIn, checkOut } from '@/lib/hooks';
 
 interface TodayBooking {
   id: string;
@@ -20,19 +21,6 @@ interface TodayBooking {
   status: 'pending' | 'confirmed' | 'arrived' | 'in_progress' | 'done' | 'no_show';
   durationMin: number;
 }
-
-const SEED: TodayBooking[] = [
-  { id: '1', code: 'BK-2026-001', time: '10:00', customer: 'Nguyễn Thị Mai', phone: '0901234567',
-    service: 'VIO Combo',           staff: 'Mai',  bedCode: 'G2A', status: 'confirmed',  durationMin: 60 },
-  { id: '2', code: 'BK-2026-002', time: '11:30', customer: 'Trần Thị Lan',  phone: '0902345678',
-    service: 'Combo 10 buổi VIO',   staff: 'Mai',  bedCode: 'G2B', status: 'arrived',    durationMin: 60 },
-  { id: '3', code: 'BK-2026-003', time: '14:00', customer: 'Lê Thị Hoa',    phone: '0903456789',
-    service: 'Yomogi Steam',        staff: 'Yến',  bedCode: 'GVIP', status: 'pending',   durationMin: 30 },
-  { id: '4', code: 'BK-2026-004', time: '15:30', customer: 'Phạm Thị Yến',  phone: '0904567890',
-    service: 'Triệt Toàn Thân',     staff: 'Mai',  bedCode: 'G1A', status: 'pending',    durationMin: 120 },
-  { id: '5', code: 'BK-2026-005', time: '17:00', customer: 'Hoàng Thị Thu', phone: '0905678901',
-    service: 'Set Beauty 3 DV VIP', staff: 'Yến',  bedCode: 'GVIP', status: 'confirmed', durationMin: 90 }
-];
 
 const STATUS_BG: Record<string, string> = {
   pending:     'bg-amber-100 text-amber-800 border-amber-200',
@@ -49,10 +37,35 @@ const STATUS_VI: Record<string, string> = {
 };
 
 export default function ReceptionView() {
+  // Attendance is the actual reception workflow: check staff in/out for the
+  // shift. Booking-level pending/arrived/in_progress is separate (timeline lives
+  // on the booking detail page).
+  const { data: attendance, loading, refetch } = useAttendance();
+  const [busy, setBusy] = useState<string | null>(null);
+
+  // Booking list is mock until /v1/bookings paged list ships in M1.
+  // TODO(M1): replace SEED with hook that filters today's bookings by branch.
+  const SEED: TodayBooking[] = useMemo(() => ([
+    { id: '1', code: 'BK-2026-001', time: '10:00', customer: 'Nguyễn Thị Mai', phone: '0901234567',
+      service: 'VIO Combo', staff: 'Mai', bedCode: 'G2A', status: 'confirmed', durationMin: 60 },
+    { id: '2', code: 'BK-2026-002', time: '11:30', customer: 'Trần Thị Lan', phone: '0902345678',
+      service: 'Combo 10 buổi VIO', staff: 'Mai', bedCode: 'G2B', status: 'arrived', durationMin: 60 }
+  ]), []);
   const [list, setList] = useState<TodayBooking[]>(SEED);
 
   const move = (id: string, to: TodayBooking['status']) => {
     setList(s => s.map(b => b.id === id ? { ...b, status: to } : b));
+  };
+
+  const punchIn = async (staffId: string) => {
+    setBusy(staffId);
+    try { await checkIn(staffId); await refetch(); }
+    finally { setBusy(null); }
+  };
+  const punchOut = async (staffId: string) => {
+    setBusy(staffId);
+    try { await checkOut(staffId); await refetch(); }
+    finally { setBusy(null); }
   };
 
   const counts = list.reduce((a, b) => { a[b.status] = (a[b.status] ?? 0) + 1; return a; }, {} as Record<string, number>);
@@ -60,6 +73,9 @@ export default function ReceptionView() {
   const upcoming = list.filter(b => ['pending', 'confirmed'].includes(b.status));
   const arrivedNow = list.filter(b => ['arrived', 'in_progress'].includes(b.status));
   const wrapped = list.filter(b => ['done', 'no_show'].includes(b.status));
+
+  const presentCount = (attendance ?? []).filter(a => a.actualIn != null && a.actualOut == null).length;
+  const totalScheduled = (attendance ?? []).filter(a => a.shiftType != null && a.shiftType !== 'NGHI').length;
 
   return (
     <>
@@ -73,15 +89,66 @@ export default function ReceptionView() {
         </Link>
       </header>
 
-      {/* Quick stats — 2 col mobile, 4 desktop */}
+      {/* Quick stats */}
       <section className="grid gap-2 sm:gap-4 grid-cols-2 lg:grid-cols-4 mb-4 sm:mb-6">
-        <Stat label="Chờ" count={counts.pending ?? 0}      Icon={Clock}        tone="amber" />
-        <Stat label="Đã đến" count={counts.arrived ?? 0}    Icon={UserCheck}    tone="violet" />
-        <Stat label="Đang phục vụ" count={counts.in_progress ?? 0} Icon={Sparkles} tone="emerald" />
-        <Stat label="Hoàn tất" count={counts.done ?? 0}     Icon={CheckCircle2} tone="slate" />
+        <Stat label="KTV có mặt"    count={presentCount}                 Icon={UserCheck}    tone="emerald" />
+        <Stat label="Lịch chờ"      count={counts.pending ?? 0}           Icon={Clock}        tone="amber" />
+        <Stat label="Đang phục vụ"  count={counts.in_progress ?? 0}        Icon={Sparkles}     tone="violet" />
+        <Stat label="Hoàn tất"      count={counts.done ?? 0}              Icon={CheckCircle2} tone="slate" />
       </section>
 
-      {/* Section 1: Đang ở spa */}
+      {/* Staff attendance */}
+      <Section title="Chấm công nhân viên" badge={(attendance ?? []).length}>
+        {loading ? (
+          <p className="text-sm text-brand-textmuted text-center py-4">
+            <Loader2 className="inline h-4 w-4 animate-spin" />
+          </p>
+        ) : (attendance ?? []).length === 0 ? (
+          <p className="text-sm text-brand-textmuted text-center py-4">Chưa có dữ liệu</p>
+        ) : (
+          <ul className="grid gap-2 sm:grid-cols-2">
+            {(attendance ?? []).map(a => {
+              const isIn = a.actualIn != null && a.actualOut == null;
+              const isOut = a.actualOut != null;
+              return (
+                <li key={a.staffId} className="rounded-2xl border border-brand-cream bg-white p-3 flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="font-medium text-sm truncate">
+                      {a.staffName ?? a.staffNickname ?? a.staffId.slice(0, 8)}
+                    </p>
+                    <p className="text-[10px] uppercase tracking-widest text-brand-textmuted">
+                      {a.shiftType ?? 'Chưa phân ca'} · {a.status}
+                    </p>
+                  </div>
+                  <div className="flex gap-1">
+                    {!isIn && !isOut && (
+                      <button
+                        disabled={busy === a.staffId}
+                        onClick={() => punchIn(a.staffId)}
+                        className="btn-primary !py-1 !px-3 !text-xs disabled:opacity-50"
+                      >
+                        {busy === a.staffId ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Vào'}
+                      </button>
+                    )}
+                    {isIn && (
+                      <button
+                        disabled={busy === a.staffId}
+                        onClick={() => punchOut(a.staffId)}
+                        className="btn-ghost !py-1 !px-3 !text-xs disabled:opacity-50"
+                      >
+                        {busy === a.staffId ? <Loader2 className="h-3 w-3 animate-spin" /> : 'Ra'}
+                      </button>
+                    )}
+                    {isOut && <span className="text-[10px] text-emerald-600 self-center">Đã tan ca</span>}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </Section>
+
+      {/* Section 1: Đang ở spa (mock) */}
       <Section title="Đang ở Spa" badge={arrivedNow.length} highlight>
         {arrivedNow.length === 0 ? (
           <p className="text-sm text-brand-textmuted text-center py-4">Chưa có khách check-in</p>
@@ -105,6 +172,10 @@ export default function ReceptionView() {
           {wrapped.map(b => <BookingCard key={b.id} b={b} onMove={move} />)}
         </Section>
       )}
+
+      <p className="mt-6 text-[10px] text-brand-textmuted text-center">
+        Đã phân ca: {totalScheduled}. Booking list dùng mock — sẽ thay khi /v1/bookings list ra mắt.
+      </p>
     </>
   );
 }

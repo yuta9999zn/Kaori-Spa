@@ -1,25 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Megaphone, Plus, Loader2, Mail, MessageSquare, Bell, Smartphone,
   XCircle, Clock, AlertCircle, CheckCircle2, Send
 } from 'lucide-react';
-import { api, ApiError, ctx } from '@/lib/api';
+import { ApiError } from '@/lib/api';
+import { useCampaigns, createCampaign, cancelCampaign, type CampaignDto } from '@/lib/hooks';
 import { cn } from '@/lib/cn';
-
-interface CampaignDto {
-  id: string;
-  name: string;
-  channel: 'sms' | 'email' | 'inapp' | 'push';
-  templateCode: string;
-  status: 'draft' | 'scheduled' | 'running' | 'done' | 'cancelled' | 'failed';
-  scheduledAt: string | null;
-  totalRecipients: number;
-  sentCount: number;
-  failedCount: number;
-  createdAt: string;
-}
 
 const SEED: CampaignDto[] = [
   { id: 's1', name: 'Khuyến mãi Tết 2026', channel: 'sms', templateCode: 'campaign.tet2026',
@@ -45,25 +33,14 @@ const STATUS_BG: Record<string, string> = {
 };
 
 export default function CampaignManager() {
-  const [list, setList] = useState<CampaignDto[]>(SEED);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, error, loading, refetch } = useCampaigns();
   const [showForm, setShowForm] = useState(false);
-
-  const refresh = async () => {
-    setLoading(true);
-    try {
-      const r = await api<CampaignDto[]>(`/v1/campaigns?tenantId=${ctx.tenantId}`);
-      setList(r);
-      setError(null);
-    } catch (e) { setError((e as ApiError).message); }
-    finally { setLoading(false); }
-  };
-  useEffect(() => { void refresh(); /* eslint-disable-next-line */ }, []);
+  // Fall back to demo data only when the API is offline.
+  const list: CampaignDto[] = data ?? SEED;
 
   const cancel = async (id: string) => {
     if (!confirm('Huỷ chiến dịch này?')) return;
-    try { await api(`/v1/campaigns/${id}/cancel`, { method: 'POST' }); await refresh(); }
+    try { await cancelCampaign(id); await refetch(); }
     catch (e) { alert((e as ApiError).message); }
   };
 
@@ -105,7 +82,7 @@ export default function CampaignManager() {
         <Stat Icon={Megaphone}   label="Chiến dịch" value={String(list.length)} />
       </section>
 
-      {showForm && <CreateForm onCreated={() => { setShowForm(false); refresh(); }} />}
+      {showForm && <CreateForm onCreated={() => { setShowForm(false); void refetch(); }} />}
 
       {loading ? (
         <div className="p-8 text-center"><Loader2 className="mx-auto h-5 w-5 animate-spin text-brand-textmuted" /></div>
@@ -175,14 +152,12 @@ function CreateForm({ onCreated }: { onCreated: () => void }) {
   const submit = async () => {
     setBusy(true); setError(null);
     try {
-      await api('/v1/campaigns', {
-        method: 'POST',
-        body: JSON.stringify({
-          tenantId: ctx.tenantId,
-          name, channel, templateCode,
-          segmentFilter: segment === 'all' ? {} : { segment },
-          scheduledAt: new Date(scheduledAt).toISOString()
-        })
+      await createCampaign({
+        name,
+        channel,
+        templateCode,
+        segmentFilter: segment === 'all' ? {} : { segment },
+        scheduledAt: new Date(scheduledAt).toISOString()
       });
       onCreated();
     } catch (e) { setError((e as ApiError).message); }

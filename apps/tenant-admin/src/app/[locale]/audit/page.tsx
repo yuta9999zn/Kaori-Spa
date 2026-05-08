@@ -1,3 +1,5 @@
+// TODO(M3+): wire when audit-service ships an HTTP read endpoint backed by ClickHouse
+//            (events currently flow into Kafka topic kaori.audit.event.v1 only).
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 
 export default async function AuditPage({ params }: { params: Promise<{ locale: string }> }) {
