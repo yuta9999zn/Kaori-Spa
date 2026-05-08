@@ -1,0 +1,191 @@
+package vn.kaori.spa.booking.api;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import vn.kaori.spa.shared.api.ApiResponse;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.UUID;
+
+/**
+ * Aggregated reports across one or many branches (used by org-admin).
+ *
+ * For now we read from Postgres directly. Once the ClickHouse ETL is live
+ * (analytics-service) these queries should switch to CH for sub-second
+ * response on years of data.
+ */
+@RestController
+@RequestMapping("/v1/reports")
+@RequiredArgsConstructor
+public class ReportController {
+
+    @PersistenceContext
+    private EntityManager em;
+
+    public record DailyRevenue(LocalDate day, BigDecimal revenue, long bookings) {}
+    public record BranchSummary(UUID branchId, BigDecimal revenue, long bookings,
+                                long doneBookings, long cancelled, BigDecimal avgTicket) {}
+    public record TopService(String serviceCode, long times, BigDecimal revenue) {}
+
+    @GetMapping("/revenue/daily")
+    @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER','BRANCH_MANAGER','ACCOUNTANT')")
+    @SuppressWarnings("unchecked")
+    public ApiResponse<List<DailyRevenue>> daily(
+            @RequestParam UUID tenantId,
+            @RequestParam(required = false) UUID branchId,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to
+    ) {
+        var q = em.createNativeQuery("""
+            SELECT (i.start_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date AS day,
+                   COALESCE(SUM(i.price), 0)                          AS revenue,
+                   COUNT(DISTINCT i.booking_id)                       AS bookings
+            FROM booking.booking_items i
+            JOIN booking.bookings b ON b.id = i.booking_id
+            WHERE b.tenant_id = :tenantId
+              AND (:branchId IS NULL OR b.branch_id = :branchId)
+              AND b.status IN ('done', 'in_progress', 'confirmed')
+              AND i.start_at >= :from
+              AND i.start_at <  :toExclusive
+              AND i.cancelled_at IS NULL
+            GROUP BY day
+            ORDER BY day
+            """)
+            .setParameter("tenantId", tenantId)
+            .setParameter("branchId", branchId)
+            .setParameter("from", from.atStartOfDay())
+            .setParameter("toExclusive", to.plusDays(1).atStartOfDay());
+
+        List<Object[]> rows = q.getResultList();
+        return ApiResponse.ok(rows.stream().map(r -> new DailyRevenue(
+                ((java.sql.Date) r[0]).toLocalDate(),
+                (BigDecimal) r[1],
+                ((Number) r[2]).longValue()
+        )).toList());
+    }
+
+    @GetMapping("/revenue/by-branch")
+    @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER','ACCOUNTANT')")
+    @SuppressWarnings("unchecked")
+    public ApiResponse<List<BranchSummary>> byBranch(
+            @RequestParam UUID tenantId,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to
+    ) {
+        List<Object[]> rows = em.createNativeQuery("""
+            SELECT b.branch_id,
+                   COALESCE(SUM(CASE WHEN i.cancelled_at IS NULL AND i.status IN ('done','in_progress','confirmed')
+                                     THEN i.price ELSE 0 END), 0) AS revenue,
+                   COUNT(DISTINCT b.id)                            AS bookings,
+                   COUNT(DISTINCT b.id) FILTER (WHERE b.status = 'done')      AS done_count,
+                   COUNT(DISTINCT b.id) FILTER (WHERE b.status = 'cancelled') AS cancelled,
+                   COALESCE(AVG(b.total_amount) FILTER (WHERE b.status = 'done'), 0) AS avg_ticket
+            FROM booking.bookings b
+            LEFT JOIN booking.booking_items i ON i.booking_id = b.id
+            WHERE b.tenant_id = :tenantId
+              AND b.start_at >= :from
+              AND b.start_at <  :toExclusive
+            GROUP BY b.branch_id
+            ORDER BY revenue DESC
+            """)
+            .setParameter("tenantId", tenantId)
+            .setParameter("from", from.atStartOfDay())
+            .setParameter("toExclusive", to.plusDays(1).atStartOfDay())
+            .getResultList();
+
+        return ApiResponse.ok(rows.stream().map(r -> new BranchSummary(
+                (UUID) r[0],
+                (BigDecimal) r[1],
+                ((Number) r[2]).longValue(),
+                ((Number) r[3]).longValue(),
+                ((Number) r[4]).longValue(),
+                (BigDecimal) r[5]
+        )).toList());
+    }
+
+    @GetMapping("/top-services")
+    @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER','BRANCH_MANAGER','ACCOUNTANT')")
+    @SuppressWarnings("unchecked")
+    public ApiResponse<List<TopService>> topServices(
+            @RequestParam UUID tenantId,
+            @RequestParam(required = false) UUID branchId,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to,
+            @RequestParam(defaultValue = "10") int limit
+    ) {
+        List<Object[]> rows = em.createNativeQuery("""
+            SELECT i.service_code,
+                   COUNT(*)                AS times,
+                   COALESCE(SUM(i.price),0) AS revenue
+            FROM booking.booking_items i
+            JOIN booking.bookings b ON b.id = i.booking_id
+            WHERE b.tenant_id = :tenantId
+              AND (:branchId IS NULL OR b.branch_id = :branchId)
+              AND b.status IN ('done', 'in_progress')
+              AND i.cancelled_at IS NULL
+              AND i.start_at >= :from AND i.start_at < :toExclusive
+            GROUP BY i.service_code
+            ORDER BY revenue DESC
+            LIMIT :lim
+            """)
+            .setParameter("tenantId", tenantId)
+            .setParameter("branchId", branchId)
+            .setParameter("from", from.atStartOfDay())
+            .setParameter("toExclusive", to.plusDays(1).atStartOfDay())
+            .setParameter("lim", limit)
+            .getResultList();
+
+        return ApiResponse.ok(rows.stream().map(r -> new TopService(
+                (String) r[0],
+                ((Number) r[1]).longValue(),
+                (BigDecimal) r[2]
+        )).toList());
+    }
+
+    /** dow = 0..6 (Mon..Sun), hour = 0..23. */
+    public record HeatmapCell(int dow, int hour, long bookings) {}
+
+    /**
+     * Booking density per (day-of-week × hour-of-day) over the requested
+     * window. Used by the availability heatmap so managers can see which
+     * cells of the week are busy / quiet.
+     */
+    @GetMapping("/heatmap")
+    @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER','BRANCH_MANAGER','ACCOUNTANT')")
+    @SuppressWarnings("unchecked")
+    public ApiResponse<List<HeatmapCell>> heatmap(
+            @RequestParam UUID tenantId,
+            @RequestParam(required = false) UUID branchId,
+            @RequestParam LocalDate from,
+            @RequestParam LocalDate to
+    ) {
+        List<Object[]> rows = em.createNativeQuery("""
+            SELECT (EXTRACT(ISODOW FROM (b.start_at AT TIME ZONE 'Asia/Ho_Chi_Minh')) - 1)::int AS dow,
+                   EXTRACT(HOUR FROM (b.start_at AT TIME ZONE 'Asia/Ho_Chi_Minh'))::int       AS hour,
+                   COUNT(*)                                                                    AS cnt
+            FROM booking.bookings b
+            WHERE b.tenant_id = :tenantId
+              AND (:branchId IS NULL OR b.branch_id = :branchId)
+              AND b.status NOT IN ('cancelled', 'no_show')
+              AND b.start_at >= :from AND b.start_at < :toExclusive
+            GROUP BY dow, hour
+            ORDER BY dow, hour
+            """)
+            .setParameter("tenantId", tenantId)
+            .setParameter("branchId", branchId)
+            .setParameter("from", from.atStartOfDay())
+            .setParameter("toExclusive", to.plusDays(1).atStartOfDay())
+            .getResultList();
+
+        return ApiResponse.ok(rows.stream().map(r -> new HeatmapCell(
+                ((Number) r[0]).intValue(),
+                ((Number) r[1]).intValue(),
+                ((Number) r[2]).longValue()
+        )).toList());
+    }
+}

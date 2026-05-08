@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      routes:
+        - id: auth
+          uri: http://localhost:8081
+          predicates:
+            - Path=/v1/auth/**
+        - id: tenant-public
+          uri: http://localhost:8082
+          predicates:
+            - Path=/v1/public/**
+        - id: tenant
+          uri: http://localhost:8082
+          predicates:
+            - Path=/v1/tenant/**, /v1/orgs/**, /v1/branches/**
+        - id: ai
+          uri: http://localhost:8090
+          predicates:
+            - Path=/v1/ai/**
+
+server:
+  port: 8080

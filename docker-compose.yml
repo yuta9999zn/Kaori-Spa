@@ -1,0 +1,187 @@
+# Local stack for Kaori Spa development.
+#
+# Bring up the infra dependencies:
+#   docker compose up -d postgres redis kafka clickhouse minio mailpit
+#
+# Bring up everything (services included):
+#   docker compose --profile services up -d
+#
+# Each Kaori service has a `services` profile so the infra stack can be used
+# alone while you run apps from your IDE.
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: kaori-postgres
+    environment:
+      POSTGRES_USER: kaori
+      POSTGRES_PASSWORD: kaori
+      POSTGRES_MULTIPLE_DATABASES: kaori_auth,kaori_tenant,kaori_ai,kaori_audit
+    ports: ["5433:5432"]
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infra/postgres/init-multiple-db.sh:/docker-entrypoint-initdb.d/01-multiple.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kaori"]
+      interval: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: kaori-redis
+    ports: ["6379:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 10
+
+  kafka:
+    image: bitnami/kafka:3.7
+    container_name: kaori-kafka
+    environment:
+      KAFKA_CFG_NODE_ID: "0"
+      KAFKA_CFG_PROCESS_ROLES: "controller,broker"
+      KAFKA_CFG_LISTENERS: "PLAINTEXT://:9092,CONTROLLER://:9093"
+      KAFKA_CFG_ADVERTISED_LISTENERS: "PLAINTEXT://localhost:9092"
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: "0@kafka:9093"
+      ALLOW_PLAINTEXT_LISTENER: "yes"
+    ports: ["9092:9092"]
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server localhost:9092 --list || exit 1"]
+      interval: 10s
+      retries: 12
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.9-alpine
+    container_name: kaori-clickhouse
+    ports: ["8123:8123", "9000:9000"]
+    ulimits:
+      nofile: { soft: 262144, hard: 262144 }
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+      - ./infra/clickhouse/init:/docker-entrypoint-initdb.d:ro
+
+  minio:
+    image: minio/minio:latest
+    container_name: kaori-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: kaori
+      MINIO_ROOT_PASSWORD: kaori-secret
+    ports: ["9100:9000", "9101:9001"]
+    volumes:
+      - minio_data:/data
+
+  mailpit:
+    image: axllent/mailpit:v1.20
+    container_name: kaori-mailpit
+    ports: ["1025:1025", "8025:8025"]
+
+  grafana:
+    image: grafana/grafana:11.2.0
+    container_name: kaori-grafana
+    depends_on: [clickhouse]
+    environment:
+      GF_INSTALL_PLUGINS: grafana-clickhouse-datasource
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_SECURITY_ADMIN_PASSWORD: kaori
+    ports: ["3030:3000"]
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+
+  # ── Application services (profile: services) ──
+  auth-service:
+    profiles: ["services"]
+    build:
+      context: ./services
+      dockerfile: ../infra/docker/java-service.Dockerfile
+      args:
+        SERVICE: auth-service
+    environment:
+      DB_URL: "jdbc:postgresql://postgres:5432/kaori_auth"
+      DB_USER: kaori
+      DB_PASS: kaori
+      JWT_SECRET: "${JWT_SECRET:-change-me-32-byte-random-secret-please-change-me}"
+    depends_on:
+      postgres: { condition: service_healthy }
+    ports: ["8081:8081"]
+
+  tenant-service:
+    profiles: ["services"]
+    build:
+      context: ./services
+      dockerfile: ../infra/docker/java-service.Dockerfile
+      args:
+        SERVICE: tenant-service
+    environment:
+      DB_URL: "jdbc:postgresql://postgres:5432/kaori_tenant"
+      DB_USER: kaori
+      DB_PASS: kaori
+    depends_on:
+      postgres: { condition: service_healthy }
+    ports: ["8082:8082"]
+
+  realtime-gateway:
+    profiles: ["services"]
+    build:
+      context: ./services
+      dockerfile: ../infra/docker/java-service.Dockerfile
+      args:
+        SERVICE: realtime-gateway
+    environment:
+      KAFKA_BROKERS: "kafka:9092"
+      JWT_SECRET: "${JWT_SECRET:-change-me-32-byte-random-secret-please-change-me}"
+    depends_on:
+      kafka: { condition: service_healthy }
+    ports: ["8083:8083"]
+
+  notification-service:
+    profiles: ["services"]
+    build:
+      context: ./services
+      dockerfile: ../infra/docker/java-service.Dockerfile
+      args:
+        SERVICE: notification-service
+    environment:
+      KAFKA_BROKERS: "kafka:9092"
+    depends_on:
+      kafka: { condition: service_healthy }
+    ports: ["8084:8084"]
+
+  ai-service:
+    profiles: ["services"]
+    build:
+      context: ./services/ai-service
+      dockerfile: ../../infra/docker/python-service.Dockerfile
+    environment:
+      DB_URL: "postgresql+asyncpg://kaori:kaori@postgres:5432/kaori_ai"
+      REDIS_URL: "redis://redis:6379/0"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis:    { condition: service_healthy }
+    ports: ["8090:8090"]
+
+  api-gateway:
+    profiles: ["services"]
+    build:
+      context: ./services
+      dockerfile: ../infra/docker/java-service.Dockerfile
+      args:
+        SERVICE: api-gateway
+    depends_on:
+      - auth-service
+      - tenant-service
+      - ai-service
+    ports: ["8080:8080"]
+
+volumes:
+  postgres_data:
+  clickhouse_data:
+  minio_data:
+  grafana_data:

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription & Plan | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-brand-ivory border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:bg-white focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60;
+        }
+        
+        /* Progress Bar Animation */
+        @keyframes fillProgress {
+            from { width: 0; }
+        }
+        .progress-fill {
+            animation: fillProgress 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="building" class="w-4 h-4 mr-3 opacity-70"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3 opacity-70"></i> Roles
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="palette" class="w-4 h-4 mr-3 opacity-70"></i> Branding
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="globe" class="w-4 h-4 mr-3 opacity-70"></i> Domains
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Marketing Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Marketing</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="megaphone" class="w-4 h-4 mr-3 opacity-70"></i> Campaigns
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-3 opacity-70"></i> Blog CMS
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div>
+                <div class="space-y-1 pt-4 border-t border-brand-cream">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="settings" class="w-4 h-4 mr-3"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search billing, invoices, or settings..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-7xl mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Settings</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Subscription & Plan</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Subscription & Plan</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Manage your spa platform subscription, view limits, and update billing information.</p>
+                    </div>
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10">
+                        <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center">
+                            <i data-lucide="download" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Download Invoice
+                        </button>
+                        <button class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                            <i data-lucide="arrow-up-circle" class="w-4 h-4 mr-2"></i> Upgrade Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TOP GRID: CURRENT PLAN & USAGE -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- CURRENT PLAN CARD -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden relative flex flex-col group">
+                        <!-- Decorative Header -->
+                        <div class="h-32 bg-gradient-to-br from-brand-ivory to-brand-gold/10 p-8 flex items-center justify-between border-b border-brand-cream/50 relative">
+                            <div class="absolute right-0 top-0 opacity-10 transform translate-x-1/4 -translate-y-1/4 group-hover:scale-110 transition-transform duration-700">
+                                <i data-lucide="award" class="w-48 h-48 text-brand-gold"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <span class="px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-[10px] font-bold uppercase tracking-wider mb-3 inline-block">Active Subscription</span>
+                                <h3 class="font-serif text-3xl text-brand-textmain">Professional Plan</h3>
+                            </div>
+                            <div class="text-right relative z-10">
+                                <div class="flex items-end justify-end">
+                                    <span class="text-2xl font-serif text-brand-textmain font-medium">$</span>
+                                    <span class="text-5xl font-serif text-brand-textmain font-medium leading-none">79</span>
+                                </div>
+                                <p class="text-sm text-brand-textmuted">per month</p>
+                            </div>
+                        </div>
+
+                        <div class="p-8 flex-1 flex flex-col justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-brand-textmain mb-4 flex items-center">
+                                    <i data-lucide="calendar" class="w-4 h-4 mr-2 text-brand-gold"></i> Next billing date: <span class="ml-1 text-brand-textmuted font-normal">August 15, 2026</span>
+                                </p>
+                                
+                                <div class="h-px bg-brand-cream w-full my-6"></div>
+                                
+                                <h4 class="text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-4">Current Plan Features</h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-center text-sm text-brand-textmain">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 mr-3 text-brand-gold shrink-0"></i> Up to 5 Active Branches
+                                    </li>
+                                    <li class="flex items-center text-sm text-brand-textmain">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 mr-3 text-brand-gold shrink-0"></i> 50 Staff Users / Accounts
+                                    </li>
+                                    <li class="flex items-center text-sm text-brand-textmain">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 mr-3 text-brand-gold shrink-0"></i> Unlimited Customer Profiles
+                                    </li>
+                                    <li class="flex items-center text-sm text-brand-textmain">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 mr-3 text-brand-gold shrink-0"></i> Advanced Analytics & Reports
+                                    </li>
+                                    <li class="flex items-center text-sm text-brand-textmain">
+                                        <i data-lucide="check-circle-2" class="w-4 h-4 mr-3 text-brand-gold shrink-0"></i> Priority Email Support
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-brand-cream flex justify-between items-center">
+                                <button class="text-sm font-medium text-brand-rose hover:text-red-600 transition">Cancel Subscription</button>
+                                <button class="px-6 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                                    Change Plan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- USAGE STATISTICS -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 p-8 flex flex-col">
+                        <div class="flex items-center mb-8">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                <i data-lucide="bar-chart" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-2xl text-brand-textmain">Platform Usage</h3>
+                                <p class="text-xs text-brand-textmuted mt-1">Current utilization across your workspace limits.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-7 flex-1">
+                            <!-- Metric 1: Users -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-medium text-brand-textmain">Staff Users</span>
+                                    <span class="text-brand-textmuted"><span class="text-brand-textmain font-medium">18</span> / 50</span>
+                                </div>
+                                <div class="w-full bg-brand-ivory rounded-full h-2.5 border border-brand-cream overflow-hidden">
+                                    <div class="bg-brand-gold h-full rounded-full progress-fill" style="width: 36%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Metric 2: Branches -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-medium text-brand-textmain">Active Branches</span>
+                                    <span class="text-brand-textmuted"><span class="text-brand-textmain font-medium">3</span> / 5</span>
+                                </div>
+                                <div class="w-full bg-brand-ivory rounded-full h-2.5 border border-brand-cream overflow-hidden">
+                                    <div class="bg-brand-gold h-full rounded-full progress-fill" style="width: 60%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Metric 3: Storage -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-medium text-brand-textmain">Asset Storage</span>
+                                    <span class="text-brand-textmuted"><span class="text-brand-textmain font-medium">12 GB</span> / 50 GB</span>
+                                </div>
+                                <div class="w-full bg-brand-ivory rounded-full h-2.5 border border-brand-cream overflow-hidden">
+                                    <div class="bg-brand-rose h-full rounded-full progress-fill" style="width: 24%"></div>
+                                </div>
+                            </div>
+
+                            <!-- Metric 4: Bookings -->
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="font-medium text-brand-textmain flex items-center">Monthly Bookings <i data-lucide="infinity" class="w-4 h-4 ml-2 text-brand-gold"></i></span>
+                                    <span class="text-brand-textmuted"><span class="text-brand-textmain font-medium">1,240</span> (Unlimited)</span>
+                                </div>
+                                <div class="w-full bg-brand-ivory rounded-full h-2.5 border border-brand-cream overflow-hidden relative">
+                                    <!-- Indeterminate/Unlimited visual -->
+                                    <div class="bg-gradient-to-r from-brand-gold/40 via-brand-gold to-brand-gold/40 h-full w-full opacity-50"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8 p-4 bg-brand-cream/30 rounded-xl border border-brand-cream flex items-start">
+                            <i data-lucide="info" class="w-5 h-5 text-brand-gold shrink-0 mr-3 mt-0.5"></i>
+                            <p class="text-xs text-brand-textmuted leading-relaxed">
+                                Approaching your limits? Contact our success team to automatically scale your infrastructure or discuss enterprise volume discounts.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MIDDLE GRID: BILLING INFO -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Billing Details -->
+                    <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="file-text" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Billing Information</h3>
+                            </div>
+                            <button class="text-sm font-medium text-brand-gold hover:text-brand-goldhover transition">Edit</button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="bg-brand-ivory rounded-2xl p-5 border border-brand-cream">
+                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Company Name</p>
+                                <p class="text-sm font-medium text-brand-textmain">Lotus Wellness Group LLC</p>
+                            </div>
+                            <div class="bg-brand-ivory rounded-2xl p-5 border border-brand-cream">
+                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Billing Address</p>
+                                <p class="text-sm text-brand-textmain leading-relaxed">
+                                    100 Wellness Boulevard, Suite 200<br>
+                                    Beverly Hills, CA 90210<br>
+                                    United States
+                                </p>
+                            </div>
+                            <div class="bg-brand-ivory rounded-2xl p-5 border border-brand-cream flex justify-between items-center">
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Tax ID / VAT</p>
+                                    <p class="text-sm font-mono text-brand-textmain">US-99-1234567</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60 flex flex-col">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="credit-card" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Payment Method</h3>
+                            </div>
+                        </div>
+
+                        <!-- Card Preview Mockup -->
+                        <div class="relative w-full max-w-sm mx-auto h-48 bg-gradient-to-tr from-brand-textmain to-[#2A2622] rounded-2xl shadow-lg p-6 flex flex-col justify-between text-white overflow-hidden group hover:-translate-y-1 transition-transform mb-6">
+                            <!-- Decor -->
+                            <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
+                            <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-brand-gold/20 rounded-full blur-xl"></div>
+                            
+                            <div class="flex justify-between items-center relative z-10">
+                                <i data-lucide="credit-card" class="w-8 h-8 opacity-80"></i>
+                                <span class="font-bold italic text-lg opacity-90 tracking-wider">VISA</span>
+                            </div>
+                            
+                            <div class="relative z-10 space-y-4">
+                                <div class="flex space-x-4 font-mono text-xl tracking-widest opacity-90">
+                                    <span>••••</span>
+                                    <span>••••</span>
+                                    <span>••••</span>
+                                    <span>4242</span>
+                                </div>
+                                <div class="flex justify-between items-end text-xs font-medium uppercase tracking-wider opacity-70">
+                                    <div>
+                                        <p class="text-[8px] mb-0.5">Card Holder</p>
+                                        <p>Sarah Miller</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[8px] mb-0.5">Expires</p>
+                                        <p>12/28</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-auto flex space-x-3">
+                            <button class="flex-1 py-3 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex justify-center items-center">
+                                Add Bank Transfer
+                            </button>
+                            <button class="flex-1 py-3 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex justify-center items-center">
+                                Update Card
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INVOICE HISTORY -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden">
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex justify-between items-center">
+                        <div class="flex items-center">
+                            <i data-lucide="receipt" class="w-5 h-5 text-brand-gold mr-3"></i>
+                            <h3 class="font-serif text-xl text-brand-textmain">Invoice History</h3>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/50 border-b border-brand-cream">
+                                    <th class="py-4 px-6 font-semibold">Invoice ID</th>
+                                    <th class="py-4 px-6 font-semibold">Billing Date</th>
+                                    <th class="py-4 px-6 font-semibold">Amount</th>
+                                    <th class="py-4 px-6 font-semibold">Status</th>
+                                    <th class="py-4 px-6 font-semibold text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50">
+                                <tr class="hover:bg-brand-ivory/40 transition">
+                                    <td class="py-4 px-6 font-mono text-brand-textmain">INV-1023</td>
+                                    <td class="py-4 px-6 text-brand-textmuted">Jul 15, 2026</td>
+                                    <td class="py-4 px-6 font-medium text-brand-textmain">$79.00</td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-green-700 bg-green-50 border border-green-200">Paid</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <button class="text-brand-gold hover:text-brand-goldhover transition font-medium text-sm flex items-center justify-end ml-auto">
+                                            <i data-lucide="download" class="w-4 h-4 mr-1"></i> PDF
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-brand-ivory/40 transition">
+                                    <td class="py-4 px-6 font-mono text-brand-textmain">INV-1022</td>
+                                    <td class="py-4 px-6 text-brand-textmuted">Jun 15, 2026</td>
+                                    <td class="py-4 px-6 font-medium text-brand-textmain">$79.00</td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-green-700 bg-green-50 border border-green-200">Paid</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <button class="text-brand-gold hover:text-brand-goldhover transition font-medium text-sm flex items-center justify-end ml-auto">
+                                            <i data-lucide="download" class="w-4 h-4 mr-1"></i> PDF
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-brand-ivory/40 transition">
+                                    <td class="py-4 px-6 font-mono text-brand-textmain">INV-1021</td>
+                                    <td class="py-4 px-6 text-brand-textmuted">May 15, 2026</td>
+                                    <td class="py-4 px-6 font-medium text-brand-textmain">$79.00</td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-green-700 bg-green-50 border border-green-200">Paid</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <button class="text-brand-gold hover:text-brand-goldhover transition font-medium text-sm flex items-center justify-end ml-auto">
+                                            <i data-lucide="download" class="w-4 h-4 mr-1"></i> PDF
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PLAN COMPARISON SECTION -->
+                <div class="mt-12">
+                    <div class="text-center mb-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain mb-2">Platform Pricing Plans</h2>
+                        <p class="text-brand-textmuted">Scale your spa business with features designed for growth.</p>
+                        
+                        <div class="inline-flex bg-white rounded-full p-1 border border-brand-cream shadow-sm mt-6">
+                            <button class="px-6 py-2 rounded-full text-sm font-medium text-brand-textmuted hover:text-brand-textmain transition">Monthly billing</button>
+                            <button class="px-6 py-2 rounded-full text-sm font-medium bg-brand-gold/10 text-brand-gold">Yearly (Save 20%)</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        
+                        <!-- Starter Plan -->
+                        <div class="bg-white rounded-3xl p-8 border border-brand-cream hover:shadow-soft transition-shadow flex flex-col h-full">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-2">Starter</h3>
+                            <p class="text-xs text-brand-textmuted h-8 mb-4">Perfect for independent therapists and single-location salons.</p>
+                            <div class="mb-8">
+                                <span class="text-3xl font-serif text-brand-textmain">$29</span>
+                                <span class="text-brand-textmuted text-sm">/ mo</span>
+                            </div>
+                            <ul class="space-y-4 mb-8 flex-1">
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> 1 Active Branch
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Up to 5 Staff Users
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Standard Booking Page
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Basic Analytics
+                                </li>
+                            </ul>
+                            <button class="w-full py-3 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full font-medium transition shadow-sm">
+                                Downgrade
+                            </button>
+                        </div>
+
+                        <!-- Professional Plan (Highlighted) -->
+                        <div class="bg-white rounded-3xl p-8 border-2 border-brand-gold shadow-premium relative flex flex-col h-full transform md:-translate-y-4">
+                            <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-gold text-white px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                Current Plan
+                            </div>
+                            <h3 class="font-serif text-xl text-brand-textmain mb-2">Professional</h3>
+                            <p class="text-xs text-brand-textmuted h-8 mb-4">Everything you need to manage a growing multi-branch spa.</p>
+                            <div class="mb-8">
+                                <span class="text-4xl font-serif text-brand-gold">$79</span>
+                                <span class="text-brand-textmuted text-sm">/ mo</span>
+                            </div>
+                            <ul class="space-y-4 mb-8 flex-1">
+                                <li class="flex items-start text-sm text-brand-textmain font-medium">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Up to 5 Active Branches
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain font-medium">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Up to 50 Staff Users
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain font-medium">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> White-label Booking Portal
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain font-medium">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Advanced Analytics & Reports
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain font-medium">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Priority Email Support
+                                </li>
+                            </ul>
+                            <button class="w-full py-3 bg-brand-gold/10 text-brand-gold cursor-default rounded-full font-medium shadow-sm flex justify-center items-center">
+                                <i data-lucide="check-circle" class="w-4 h-4 mr-2"></i> Active
+                            </button>
+                        </div>
+
+                        <!-- Enterprise Plan -->
+                        <div class="bg-white rounded-3xl p-8 border border-brand-cream hover:shadow-soft transition-shadow flex flex-col h-full bg-gradient-to-b from-brand-ivory to-white">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-2">Enterprise</h3>
+                            <p class="text-xs text-brand-textmuted h-8 mb-4">Dedicated infrastructure for large-scale wellness franchises.</p>
+                            <div class="mb-8">
+                                <span class="text-3xl font-serif text-brand-textmain">$199</span>
+                                <span class="text-brand-textmuted text-sm">/ mo</span>
+                            </div>
+                            <ul class="space-y-4 mb-8 flex-1">
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Unlimited Branches
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Unlimited Users
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> Custom App Development
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> API & Webhook Access
+                                </li>
+                                <li class="flex items-start text-sm text-brand-textmain">
+                                    <i data-lucide="check" class="w-4 h-4 mr-3 text-brand-gold shrink-0 mt-0.5"></i> 24/7 Dedicated Account Manager
+                                </li>
+                            </ul>
+                            <button class="w-full py-3 bg-brand-gold text-white hover:bg-brand-goldhover rounded-full font-medium transition shadow-md">
+                                Upgrade to Enterprise
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

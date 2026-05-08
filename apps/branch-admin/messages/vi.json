@@ -1,0 +1,126 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "Quản lý Chi nhánh", "subtitle": "Branch Manager" },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "booking": "Đặt lịch",
+    "calendar": "Lịch tuần",
+    "checkin": "Check-in",
+    "customer": "Khách hàng",
+    "service": "Dịch vụ",
+    "staff": "Nhân viên",
+    "shift": "Phân ca",
+    "attendance": "Chấm công",
+    "payroll": "Lương",
+    "room": "Phòng",
+    "inventory": "Kho",
+    "report": "Báo cáo",
+    "notification": "Thông báo",
+    "content": "Nội dung",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
+  },
+  "dashboard": {
+    "title": "Tổng quan hôm nay",
+    "subtitle": "Cập nhật {time}",
+    "kpi": {
+      "revenue": "Doanh thu hôm nay",
+      "bookings": "Booking",
+      "checkedIn": "Đã check-in",
+      "pending": "Chờ xử lý",
+      "newCustomers": "Khách mới"
+    },
+    "todayBookings": "Booking hôm nay",
+    "popularServices": "Dịch vụ nổi bật",
+    "noData": "Chưa có dữ liệu"
+  },
+  "booking": {
+    "title": "Quản lý đặt lịch",
+    "create": "Tạo booking",
+    "filterAll": "Tất cả",
+    "filterToday": "Hôm nay",
+    "filterUpcoming": "Sắp tới",
+    "filterDone": "Đã xong",
+    "columns": {
+      "code": "Mã",
+      "customer": "Khách hàng",
+      "service": "Dịch vụ",
+      "staff": "KTV",
+      "room": "Phòng",
+      "time": "Thời gian",
+      "status": "Trạng thái",
+      "amount": "Giá trị"
+    },
+    "status": {
+      "pending": "Chờ xác nhận",
+      "confirmed": "Đã xác nhận",
+      "in_progress": "Đang phục vụ",
+      "done": "Hoàn tất",
+      "cancelled": "Đã huỷ"
+    }
+  },
+  "customer": {
+    "title": "Khách hàng",
+    "create": "Thêm khách hàng",
+    "search": "Tìm theo tên, SĐT, email…",
+    "columns": {
+      "code": "Mã KH",
+      "name": "Họ tên",
+      "phone": "Điện thoại",
+      "segment": "Phân khúc",
+      "lastVisit": "Lần gần nhất",
+      "points": "Điểm",
+      "spent": "Tổng chi"
+    },
+    "segments": { "vip": "VIP", "regular": "Thường xuyên", "new": "Mới", "dormant": "Lâu chưa quay lại" }
+  },
+  "shift": {
+    "title": "Quản lý ca làm việc",
+    "subtitle": "Phân ca theo tháng — SÁNG / TỐI / FULL / NGHỈ",
+    "month": "Tháng", "year": "Năm",
+    "prev": "Trước", "next": "Sau", "today": "Hôm nay",
+    "save": "Lưu", "saved": "Đã lưu", "stats": "Thống kê",
+    "type": { "SANG": "SÁNG", "TOI": "TỐI", "FULL": "FULL", "NGHI": "NGHỈ" },
+    "typeFull": {
+      "SANG": "Ca sáng (09:00-15:00)",
+      "TOI": "Ca tối (15:00-21:00)",
+      "FULL": "Ca dài (09:00-21:00)",
+      "NGHI": "Nghỉ"
+    },
+    "legend": "Click ô để chọn ca, click lại để bỏ"
+  },
+  "attendance": {
+    "title": "Chấm công",
+    "subtitle": "Trạng thái nhân viên hôm nay",
+    "checkIn": "Vào ca", "checkOut": "Tan ca",
+    "expected": "Ca dự kiến", "in": "Vào", "out": "Ra", "worked": "Làm việc", "minutes": "phút",
+    "status": {
+      "scheduled": "Đã phân ca", "present": "Đúng giờ", "late": "Đi muộn",
+      "absent": "Vắng", "early_out": "Về sớm", "off": "Nghỉ", "no_shift": "Chưa phân ca"
+    }
+  },
+  "room": {
+    "title": "Phòng & Giường",
+    "subtitle": "Quản lý phòng và giường, trạng thái khả dụng",
+    "addRoom": "Thêm phòng",
+    "addBed": "Thêm giường",
+    "floor": "Tầng",
+    "capacity": "Sức chứa",
+    "beds": "Giường",
+    "noBeds": "Phòng này chưa có giường",
+    "type": { "normal": "Phòng thường", "vip": "Phòng VIP", "couple": "Phòng đôi", "laser": "Phòng laser" },
+    "bedType": { "standard": "Tiêu chuẩn", "massage": "Massage", "laser": "Laser", "vip": "VIP" },
+    "status": { "active": "Hoạt động", "maintenance": "Bảo trì", "retired": "Ngừng" }
+  },
+  "common": {
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "loading": "Đang tải...",
+    "back": "Quay lại",
+    "save": "Lưu",
+    "cancel": "Huỷ",
+    "edit": "Sửa",
+    "delete": "Xoá",
+    "view": "Xem"
+  }
+}

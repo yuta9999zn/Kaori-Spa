@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty",
+    "tagline": "Premium hair removal & skin care"
+  },
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "branches": "Branches",
+    "booking": "Book now",
+    "about": "About",
+    "contact": "Contact",
+    "languageSwitcher": "Language"
+  },
+  "home": {
+    "heroEyebrow": "NATURAL BEAUTY × KAORI",
+    "heroTitle": "Natural beauty, refined technology",
+    "heroSubtitle": "Advanced laser hair removal, intimate care, and light-based skin rejuvenation. Book online and pick the most convenient branch.",
+    "ctaBook": "Book now",
+    "ctaServices": "View services",
+    "highlightsTitle": "Why choose us",
+    "highlight1": { "title": "International standards", "desc": "Imported laser devices, certified technicians." },
+    "highlight2": { "title": "Privacy & hygiene", "desc": "Private VIP rooms, sterilised tools every session." },
+    "highlight3": { "title": "Transparent pricing", "desc": "Listed prices, no hidden fees." }
+  },
+  "services": {
+    "title": "Service menu",
+    "subtitle": "Listed prices apply to all branches, taxes included.",
+    "filterAll": "All",
+    "filterMen": "Men",
+    "filterWomen": "Women",
+    "filterUnisex": "Unisex",
+    "filterFace": "Face",
+    "filterArm": "Arms",
+    "filterChest": "Chest",
+    "filterBelly": "Belly",
+    "filterBack": "Back",
+    "filterVio": "V-I-O",
+    "filterLeg": "Legs",
+    "filterFullBody": "Full body",
+    "filterBeauty": "Beauty",
+    "filterCombo": "Combo",
+    "duration": "{minutes} min",
+    "sessions": "{count} sessions",
+    "price": "{price, number, ::currency/VND}",
+    "bookNow": "Book"
+  },
+  "branches": {
+    "title": "Natural Beauty branches",
+    "subtitle": "Pick the branch closest to you.",
+    "openHours": "Hours",
+    "phone": "Phone",
+    "address": "Address",
+    "directions": "Directions",
+    "bookHere": "Book at this branch"
+  },
+  "booking": {
+    "title": "Online booking",
+    "subtitle": "4 quick steps. We confirm within 15 minutes.",
+    "stepBranch": "Branch",
+    "stepService": "Service",
+    "stepTime": "Time",
+    "stepInfo": "Your info",
+    "next": "Continue",
+    "back": "Back",
+    "confirm": "Confirm booking",
+    "summary": "Summary",
+    "form": {
+      "name": "Full name",
+      "phone": "Phone",
+      "email": "Email (optional)",
+      "note": "Notes",
+      "namePlaceholder": "Jane Doe",
+      "phonePlaceholder": "+84 9xx xxx xxx",
+      "notePlaceholder": "Anything we should know"
+    },
+    "success": {
+      "title": "Booking confirmed!",
+      "desc": "We have sent a confirmation by SMS. See you at Natural Beauty.",
+      "backHome": "Back to home"
+    },
+    "errors": {
+      "nameRequired": "Please enter your name",
+      "phoneInvalid": "Invalid phone number",
+      "emailInvalid": "Invalid email",
+      "branchRequired": "Please select a branch",
+      "serviceRequired": "Please select at least one service",
+      "slotRequired": "Please pick a time slot"
+    }
+  },
+  "about": {
+    "title": "About Natural Beauty",
+    "lead": "Natural Beauty is a chain of high-tech hair removal and skin care spas, powered by the Kaori platform.",
+    "missionTitle": "Mission",
+    "missionText": "Deliver safe, professional beauty experiences with transparent pricing.",
+    "valuesTitle": "Core values",
+    "value1": "Care",
+    "value2": "Expertise",
+    "value3": "Privacy",
+    "value4": "Sustainability"
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Send us a message, we reply within 24 hours.",
+    "form": {
+      "name": "Full name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "send": "Send"
+    },
+    "hotline": "Hotline",
+    "hotlineNumber": "1900 0000",
+    "address": "Headquarters",
+    "addressValue": "575 Kim Ma, Ba Dinh, Hanoi"
+  },
+  "footer": {
+    "rights": "© 2026 Natural Beauty on the Kaori platform. All rights reserved.",
+    "policy": "Privacy policy",
+    "terms": "Terms",
+    "support": "Support"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong, please retry.",
+    "vnd": "₫"
+  }
+}

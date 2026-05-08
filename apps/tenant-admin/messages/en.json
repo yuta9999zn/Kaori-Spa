@@ -1,0 +1,37 @@
+{
+  "brand": { "platform": "Kaori" },
+  "portal": { "name": "Kaori Platform", "subtitle": "Tenant Administrator" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "tenant": "Tenants",
+    "plan": "Plans",
+    "billing": "Billing",
+    "domain": "Domains",
+    "audit": "Audit log",
+    "integration": "Integrations",
+    "feature": "Features",
+    "settings": "Settings",
+    "logout": "Sign out"
+  },
+  "dashboard": {
+    "title": "Platform overview",
+    "kpi": {
+      "tenants": "Active tenants",
+      "branches": "Total branches",
+      "users": "Users",
+      "mrr": "Monthly recurring revenue"
+    },
+    "recentTenants": "Newest tenants"
+  },
+  "tenant": {
+    "title": "Tenants",
+    "create": "Add tenant",
+    "columns": { "code": "Code", "name": "Name", "plan": "Plan", "branches": "Branches", "status": "Status", "createdAt": "Created" }
+  },
+  "plan": { "title": "Plans", "starter": "Starter", "professional": "Professional", "enterprise": "Enterprise" },
+  "audit": {
+    "title": "Audit log",
+    "subtitle": "Immutable activity history",
+    "columns": { "ts": "Time", "actor": "Actor", "action": "Action", "entity": "Entity", "ip": "IP" }
+  }
+}

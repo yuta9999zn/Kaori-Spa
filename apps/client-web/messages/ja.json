@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty",
+    "tagline": "高品質な脱毛とスキンケア"
+  },
+  "nav": {
+    "home": "ホーム",
+    "services": "サービス",
+    "branches": "店舗",
+    "booking": "予約",
+    "about": "私たちについて",
+    "contact": "お問い合わせ",
+    "languageSwitcher": "言語"
+  },
+  "home": {
+    "heroEyebrow": "NATURAL BEAUTY × KAORI",
+    "heroTitle": "自然な美しさ、洗練された技術",
+    "heroSubtitle": "最先端のレーザー脱毛、デリケートゾーンケア、光による肌の若返り。オンライン予約で最寄り店舗を簡単に選択。",
+    "ctaBook": "今すぐ予約",
+    "ctaServices": "サービスを見る",
+    "highlightsTitle": "選ばれる理由",
+    "highlight1": { "title": "国際基準の技術", "desc": "輸入レーザー機器と認定技術者。" },
+    "highlight2": { "title": "プライバシーと衛生", "desc": "個室VIP、毎回滅菌された器具。" },
+    "highlight3": { "title": "明朗会計", "desc": "公開価格、隠れた費用なし。" }
+  },
+  "services": {
+    "title": "メニュー",
+    "subtitle": "全店舗共通価格・税込。",
+    "filterAll": "すべて",
+    "filterMen": "メンズ",
+    "filterWomen": "レディース",
+    "filterUnisex": "共通",
+    "filterFace": "顔",
+    "filterArm": "腕",
+    "filterChest": "胸",
+    "filterBelly": "腹",
+    "filterBack": "背中",
+    "filterVio": "VIO",
+    "filterLeg": "脚",
+    "filterFullBody": "全身",
+    "filterBeauty": "美容",
+    "filterCombo": "コンボ",
+    "duration": "{minutes}分",
+    "sessions": "{count}回",
+    "price": "{price, number, ::currency/VND}",
+    "bookNow": "予約"
+  },
+  "branches": {
+    "title": "Natural Beauty 店舗",
+    "subtitle": "最寄りの店舗をお選びください。",
+    "openHours": "営業時間",
+    "phone": "電話",
+    "address": "住所",
+    "directions": "ルート",
+    "bookHere": "この店舗で予約"
+  },
+  "booking": {
+    "title": "オンライン予約",
+    "subtitle": "4ステップ、15分以内に確認します。",
+    "stepBranch": "店舗",
+    "stepService": "サービス",
+    "stepTime": "時間",
+    "stepInfo": "お客様情報",
+    "next": "次へ",
+    "back": "戻る",
+    "confirm": "予約確認",
+    "summary": "概要",
+    "form": {
+      "name": "氏名",
+      "phone": "電話番号",
+      "email": "メール (任意)",
+      "note": "備考",
+      "namePlaceholder": "山田 花子",
+      "phonePlaceholder": "+84 9xx xxx xxx",
+      "notePlaceholder": "ご要望があればご記入ください"
+    },
+    "success": {
+      "title": "予約完了!",
+      "desc": "SMSにて確認をお送りしました。Natural Beautyでお待ちしております。",
+      "backHome": "ホームへ"
+    },
+    "errors": {
+      "nameRequired": "氏名を入力してください",
+      "phoneInvalid": "電話番号が正しくありません",
+      "emailInvalid": "メールが正しくありません",
+      "branchRequired": "店舗をお選びください",
+      "serviceRequired": "サービスを1つ以上お選びください",
+      "slotRequired": "時間をお選びください"
+    }
+  },
+  "about": {
+    "title": "Natural Beautyについて",
+    "lead": "Natural BeautyはKaoriプラットフォームを基盤とする、高技術脱毛と本格スキンケアのスパチェーンです。",
+    "missionTitle": "ミッション",
+    "missionText": "明朗会計で安全・プロフェッショナルな美容体験を提供します。",
+    "valuesTitle": "コアバリュー",
+    "value1": "心遣い",
+    "value2": "専門性",
+    "value3": "プライバシー",
+    "value4": "持続可能性"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "subtitle": "24時間以内にご返信します。",
+    "form": {
+      "name": "氏名",
+      "email": "メール",
+      "subject": "件名",
+      "message": "本文",
+      "send": "送信"
+    },
+    "hotline": "ホットライン",
+    "hotlineNumber": "1900 0000",
+    "address": "本店",
+    "addressValue": "575 Kim Ma, Ba Dinh, ハノイ"
+  },
+  "footer": {
+    "rights": "© 2026 Natural Beauty on Kaori. All rights reserved.",
+    "policy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "support": "サポート"
+  },
+  "common": {
+    "loading": "読み込み中...",
+    "error": "エラーが発生しました。もう一度お試しください。",
+    "vnd": "₫"
+  }
+}

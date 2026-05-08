@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Rules & Policies | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.5rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1.25rem);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search policies or settings..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Booking Rules & Policies</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Booking Rules & Policies</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Configure operational policies governing lead times, cancellations, penalties, and online booking limits across your business.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-4 mt-6 md:mt-0 relative z-10">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm flex items-center justify-between">
+                                <span class="flex items-center"><i data-lucide="globe" class="w-4 h-4 mr-2 text-brand-gold"></i> All Branches (Global)</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 ml-3 text-brand-textmuted"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-full min-w-[240px] bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="block px-4 py-2.5 text-sm font-medium bg-brand-gold/5 text-brand-gold transition">All Branches (Global)</a>
+                                <div class="h-px bg-brand-cream my-1 mx-2"></div>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">District 1 Spa</a>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">Westside Retreat</a>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">Ocean View Clinic</a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                            Reset to Default
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Rules
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN CONFIGURATION GRID -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT COLUMN: POLICY FORMS (Col Span 2) -->
+                    <div class="lg:col-span-2 space-y-8">
+                        
+                        <!-- 1. Booking Windows -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="calendar-clock" class="w-5 h-5 mr-3 text-brand-gold"></i> Booking Windows & Lead Times
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="spa-label">Minimum Booking Notice</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="0">Immediate (0 hours)</option>
+                                        <option value="1">1 Hour Before</option>
+                                        <option value="2" selected>2 Hours Before</option>
+                                        <option value="4">4 Hours Before</option>
+                                        <option value="24">24 Hours Before (Next Day)</option>
+                                    </select>
+                                    <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1 leading-relaxed">Prevents last-minute surprises. Customers must book at least this far in advance.</p>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Maximum Booking Window</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="14">Up to 14 days</option>
+                                        <option value="30" selected>Up to 30 days</option>
+                                        <option value="60">Up to 60 days</option>
+                                        <option value="90">Up to 90 days</option>
+                                        <option value="365">Up to 1 year</option>
+                                    </select>
+                                    <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1 leading-relaxed">Limits how far into the future the calendar is open for new appointments.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Changes & Cancellations -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="file-warning" class="w-5 h-5 mr-3 text-brand-gold"></i> Modifications & Cancellations
+                            </h3>
+                            
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    <div>
+                                        <label class="spa-label">Min. Notice to Modify</label>
+                                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                            <option value="0">Anytime</option>
+                                            <option value="1">1 Hour Before</option>
+                                            <option value="3" selected>3 Hours Before</option>
+                                            <option value="24">24 Hours Before</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="spa-label">Min. Notice to Cancel</label>
+                                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                            <option value="1">1 Hour Before</option>
+                                            <option value="6">6 Hours Before</option>
+                                            <option value="12">12 Hours Before</option>
+                                            <option value="24" selected>24 Hours Before</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="h-px bg-brand-cream/50 w-full"></div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-2">
+                                    <div>
+                                        <label class="spa-label">Max Reschedules Allowed</label>
+                                        <input type="number" class="spa-input font-medium" placeholder="Unlimited" value="2">
+                                        <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1 leading-relaxed">Limits how many times a single booking can be moved.</p>
+                                    </div>
+                                    <div>
+                                        <label class="spa-label">Late Cancellation Fee</label>
+                                        <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all bg-white">
+                                            <span class="flex items-center px-4 bg-brand-ivory border-r border-brand-cream text-brand-textmuted text-sm font-medium">$</span>
+                                            <input type="number" class="w-full bg-transparent px-4 py-2.5 text-sm font-serif font-medium outline-none text-brand-textmain" placeholder="0.00" value="25.00" step="5">
+                                        </div>
+                                        <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1 leading-relaxed">Applied if cancelled past the allowed minimum notice window.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Attendance Policies (No-show & Late) -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="user-x" class="w-5 h-5 mr-3 text-brand-gold"></i> Attendance Policies
+                            </h3>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div>
+                                    <label class="spa-label">Late Arrival Threshold</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="5">5 Minutes</option>
+                                        <option value="10" selected>10 Minutes</option>
+                                        <option value="15">15 Minutes</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Late Arrival Action</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="shorten" selected>Shorten service duration</option>
+                                        <option value="cancel">Cancel booking</option>
+                                        <option value="reschedule">Force reschedule</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-6">
+                                <h4 class="text-sm font-semibold text-brand-textmain mb-4 uppercase tracking-widest">No-Show Handling</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="spa-label">No-Show Grace Period</label>
+                                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer bg-white">
+                                            <option value="15" selected>15 Minutes Late</option>
+                                            <option value="20">20 Minutes Late</option>
+                                            <option value="30">30 Minutes Late</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="spa-label">Primary Penalty</label>
+                                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer bg-white">
+                                            <option value="fee">Charge cancellation fee</option>
+                                            <option value="deduct">Deduct package session</option>
+                                            <option value="points" selected>Add account penalty mark</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- 4. Limits & Online Settings -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="globe" class="w-5 h-5 mr-3 text-brand-gold"></i> Limits & Online Booking
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                                <div>
+                                    <label class="spa-label">Max Bookings / Customer / Day</label>
+                                    <input type="number" class="spa-input font-medium" placeholder="e.g. 2" value="2">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Max Active Future Bookings</label>
+                                    <input type="number" class="spa-input font-medium" placeholder="Unlimited" value="4">
+                                </div>
+                            </div>
+
+                            <div class="h-px bg-brand-cream/50 w-full mb-6"></div>
+
+                            <div class="space-y-6">
+                                <!-- Deposit Toggle -->
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-brand-textmain">Require Booking Deposit</p>
+                                        <p class="text-xs text-brand-textmuted mt-1 max-w-sm leading-relaxed">Require customers to pay a percentage upfront to secure their slot online.</p>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <div class="flex rounded-lg overflow-hidden border border-brand-cream focus-within:border-brand-gold transition-all bg-white w-24">
+                                            <input type="number" class="w-full bg-transparent px-3 py-1.5 text-sm outline-none text-brand-textmain text-right" value="20" max="100">
+                                            <span class="flex items-center px-2 bg-brand-ivory border-l border-brand-cream text-brand-textmuted text-xs font-medium">%</span>
+                                        </div>
+                                        <div class="relative inline-block w-11 align-middle select-none shrink-0 pt-0.5">
+                                            <input type="checkbox" id="tgl-deposit" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-deposit" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Confirmation Toggle -->
+                                <div class="flex items-start justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-brand-textmain">Require Manual Confirmation</p>
+                                        <p class="text-xs text-brand-textmuted mt-1 max-w-sm leading-relaxed">Online bookings remain in 'Pending' status until approved by reception.</p>
+                                    </div>
+                                    <div class="relative inline-block w-11 align-middle select-none shrink-0 pt-1">
+                                        <input type="checkbox" id="tgl-confirm" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label for="tgl-confirm" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: POLICY SIMULATION (Sticky) -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-3xl p-6 shadow-premium border border-brand-gold/30 sticky top-28 flex flex-col h-[calc(100vh-140px)]">
+                            
+                            <div class="flex items-center justify-between mb-4 border-b border-brand-cream/50 pb-3">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="play-circle" class="w-5 h-5 mr-2 text-brand-gold"></i> Impact Simulator
+                                </h3>
+                                <span class="px-2 py-1 bg-brand-gold/10 text-brand-gold text-[9px] font-bold uppercase tracking-wider rounded border border-brand-gold/20">Live Sync</span>
+                            </div>
+
+                            <p class="text-xs text-brand-textmuted mb-6 leading-relaxed">Preview how your configured rules affect real-world customer booking scenarios.</p>
+
+                            <!-- Scenarios Container -->
+                            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-6">
+                                
+                                <!-- Scenario 1 -->
+                                <div class="space-y-3">
+                                    <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmain">Scenario: Last-Minute Booking</h4>
+                                    <div class="bg-brand-ivory/50 rounded-xl p-4 border border-brand-cream shadow-sm">
+                                        <p class="text-sm font-medium text-brand-textmain mb-2">Customer attempts to book a 12:00 PM slot at 11:00 AM today.</p>
+                                        <div class="flex items-start bg-red-50 text-red-700 p-2.5 rounded-lg border border-red-100 text-xs">
+                                            <i data-lucide="x-circle" class="w-4 h-4 mr-2 shrink-0 mt-0.5"></i>
+                                            <span><span class="font-bold">Rejected.</span> Violates the <span class="font-medium underline underline-offset-2">2 Hours Minimum Notice</span> rule.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Scenario 2 -->
+                                <div class="space-y-3">
+                                    <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmain">Scenario: Standard Online Booking</h4>
+                                    <div class="bg-brand-ivory/50 rounded-xl p-4 border border-brand-cream shadow-sm">
+                                        <p class="text-sm font-medium text-brand-textmain mb-2">Customer books an $80 massage for next Tuesday.</p>
+                                        <div class="flex items-start bg-green-50 text-green-700 p-2.5 rounded-lg border border-green-100 text-xs">
+                                            <i data-lucide="check-circle" class="w-4 h-4 mr-2 shrink-0 mt-0.5"></i>
+                                            <span><span class="font-bold">Allowed.</span> System requires a <span class="font-medium underline underline-offset-2">$16.00 Deposit (20%)</span> at checkout. Booking auto-confirms.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Scenario 3 -->
+                                <div class="space-y-3">
+                                    <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmain">Scenario: Cancellation Attempt</h4>
+                                    <div class="bg-brand-ivory/50 rounded-xl p-4 border border-brand-cream shadow-sm">
+                                        <p class="text-sm font-medium text-brand-textmain mb-2">Customer tries to cancel online 12 hours before appointment.</p>
+                                        <div class="flex items-start bg-amber-50 text-amber-700 p-2.5 rounded-lg border border-amber-200 text-xs">
+                                            <i data-lucide="alert-triangle" class="w-4 h-4 mr-2 shrink-0 mt-0.5"></i>
+                                            <span><span class="font-bold">Allowed with Penalty.</span> Violates <span class="font-medium underline underline-offset-2">24h Minimum Cancel Notice</span>. Customer is informed of a <span class="font-bold">$25.00 Fee</span>.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Scenario 4 -->
+                                <div class="space-y-3">
+                                    <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmain">Scenario: Late Arrival</h4>
+                                    <div class="bg-brand-ivory/50 rounded-xl p-4 border border-brand-cream shadow-sm">
+                                        <p class="text-sm font-medium text-brand-textmain mb-2">Customer arrives 15 minutes late to a 60-min session.</p>
+                                        <div class="flex items-start bg-blue-50 text-blue-700 p-2.5 rounded-lg border border-blue-100 text-xs">
+                                            <i data-lucide="info" class="w-4 h-4 mr-2 shrink-0 mt-0.5"></i>
+                                            <span><span class="font-bold">Handled.</span> Exceeds 10m threshold. Service duration automatically <span class="font-medium underline underline-offset-2">shortened to 45 mins</span> to protect schedule.</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'quy-tac' });</script>
+</body>
+</html>

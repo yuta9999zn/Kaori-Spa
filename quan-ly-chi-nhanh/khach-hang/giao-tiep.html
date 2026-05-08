@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Communication | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Tabs styling */
+        .tab-btn {
+            @apply py-4 px-6 text-sm font-medium border-b-2 transition-colors duration-200 outline-none whitespace-nowrap;
+        }
+        .tab-btn.active {
+            @apply border-brand-gold text-brand-gold;
+        }
+        .tab-btn.inactive {
+            @apply border-transparent text-brand-textmuted hover:text-brand-textmain hover:bg-brand-cream/20;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+        
+        /* Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm text-brand-gold;
+        }
+        .radio-card-input:checked + .radio-card-body .radio-card-icon {
+            @apply text-brand-gold opacity-100 scale-100;
+        }
+
+        /* Channel Badges */
+        .badge-sms { @apply bg-blue-50 text-blue-700 border-blue-200; }
+        .badge-email { @apply bg-purple-50 text-purple-700 border-purple-200; }
+        .badge-push { @apply bg-orange-50 text-orange-700 border-orange-200; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search campaigns, messages, or customers..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('sendMessagePanel')">
+                            <i data-lucide="message-square" class="w-4 h-4 mr-2"></i> Direct Message
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('createCampaignPanel')">
+                            <i data-lucide="megaphone" class="w-4 h-4 mr-2"></i> New Campaign
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Marketing Director</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Customers</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Communications</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6 mb-6 md:mb-0">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Customer Communication</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Send direct messages, appointment reminders, and targeted promotional campaigns to your client base.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                                <i data-lucide="more-horizontal" class="w-4 h-4 mr-2"></i> Options
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Logs
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh Data
+                                </a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-brand-ivory rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center" onclick="togglePanel('sendMessagePanel')">
+                            <i data-lucide="message-square" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Send Message
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center" onclick="togglePanel('createCampaignPanel')">
+                            <i data-lucide="megaphone" class="w-4 h-4 mr-2"></i> Create Campaign
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI METRICS CARDS -->
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Messages Sent Today</p>
+                        <h3 class="font-serif text-3xl text-brand-textmain">320</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Active Campaigns</p>
+                        <h3 class="font-serif text-3xl text-brand-textmain">3</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-green-600 mb-1">Delivery Rate</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain flex items-center">
+                            98.5% <span class="text-xs font-sans text-brand-textmuted font-normal ml-2 text-green-500"><i data-lucide="arrow-up" class="w-3 h-3 inline"></i> 1.2%</span>
+                        </h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-gold mb-1">Open Rate (Email)</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">42.4%</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Response / Click Rate</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">12.8%</h3>
+                    </div>
+                </div>
+
+                <!-- MAIN CONTENT TABS & TABLES -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col min-h-[600px]">
+                    
+                    <!-- Tabs Navigation -->
+                    <div class="flex overflow-x-auto border-b border-brand-cream bg-brand-ivory/30 px-2 hide-scroll">
+                        <button class="tab-btn active" onclick="switchTab(this, 'tab-campaigns')"><i data-lucide="megaphone" class="w-4 h-4 inline mr-2 mb-0.5"></i> Campaigns</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-history')"><i data-lucide="history" class="w-4 h-4 inline mr-2 mb-0.5"></i> Communication Log</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-templates')"><i data-lucide="layout-template" class="w-4 h-4 inline mr-2 mb-0.5"></i> Message Templates</button>
+                    </div>
+
+                    <!-- TAB CONTENT: CAMPAIGNS -->
+                    <div id="tab-campaigns" class="tab-content active">
+                        <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center bg-white">
+                            <div class="flex items-center bg-brand-ivory rounded-xl px-4 py-2 border border-brand-cream w-full md:w-[350px] focus-within:border-brand-gold transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                <input type="text" placeholder="Search campaigns..." class="bg-transparent border-none outline-none w-full text-sm text-brand-textmain">
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse min-w-[1000px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/20 border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold">Campaign Name</th>
+                                        <th class="py-4 px-4 font-semibold">Target Segment</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Channel</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Performance</th>
+                                        <th class="py-4 px-4 font-semibold">Schedule / Status</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                    
+                                    <!-- Campaign 1: Active -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="font-serif text-base font-medium text-brand-textmain">Spring Detox Promotion</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">20% off all packages</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                                All Active Customers
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-email border">
+                                                <i data-lucide="mail" class="w-3 h-3 mr-1"></i> Email
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <p class="text-xs font-medium text-brand-textmain">Sent: 1,240</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">Opened: 45% • Clicked: 12%</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200 mb-1">
+                                                Active
+                                            </span>
+                                            <p class="text-[10px] font-mono text-brand-textmuted">Started Mar 01</p>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2">
+                                                Report
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Campaign 2: Scheduled -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="font-serif text-base font-medium text-brand-textmain">VIP Exclusive Preview</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">New service launch invite</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
+                                                VIP Segment
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-sms border">
+                                                <i data-lucide="message-square" class="w-3 h-3 mr-1"></i> SMS
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <p class="text-xs font-medium text-brand-textmuted italic">Waiting to send...</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">Est. Reach: 150</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200 mb-1">
+                                                Scheduled
+                                            </span>
+                                            <p class="text-[10px] font-mono text-brand-textmuted">Mar 15, 09:00 AM</p>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-white border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2">
+                                                Edit
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-rose hover:bg-red-50 rounded-lg transition">
+                                                <i data-lucide="x-circle" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Campaign 3: Completed -->
+                                    <tr class="hover:bg-brand-ivory/30 transition opacity-80">
+                                        <td class="py-4 px-6">
+                                            <p class="font-serif text-base font-medium text-brand-textmain">Valentine's Day Special</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">Couples massage promo</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-100">
+                                                Frequent Visitors
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-email border">
+                                                <i data-lucide="mail" class="w-3 h-3 mr-1"></i> Email
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <p class="text-xs font-medium text-brand-textmain">Sent: 850</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">Opened: 52% • Clicked: 18%</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200 mb-1">
+                                                Completed
+                                            </span>
+                                            <p class="text-[10px] font-mono text-brand-textmuted">Feb 14, 2026</p>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2">
+                                                Report
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB CONTENT: COMMUNICATION LOG / HISTORY -->
+                    <div id="tab-history" class="tab-content">
+                        <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center bg-white flex-wrap gap-4">
+                            <div class="flex items-center bg-brand-ivory rounded-xl px-4 py-2 border border-brand-cream w-full md:w-[350px] focus-within:border-brand-gold transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                <input type="text" placeholder="Search by Message ID, Customer..." class="bg-transparent border-none outline-none w-full text-sm text-brand-textmain">
+                            </div>
+                            <div class="flex space-x-2">
+                                <select class="spa-input w-auto py-2 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1em] cursor-pointer text-xs font-medium">
+                                    <option value="">All Channels</option>
+                                    <option value="sms">SMS</option>
+                                    <option value="email">Email</option>
+                                </select>
+                                <select class="spa-input w-auto py-2 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1em] cursor-pointer text-xs font-medium">
+                                    <option value="">All Types</option>
+                                    <option>Direct Message</option>
+                                    <option>Campaign</option>
+                                    <option>Automated Reminder</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto min-h-[400px]">
+                            <table class="w-full text-left border-collapse min-w-[1000px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/20 border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold">Message ID & Time</th>
+                                        <th class="py-4 px-4 font-semibold">Customer</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Channel</th>
+                                        <th class="py-4 px-4 font-semibold">Type / Subject</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Status</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                    
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="font-mono text-xs text-brand-textmain">MSG-2045</p>
+                                            <p class="text-[10px] font-mono text-brand-textmuted mt-0.5">Mar 10, 09:30 AM</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="font-medium text-brand-textmain">John Doe</p>
+                                            <p class="text-[10px] text-brand-textmuted font-mono mt-0.5">+84 912 345 678</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-sms border">
+                                                SMS
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain text-xs font-medium">Appointment Reminder</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5 truncate max-w-[200px]" title="Reminder: Your appointment tomorrow at 10:00...">Reminder: Your appointment tomorrow at 10:00...</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                                Delivered
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right">
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-gold transition"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="font-mono text-xs text-brand-textmain">MSG-2044</p>
+                                            <p class="text-[10px] font-mono text-brand-textmuted mt-0.5">Mar 10, 09:15 AM</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="font-medium text-brand-textmain">Emma Smith</p>
+                                            <p class="text-[10px] text-brand-textmuted font-mono mt-0.5">emma@example.com</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-email border">
+                                                Email
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain text-xs font-medium">Spring Promo Campaign</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5 truncate max-w-[200px]" title="Exclusive 20% off for VIPs">Exclusive 20% off for VIPs</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                                                Opened
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right">
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-gold transition"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="hover:bg-brand-ivory/30 transition bg-red-50/10">
+                                        <td class="py-4 px-6">
+                                            <p class="font-mono text-xs text-brand-textmain">MSG-2043</p>
+                                            <p class="text-[10px] font-mono text-brand-textmuted mt-0.5">Mar 10, 08:00 AM</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="font-medium text-brand-textmain">Marcus Chen</p>
+                                            <p class="text-[10px] text-brand-textmuted font-mono mt-0.5">+84 999 000 111</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-sms border">
+                                                SMS
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain text-xs font-medium">Payment Link</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5 truncate max-w-[200px]" title="Complete your deposit here...">Complete your deposit here...</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200">
+                                                Failed
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right">
+                                            <button class="text-xs text-red-500 hover:text-red-700 transition mr-3">Retry</button>
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-gold transition"><i data-lucide="eye" class="w-4 h-4"></i></button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="p-4 border-t border-brand-cream/50 flex justify-between items-center text-sm text-brand-textmuted bg-brand-ivory/20 mt-auto">
+                            <p>Showing <span class="font-medium text-brand-textmain">1</span> to <span class="font-medium text-brand-textmain">3</span> of <span class="font-medium text-brand-textmain">1,204</span> messages</p>
+                            <div class="flex space-x-1 sm:space-x-2">
+                                <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm opacity-50 cursor-not-allowed">Previous</button>
+                                <button class="w-8 h-8 flex items-center justify-center border border-brand-gold bg-brand-gold text-white rounded-lg shadow-sm font-medium">1</button>
+                                <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm">Next</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB CONTENT: TEMPLATES -->
+                    <div id="tab-templates" class="tab-content">
+                        <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center bg-white">
+                            <div class="flex items-center bg-brand-ivory rounded-xl px-4 py-2 border border-brand-cream w-full md:w-[350px] focus-within:border-brand-gold transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                <input type="text" placeholder="Search templates..." class="bg-transparent border-none outline-none w-full text-sm text-brand-textmain">
+                            </div>
+                            <button class="px-4 py-2 bg-brand-gold text-white hover:bg-brand-goldhover rounded-lg text-xs font-medium transition shadow-sm flex items-center">
+                                <i data-lucide="plus" class="w-3.5 h-3.5 mr-1.5"></i> New Template
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto min-h-[400px]">
+                            <table class="w-full text-left border-collapse min-w-[900px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/20 border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold">Template Name</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Channel</th>
+                                        <th class="py-4 px-4 font-semibold w-1/2">Content Snippet</th>
+                                        <th class="py-4 px-4 font-semibold">Last Edited</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                    
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6 font-medium text-brand-textmain">Standard Appt. Reminder</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-sms border">
+                                                SMS
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-xs text-brand-textmuted truncate max-w-[300px]" title="Hi {{customer_name}}, this is a reminder for your appointment at Lotus Spa on {{booking_date}} at {{booking_time}}. Reply C to confirm or call us to reschedule.">
+                                            Hi {{customer_name}}, this is a reminder for your appointment at Lotus Spa on {{booking_date}} at {{booking_time}}. Reply C to confirm or call us to reschedule.
+                                        </td>
+                                        <td class="py-4 px-4 font-mono text-xs text-brand-textmuted">Feb 01, 2026</td>
+                                        <td class="py-4 px-6 text-right">
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-gold transition mr-3"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-rose transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6 font-medium text-brand-textmain">Post-Service Thank You</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider badge-email border">
+                                                Email
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-xs text-brand-textmuted truncate max-w-[300px]" title="Subject: Thank you for visiting Lotus Spa! | We hope you enjoyed your {{service_name}} with {{staff_name}}. Please leave us a review here: {{review_link}}">
+                                            Subject: Thank you for visiting Lotus Spa! | We hope you enjoyed your {{service_name}} with {{staff_name}}. Please leave us a review here: {{review_link}}
+                                        </td>
+                                        <td class="py-4 px-4 font-mono text-xs text-brand-textmuted">Jan 15, 2026</td>
+                                        <td class="py-4 px-6 text-right">
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-gold transition mr-3"><i data-lucide="edit-2" class="w-4 h-4"></i></button>
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-rose transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT: SEND DIRECT MESSAGE PANEL -->
+    <div id="sendMessagePanel" class="fixed inset-y-0 right-0 w-full max-w-lg bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[60] flex flex-col border-l border-brand-cream">
+        
+        <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <div>
+                <h3 class="font-serif text-2xl text-brand-textmain flex items-center">Send Message</h3>
+                <p class="text-xs text-brand-textmuted mt-1">Send a direct message to an individual customer.</p>
+            </div>
+            <button onclick="togglePanel('sendMessagePanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
+            
+            <div>
+                <label class="spa-label">Search Customer <span class="text-brand-rose">*</span></label>
+                <div class="relative dropdown-container">
+                    <div class="flex items-center bg-white border border-brand-cream rounded-xl px-4 py-3 focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all shadow-sm">
+                        <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-3"></i>
+                        <input type="text" placeholder="Type name, phone, or email..." class="bg-transparent border-none outline-none w-full text-sm text-brand-textmain">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label class="spa-label">Communication Channel</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="msg_channel" class="peer sr-only radio-card-input" checked>
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm text-center">
+                            <i data-lucide="message-square" class="w-5 h-5 mx-auto mb-2 text-brand-textmuted peer-checked:text-brand-gold transition-colors"></i>
+                            <span class="block font-medium text-brand-textmain mb-1">SMS</span>
+                        </div>
+                    </label>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="msg_channel" class="peer sr-only radio-card-input">
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm text-center">
+                            <i data-lucide="mail" class="w-5 h-5 mx-auto mb-2 text-brand-textmuted peer-checked:text-brand-gold transition-colors"></i>
+                            <span class="block font-medium text-brand-textmain mb-1">Email</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <div class="flex justify-between items-end mb-2">
+                    <label class="spa-label mb-0">Message Template (Optional)</label>
+                    <button class="text-[10px] uppercase font-bold tracking-wider text-brand-gold hover:text-brand-goldhover transition">Manage</button>
+                </div>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium text-brand-textmain">
+                    <option value="">Start from scratch...</option>
+                    <option value="rem">Standard Appt. Reminder</option>
+                    <option value="follow">Post-Service Follow Up</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="spa-label">Message Content <span class="text-brand-rose">*</span></label>
+                <textarea class="spa-input h-32 resize-none text-sm" placeholder="Type your message here... Variables like {{customer_name}} are supported."></textarea>
+                <p class="text-[10px] text-brand-textmuted mt-2 text-right">0 / 160 characters (1 SMS message)</p>
+            </div>
+
+        </div>
+
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+            <button class="px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-full text-sm font-medium transition shadow-sm" onclick="togglePanel('sendMessagePanel')">Cancel</button>
+            <button class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium font-medium flex items-center" onclick="togglePanel('sendMessagePanel')">
+                <i data-lucide="send" class="w-4 h-4 mr-2"></i> Send Now
+            </button>
+        </div>
+    </div>
+
+    <!-- SLIDE-OUT: CREATE CAMPAIGN PANEL -->
+    <div id="createCampaignPanel" class="fixed inset-y-0 right-0 w-full max-w-xl bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[60] flex flex-col border-l border-brand-cream">
+        
+        <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <div>
+                <h3 class="font-serif text-2xl text-brand-textmain flex items-center">Create Campaign</h3>
+                <p class="text-xs text-brand-textmuted mt-1">Send bulk promotions or announcements to specific segments.</p>
+            </div>
+            <button onclick="togglePanel('createCampaignPanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-8 space-y-6 custom-scrollbar">
+            
+            <div>
+                <label class="spa-label">Campaign Name <span class="text-brand-rose">*</span></label>
+                <input type="text" class="spa-input" placeholder="e.g. Summer Skincare Promo">
+            </div>
+
+            <div>
+                <label class="spa-label">Target Audience (Segment) <span class="text-brand-rose">*</span></label>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                    <option value="" disabled selected>Select segment or tag...</option>
+                    <option value="all">All Active Customers (~1,840)</option>
+                    <option value="vip">Segment: VIP High Spenders (~120)</option>
+                    <option value="inactive">Segment: Inactive Clients (~450)</option>
+                    <option value="tag">Tag: Weekend Only (~850)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="spa-label">Communication Channel</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="camp_channel" class="peer sr-only radio-card-input">
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm text-center">
+                            <i data-lucide="message-square" class="w-5 h-5 mx-auto mb-2 text-brand-textmuted peer-checked:text-brand-gold transition-colors"></i>
+                            <span class="block font-medium text-brand-textmain mb-1">SMS</span>
+                        </div>
+                    </label>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="camp_channel" class="peer sr-only radio-card-input" checked>
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm text-center">
+                            <i data-lucide="mail" class="w-5 h-5 mx-auto mb-2 text-brand-textmuted peer-checked:text-brand-gold transition-colors"></i>
+                            <span class="block font-medium text-brand-textmain mb-1">Email</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="spa-label">Email Subject <span class="text-brand-rose">*</span></label>
+                <input type="text" class="spa-input" placeholder="Enter subject line...">
+            </div>
+
+            <div>
+                <label class="spa-label">Message Content / Template <span class="text-brand-rose">*</span></label>
+                <textarea class="spa-input h-32 resize-none text-sm mb-2" placeholder="HTML or Plain Text content here..."></textarea>
+                <button class="text-[10px] uppercase font-bold tracking-wider text-brand-gold hover:text-brand-goldhover transition bg-brand-gold/10 px-3 py-1.5 rounded"><i data-lucide="layout-template" class="w-3 h-3 inline mr-1"></i> Load Template</button>
+            </div>
+
+            <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-5">
+                <label class="spa-label mb-3">Scheduling</label>
+                <div class="space-y-4">
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="radio" name="schedule" class="w-4 h-4 text-brand-gold focus:ring-brand-gold border-gray-300" checked>
+                        <span class="ml-3 text-sm text-brand-textmain font-medium">Send Immediately</span>
+                    </label>
+                    
+                    <label class="flex items-center cursor-pointer group">
+                        <input type="radio" name="schedule" class="w-4 h-4 text-brand-gold focus:ring-brand-gold border-gray-300">
+                        <span class="ml-3 text-sm text-brand-textmain font-medium">Schedule for later</span>
+                    </label>
+
+                    <div class="grid grid-cols-2 gap-4 pl-7 opacity-50">
+                        <input type="date" class="spa-input py-2 text-xs" disabled>
+                        <input type="time" class="spa-input py-2 text-xs" disabled>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+            <button class="px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-full text-sm font-medium transition shadow-sm" onclick="togglePanel('createCampaignPanel')">Cancel</button>
+            <button class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium font-medium flex items-center" onclick="togglePanel('createCampaignPanel')">
+                <i data-lucide="send" class="w-4 h-4 mr-2"></i> Launch Campaign
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Simple Tab Switching Logic
+        function switchTab(btn, tabId) {
+            // Remove active classes from all buttons
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('inactive');
+            });
+            // Add active class to clicked button
+            btn.classList.remove('inactive');
+            btn.classList.add('active');
+
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+            });
+            // Show targeted tab content
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kh-giaotiep' });</script>
+</body>
+</html>

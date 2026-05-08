@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create / Edit Post | Lotus Spa CMS</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      
+                            cream: '#F4EFEA',      
+                            gold: '#C9A87C',       
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       
+                            textmain: '#2C2A28',   
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        editor: ['Lora', 'serif'], /* Serif font for the actual article reading experience */
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(44, 42, 40, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'floating': '0 10px 40px -10px rgba(0,0,0,0.1)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdowns */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.2s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .cms-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-3 py-2 text-sm outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        
+        .cms-label {
+            @apply block text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1.5;
+        }
+
+        /* Editor Placeholder Styling */
+        [contenteditable]:empty:before {
+            content: attr(placeholder);
+            color: #8B837C;
+            opacity: 0.5;
+            pointer-events: none;
+            display: block; /* For Firefox */
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.25rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1rem);
+        }
+
+        /* Block Editor Add Menu */
+        .block-menu-trigger {
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.2s;
+        }
+        .editor-block:hover .block-menu-trigger {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Toolbar -->
+        <header class="h-16 bg-white border-b border-brand-cream flex items-center justify-between px-6 z-40 shrink-0">
+            <!-- Left: Navigation & Title -->
+            <div class="flex items-center">
+                <button class="text-brand-textmuted hover:text-brand-textmain transition flex items-center mr-4 text-sm font-medium">
+                    <i data-lucide="arrow-left" class="w-4 h-4 mr-1.5"></i> Back
+                </button>
+                <div class="h-5 w-px bg-brand-cream mr-4"></div>
+                <div class="flex items-center">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 mr-3">
+                        Draft
+                    </span>
+                    <span class="text-xs text-brand-textmuted font-medium flex items-center"><i data-lucide="cloud-off" class="w-3 h-3 mr-1"></i> Saved just now</span>
+                </div>
+            </div>
+            
+            <!-- Right: Actions -->
+            <div class="flex items-center space-x-3">
+                <button class="px-4 py-2 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-lg text-sm font-medium transition shadow-sm flex items-center" title="Desktop/Mobile Preview">
+                    <i data-lucide="monitor" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Preview
+                </button>
+                <div class="relative dropdown-container">
+                    <button class="px-6 py-2 bg-brand-gold text-white rounded-lg hover:bg-brand-goldhover transition shadow-sm text-sm font-medium flex items-center">
+                        Publish <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-xl shadow-floating z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="send" class="w-4 h-4 mr-2"></i> Publish Now
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-clock" class="w-4 h-4 mr-2"></i> Schedule Publish
+                        </a>
+                        <div class="h-px bg-brand-cream my-1 w-full"></div>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory transition">
+                            <i data-lucide="save" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Save as Draft
+                        </a>
+                    </div>
+                </div>
+                <!-- Toggle Sidebar Button (Mobile/Tablet) -->
+                <button class="xl:hidden p-2 text-brand-textmuted hover:text-brand-gold bg-brand-ivory rounded-lg border border-brand-cream">
+                    <i data-lucide="settings" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Editor Layout (Two Columns) -->
+        <div class="flex-1 flex overflow-hidden">
+            
+            <!-- LEFT: Content Editor (Block Style) -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar relative bg-white pb-32">
+                
+                <!-- Format Floating Toolbar (Mockup) -->
+                <div class="absolute top-4 left-1/2 transform -translate-x-1/2 bg-brand-textmain text-white rounded-lg shadow-lg flex items-center px-2 py-1.5 space-x-1 z-10 opacity-0 pointer-events-none transition-opacity">
+                    <button class="p-1.5 hover:bg-white/20 rounded"><i data-lucide="bold" class="w-4 h-4"></i></button>
+                    <button class="p-1.5 hover:bg-white/20 rounded"><i data-lucide="italic" class="w-4 h-4"></i></button>
+                    <button class="p-1.5 hover:bg-white/20 rounded"><i data-lucide="underline" class="w-4 h-4"></i></button>
+                    <div class="w-px h-4 bg-white/30 mx-1"></div>
+                    <button class="p-1.5 hover:bg-white/20 rounded"><i data-lucide="link" class="w-4 h-4"></i></button>
+                    <button class="p-1.5 hover:bg-white/20 rounded text-brand-gold"><i data-lucide="highlighter" class="w-4 h-4"></i></button>
+                </div>
+
+                <div class="max-w-3xl mx-auto px-8 sm:px-12 py-16">
+                    
+                    <!-- Title Area -->
+                    <div class="mb-10 group relative editor-block">
+                        <textarea class="w-full text-4xl md:text-5xl font-serif text-brand-textmain font-medium border-none outline-none resize-none bg-transparent placeholder-brand-textmuted/40 leading-tight" placeholder="Enter post title..." rows="2">The Holistic Benefits of Aromatherapy Massages</textarea>
+                    </div>
+
+                    <!-- Editor Body -->
+                    <div class="space-y-6 font-editor text-lg text-brand-textmain leading-relaxed">
+                        
+                        <!-- Block: Paragraph -->
+                        <div class="group relative flex items-start editor-block">
+                            <button class="block-menu-trigger absolute -left-10 mt-1.5 p-1 text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory rounded transition">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                            <button class="block-menu-trigger absolute -left-5 mt-1.5 p-1 text-brand-textmuted/50 cursor-grab hover:text-brand-textmain transition">
+                                <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                            </button>
+                            <div contenteditable="true" class="w-full outline-none" placeholder="Start writing or type '/' for commands">
+                                In today's fast-paced world, finding moments of pure tranquility is not just a luxury; it is a necessity for maintaining mental and physical health. Among the myriad of spa treatments available, the aromatherapy massage stands out as a profoundly holistic approach to wellness.
+                            </div>
+                        </div>
+
+                        <!-- Block: H2 -->
+                        <div class="group relative flex items-start editor-block mt-8">
+                            <button class="block-menu-trigger absolute -left-10 mt-1 p-1 text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory rounded transition">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                            <button class="block-menu-trigger absolute -left-5 mt-1 p-1 text-brand-textmuted/50 cursor-grab hover:text-brand-textmain transition">
+                                <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                            </button>
+                            <h2 contenteditable="true" class="w-full outline-none font-serif text-2xl font-medium mt-4" placeholder="Heading 2">What is Aromatherapy Massage?</h2>
+                        </div>
+
+                        <!-- Block: Paragraph -->
+                        <div class="group relative flex items-start editor-block">
+                            <button class="block-menu-trigger absolute -left-10 mt-1.5 p-1 text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory rounded transition"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                            <button class="block-menu-trigger absolute -left-5 mt-1.5 p-1 text-brand-textmuted/50 cursor-grab hover:text-brand-textmain transition"><i data-lucide="grip-vertical" class="w-4 h-4"></i></button>
+                            <div contenteditable="true" class="w-full outline-none" placeholder="Start writing or type '/' for commands">
+                                Unlike a standard Swedish or deep tissue massage, an aromatherapy session incorporates highly concentrated plant oils, known as essential oils, added to the massage lotion. Your skin absorbs these oils while you breathe in their scent, engaging the limbic system—the part of the brain that controls emotions and memory.
+                            </div>
+                        </div>
+
+                        <!-- Block: Image -->
+                        <div class="group relative flex items-start editor-block py-4">
+                            <button class="block-menu-trigger absolute -left-10 top-1/2 -translate-y-1/2 p-1 text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory rounded transition"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                            <button class="block-menu-trigger absolute -left-5 top-1/2 -translate-y-1/2 p-1 text-brand-textmuted/50 cursor-grab hover:text-brand-textmain transition"><i data-lucide="grip-vertical" class="w-4 h-4"></i></button>
+                            
+                            <div class="w-full relative group/img">
+                                <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" class="w-full h-80 object-cover rounded-xl border border-brand-cream">
+                                <div class="absolute top-3 right-3 opacity-0 group-hover/img:opacity-100 transition-opacity flex space-x-2">
+                                    <button class="p-2 bg-white/90 backdrop-blur text-brand-textmain rounded-lg shadow-sm hover:text-brand-gold"><i data-lucide="crop" class="w-4 h-4"></i></button>
+                                    <button class="p-2 bg-white/90 backdrop-blur text-brand-textmain rounded-lg shadow-sm hover:text-brand-gold"><i data-lucide="settings" class="w-4 h-4"></i></button>
+                                    <button class="p-2 bg-white/90 backdrop-blur text-brand-rose rounded-lg shadow-sm hover:text-red-600"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                </div>
+                                <input type="text" class="w-full text-center mt-3 text-sm text-brand-textmuted font-sans bg-transparent border-none outline-none focus:border-b border-brand-cream pb-1" placeholder="Write a caption..." value="Essential oils carefully extracted from organic botanicals.">
+                            </div>
+                        </div>
+
+                        <!-- Block: Quote -->
+                        <div class="group relative flex items-start editor-block py-2">
+                            <button class="block-menu-trigger absolute -left-10 mt-1 p-1 text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory rounded transition"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                            <button class="block-menu-trigger absolute -left-5 mt-1 p-1 text-brand-textmuted/50 cursor-grab hover:text-brand-textmain transition"><i data-lucide="grip-vertical" class="w-4 h-4"></i></button>
+                            
+                            <blockquote contenteditable="true" class="w-full outline-none font-serif text-2xl italic text-brand-gold border-l-4 border-brand-gold pl-6 py-2" placeholder="Enter a quote...">
+                                "The true power of aromatherapy lies in its dual action: soothing the physical body through touch, while simultaneously calming the mind through scent."
+                            </blockquote>
+                        </div>
+
+                        <!-- Block: Empty / New Line -->
+                        <div class="group relative flex items-start editor-block">
+                            <button class="block-menu-trigger absolute -left-10 mt-1.5 p-1 text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory rounded transition">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                            <button class="block-menu-trigger absolute -left-5 mt-1.5 p-1 text-brand-textmuted/50 cursor-grab hover:text-brand-textmain transition">
+                                <i data-lucide="grip-vertical" class="w-4 h-4"></i>
+                            </button>
+                            <div contenteditable="true" class="w-full outline-none" placeholder="Start writing or type '/' for commands"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Post Settings Panel -->
+            <aside class="w-80 bg-brand-ivory/50 border-l border-brand-cream flex flex-col h-full shrink-0 overflow-y-auto custom-scrollbar hidden xl:flex shadow-[-10px_0_30px_rgba(0,0,0,0.02)]">
+                
+                <div class="p-6 space-y-8">
+                    
+                    <!-- Section: Post Scope & Type -->
+                    <div>
+                        <h4 class="font-serif text-lg text-brand-textmain mb-4 flex items-center border-b border-brand-cream pb-2">
+                            <i data-lucide="layers" class="w-4 h-4 mr-2 text-brand-gold"></i> Post Scope
+                        </h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="cms-label">Post Type <span class="text-brand-rose">*</span></label>
+                                <select class="cms-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center]">
+                                    <option value="tenant">Global (Tenant Post)</option>
+                                    <option value="branch">Branch Specific</option>
+                                    <option value="service" selected>Service Post</option>
+                                    <option value="product">Product Post</option>
+                                    <option value="company">Company PR</option>
+                                </select>
+                                <p class="text-[9px] text-brand-textmuted mt-1.5 ml-1">Links this article to a specific spa service.</p>
+                            </div>
+
+                            <!-- Conditional Field: Service Assigment (Because 'Service Post' is selected) -->
+                            <div class="bg-white p-3 rounded-xl border border-brand-gold/30 shadow-sm relative overflow-hidden">
+                                <div class="absolute left-0 top-0 bottom-0 w-1 bg-brand-gold"></div>
+                                <label class="cms-label">Target Service</label>
+                                <select class="cms-input py-1.5 px-2 text-xs appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] shadow-none border-brand-cream bg-brand-ivory/50">
+                                    <option value="">Select Service...</option>
+                                    <option value="s1" selected>Aromatherapy Relaxation</option>
+                                    <option value="s2">Deep Tissue Massage</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Featured Image -->
+                    <div>
+                        <h4 class="font-serif text-lg text-brand-textmain mb-4 flex items-center border-b border-brand-cream pb-2">
+                            <i data-lucide="image" class="w-4 h-4 mr-2 text-brand-gold"></i> Featured Image
+                        </h4>
+                        
+                        <div class="w-full aspect-[4/3] bg-white border-2 border-dashed border-brand-cream rounded-xl flex flex-col items-center justify-center text-brand-textmuted hover:border-brand-gold hover:bg-brand-gold/5 transition cursor-pointer overflow-hidden relative group">
+                            <!-- Placeholder state hidden since we have an image -->
+                            <!-- <i data-lucide="upload-cloud" class="w-6 h-6 mb-2 text-brand-gold"></i>
+                            <span class="text-xs font-medium">Upload Image</span> -->
+                            
+                            <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover">
+                            
+                            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span class="bg-white text-brand-textmain px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider shadow-sm">Replace</span>
+                            </div>
+                        </div>
+                        <p class="text-[9px] text-brand-textmuted mt-2 text-center">Recommended size: 1200 x 630px</p>
+                    </div>
+
+                    <!-- Section: Categorization -->
+                    <div>
+                        <h4 class="font-serif text-lg text-brand-textmain mb-4 flex items-center border-b border-brand-cream pb-2">
+                            <i data-lucide="tag" class="w-4 h-4 mr-2 text-brand-gold"></i> Organization
+                        </h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="cms-label">Category</label>
+                                <select class="cms-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center]">
+                                    <option value="wellness" selected>Spa & Wellness Tips</option>
+                                    <option value="skincare">Skincare Routines</option>
+                                    <option value="news">News & Promotions</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="cms-label">Tags</label>
+                                <div class="w-full bg-white border border-brand-cream rounded-xl p-2 min-h-[42px] shadow-sm flex flex-wrap gap-2 items-center focus-within:border-brand-gold transition-colors">
+                                    <span class="inline-flex items-center px-2 py-0.5 bg-brand-ivory border border-brand-cream rounded text-[10px] text-brand-textmain">massage <i data-lucide="x" class="w-3 h-3 ml-1 text-brand-textmuted cursor-pointer hover:text-brand-rose"></i></span>
+                                    <span class="inline-flex items-center px-2 py-0.5 bg-brand-ivory border border-brand-cream rounded text-[10px] text-brand-textmain">aromatherapy <i data-lucide="x" class="w-3 h-3 ml-1 text-brand-textmuted cursor-pointer hover:text-brand-rose"></i></span>
+                                    <input type="text" class="bg-transparent border-none outline-none text-xs w-20 flex-1 min-w-[50px] placeholder-brand-textmuted/50" placeholder="Add tag...">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: SEO Settings -->
+                    <div>
+                        <h4 class="font-serif text-lg text-brand-textmain mb-4 flex justify-between items-center border-b border-brand-cream pb-2">
+                            <span class="flex items-center"><i data-lucide="search-check" class="w-4 h-4 mr-2 text-brand-gold"></i> SEO Metadata</span>
+                            
+                            <!-- Mini SEO Score -->
+                            <div class="flex items-center">
+                                <span class="text-[10px] font-bold text-yellow-600 mr-1">78/100</span>
+                                <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></div>
+                            </div>
+                        </h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="cms-label flex justify-between">Slug / URL <span class="text-[9px] text-brand-textmuted lowercase normal-case">Auto-generated</span></label>
+                                <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold transition-all bg-white">
+                                    <span class="flex items-center pl-3 pr-1 bg-brand-ivory text-brand-textmuted text-xs">/blog/</span>
+                                    <input type="text" class="w-full bg-transparent pr-3 py-2 text-xs font-mono outline-none text-brand-textmain" value="holistic-benefits-aromatherapy">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="cms-label flex justify-between">Meta Title <span class="text-[9px] text-amber-600 lowercase normal-case">48 / 60 chars</span></label>
+                                <input type="text" class="cms-input text-xs" value="The Holistic Benefits of Aromatherapy Massages">
+                            </div>
+
+                            <div>
+                                <label class="cms-label flex justify-between">Meta Description <span class="text-[9px] text-brand-textmuted lowercase normal-case">142 / 160 chars</span></label>
+                                <textarea class="cms-input text-xs h-20 resize-none" placeholder="Write a compelling summary for search engines...">Discover how aromatherapy massages engage the limbic system to relieve stress and physical pain. Learn about the healing power of essential oils.</textarea>
+                            </div>
+                            
+                            <!-- Search Preview Mockup -->
+                            <div class="bg-white border border-brand-cream rounded-xl p-3 shadow-sm">
+                                <p class="text-[10px] font-semibold uppercase tracking-wider text-brand-textmuted mb-2 border-b border-brand-cream pb-1">Google Preview</p>
+                                <p class="text-[11px] text-blue-800 truncate mb-0.5 font-medium">lotusspa.com › blog › holistic-benefits-aromatherapy</p>
+                                <p class="text-sm text-blue-600 hover:underline cursor-pointer truncate font-medium mb-1">The Holistic Benefits of Aromatherapy Massages | Lotus Spa</p>
+                                <p class="text-xs text-gray-600 line-clamp-2 leading-relaxed">Discover how aromatherapy massages engage the limbic system to relieve stress and physical pain. Learn about the healing power of essential oils.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Author -->
+                    <div>
+                        <h4 class="font-serif text-lg text-brand-textmain mb-4 flex items-center border-b border-brand-cream pb-2">
+                            <i data-lucide="user" class="w-4 h-4 mr-2 text-brand-gold"></i> Authorship
+                        </h4>
+                        
+                        <div>
+                            <select class="cms-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] pl-10 relative">
+                                <option value="jd" selected>Jane Doe (Marketing)</option>
+                                <option value="sm">Sarah Miller (Owner)</option>
+                                <option value="lt">Lotus Team (Corporate)</option>
+                            </select>
+                            <!-- Fake icon overlay for select -->
+                            <div class="absolute w-5 h-5 rounded-full bg-brand-ivory border border-brand-cream text-[8px] font-serif flex items-center justify-center -mt-[29px] ml-3 pointer-events-none">JD</div>
+                        </div>
+                    </div>
+
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Basic toggle panel function for responsive design (mockup functionality)
+        function togglePanel(panelID) {
+            console.log("Toggle panel: " + panelID);
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'tao-bai' });</script>
+</body>
+</html>

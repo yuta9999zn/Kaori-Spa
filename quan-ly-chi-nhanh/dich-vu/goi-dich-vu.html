@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Goi Combo Dich Vu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .pkg-card{background:white;border-radius:20px;border:2px solid #F4EFEA;box-shadow:0 10px 40px -10px rgba(74,68,62,.06);transition:all .2s;cursor:pointer}
+        .pkg-card:hover{border-color:#C9A87C;transform:translateY(-2px)}
+        .pkg-card.active{border-color:#C9A87C;background:#FFFDF9}
+        .svc-tag{display:inline-flex;align-items:center;gap:5px;background:#FAF9F6;border:1px solid #F4EFEA;border-radius:999px;padding:3px 10px;font-size:12px}
+        .form-input{width:100%;border:1px solid #F4EFEA;border-radius:12px;padding:10px 14px;font-size:13px;background:#FAF9F6;outline:none;transition:border .15s}
+        .form-input:focus{border-color:#C9A87C}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <a href="danh-sach.html" class="text-brand-textmuted hover:text-brand-gold transition">
+            <i data-lucide="arrow-left" class="w-4 h-4" stroke-width="1.5"></i>
+        </a>
+        <i data-lucide="package" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Goi Combo Dich Vu</h1>
+    </div>
+    <button onclick="openCreateModal()"
+        class="bg-brand-gold hover:bg-brand-goldhover text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition">
+        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Tao goi moi
+    </button>
+</header>
+
+<!-- Info strip -->
+<div class="bg-amber-50 border-b border-amber-100 px-8 py-2.5 flex items-start gap-3 text-xs flex-shrink-0">
+    <i data-lucide="info" class="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5"></i>
+    <p class="text-amber-700">
+        <strong>Goi Combo (Loai B)</strong> gom nhieu dich vu khac nhau vao 1 goi ban cho khach. Vi du: Goi Bridal = 10 buoi nach + 5 buoi chan + 3 buoi mat.
+        Khac voi <strong>Combo Buoi (Loai A)</strong> chi co 1 dich vu x nhieu lan — xem o
+        <a href="../bao-cao/lieu-trinh.html" class="underline hover:text-amber-900">Theo doi Lieu Trinh</a>.
+    </p>
+</div>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-6xl mx-auto p-8">
+
+    <!-- KPI row -->
+    <div class="grid grid-cols-4 gap-4 mb-8">
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-brand-gold/10 flex items-center justify-center">
+                <i data-lucide="package" class="w-5 h-5 text-brand-gold"></i>
+            </div>
+            <div>
+                <p class="text-2xl font-medium" id="kpi-total">0</p>
+                <p class="text-xs text-brand-textmuted">Goi dang ban</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
+                <i data-lucide="users" class="w-5 h-5 text-green-600"></i>
+            </div>
+            <div>
+                <p class="text-2xl font-medium" id="kpi-active">0</p>
+                <p class="text-xs text-brand-textmuted">Khach dang dung</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                <i data-lucide="trending-up" class="w-5 h-5 text-blue-600"></i>
+            </div>
+            <div>
+                <p class="text-2xl font-medium" id="kpi-revenue">0M</p>
+                <p class="text-xs text-brand-textmuted">Doanh thu goi (thang)</p>
+            </div>
+        </div>
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-brand-rose/20 flex items-center justify-center">
+                <i data-lucide="layers" class="w-5 h-5 text-brand-rose"></i>
+            </div>
+            <div>
+                <p class="text-2xl font-medium" id="kpi-svcs">0</p>
+                <p class="text-xs text-brand-textmuted">DV trung binh / goi</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Package grid -->
+    <div class="grid grid-cols-3 gap-5" id="pkg-grid"></div>
+
+</div>
+</div>
+</div>
+
+<!-- Create Package Modal -->
+<div id="create-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between p-5 border-b border-brand-cream sticky top-0 bg-white z-10">
+            <p class="font-serif text-base">Tao Goi Combo Moi</p>
+            <button onclick="closeCreateModal()" class="p-1.5 rounded-lg hover:bg-brand-cream transition">
+                <i data-lucide="x" class="w-4 h-4 text-brand-textmuted"></i>
+            </button>
+        </div>
+        <div class="p-5 flex flex-col gap-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                    <label class="text-xs text-brand-textmuted block mb-1">Ten goi *</label>
+                    <input type="text" id="new-pkg-name" placeholder="Goi Bridal, Goi VIP Toan Than..."
+                        class="form-input">
+                </div>
+                <div>
+                    <label class="text-xs text-brand-textmuted block mb-1">Mau the hien</label>
+                    <select id="new-pkg-color" class="form-input">
+                        <option value="gold">Vang (mac dinh)</option>
+                        <option value="rose">Hong</option>
+                        <option value="blue">Xanh duong</option>
+                        <option value="green">Xanh la</option>
+                        <option value="purple">Tim</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs text-brand-textmuted block mb-1">Hieu luc (thang, de trong = khong han)</label>
+                    <input type="number" id="new-pkg-validity" min="1" placeholder="12"
+                        class="form-input">
+                </div>
+                <div class="col-span-2">
+                    <label class="text-xs text-brand-textmuted block mb-1">Mo ta ngan</label>
+                    <input type="text" id="new-pkg-desc" placeholder="Mo ta goi, doi tuong phu hop..."
+                        class="form-input">
+                </div>
+            </div>
+
+            <!-- Service rows -->
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs text-brand-textmuted font-medium">Cac dich vu trong goi *</p>
+                    <button onclick="addSvcRow()" class="text-xs text-brand-gold hover:underline flex items-center gap-1">
+                        <i data-lucide="plus" class="w-3 h-3"></i> Them dich vu
+                    </button>
+                </div>
+                <div class="grid grid-cols-12 gap-2 text-xs text-brand-textmuted font-medium px-1 mb-1">
+                    <div class="col-span-4">Vung xu ly</div>
+                    <div class="col-span-3 text-center">So buoi</div>
+                    <div class="col-span-4 text-right">Don gia / buoi</div>
+                    <div class="col-span-1"></div>
+                </div>
+                <div id="svc-rows" class="flex flex-col gap-2"></div>
+                <div class="mt-3 pt-3 border-t border-brand-cream flex justify-between text-sm">
+                    <span class="text-brand-textmuted">Tong gia tri goi</span>
+                    <span class="font-medium text-brand-gold" id="modal-total">0 ₫</span>
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-2 border-t border-brand-cream">
+                <button onclick="submitCreate()"
+                    class="flex-1 bg-brand-gold hover:bg-brand-goldhover text-white py-2.5 rounded-xl text-sm font-medium transition">
+                    Luu goi
+                </button>
+                <button onclick="closeCreateModal()"
+                    class="px-5 border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold rounded-xl text-sm transition">
+                    Huy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Detail Modal -->
+<div id="detail-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between p-5 border-b border-brand-cream">
+            <p class="font-serif text-base" id="detail-name">—</p>
+            <button onclick="closeDetailModal()" class="p-1.5 rounded-lg hover:bg-brand-cream transition">
+                <i data-lucide="x" class="w-4 h-4 text-brand-textmuted"></i>
+            </button>
+        </div>
+        <div class="p-5">
+            <p class="text-xs text-brand-textmuted mb-4" id="detail-desc">—</p>
+            <div id="detail-items" class="flex flex-col gap-2 mb-5"></div>
+            <div class="flex items-center justify-between text-sm border-t border-brand-cream pt-4 mb-5">
+                <span class="text-brand-textmuted">Tong gia tri goi</span>
+                <span class="font-medium text-brand-gold text-base" id="detail-total">—</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-5" id="detail-meta"></div>
+            <div class="flex gap-3">
+                <button onclick="assignToCustomer()"
+                    class="flex-1 bg-brand-gold hover:bg-brand-goldhover text-white py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition">
+                    <i data-lucide="user-plus" class="w-4 h-4"></i> Ban cho khach
+                </button>
+                <button onclick="editPackage()"
+                    class="px-4 border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold rounded-xl text-sm transition flex items-center gap-2">
+                    <i data-lucide="edit-2" class="w-4 h-4"></i> Sua
+                </button>
+                <button onclick="deletePackage()"
+                    class="px-4 border border-red-100 text-red-400 hover:bg-red-50 rounded-xl text-sm transition flex items-center gap-2">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-8 right-8 bg-white border border-green-200 shadow-lg rounded-2xl px-5 py-4 flex items-center gap-3 z-50">
+    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
+        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-green-700">Thanh cong!</p>
+        <p class="text-xs text-brand-textmuted" id="toast-msg">—</p>
+    </div>
+</div>
+
+<script>
+// ─── PACKAGE CATALOG ──────────────────────────────────────────────────────────
+// Loai B: Goi Combo = nhieu dich vu khac nhau trong 1 goi
+// Khac voi Loai A (Combo Buoi = 1 DV x N lan) trong lieu-trinh.html
+
+let PACKAGES = [
+    {
+        id: 'GOI-BRIDAL',
+        name: 'Goi Bridal',
+        desc: 'Chuan bi cho ngay cuoi - toan bo vung can thiet cho co dau',
+        color: 'gold',
+        validity: 12,
+        items: [
+            { service: 'Nach',          sessions: 10, unitPrice: 200000 },
+            { service: 'Chan (dui)',     sessions: 10, unitPrice: 300000 },
+            { service: 'Chan (bap chan)',sessions: 10, unitPrice: 280000 },
+            { service: 'Tay (canh tay)',sessions: 10, unitPrice: 250000 },
+            { service: 'Mat',           sessions: 5,  unitPrice: 350000 },
+        ],
+        activeCustomers: 3,
+        monthRevenue: 15000000,
+    },
+    {
+        id: 'GOI-VIP',
+        name: 'Goi VIP Toan Than',
+        desc: 'Goi toan dien cao cap - tat ca vung xu ly + cham soc mat',
+        color: 'purple',
+        validity: 18,
+        items: [
+            { service: 'Toan than',     sessions: 5,  unitPrice: 1500000 },
+            { service: 'Mat',           sessions: 5,  unitPrice: 350000 },
+            { service: 'Tay (canh tay)',sessions: 5,  unitPrice: 250000 },
+        ],
+        activeCustomers: 2,
+        monthRevenue: 10500000,
+    },
+    {
+        id: 'GOI-BASIC',
+        name: 'Goi Co Ban',
+        desc: 'Phu hop khach moi - 2 vung pho bien nhat',
+        color: 'rose',
+        validity: 12,
+        items: [
+            { service: 'Nach',          sessions: 10, unitPrice: 200000 },
+            { service: 'Mat',           sessions: 5,  unitPrice: 350000 },
+        ],
+        activeCustomers: 5,
+        monthRevenue: 5750000,
+    },
+    {
+        id: 'GOI-MEN',
+        name: 'Goi Nam Co Ban',
+        desc: 'Goi danh rieng cho nam - vung pho bien theo gioi tinh',
+        color: 'blue',
+        validity: 12,
+        items: [
+            { service: 'Nach',          sessions: 10, unitPrice: 300000 },
+            { service: 'Lung',          sessions: 5,  unitPrice: 400000 },
+        ],
+        activeCustomers: 2,
+        monthRevenue: 4000000,
+    },
+];
+
+const COLOR_CFG = {
+    gold:   { border:'border-brand-gold',  bg:'bg-brand-gold/5',  icon:'text-brand-gold',  badge:'bg-brand-gold/10 text-brand-gold' },
+    rose:   { border:'border-brand-rose',  bg:'bg-brand-rose/5',  icon:'text-brand-rose',  badge:'bg-brand-rose/20 text-brand-rose' },
+    blue:   { border:'border-blue-300',    bg:'bg-blue-50',       icon:'text-blue-600',    badge:'bg-blue-50 text-blue-600' },
+    green:  { border:'border-green-300',   bg:'bg-green-50',      icon:'text-green-600',   badge:'bg-green-50 text-green-600' },
+    purple: { border:'border-purple-300',  bg:'bg-purple-50',     icon:'text-purple-600',  badge:'bg-purple-50 text-purple-600' },
+};
+
+function pkgTotal(pkg) {
+    return pkg.items.reduce((s, it) => s + it.sessions * it.unitPrice, 0);
+}
+
+// ─── RENDER ───────────────────────────────────────────────────────────────────
+function renderGrid() {
+    const grid = document.getElementById('pkg-grid');
+    grid.innerHTML = PACKAGES.map(pkg => {
+        const cc = COLOR_CFG[pkg.color] || COLOR_CFG.gold;
+        const total = pkgTotal(pkg);
+        const svcList = pkg.items.slice(0, 3).map(it =>
+            `<span class="svc-tag">${it.service} <span class="text-brand-textmuted">×${it.sessions}</span></span>`
+        ).join('') + (pkg.items.length > 3 ? `<span class="svc-tag text-brand-textmuted">+${pkg.items.length - 3} DV</span>` : '');
+
+        return `<div class="pkg-card p-5 ${cc.border}" onclick="openDetail('${pkg.id}')">
+            <div class="flex items-start justify-between mb-3">
+                <div class="w-10 h-10 rounded-xl ${cc.bg} flex items-center justify-center">
+                    <i data-lucide="package" class="w-5 h-5 ${cc.icon}"></i>
+                </div>
+                <span class="text-xs px-2 py-1 rounded-full ${cc.badge}">${pkg.items.length} dich vu</span>
+            </div>
+            <p class="font-semibold text-base mb-1">${pkg.name}</p>
+            <p class="text-xs text-brand-textmuted mb-3 leading-relaxed">${pkg.desc}</p>
+            <div class="flex flex-wrap gap-1.5 mb-4">${svcList}</div>
+            <div class="border-t border-brand-cream pt-3 flex items-center justify-between">
+                <div>
+                    <p class="text-xs text-brand-textmuted">Tong gia tri goi</p>
+                    <p class="font-semibold text-brand-gold">${(total/1e6).toFixed(1)}M ₫</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs text-brand-textmuted">Khach dang dung</p>
+                    <p class="font-semibold">${pkg.activeCustomers}</p>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+    lucide.createIcons();
+}
+
+function renderKPIs() {
+    document.getElementById('kpi-total').textContent = PACKAGES.length;
+    document.getElementById('kpi-active').textContent = PACKAGES.reduce((s, p) => s + p.activeCustomers, 0);
+    const rev = PACKAGES.reduce((s, p) => s + p.monthRevenue, 0);
+    document.getElementById('kpi-revenue').textContent = (rev / 1e6).toFixed(1) + 'M';
+    const avgSvc = PACKAGES.length ? (PACKAGES.reduce((s, p) => s + p.items.length, 0) / PACKAGES.length).toFixed(1) : 0;
+    document.getElementById('kpi-svcs').textContent = avgSvc;
+}
+
+// ─── DETAIL MODAL ─────────────────────────────────────────────────────────────
+let selectedPkgId = null;
+
+function openDetail(id) {
+    selectedPkgId = id;
+    const pkg = PACKAGES.find(p => p.id === id);
+    if (!pkg) return;
+    const cc = COLOR_CFG[pkg.color] || COLOR_CFG.gold;
+    const total = pkgTotal(pkg);
+
+    document.getElementById('detail-name').textContent = pkg.name;
+    document.getElementById('detail-desc').textContent = pkg.desc;
+    document.getElementById('detail-total').textContent = total.toLocaleString('vi-VN') + ' ₫';
+
+    document.getElementById('detail-items').innerHTML = pkg.items.map(it => `
+        <div class="flex items-center justify-between bg-brand-ivory rounded-xl px-4 py-3">
+            <div class="flex items-center gap-3">
+                <div class="w-7 h-7 rounded-lg ${cc.bg} flex items-center justify-center">
+                    <i data-lucide="zap" class="w-3.5 h-3.5 ${cc.icon}"></i>
+                </div>
+                <span class="text-sm font-medium">${it.service}</span>
+            </div>
+            <div class="text-right">
+                <p class="text-sm font-semibold">${it.sessions} buoi</p>
+                <p class="text-xs text-brand-textmuted">${(it.unitPrice/1000).toFixed(0)}k/buoi • ${(it.sessions*it.unitPrice/1000).toFixed(0)}k</p>
+            </div>
+        </div>`).join('');
+
+    document.getElementById('detail-meta').innerHTML = [
+        ['Hieu luc', pkg.validity ? pkg.validity + ' thang' : 'Khong han'],
+        ['Khach dang dung', pkg.activeCustomers + ' nguoi'],
+        ['DT thang (uoc)', (pkg.monthRevenue/1e6).toFixed(1) + 'M ₫'],
+        ['So dich vu', pkg.items.length + ' DV'],
+    ].map(([l, v]) => `<div class="bg-brand-ivory rounded-xl p-3">
+        <p class="text-xs text-brand-textmuted mb-0.5">${l}</p>
+        <p class="text-sm font-medium">${v}</p>
+    </div>`).join('');
+
+    document.getElementById('detail-modal').classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function closeDetailModal() { document.getElementById('detail-modal').classList.add('hidden'); }
+
+function assignToCustomer() {
+    showToast('Mo man hinh chon khach hang de ban goi nay...');
+    closeDetailModal();
+}
+
+function editPackage() {
+    showToast('Tinh nang sua goi — se cap nhat sau.');
+}
+
+function deletePackage() {
+    const pkg = PACKAGES.find(p => p.id === selectedPkgId);
+    if (!pkg) return;
+    if (!confirm('Xoa goi "' + pkg.name + '"? Hanh dong nay khong the hoan tac.')) return;
+    PACKAGES = PACKAGES.filter(p => p.id !== selectedPkgId);
+    closeDetailModal();
+    renderGrid();
+    renderKPIs();
+    showToast('Da xoa goi ' + pkg.name + '.');
+}
+
+// ─── CREATE MODAL ─────────────────────────────────────────────────────────────
+let svcRowCount = 0;
+
+function openCreateModal() {
+    svcRowCount = 0;
+    document.getElementById('new-pkg-name').value = '';
+    document.getElementById('new-pkg-desc').value = '';
+    document.getElementById('new-pkg-validity').value = '';
+    document.getElementById('new-pkg-color').value = 'gold';
+    document.getElementById('svc-rows').innerHTML = '';
+    document.getElementById('modal-total').textContent = '0 ₫';
+    addSvcRow();
+    document.getElementById('create-modal').classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function closeCreateModal() { document.getElementById('create-modal').classList.add('hidden'); }
+
+function addSvcRow() {
+    svcRowCount++;
+    const row = document.createElement('div');
+    row.id = 'svc-row-' + svcRowCount;
+    row.className = 'grid grid-cols-12 gap-2 items-center';
+    row.innerHTML = `
+        <div class="col-span-4">
+            <select class="form-input" onchange="recalcTotal()">
+                <option>Nach</option><option>Mat</option>
+                <option>Chan (dui)</option><option>Chan (bap chan)</option>
+                <option>Tay (canh tay)</option><option>Lung</option>
+                <option>Toan than</option>
+            </select>
+        </div>
+        <div class="col-span-3">
+            <input type="number" min="1" value="10" placeholder="Buoi"
+                class="form-input text-center" onchange="recalcTotal()">
+        </div>
+        <div class="col-span-4">
+            <input type="number" min="0" value="200000" placeholder="Don gia"
+                class="form-input text-right" onchange="recalcTotal()">
+        </div>
+        <div class="col-span-1 flex justify-end">
+            <button onclick="document.getElementById('svc-row-${svcRowCount}').remove(); recalcTotal();"
+                class="p-1 rounded-lg hover:bg-red-50 text-brand-textmuted hover:text-red-500 transition">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+        </div>`;
+    document.getElementById('svc-rows').appendChild(row);
+    lucide.createIcons();
+    recalcTotal();
+}
+
+function recalcTotal() {
+    let t = 0;
+    document.querySelectorAll('#svc-rows > div').forEach(row => {
+        const inputs = row.querySelectorAll('input[type="number"]');
+        if (inputs.length >= 2) {
+            const sessions = parseInt(inputs[0].value) || 0;
+            const price    = parseInt(inputs[1].value) || 0;
+            t += sessions * price;
+        }
+    });
+    document.getElementById('modal-total').textContent = t.toLocaleString('vi-VN') + ' ₫';
+}
+
+function submitCreate() {
+    const name = document.getElementById('new-pkg-name').value.trim();
+    if (!name) { alert('Vui long nhap ten goi.'); return; }
+
+    const rows = document.querySelectorAll('#svc-rows > div');
+    if (rows.length === 0) { alert('Vui long them it nhat 1 dich vu vao goi.'); return; }
+
+    const items = [];
+    rows.forEach(row => {
+        const sel = row.querySelector('select');
+        const inputs = row.querySelectorAll('input[type="number"]');
+        if (sel && inputs.length >= 2) {
+            items.push({
+                service:   sel.value,
+                sessions:  parseInt(inputs[0].value) || 1,
+                unitPrice: parseInt(inputs[1].value) || 0,
+            });
+        }
+    });
+
+    const newPkg = {
+        id:              'GOI-' + Date.now(),
+        name,
+        desc:            document.getElementById('new-pkg-desc').value.trim(),
+        color:           document.getElementById('new-pkg-color').value,
+        validity:        parseInt(document.getElementById('new-pkg-validity').value) || null,
+        items,
+        activeCustomers: 0,
+        monthRevenue:    0,
+    };
+
+    PACKAGES.push(newPkg);
+    closeCreateModal();
+    renderGrid();
+    renderKPIs();
+    showToast('Da tao goi "' + name + '" voi ' + items.length + ' dich vu.');
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+    document.getElementById('toast-msg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.remove('hidden');
+    setTimeout(() => t.classList.add('hidden'), 3500);
+}
+
+renderGrid();
+renderKPIs();
+</script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'dv-goidv' });</script>
+</body>
+</html>

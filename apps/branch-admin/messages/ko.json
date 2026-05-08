@@ -1,0 +1,126 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "지점 관리", "subtitle": "Branch Manager" },
+  "nav": {
+    "dashboard": "대시보드",
+    "booking": "예약",
+    "calendar": "주간 일정",
+    "checkin": "체크인",
+    "customer": "고객",
+    "service": "서비스",
+    "staff": "직원",
+    "shift": "근무",
+    "attendance": "출퇴근",
+    "payroll": "급여",
+    "room": "룸",
+    "inventory": "재고",
+    "report": "리포트",
+    "notification": "알림",
+    "content": "콘텐츠",
+    "settings": "설정",
+    "logout": "로그아웃"
+  },
+  "dashboard": {
+    "title": "오늘의 개요",
+    "subtitle": "업데이트 {time}",
+    "kpi": {
+      "revenue": "오늘 매출",
+      "bookings": "예약",
+      "checkedIn": "체크인",
+      "pending": "대기",
+      "newCustomers": "신규 고객"
+    },
+    "todayBookings": "오늘의 예약",
+    "popularServices": "인기 서비스",
+    "noData": "데이터 없음"
+  },
+  "booking": {
+    "title": "예약 관리",
+    "create": "예약 생성",
+    "filterAll": "전체",
+    "filterToday": "오늘",
+    "filterUpcoming": "예정",
+    "filterDone": "완료",
+    "columns": {
+      "code": "코드",
+      "customer": "고객",
+      "service": "서비스",
+      "staff": "테라피스트",
+      "room": "룸",
+      "time": "시간",
+      "status": "상태",
+      "amount": "금액"
+    },
+    "status": {
+      "pending": "대기",
+      "confirmed": "확인",
+      "in_progress": "진행 중",
+      "done": "완료",
+      "cancelled": "취소"
+    }
+  },
+  "customer": {
+    "title": "고객",
+    "create": "고객 추가",
+    "search": "이름·전화·이메일로 검색…",
+    "columns": {
+      "code": "ID",
+      "name": "이름",
+      "phone": "전화",
+      "segment": "세그먼트",
+      "lastVisit": "최근 방문",
+      "points": "포인트",
+      "spent": "총 지출"
+    },
+    "segments": { "vip": "VIP", "regular": "단골", "new": "신규", "dormant": "휴면" }
+  },
+  "shift": {
+    "title": "근무 관리",
+    "subtitle": "월간 근무 배정 — 오전 / 오후 / 종일 / 휴무",
+    "month": "월", "year": "연도",
+    "prev": "이전", "next": "다음", "today": "오늘",
+    "save": "저장", "saved": "저장됨", "stats": "통계",
+    "type": { "SANG": "오전", "TOI": "오후", "FULL": "종일", "NGHI": "휴무" },
+    "typeFull": {
+      "SANG": "오전 (09:00-15:00)",
+      "TOI": "오후 (15:00-21:00)",
+      "FULL": "종일 (09:00-21:00)",
+      "NGHI": "휴무"
+    },
+    "legend": "셀 클릭으로 배정, 다시 클릭하면 해제"
+  },
+  "attendance": {
+    "title": "출퇴근",
+    "subtitle": "오늘의 체크인/아웃",
+    "checkIn": "출근", "checkOut": "퇴근",
+    "expected": "예정", "in": "입", "out": "출", "worked": "근무", "minutes": "분",
+    "status": {
+      "scheduled": "예정", "present": "정상", "late": "지각",
+      "absent": "결근", "early_out": "조퇴", "off": "휴무", "no_shift": "근무없음"
+    }
+  },
+  "room": {
+    "title": "룸 & 베드",
+    "subtitle": "룸·베드 및 가용 상태 관리",
+    "addRoom": "룸 추가",
+    "addBed": "베드 추가",
+    "floor": "층",
+    "capacity": "수용",
+    "beds": "베드",
+    "noBeds": "이 룸에는 아직 베드가 없습니다",
+    "type": { "normal": "일반", "vip": "VIP", "couple": "커플", "laser": "레이저" },
+    "bedType": { "standard": "스탠다드", "massage": "마사지", "laser": "레이저", "vip": "VIP" },
+    "status": { "active": "운영", "maintenance": "정비", "retired": "중단" }
+  },
+  "common": {
+    "search": "검색",
+    "filter": "필터",
+    "loading": "로딩 중...",
+    "back": "뒤로",
+    "save": "저장",
+    "cancel": "취소",
+    "edit": "수정",
+    "delete": "삭제",
+    "view": "보기"
+  }
+}

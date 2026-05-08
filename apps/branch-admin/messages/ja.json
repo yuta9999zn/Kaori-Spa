@@ -1,0 +1,126 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "店舗管理", "subtitle": "Branch Manager" },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "booking": "予約",
+    "calendar": "週間",
+    "checkin": "チェックイン",
+    "customer": "顧客",
+    "service": "サービス",
+    "staff": "スタッフ",
+    "shift": "シフト",
+    "attendance": "勤怠",
+    "payroll": "給与",
+    "room": "ルーム",
+    "inventory": "在庫",
+    "report": "レポート",
+    "notification": "通知",
+    "content": "コンテンツ",
+    "settings": "設定",
+    "logout": "ログアウト"
+  },
+  "dashboard": {
+    "title": "本日の概要",
+    "subtitle": "更新 {time}",
+    "kpi": {
+      "revenue": "本日の売上",
+      "bookings": "予約",
+      "checkedIn": "チェックイン済",
+      "pending": "保留",
+      "newCustomers": "新規顧客"
+    },
+    "todayBookings": "本日の予約",
+    "popularServices": "人気サービス",
+    "noData": "データなし"
+  },
+  "booking": {
+    "title": "予約管理",
+    "create": "予約作成",
+    "filterAll": "すべて",
+    "filterToday": "本日",
+    "filterUpcoming": "今後",
+    "filterDone": "完了",
+    "columns": {
+      "code": "コード",
+      "customer": "顧客",
+      "service": "サービス",
+      "staff": "セラピスト",
+      "room": "ルーム",
+      "time": "時間",
+      "status": "状態",
+      "amount": "金額"
+    },
+    "status": {
+      "pending": "保留",
+      "confirmed": "確認済",
+      "in_progress": "対応中",
+      "done": "完了",
+      "cancelled": "キャンセル"
+    }
+  },
+  "customer": {
+    "title": "顧客",
+    "create": "顧客追加",
+    "search": "名前・電話・メールで検索…",
+    "columns": {
+      "code": "ID",
+      "name": "氏名",
+      "phone": "電話",
+      "segment": "セグメント",
+      "lastVisit": "最終来店",
+      "points": "ポイント",
+      "spent": "合計"
+    },
+    "segments": { "vip": "VIP", "regular": "常連", "new": "新規", "dormant": "休眠" }
+  },
+  "shift": {
+    "title": "シフト管理",
+    "subtitle": "月次シフト — 早番 / 遅番 / ロング / 休み",
+    "month": "月", "year": "年",
+    "prev": "前", "next": "次", "today": "本日",
+    "save": "保存", "saved": "保存しました", "stats": "集計",
+    "type": { "SANG": "早番", "TOI": "遅番", "FULL": "ロング", "NGHI": "休み" },
+    "typeFull": {
+      "SANG": "早番 (09:00-15:00)",
+      "TOI": "遅番 (15:00-21:00)",
+      "FULL": "ロング (09:00-21:00)",
+      "NGHI": "休み"
+    },
+    "legend": "セルをクリックで割当、再クリックでクリア"
+  },
+  "attendance": {
+    "title": "勤怠",
+    "subtitle": "本日のチェックイン/アウト",
+    "checkIn": "出勤", "checkOut": "退勤",
+    "expected": "予定", "in": "入", "out": "出", "worked": "勤務", "minutes": "分",
+    "status": {
+      "scheduled": "予定", "present": "定時", "late": "遅刻",
+      "absent": "欠勤", "early_out": "早退", "off": "休み", "no_shift": "シフトなし"
+    }
+  },
+  "room": {
+    "title": "ルーム・ベッド",
+    "subtitle": "ルームとベッド、稼働状況を管理",
+    "addRoom": "ルーム追加",
+    "addBed": "ベッド追加",
+    "floor": "階",
+    "capacity": "収容数",
+    "beds": "ベッド",
+    "noBeds": "このルームにはベッドがありません",
+    "type": { "normal": "通常", "vip": "VIP", "couple": "カップル", "laser": "レーザー" },
+    "bedType": { "standard": "スタンダード", "massage": "マッサージ", "laser": "レーザー", "vip": "VIP" },
+    "status": { "active": "稼働中", "maintenance": "メンテナンス", "retired": "停止" }
+  },
+  "common": {
+    "search": "検索",
+    "filter": "絞り込み",
+    "loading": "読み込み中...",
+    "back": "戻る",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "edit": "編集",
+    "delete": "削除",
+    "view": "表示"
+  }
+}

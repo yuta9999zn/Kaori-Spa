@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain & Booking URL | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-brand-ivory border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:bg-white focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Input Group Addon */
+        .input-group-addon {
+            @apply flex items-center px-4 bg-brand-cream/50 border border-brand-cream text-brand-textmuted text-sm font-medium;
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.75rem;
+            height: 1.5rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1.25rem);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="building" class="w-4 h-4 mr-3 opacity-70"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3 opacity-70"></i> Roles
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="palette" class="w-4 h-4 mr-3 opacity-70"></i> Branding
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="globe" class="w-4 h-4 mr-3"></i> Domains
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Marketing Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Marketing</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="megaphone" class="w-4 h-4 mr-3 opacity-70"></i> Campaigns
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-3 opacity-70"></i> Blog CMS
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div>
+                <div class="space-y-1 pt-4 border-t border-brand-cream">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search branches, staff, or settings..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="store" class="w-4 h-4 mr-2"></i> Create Branch
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Invite Staff
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> Add Service
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-7xl mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Tenant</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Domains</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Domain & Booking URL</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Configure how customers access your spa's online booking page and portal.</p>
+                    </div>
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10">
+                        <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-textmuted hover:bg-white rounded-full text-sm font-medium transition shadow-sm">
+                            Cancel
+                        </button>
+                        <button class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 mr-2"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN GRID -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT COLUMN (Settings Forms) -->
+                    <div class="xl:col-span-2 space-y-8">
+                        
+                        <!-- SECTION 1: PLATFORM SUBDOMAIN -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="link" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-serif text-2xl text-brand-textmain">Platform Subdomain</h3>
+                                    <p class="text-xs text-brand-textmuted mt-1">Your free default booking address.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col md:flex-row gap-4 items-end">
+                                <div class="flex-1 w-full">
+                                    <label class="spa-label">Subdomain Name</label>
+                                    <div class="flex rounded-xl overflow-hidden shadow-inner-soft border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all">
+                                        <input type="text" class="w-full bg-brand-ivory px-4 py-2.5 text-sm outline-none text-brand-textmain font-medium placeholder-brand-textmuted/60" value="lotusspa" placeholder="your-spa-name">
+                                        <span class="input-group-addon rounded-r-xl border-l border-brand-cream/50">.auraplatform.com</span>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-2 w-full md:w-auto mt-2 md:mt-0">
+                                    <button class="px-4 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm w-full md:w-auto">
+                                        Check Availability
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-sm font-medium text-green-600 mt-4 flex items-center bg-green-50 p-3 rounded-xl border border-green-100">
+                                <i data-lucide="check-circle" class="w-4 h-4 mr-2"></i> URL is available and active.
+                            </p>
+                        </div>
+
+                        <!-- SECTION 2: CUSTOM DOMAIN -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60 relative overflow-hidden group">
+                            <!-- Subtle border glow effect if connected -->
+                            <div class="absolute inset-0 border-2 border-brand-gold/20 rounded-3xl pointer-events-none"></div>
+
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                        <i data-lucide="globe" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-serif text-2xl text-brand-textmain">Custom Domain</h3>
+                                        <p class="text-xs text-brand-textmuted mt-1">Connect your own website domain.</p>
+                                    </div>
+                                </div>
+                                <span class="px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center shadow-sm">
+                                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5 animate-pulse"></span> Connected
+                                </span>
+                            </div>
+                            
+                            <div class="flex flex-col md:flex-row gap-4 items-end">
+                                <div class="flex-1 w-full">
+                                    <label class="spa-label">Custom Domain URL</label>
+                                    <div class="flex rounded-xl overflow-hidden shadow-inner-soft border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all">
+                                        <span class="input-group-addon rounded-l-xl border-r border-brand-cream/50 bg-brand-ivory text-brand-textmuted font-mono text-xs"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> https://</span>
+                                        <input type="text" class="w-full bg-white px-4 py-2.5 text-sm outline-none text-brand-textmain font-medium font-mono placeholder-brand-textmuted/60" value="booking.lotusspa.com" placeholder="booking.yourdomain.com">
+                                    </div>
+                                </div>
+                                <div class="flex space-x-3 w-full md:w-auto mt-2 md:mt-0">
+                                    <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-xl text-sm font-medium transition shadow-sm w-full md:w-auto">
+                                        Disconnect
+                                    </button>
+                                    <button class="px-5 py-2.5 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-goldhover transition shadow-sm flex items-center justify-center w-full md:w-auto">
+                                        <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Verify Domain
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 3 & 7: SSL & SECURITY -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- SSL Certificate -->
+                            <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center mr-4 text-green-600 border border-green-100">
+                                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">SSL Certificate</h3>
+                                </div>
+                                
+                                <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-5 text-center mb-6">
+                                    <p class="text-sm text-brand-textmuted mb-1">Status</p>
+                                    <p class="font-serif text-2xl text-green-600 mb-2">Active & Secure</p>
+                                    <p class="text-xs text-brand-textmuted flex items-center justify-center"><i data-lucide="clock" class="w-3 h-3 mr-1"></i> Auto-renews in 245 days</p>
+                                </div>
+                                
+                                <button class="w-full py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm">
+                                    Renew Certificate Manually
+                                </button>
+                            </div>
+
+                            <!-- Security Settings -->
+                            <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                                <div class="flex items-center mb-6">
+                                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                        <i data-lucide="lock" class="w-5 h-5"></i>
+                                    </div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">Domain Security</h3>
+                                </div>
+
+                                <div class="space-y-6">
+                                    <!-- Toggle 1 -->
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Force HTTPS</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">Redirect HTTP traffic to secure connection</p>
+                                        </div>
+                                        <div class="relative inline-block w-11 align-middle select-none">
+                                            <input type="checkbox" id="tgl-https" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked disabled/>
+                                            <label for="tgl-https" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Toggle 2 -->
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Redirect old URLs</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">Forward traffic from platform subdomain</p>
+                                        </div>
+                                        <div class="relative inline-block w-11 align-middle select-none">
+                                            <input type="checkbox" id="tgl-redirect" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-redirect" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Toggle 3 -->
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Booking Page Protection</p>
+                                            <p class="text-[10px] text-brand-textmuted mt-0.5">Require customer login to view prices</p>
+                                        </div>
+                                        <div class="relative inline-block w-11 align-middle select-none">
+                                            <input type="checkbox" id="tgl-protect" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                            <label for="tgl-protect" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 4: BOOKING PAGE URLS -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="share-2" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-2xl text-brand-textmain">Public Booking Links</h3>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <!-- Main URL -->
+                                <div class="bg-brand-ivory/80 rounded-2xl p-4 border border-brand-cream hover:border-brand-gold/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div>
+                                        <p class="text-xs font-semibold text-brand-textmain uppercase tracking-widest mb-1">Main Organization Page</p>
+                                        <p class="font-mono text-sm text-brand-gold">https://booking.lotusspa.com/</p>
+                                    </div>
+                                    <div class="flex space-x-2 shrink-0">
+                                        <button class="p-2 bg-white text-brand-textmuted hover:text-brand-gold border border-brand-cream rounded-xl transition shadow-sm" title="Copy Link"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                        <button class="p-2 bg-white text-brand-textmuted hover:text-brand-gold border border-brand-cream rounded-xl transition shadow-sm" title="Open Link"><i data-lucide="external-link" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- Branch URL 1 -->
+                                <div class="bg-white rounded-2xl p-4 border border-brand-cream hover:border-brand-gold/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div>
+                                        <p class="text-xs font-semibold text-brand-textmuted uppercase tracking-widest mb-1">District 1 Luxury Spa</p>
+                                        <p class="font-mono text-sm text-brand-textmain">https://booking.lotusspa.com/district-1</p>
+                                    </div>
+                                    <div class="flex space-x-2 shrink-0">
+                                        <button class="p-2 bg-brand-ivory text-brand-textmuted hover:text-brand-gold border border-brand-cream rounded-xl transition shadow-sm" title="Copy Link"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                        <button class="p-2 bg-brand-ivory text-brand-textmuted hover:text-brand-gold border border-brand-cream rounded-xl transition shadow-sm" title="Open Link"><i data-lucide="external-link" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- Branch URL 2 -->
+                                <div class="bg-white rounded-2xl p-4 border border-brand-cream hover:border-brand-gold/50 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                                    <div>
+                                        <p class="text-xs font-semibold text-brand-textmuted uppercase tracking-widest mb-1">Westside Retreat</p>
+                                        <p class="font-mono text-sm text-brand-textmain">https://booking.lotusspa.com/westside</p>
+                                    </div>
+                                    <div class="flex space-x-2 shrink-0">
+                                        <button class="p-2 bg-brand-ivory text-brand-textmuted hover:text-brand-gold border border-brand-cream rounded-xl transition shadow-sm" title="Copy Link"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                        <button class="p-2 bg-brand-ivory text-brand-textmuted hover:text-brand-gold border border-brand-cream rounded-xl transition shadow-sm" title="Open Link"><i data-lucide="external-link" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: GUIDE & PREVIEW -->
+                    <div class="xl:col-span-1 space-y-8">
+                        
+                        <!-- SECTION 5: DOMAIN CONNECTION GUIDE -->
+                        <div class="bg-brand-cream/20 rounded-3xl p-6 border border-brand-cream/60 shadow-inner-soft">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-1">Setup Guide</h3>
+                            <p class="text-xs text-brand-textmuted mb-6">Follow these steps to point your custom domain to our platform.</p>
+
+                            <ol class="space-y-5">
+                                <li class="relative pl-8">
+                                    <div class="absolute left-0 top-0 w-5 h-5 bg-brand-gold text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm">1</div>
+                                    <p class="text-sm font-medium text-brand-textmain mb-1">Add DNS Record</p>
+                                    <p class="text-xs text-brand-textmuted leading-relaxed">Log into your domain provider (e.g., GoDaddy, Namecheap) and add a new CNAME record.</p>
+                                </li>
+                                <li class="relative pl-8">
+                                    <div class="absolute left-0 top-0 w-5 h-5 bg-brand-gold text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm">2</div>
+                                    <p class="text-sm font-medium text-brand-textmain mb-2">Configure Record</p>
+                                    <div class="bg-white rounded-xl border border-brand-cream p-3 shadow-sm text-xs font-mono text-brand-textmain space-y-2 overflow-hidden">
+                                        <div class="flex justify-between border-b border-brand-cream pb-1">
+                                            <span class="text-brand-textmuted font-sans font-medium uppercase tracking-wider text-[9px]">Type</span>
+                                            <span>CNAME</span>
+                                        </div>
+                                        <div class="flex justify-between border-b border-brand-cream pb-1">
+                                            <span class="text-brand-textmuted font-sans font-medium uppercase tracking-wider text-[9px]">Host / Name</span>
+                                            <span>booking</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-brand-textmuted font-sans font-medium uppercase tracking-wider text-[9px]">Value / Target</span>
+                                            <span class="text-brand-gold truncate ml-2">domains.auraplatform.com</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="relative pl-8">
+                                    <div class="absolute left-0 top-0 w-5 h-5 bg-brand-gold text-white rounded-full flex items-center justify-center text-[10px] font-bold shadow-sm">3</div>
+                                    <p class="text-sm font-medium text-brand-textmain mb-1">Verify Connection</p>
+                                    <p class="text-xs text-brand-textmuted leading-relaxed">Click "Verify Domain" in Section 2. Propagation may take up to 24 hours.</p>
+                                </li>
+                            </ol>
+                            
+                            <div class="mt-6 text-center border-t border-brand-cream pt-4">
+                                <a href="#" class="text-xs font-medium text-brand-gold hover:text-brand-goldhover flex items-center justify-center transition">
+                                    Read Full Documentation <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 6: LIVE PREVIEW -->
+                        <div class="sticky top-8 bg-brand-ivory rounded-3xl p-6 border border-brand-cream/60 shadow-soft">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-1">Customer View</h3>
+                            <p class="text-xs text-brand-textmuted mb-6">Preview of your active booking portal.</p>
+
+                            <!-- Mockup Container -->
+                            <div class="bg-white rounded-2xl shadow-premium border border-brand-cream/50 overflow-hidden flex flex-col relative h-[400px]">
+                                
+                                <!-- Mockup Browser Header -->
+                                <div class="bg-brand-ivory border-b border-brand-cream px-3 py-2 flex items-center shrink-0">
+                                    <div class="flex space-x-1.5 mr-4">
+                                        <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+                                        <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+                                    </div>
+                                    <div class="flex-1 bg-white border border-brand-cream rounded-md px-3 py-1 flex items-center justify-center shadow-inner-soft">
+                                        <i data-lucide="lock" class="w-3 h-3 text-green-600 mr-1.5"></i>
+                                        <span class="font-mono text-[9px] text-brand-textmain">booking.lotusspa.com</span>
+                                    </div>
+                                </div>
+
+                                <!-- Mockup App Header -->
+                                <div class="bg-white border-b border-brand-cream px-4 py-3 flex justify-between items-center shrink-0">
+                                    <div class="flex items-center space-x-2">
+                                        <i data-lucide="flower" class="w-4 h-4 text-[#C9A87C]"></i>
+                                        <span class="font-serif text-[10px] font-bold tracking-widest uppercase text-[#4A443E]">Lotus</span>
+                                    </div>
+                                    <i data-lucide="menu" class="w-4 h-4 text-[#8B837C]"></i>
+                                </div>
+
+                                <!-- Mockup Content -->
+                                <div class="p-4 flex-1 overflow-y-auto bg-[#FAF9F6] custom-scrollbar">
+                                    <div class="text-center mb-4">
+                                        <h4 class="font-serif text-sm text-[#4A443E] mb-1">Book an Appointment</h4>
+                                        <p class="font-sans text-[9px] text-[#8B837C]">Select a location to begin</p>
+                                    </div>
+                                    
+                                    <div class="space-y-3">
+                                        <div class="bg-white p-3 rounded-xl shadow-sm border border-[#F4EFEA] hover:border-[#C9A87C] transition cursor-pointer">
+                                            <p class="text-xs font-medium text-[#4A443E] font-serif mb-1">District 1 Luxury Spa</p>
+                                            <p class="text-[9px] text-[#8B837C] font-sans flex items-center"><i data-lucide="map-pin" class="w-2 h-2 mr-1"></i> 123 Nguyen Hue Street</p>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-xl shadow-sm border border-[#F4EFEA] hover:border-[#C9A87C] transition cursor-pointer">
+                                            <p class="text-xs font-medium text-[#4A443E] font-serif mb-1">Westside Retreat</p>
+                                            <p class="text-[9px] text-[#8B837C] font-sans flex items-center"><i data-lucide="map-pin" class="w-2 h-2 mr-1"></i> 450 Sunset Boulevard</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

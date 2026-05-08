@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Detail | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search services, categories, or staff..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> Create Service
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Services</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Signature Deep Tissue Massage</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide mb-4">Signature Deep Tissue Massage</h2>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="inline-flex items-center px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-brand-ivory border border-brand-cream text-brand-textmain">
+                                <i data-lucide="tag" class="w-3 h-3 mr-1.5 opacity-70"></i> Massage
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-brand-ivory border border-brand-cream text-brand-textmain">
+                                <i data-lucide="clock" class="w-3 h-3 mr-1.5 opacity-70"></i> 60 min
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-brand-gold/10 border border-brand-gold/20 text-brand-gold">
+                                <i data-lucide="dollar-sign" class="w-3 h-3 mr-1 opacity-70"></i> 160.00
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Active
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10 shrink-0">
+                        <div class="relative dropdown-container">
+                            <button class="p-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full transition shadow-sm">
+                                <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="copy" class="w-4 h-4 mr-2"></i> Duplicate
+                                </a>
+                                <div class="h-px bg-brand-cream my-1"></div>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-amber-600 hover:bg-amber-50 transition">
+                                    <i data-lucide="power-off" class="w-4 h-4 mr-2"></i> Disable Service
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition">
+                                    <i data-lucide="trash-2" class="w-4 h-4 mr-2"></i> Delete Service
+                                </a>
+                            </div>
+                        </div>
+                        <button class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                            <i data-lucide="edit-2" class="w-4 h-4 mr-2"></i> Edit Service
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ROW 1: OVERVIEW & SETTINGS -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Service Overview Card -->
+                    <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 lg:col-span-2 flex flex-col md:flex-row gap-6">
+                        <div class="w-full md:w-1/3 aspect-square md:aspect-auto bg-brand-ivory rounded-2xl border border-brand-cream flex items-center justify-center relative overflow-hidden group">
+                            <i data-lucide="image" class="w-12 h-12 text-brand-gold opacity-50 group-hover:scale-110 transition-transform duration-500"></i>
+                            <div class="absolute bottom-2 right-2 px-2 py-1 bg-white/90 backdrop-blur rounded text-[10px] uppercase font-bold text-brand-textmain border border-brand-cream">
+                                Cover Image
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain mb-3">Service Description</h3>
+                                <p class="text-sm text-brand-textmuted leading-relaxed mb-6">
+                                    An intensive treatment utilizing firm pressure to target deeper layers of muscle tissue. This massage is highly recommended for individuals experiencing consistent tension, active athletes, or those aiding in physical recovery. Uses premium organic therapeutic oils.
+                                </p>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-6 pt-4 border-t border-brand-cream/50">
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Service Code</p>
+                                    <p class="text-sm font-mono font-medium text-brand-textmain">MSG-DEEP-01</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Staff Required</p>
+                                    <p class="text-sm font-medium text-brand-textmain flex items-center"><i data-lucide="user" class="w-3.5 h-3.5 mr-1.5 text-brand-gold"></i> 1 Therapist</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Created Date</p>
+                                    <p class="text-sm text-brand-textmain">Feb 10, 2026</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Duration</p>
+                                    <p class="text-sm font-medium text-brand-textmain">60 Minutes</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Base Price</p>
+                                    <p class="text-sm font-serif font-medium text-brand-textmain">$160.00</p>
+                                </div>
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Last Updated</p>
+                                    <p class="text-sm text-brand-textmain">Mar 01, 2026</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service Settings Summary -->
+                    <div class="bg-brand-ivory/50 rounded-3xl p-6 shadow-inner-soft border border-brand-cream flex flex-col">
+                        <div class="flex items-center mb-6">
+                            <i data-lucide="settings" class="w-5 h-5 text-brand-gold mr-3"></i>
+                            <h3 class="font-serif text-xl text-brand-textmain">Settings</h3>
+                        </div>
+                        
+                        <div class="space-y-4 flex-1">
+                            <div class="bg-white p-4 rounded-xl border border-brand-cream shadow-sm flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Online Booking</p>
+                                    <p class="text-[10px] text-brand-textmuted mt-0.5">Visible to customers</p>
+                                </div>
+                                <span class="px-2 py-1 bg-green-50 text-green-600 rounded text-xs font-semibold">Yes</span>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-brand-cream shadow-sm flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Max Bookings/Day</p>
+                                    <p class="text-[10px] text-brand-textmuted mt-0.5">Across all branches</p>
+                                </div>
+                                <span class="px-2 py-1 bg-brand-ivory text-brand-textmain border border-brand-cream rounded text-xs font-mono font-medium">Unlimited</span>
+                            </div>
+
+                            <div class="bg-white p-4 rounded-xl border border-brand-cream shadow-sm flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Required Level</p>
+                                    <p class="text-[10px] text-brand-textmuted mt-0.5">Minimum staff experience</p>
+                                </div>
+                                <span class="px-2 py-1 bg-brand-gold/10 text-brand-gold border border-brand-gold/20 rounded text-xs font-semibold">Senior</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 2: BOOKING STATISTICS -->
+                <section>
+                    <div class="flex items-center justify-between mb-4 px-1">
+                        <h3 class="font-serif text-2xl text-brand-textmain">Booking Analytics</h3>
+                        <select class="spa-input w-40 py-2 !rounded-full cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                            <option>Last 30 Days</option>
+                            <option>This Year</option>
+                            <option>All Time</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-6">
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Bookings</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">1,452</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">This Month</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain flex items-center">
+                                124 <span class="text-xs font-sans text-green-500 ml-2 font-medium"><i data-lucide="arrow-up" class="w-3 h-3 inline"></i> 8%</span>
+                            </h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-gold mb-1">Revenue Generated</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">$232,320</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Avg Rating</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain flex items-center">
+                                4.9 <i data-lucide="star" class="w-4 h-4 fill-current text-brand-gold ml-1.5 pb-0.5"></i>
+                            </h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-rose mb-1">Cancel Rate</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">4.2%</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 h-[300px] relative">
+                        <canvas id="servicePerformanceChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- ROW 3: BRANCHES & STAFF TABLES -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Branch Availability -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden">
+                        <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i data-lucide="store" class="w-5 h-5 text-brand-gold mr-3"></i>
+                                <h3 class="font-serif text-xl text-brand-textmain">Branch Availability</h3>
+                            </div>
+                            <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">Manage</button>
+                        </div>
+                        <div class="overflow-x-auto p-2">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted border-b border-brand-cream/50">
+                                        <th class="py-3 px-4 font-semibold font-sans">Branch Name</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-center">Status</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-right">Override Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/30">
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 font-medium text-brand-textmain">District 1 Luxury Spa</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700">Active</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-right text-brand-textmuted">-</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 font-medium text-brand-textmain">Westside Retreat</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700">Active</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$180</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition opacity-60">
+                                        <td class="py-3 px-4 font-medium text-brand-textmain">Ocean View Clinic</td>
+                                        <td class="py-3 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">Inactive</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-right text-brand-textmuted">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Assigned Staff -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden">
+                        <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i data-lucide="users" class="w-5 h-5 text-brand-gold mr-3"></i>
+                                <h3 class="font-serif text-xl text-brand-textmain">Assigned Staff</h3>
+                            </div>
+                            <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">Assign Staff</button>
+                        </div>
+                        <div class="overflow-x-auto p-2">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted border-b border-brand-cream/50">
+                                        <th class="py-3 px-4 font-semibold font-sans">Staff Name</th>
+                                        <th class="py-3 px-4 font-semibold font-sans">Role / Level</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-center">Branch</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/30">
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 flex items-center">
+                                            <div class="w-6 h-6 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-[10px] mr-2">AN</div>
+                                            <span class="font-medium text-brand-textmain">Anna Nguyen</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-brand-textmuted text-xs">Senior Therapist</td>
+                                        <td class="py-3 px-4 text-center text-brand-textmain text-xs">District 1</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <button class="text-brand-textmuted hover:text-brand-rose transition" title="Remove Assignment"><i data-lucide="user-minus" class="w-4 h-4 ml-auto"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 flex items-center">
+                                            <div class="w-6 h-6 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-gold font-serif text-[10px] mr-2">ER</div>
+                                            <span class="font-medium text-brand-textmain">Elena Rodriguez</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-brand-gold text-xs font-medium">Master Therapist</td>
+                                        <td class="py-3 px-4 text-center text-brand-textmain text-xs">Global</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <button class="text-brand-textmuted hover:text-brand-rose transition" title="Remove Assignment"><i data-lucide="user-minus" class="w-4 h-4 ml-auto"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 flex items-center">
+                                            <div class="w-6 h-6 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-[10px] mr-2">JD</div>
+                                            <span class="font-medium text-brand-textmain">James Davies</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-brand-textmuted text-xs">Senior Therapist</td>
+                                        <td class="py-3 px-4 text-center text-brand-textmain text-xs">Westside</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <button class="text-brand-textmuted hover:text-brand-rose transition" title="Remove Assignment"><i data-lucide="user-minus" class="w-4 h-4 ml-auto"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-3 border-t border-brand-cream/50 bg-brand-ivory/30 text-center">
+                            <p class="text-[10px] text-brand-textmuted uppercase tracking-wider font-semibold">+ 4 more therapists assigned</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 4: REVIEWS & RELATED -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- Customer Feedback -->
+                    <div class="xl:col-span-2 bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden">
+                        <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i data-lucide="message-square" class="w-5 h-5 text-brand-gold mr-3"></i>
+                                <h3 class="font-serif text-xl text-brand-textmain">Customer Feedback</h3>
+                            </div>
+                            <select class="text-xs bg-white border border-brand-cream rounded-full px-3 py-1.5 outline-none cursor-pointer text-brand-textmain">
+                                <option>Newest First</option>
+                                <option>Highest Rating</option>
+                                <option>Lowest Rating</option>
+                            </select>
+                        </div>
+                        
+                        <div class="divide-y divide-brand-cream/50">
+                            <!-- Review 1 -->
+                            <div class="p-6 hover:bg-brand-ivory/30 transition">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-brand-cream text-brand-textmain flex items-center justify-center font-serif text-xs mr-3">SM</div>
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Sarah M.</p>
+                                            <p class="text-[10px] text-brand-textmuted">Mar 08, 2026 • District 1 Spa</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex text-brand-gold">
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-brand-textmain leading-relaxed mt-3 pl-11">
+                                    "Absolutely incredible experience. Elena was fantastic and really worked out all the tension in my shoulders. The room was perfect."
+                                </p>
+                            </div>
+
+                            <!-- Review 2 -->
+                            <div class="p-6 hover:bg-brand-ivory/30 transition">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 rounded-full bg-brand-cream text-brand-textmain flex items-center justify-center font-serif text-xs mr-3">JL</div>
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">James L.</p>
+                                            <p class="text-[10px] text-brand-textmuted">Mar 05, 2026 • Westside Retreat</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex text-brand-gold">
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                        <i data-lucide="star" class="w-3.5 h-3.5 text-brand-cream fill-current"></i>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-brand-textmain leading-relaxed mt-3 pl-11">
+                                    "Great massage, very professional. The pressure was good but could have been slightly firmer. Will definitely book again."
+                                </p>
+                            </div>
+                        </div>
+                        <div class="p-4 border-t border-brand-cream/50 bg-brand-ivory/30 text-center">
+                            <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">Load More Reviews</button>
+                        </div>
+                    </div>
+
+                    <!-- Related Services -->
+                    <div class="xl:col-span-1 bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col">
+                        <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30">
+                            <h3 class="font-serif text-xl text-brand-textmain">Related Services</h3>
+                            <p class="text-xs text-brand-textmuted mt-0.5">Other services in the Massage category.</p>
+                        </div>
+                        <div class="p-6 flex-1 space-y-4">
+                            
+                            <!-- Related 1 -->
+                            <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-4 hover:border-brand-gold transition cursor-pointer flex items-center justify-between group">
+                                <div>
+                                    <h4 class="font-serif text-brand-textmain group-hover:text-brand-gold transition">Swedish Massage</h4>
+                                    <p class="text-xs text-brand-textmuted mt-1"><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i> 60 min</p>
+                                </div>
+                                <span class="font-medium text-brand-textmain">$100</span>
+                            </div>
+
+                            <!-- Related 2 -->
+                            <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-4 hover:border-brand-gold transition cursor-pointer flex items-center justify-between group">
+                                <div>
+                                    <h4 class="font-serif text-brand-textmain group-hover:text-brand-gold transition">Hot Stone Therapy</h4>
+                                    <p class="text-xs text-brand-textmuted mt-1"><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i> 75 min</p>
+                                </div>
+                                <span class="font-medium text-brand-textmain">$135</span>
+                            </div>
+
+                            <!-- Related 3 -->
+                            <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-4 hover:border-brand-gold transition cursor-pointer flex items-center justify-between group">
+                                <div>
+                                    <h4 class="font-serif text-brand-textmain group-hover:text-brand-gold transition">Aromatherapy Relax</h4>
+                                    <p class="text-xs text-brand-textmuted mt-1"><i data-lucide="clock" class="w-3 h-3 inline mr-1"></i> 60 min</p>
+                                </div>
+                                <span class="font-medium text-brand-textmain">$95</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Booking Analytics Chart
+        document.addEventListener("DOMContentLoaded", function() {
+            const ctx = document.getElementById('servicePerformanceChart').getContext('2d');
+            
+            Chart.defaults.font.family = "'Jost', sans-serif";
+            Chart.defaults.color = '#8B837C';
+
+            // Gradient for Line
+            const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+            gradient.addColorStop(0, 'rgba(201, 168, 124, 0.3)');
+            gradient.addColorStop(1, 'rgba(201, 168, 124, 0)');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                    datasets: [{
+                        label: 'Bookings',
+                        data: [95, 110, 105, 130, 125, 140, 165, 145],
+                        borderColor: '#C9A87C',
+                        backgroundColor: gradient,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#FFFFFF',
+                        pointBorderColor: '#C9A87C',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#FAF9F6',
+                            titleColor: '#4A443E',
+                            bodyColor: '#4A443E',
+                            borderColor: '#F4EFEA',
+                            borderWidth: 1,
+                            padding: 12,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            border: { display: false },
+                            grid: { color: '#F4EFEA', drawBorder: false }
+                        },
+                        x: { 
+                            border: { display: false }, 
+                            grid: { display: false } 
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'dv-danhsach' });</script>
+</body>
+</html>

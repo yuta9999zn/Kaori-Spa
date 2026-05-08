@@ -1,0 +1,21 @@
+{
+  "name": "kaori-spa-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kaori Spa multi-tenant SaaS — Next.js apps + Java/Python services",
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "dev:client": "pnpm --filter @kaori/client-web dev",
+    "dev:branch": "pnpm --filter @kaori/branch-admin dev",
+    "dev:org": "pnpm --filter @kaori/org-admin dev",
+    "dev:tenant": "pnpm --filter @kaori/tenant-admin dev",
+    "build": "pnpm --recursive --filter './apps/*' build",
+    "lint": "pnpm --recursive --filter './apps/*' lint",
+    "typecheck": "pnpm --recursive --filter './apps/*' typecheck"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  },
+  "packageManager": "pnpm@9.10.0"
+}

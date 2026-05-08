@@ -1,0 +1,53 @@
+# ── Secrets — NEVER commit ──────────────────────────────────────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+# ── Java / Gradle ───────────────────────────────────────────────────────
+**/build/
+**/.gradle/
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# ── Python ──────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+poetry.lock
+
+# ── Node / Next ─────────────────────────────────────────────────────────
+node_modules/
+.next/
+.turbo/
+out/
+.pnpm-store/
+*.tsbuildinfo
+next-env.d.ts
+
+# ── IDE / OS ────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# ── Logs / coverage ─────────────────────────────────────────────────────
+*.log
+coverage/
+.nyc_output/
+
+# ── Local DB / containers ───────────────────────────────────────────────
+docker-compose.override.yml
+data/
+volumes/
+
+# ── Claude / agent state ────────────────────────────────────────────────
+.claude/

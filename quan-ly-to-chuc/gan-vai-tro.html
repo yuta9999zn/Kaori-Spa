@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role Permissions | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Custom Spa Checkbox */
+        .spa-checkbox {
+            appearance: none;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid #F4EFEA;
+            border-radius: 0.375rem;
+            background-color: #FAF9F6;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .spa-checkbox:hover {
+            border-color: #C9A87C;
+        }
+        .spa-checkbox:checked {
+            background-color: #C9A87C;
+            border-color: #C9A87C;
+        }
+        .spa-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        .spa-checkbox:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #f3f4f6;
+            border-color: #e5e7eb;
+        }
+        .spa-checkbox.checkbox-all:checked {
+            background-color: #4A443E;
+            border-color: #4A443E;
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.25rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1rem);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="building" class="w-4 h-4 mr-3 opacity-70"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3 opacity-70"></i> Roles
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="lock" class="w-4 h-4 mr-3"></i> Permissions
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Analytics</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="pt-4 border-t border-brand-cream">
+                <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                </a>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search roles, users, or permissions..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Invite User
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="shield-plus" class="w-4 h-4 mr-2"></i> Create Role
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-[1400px] mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Roles</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Permissions</span>
+                </div>
+
+                <!-- PAGE HEADER & ROLE INFO -->
+                <div class="bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1">
+                        <div class="flex items-center space-x-4 mb-2">
+                            <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Role Permissions</h2>
+                            <span class="inline-flex items-center px-3 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
+                                Branch Manager
+                            </span>
+                        </div>
+                        <p class="text-brand-textmuted text-sm max-w-2xl">Configure detailed system access permissions for this role. These settings determine exactly what users with this role can view and modify.</p>
+                        
+                        <div class="flex items-center space-x-6 mt-6">
+                            <div class="flex items-center">
+                                <i data-lucide="store" class="w-4 h-4 text-brand-gold mr-2"></i>
+                                <span class="text-sm text-brand-textmain font-medium">Scope:</span>
+                                <span class="text-sm text-brand-textmuted ml-1">Branch Level</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i data-lucide="users" class="w-4 h-4 text-brand-gold mr-2"></i>
+                                <span class="text-sm text-brand-textmain font-medium">Assigned:</span>
+                                <span class="text-sm text-brand-textmuted ml-1">5 Users</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 md:mt-0 relative z-10 flex space-x-3 shrink-0">
+                        <button class="px-6 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-full text-sm font-medium transition shadow-sm">
+                            Discard Changes
+                        </button>
+                        <button class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 mr-2"></i> Save Permissions
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN CONTENT GRID -->
+                <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+                    
+                    <!-- LEFT COLUMN (Permission Matrix) -->
+                    <div class="xl:col-span-3 space-y-8">
+                        
+                        <!-- OPERATIONS MODULES -->
+                        <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden">
+                            <div class="px-8 py-5 bg-brand-ivory/50 border-b border-brand-cream flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold mr-3">
+                                        <i data-lucide="briefcase" class="w-4 h-4"></i>
+                                    </div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">Operations</h3>
+                                </div>
+                                <div class="flex items-center text-xs text-brand-textmuted">
+                                    <span class="mr-2">Enable Group</span>
+                                    <div class="relative inline-block w-9 align-middle select-none">
+                                        <input type="checkbox" id="tgl-operations" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                        <label for="tgl-operations" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer" style="width: 2.25rem;"></label>
+                                        <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-5"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted border-b border-brand-cream bg-white">
+                                            <th class="py-4 px-8 font-semibold w-1/4">Module</th>
+                                            <th class="py-4 px-4 font-semibold text-center w-1/8">View</th>
+                                            <th class="py-4 px-4 font-semibold text-center w-1/8">Create</th>
+                                            <th class="py-4 px-4 font-semibold text-center w-1/8">Edit</th>
+                                            <th class="py-4 px-4 font-semibold text-center w-1/8">Delete</th>
+                                            <th class="py-4 px-4 font-semibold text-center w-1/8 text-brand-rose">Manage</th>
+                                            <th class="py-4 px-4 font-semibold text-center w-1/8 border-l border-brand-cream">Select All</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-brand-cream/50 text-sm text-brand-textmain bg-white">
+                                        <!-- Services -->
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-4 px-8 font-medium">Services</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all"></td>
+                                        </tr>
+                                        <!-- Bookings -->
+                                        <tr class="hover:bg-brand-ivory/30 transition bg-brand-gold/5">
+                                            <td class="py-4 px-8 font-medium">Bookings</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" checked></td>
+                                        </tr>
+                                        <!-- Customers -->
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-4 px-8 font-medium">Customers</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all"></td>
+                                        </tr>
+                                        <!-- Staff -->
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-4 px-8 font-medium">Staff</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all"></td>
+                                        </tr>
+                                        <!-- Inventory -->
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-4 px-8 font-medium text-brand-textmuted">Inventory <span class="ml-2 text-[8px] bg-brand-cream px-1.5 py-0.5 rounded text-brand-textmain">Add-on</span></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" disabled></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- MARKETING MODULES -->
+                        <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden">
+                            <div class="px-8 py-5 bg-brand-ivory/50 border-b border-brand-cream flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold mr-3">
+                                        <i data-lucide="megaphone" class="w-4 h-4"></i>
+                                    </div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">Marketing</h3>
+                                </div>
+                                <div class="flex items-center text-xs text-brand-textmuted">
+                                    <span class="mr-2">Enable Group</span>
+                                    <div class="relative inline-block w-9 align-middle select-none">
+                                        <input type="checkbox" id="tgl-marketing" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label for="tgl-marketing" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer" style="width: 2.25rem;"></label>
+                                        <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="overflow-x-auto opacity-50 pointer-events-none">
+                                <table class="w-full text-left border-collapse">
+                                    <thead class="sr-only">
+                                        <tr>
+                                            <th>Module</th><th>View</th><th>Create</th><th>Edit</th><th>Delete</th><th>Manage</th><th>All</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-brand-cream/50 text-sm text-brand-textmain bg-white">
+                                        <!-- Campaigns -->
+                                        <tr>
+                                            <td class="py-4 px-8 font-medium w-1/4">Campaigns</td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8 border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" disabled></td>
+                                        </tr>
+                                        <!-- Blog CMS -->
+                                        <tr>
+                                            <td class="py-4 px-8 font-medium">Blog CMS</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" disabled></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ANALYTICS MODULES -->
+                        <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden">
+                            <div class="px-8 py-5 bg-brand-ivory/50 border-b border-brand-cream flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold mr-3">
+                                        <i data-lucide="pie-chart" class="w-4 h-4"></i>
+                                    </div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">Analytics</h3>
+                                </div>
+                                <div class="flex items-center text-xs text-brand-textmuted">
+                                    <span class="mr-2">Enable Group</span>
+                                    <div class="relative inline-block w-9 align-middle select-none">
+                                        <input type="checkbox" id="tgl-analytics" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                        <label for="tgl-analytics" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer" style="width: 2.25rem;"></label>
+                                        <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-5"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead class="sr-only">
+                                        <tr>
+                                            <th>Module</th><th>View</th><th>Create</th><th>Edit</th><th>Delete</th><th>Manage</th><th>All</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-brand-cream/50 text-sm text-brand-textmain bg-white">
+                                        <!-- Global Reports -->
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-4 px-8 font-medium w-1/4">Global Reports</td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox"></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center w-1/8 border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all"></td>
+                                        </tr>
+                                        <!-- Branch Reports -->
+                                        <tr class="hover:bg-brand-ivory/30 transition bg-brand-gold/5">
+                                            <td class="py-4 px-8 font-medium">Branch Reports</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                            <td class="py-4 px-4 text-center"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" checked></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TENANT MANAGEMENT -->
+                        <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden">
+                            <div class="px-8 py-5 bg-brand-ivory/50 border-b border-brand-cream flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold mr-3">
+                                        <i data-lucide="settings" class="w-4 h-4"></i>
+                                    </div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">Tenant Management</h3>
+                                </div>
+                                <div class="flex items-center text-xs text-brand-textmuted">
+                                    <span class="mr-2">Enable Group</span>
+                                    <div class="relative inline-block w-9 align-middle select-none">
+                                        <input type="checkbox" id="tgl-tenant" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label for="tgl-tenant" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer" style="width: 2.25rem;"></label>
+                                        <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="overflow-x-auto opacity-50 pointer-events-none">
+                                <table class="w-full text-left border-collapse">
+                                    <thead class="sr-only">
+                                        <tr>
+                                            <th>Module</th><th>View</th><th>Create</th><th>Edit</th><th>Delete</th><th>Manage</th><th>All</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-brand-cream/50 text-sm text-brand-textmain bg-white">
+                                        <tr>
+                                            <td class="py-4 px-8 font-medium w-1/4">Branches</td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center w-1/8 border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" disabled></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-4 px-8 font-medium">Users & Roles</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" disabled></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-4 px-8 font-medium">Settings</td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center"><span class="text-brand-cream">-</span></td>
+                                            <td class="py-4 px-4 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                            <td class="py-4 px-4 text-center border-l border-brand-cream"><input type="checkbox" class="spa-checkbox checkbox-all" disabled></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN (Summary & Preview) -->
+                    <div class="xl:col-span-1 space-y-8">
+                        
+                        <!-- Permission Summary -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 sticky top-8">
+                            <h3 class="font-serif text-lg text-brand-textmain mb-4 border-b border-brand-cream/50 pb-3">Access Summary</h3>
+                            <p class="text-xs text-brand-textmuted mb-5 leading-relaxed">Users with this role will have access to the following modules in their workspace.</p>
+
+                            <div class="space-y-2 mb-8">
+                                <div class="flex items-center text-sm font-medium text-brand-textmain bg-green-50/50 p-2.5 rounded-lg border border-green-100">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-3 shrink-0"></i>
+                                    Bookings <span class="ml-auto text-[10px] text-green-600 bg-green-100 px-2 py-0.5 rounded">Full</span>
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-brand-textmain bg-blue-50/50 p-2.5 rounded-lg border border-blue-100">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-blue-500 mr-3 shrink-0"></i>
+                                    Customers <span class="ml-auto text-[10px] text-blue-600 bg-blue-100 px-2 py-0.5 rounded">Partial</span>
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-brand-textmain bg-blue-50/50 p-2.5 rounded-lg border border-blue-100">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-blue-500 mr-3 shrink-0"></i>
+                                    Staff <span class="ml-auto text-[10px] text-blue-600 bg-blue-100 px-2 py-0.5 rounded">Partial</span>
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-brand-textmain bg-brand-ivory p-2.5 rounded-lg border border-brand-cream">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-brand-gold mr-3 shrink-0"></i>
+                                    Services <span class="ml-auto text-[10px] text-brand-textmuted bg-white px-2 py-0.5 rounded border border-brand-cream">View Only</span>
+                                </div>
+                                <div class="flex items-center text-sm font-medium text-brand-textmain bg-brand-ivory p-2.5 rounded-lg border border-brand-cream">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-brand-gold mr-3 shrink-0"></i>
+                                    Branch Reports <span class="ml-auto text-[10px] text-brand-textmuted bg-white px-2 py-0.5 rounded border border-brand-cream">View Only</span>
+                                </div>
+                            </div>
+
+                            <h3 class="font-serif text-lg text-brand-textmain mb-4 border-b border-brand-cream/50 pb-3">Menu Preview</h3>
+                            <p class="text-xs text-brand-textmuted mb-4 leading-relaxed">This is how the left sidebar will appear for this role.</p>
+
+                            <!-- Mini Sidebar Mockup -->
+                            <div class="bg-brand-ivory rounded-2xl border border-brand-cream p-4 shadow-inner-soft">
+                                <div class="space-y-3">
+                                    <div class="flex items-center text-sm text-brand-textmain font-medium">
+                                        <i data-lucide="layout-dashboard" class="w-3.5 h-3.5 mr-2 opacity-70"></i> Dashboard
+                                    </div>
+                                    <div class="pt-2">
+                                        <p class="text-[9px] uppercase tracking-widest text-brand-textmuted mb-2 font-semibold">Operations</p>
+                                        <div class="space-y-2 pl-2">
+                                            <div class="flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-2 opacity-70"></i> Services
+                                            </div>
+                                            <div class="flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="calendar" class="w-3.5 h-3.5 mr-2 opacity-70"></i> Bookings
+                                            </div>
+                                            <div class="flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="heart" class="w-3.5 h-3.5 mr-2 opacity-70"></i> Customers
+                                            </div>
+                                            <div class="flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="user-circle" class="w-3.5 h-3.5 mr-2 opacity-70"></i> Staff
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pt-2">
+                                        <p class="text-[9px] uppercase tracking-widest text-brand-textmuted mb-2 font-semibold">Analytics</p>
+                                        <div class="space-y-2 pl-2">
+                                            <div class="flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="pie-chart" class="w-3.5 h-3.5 mr-2 opacity-70"></i> Reports
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

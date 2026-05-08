@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: customer-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/kaori_customer}
+    username: ${DB_USER:kaori}
+    password: ${DB_PASS:kaori}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: customer
+server:
+  port: ${PORT:8087}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

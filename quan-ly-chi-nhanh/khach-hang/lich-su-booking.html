@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Booking History | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Global search across platform..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Add Customer
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Customers</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">John Doe</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Booking History</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex items-center mb-6 md:mb-0">
+                        <div class="w-16 h-16 rounded-full bg-brand-ivory border-2 border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-2xl mr-5 shadow-sm">JD</div>
+                        <div>
+                            <div class="flex items-center space-x-3 mb-1">
+                                <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">John Doe</h2>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
+                                    <i data-lucide="crown" class="w-3 h-3 mr-1"></i> Gold Member
+                                </span>
+                            </div>
+                            <p class="text-brand-textmuted text-sm">Booking History & Service Analytics</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                                <i data-lucide="more-horizontal" class="w-4 h-4 mr-2"></i> Options
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export History
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh Data
+                                </a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> Create Booking
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUMMARY & ANALYTICS ROW -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Upcoming Booking Highlight -->
+                    <div class="lg:col-span-1 bg-brand-gold/5 border border-brand-gold/30 rounded-3xl p-6 shadow-sm relative overflow-hidden group">
+                        <i data-lucide="calendar-clock" class="absolute -right-4 -bottom-4 w-24 h-24 text-brand-gold/10 group-hover:scale-110 transition-transform duration-500"></i>
+                        <div class="relative z-10">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-xs uppercase tracking-widest font-bold text-brand-gold">Upcoming Appointment</h3>
+                                <span class="px-2 py-0.5 bg-white rounded text-[10px] font-bold uppercase tracking-wider text-brand-textmain shadow-sm border border-brand-cream">In 11 Days</span>
+                            </div>
+                            <h4 class="font-serif text-2xl text-brand-textmain mb-1">Facial Treatment</h4>
+                            <p class="text-sm font-medium text-brand-textmain mb-4">March 20, 2026 • 14:00 - 15:00</p>
+                            
+                            <div class="flex items-center space-x-4 mb-5 text-xs text-brand-textmuted">
+                                <span class="flex items-center"><i data-lucide="user" class="w-3.5 h-3.5 mr-1.5 text-brand-gold"></i> Lily (Staff)</span>
+                                <span class="flex items-center"><i data-lucide="store" class="w-3.5 h-3.5 mr-1.5 text-brand-gold"></i> Downtown Spa</span>
+                            </div>
+
+                            <div class="flex space-x-3">
+                                <button class="flex-1 py-2 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-lg text-xs font-medium transition shadow-sm">Reschedule</button>
+                                <button class="flex-1 py-2 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-lg text-xs font-medium transition shadow-sm">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History Metrics & Frequency Analysis -->
+                    <div class="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Visits</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">12</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-green-600 mb-1">Completed</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">10</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-rose mb-1">Cancelled</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">1</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-red-500 mb-1">No-Shows</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">1</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center md:col-span-2">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Most Booked Service</p>
+                            <h3 class="font-serif text-xl text-brand-textmain mt-0.5 truncate">Deep Tissue Massage <span class="text-xs font-sans text-brand-textmuted font-normal">(6 times)</span></h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Avg Visit Freq.</p>
+                            <h3 class="font-serif text-xl text-brand-textmain mt-0.5">~3 Weeks</h3>
+                        </div>
+                        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Avg Spend/Visit</p>
+                            <h3 class="font-serif text-xl text-brand-textmain mt-0.5">$125.00</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MAIN TABLE AREA -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden relative">
+                    
+                    <!-- FILTER BAR -->
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30">
+                        <div class="flex flex-col xl:flex-row gap-4 justify-between items-center">
+                            
+                            <!-- Search -->
+                            <div class="flex items-center bg-white rounded-xl px-4 py-2.5 border border-brand-cream w-full xl:w-[350px] focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                <input type="text" placeholder="Search by Booking ID, Service, Staff..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted/60 text-brand-textmain">
+                            </div>
+
+                            <!-- Filters -->
+                            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+                                
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">Date Range: All</option>
+                                    <option>Past 30 Days</option>
+                                    <option>Past 6 Months</option>
+                                    <option>Past Year</option>
+                                    <option>Upcoming Only</option>
+                                </select>
+
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">Status: All</option>
+                                    <option>Completed</option>
+                                    <option>Confirmed</option>
+                                    <option>Cancelled</option>
+                                    <option>No-Show</option>
+                                </select>
+
+                                <select class="spa-input w-auto min-w-[140px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">All Services</option>
+                                    <option>Massage</option>
+                                    <option>Facials</option>
+                                    <option>Packages</option>
+                                </select>
+
+                                <button class="p-2.5 text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold bg-white rounded-xl transition shadow-sm" title="More Filters">
+                                    <i data-lucide="filter" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TABLE -->
+                        <div class="overflow-x-auto min-h-[400px]">
+                            <table class="w-full text-left border-collapse min-w-[1200px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-white border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold">Date & Time</th>
+                                        <th class="py-4 px-4 font-semibold">Booking ID</th>
+                                        <th class="py-4 px-4 font-semibold">Service</th>
+                                        <th class="py-4 px-4 font-semibold">Staff & Branch</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Status</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Payment</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 bg-white font-medium text-brand-textmain">
+                                    
+                                    <!-- Upcoming Row -->
+                                    <tr class="hover:bg-brand-ivory/30 transition bg-brand-ivory/20">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain">Mar 20, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">14:00 (60 min)</p>
+                                        </td>
+                                        <td class="py-4 px-4 font-mono text-xs text-brand-textmuted">BK-10512</td>
+                                        <td class="py-4 px-4">
+                                            <p>Facial Treatment</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain">Lily</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Downtown Spa</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                                                Confirmed
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700">
+                                                Deposit Paid
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('bookingTimelinePanel')">
+                                                Timeline
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> View Detail</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="calendar-clock" class="w-3 h-3 mr-2"></i> Reschedule</a>
+                                                <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-red-600 hover:bg-red-50 transition"><i data-lucide="x-circle" class="w-3 h-3 mr-2"></i> Cancel Booking</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Completed Row 1 -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain">Mar 08, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">10:00 (60 min)</p>
+                                        </td>
+                                        <td class="py-4 px-4 font-mono text-xs text-brand-textmuted">BK-10425</td>
+                                        <td class="py-4 px-4">
+                                            <p>Deep Tissue Massage</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain">Anna</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Downtown Spa</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700">
+                                                Paid
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('bookingTimelinePanel')">
+                                                Timeline
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> View Detail</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3 h-3 mr-2"></i> Book Again</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Completed Row 2 -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain">Feb 15, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">15:00 (90 min)</p>
+                                        </td>
+                                        <td class="py-4 px-4 font-mono text-xs text-brand-textmuted">BK-10210</td>
+                                        <td class="py-4 px-4">
+                                            <p>Couples Retreat Package</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain">Elena, James</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Westside Spa</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700">
+                                                Paid
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('bookingTimelinePanel')">
+                                                Timeline
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> View Detail</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3 h-3 mr-2"></i> Book Again</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Cancelled Row -->
+                                    <tr class="hover:bg-brand-ivory/30 transition opacity-80">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain line-through">Jan 22, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">09:00 (60 min)</p>
+                                        </td>
+                                        <td class="py-4 px-4 font-mono text-xs text-brand-textmuted">BK-09885</td>
+                                        <td class="py-4 px-4">
+                                            <p>Aromatherapy</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain">Mia</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Downtown Spa</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-red-50 text-red-600 border border-red-100">
+                                                Cancelled
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500">
+                                                Refunded
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('bookingTimelinePanel')">
+                                                Timeline
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    
+                    <!-- Pagination Footer -->
+                    <div class="p-4 border-t border-brand-cream/50 flex justify-between items-center text-sm text-brand-textmuted bg-brand-ivory/20 mt-auto">
+                        <p>Showing <span class="font-medium text-brand-textmain">1</span> to <span class="font-medium text-brand-textmain">4</span> of <span class="font-medium text-brand-textmain">12</span> bookings</p>
+                        <div class="flex space-x-1 sm:space-x-2">
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm opacity-50 cursor-not-allowed">Previous</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-gold bg-brand-gold text-white rounded-lg shadow-sm font-medium">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg transition shadow-sm font-medium">2</button>
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT BOOKING TIMELINE / DETAIL PANEL -->
+    <div id="bookingTimelinePanel" class="fixed inset-y-0 right-0 w-full max-w-md bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <div>
+                <div class="flex items-center space-x-3 mb-1">
+                    <h3 class="font-serif text-xl text-brand-textmain">#BK-10425</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                        Completed
+                    </span>
+                </div>
+                <p class="text-xs text-brand-textmuted">Mar 10, 2026 • Deep Tissue Massage</p>
+            </div>
+            <button onclick="togglePanel('bookingTimelinePanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+            
+            <!-- Quick Summary -->
+            <div class="bg-white rounded-2xl border border-brand-cream p-5 shadow-sm space-y-4">
+                <div class="flex justify-between items-start">
+                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Location & Staff</p>
+                    <p class="text-sm font-medium text-brand-textmain text-right">Downtown Spa<br><span class="text-xs font-normal text-brand-textmuted">Staff: Anna N.</span></p>
+                </div>
+                <div class="h-px w-full bg-brand-cream/50"></div>
+                <div class="flex justify-between items-start">
+                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Payment</p>
+                    <p class="text-sm font-serif font-medium text-brand-textmain text-right">$80.00<br><span class="text-[10px] uppercase font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded inline-block mt-1 font-sans tracking-wider">Paid (Card)</span></p>
+                </div>
+            </div>
+
+            <!-- Lifecycle Timeline -->
+            <div class="space-y-4">
+                <h4 class="font-serif text-lg text-brand-textmain">Lifecycle Events</h4>
+                
+                <div class="relative pl-3 space-y-6 before:absolute before:inset-0 before:ml-[17px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-brand-cream">
+                    
+                    <!-- Event 1 -->
+                    <div class="relative flex items-center">
+                        <div class="absolute left-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm -ml-[5px]"></div>
+                        <div class="ml-6 bg-white p-3 border border-brand-cream rounded-xl w-full shadow-sm">
+                            <p class="text-sm font-medium text-brand-textmain">Payment Processed</p>
+                            <p class="text-[10px] text-brand-textmuted mt-0.5 font-mono">Mar 10, 11:05 AM</p>
+                            <p class="text-[10px] text-brand-textmuted mt-1 italic">By Receptionist via Card ending in 4242</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Event 2 -->
+                    <div class="relative flex items-center">
+                        <div class="absolute left-0 w-3 h-3 bg-brand-gold rounded-full border-2 border-white shadow-sm -ml-[5px]"></div>
+                        <div class="ml-6 bg-white p-3 border border-brand-cream rounded-xl w-full shadow-sm">
+                            <p class="text-sm font-medium text-brand-textmain">Service Completed</p>
+                            <p class="text-[10px] text-brand-textmuted mt-0.5 font-mono">Mar 10, 11:00 AM</p>
+                            <p class="text-[10px] text-brand-textmuted mt-1 italic">Marked complete by Anna N.</p>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="relative flex items-center">
+                        <div class="absolute left-0 w-3 h-3 bg-brand-cream rounded-full border-2 border-white shadow-sm -ml-[5px]"></div>
+                        <div class="ml-6">
+                            <p class="text-sm font-medium text-brand-textmain">Customer Checked In</p>
+                            <p class="text-[10px] text-brand-textmuted mt-0.5 font-mono">Mar 10, 09:50 AM</p>
+                        </div>
+                    </div>
+
+                    <!-- Event 4 -->
+                    <div class="relative flex items-center">
+                        <div class="absolute left-0 w-3 h-3 bg-brand-cream rounded-full border-2 border-white shadow-sm -ml-[5px]"></div>
+                        <div class="ml-6">
+                            <p class="text-sm font-medium text-brand-textmain">Staff Assigned</p>
+                            <p class="text-[10px] text-brand-textmuted mt-0.5 font-mono">Mar 02, 14:20 PM</p>
+                            <p class="text-[10px] text-brand-textmuted mt-1 italic">Auto-assigned to Anna N.</p>
+                        </div>
+                    </div>
+
+                    <!-- Event 5 -->
+                    <div class="relative flex items-center">
+                        <div class="absolute left-0 w-3 h-3 bg-brand-cream rounded-full border-2 border-white shadow-sm -ml-[5px]"></div>
+                        <div class="ml-6">
+                            <p class="text-sm font-medium text-brand-textmain">Booking Created</p>
+                            <p class="text-[10px] text-brand-textmuted mt-0.5 font-mono">Mar 02, 14:20 PM</p>
+                            <p class="text-[10px] text-brand-textmuted mt-1 italic">Via Online Portal</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 grid grid-cols-2 gap-3">
+            <button class="py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex items-center justify-center">
+                <i data-lucide="file-text" class="w-4 h-4 mr-2 text-brand-textmuted"></i> View Receipt
+            </button>
+            <button class="py-2.5 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-goldhover transition shadow-sm flex items-center justify-center">
+                <i data-lucide="copy" class="w-4 h-4 mr-2"></i> Book Again
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+
+        // Bulk Selection Logic
+        function toggleSelectAll() {
+            const masterCheckbox = document.getElementById('selectAll');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            
+            rowCheckboxes.forEach(cb => {
+                cb.checked = masterCheckbox.checked;
+            });
+        }
+
+        function checkSelection() {
+            const masterCheckbox = document.getElementById('selectAll');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            
+            let allChecked = true;
+            rowCheckboxes.forEach(cb => {
+                if(!cb.checked) allChecked = false;
+            });
+
+            masterCheckbox.checked = allChecked;
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kh-danhsach' });</script>
+</body>
+</html>

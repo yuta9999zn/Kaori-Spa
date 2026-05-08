@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaori | Hệ Thống Quản Lý Spa</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',
+                            cream: '#F4EFEA',
+                            gold: '#C9A87C',
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',
+                            lavender: '#DCD6DD',
+                            textmain: '#4A443E',
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FAF9F6; }
+        ::-webkit-scrollbar-thumb { background: #D9B8B5; border-radius: 10px; }
+        .portal-card { transition: all 0.3s ease; }
+        .portal-card:hover { transform: translateY(-8px); }
+        .gradient-bg {
+            background: linear-gradient(135deg, #FAF9F6 0%, #F4EFEA 40%, #DCD6DD 100%);
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeup { animation: fadeUp 0.6s ease forwards; }
+        .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+        .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+        .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen font-sans text-brand-textmain flex flex-col">
+
+    <!-- Header -->
+    <header class="py-8 px-12 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <i data-lucide="flower-2" class="text-brand-gold w-7 h-7" stroke-width="1.5"></i>
+            <h1 class="font-serif text-3xl tracking-widest text-brand-textmain">KAORI</h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <span class="text-sm text-brand-textmuted">Phiên bản 2.0</span>
+            <div class="w-px h-5 bg-brand-cream"></div>
+            <button class="text-sm text-brand-textmuted hover:text-brand-gold transition flex items-center gap-1.5">
+                <i data-lucide="globe" class="w-4 h-4"></i> VI
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="flex-1 flex flex-col items-center justify-center px-6 py-16">
+        <div class="text-center mb-16 animate-fadeup">
+            <p class="text-brand-gold font-light tracking-[0.3em] uppercase text-sm mb-4">Hệ Thống Quản Lý Đa Chi Nhánh</p>
+            <h2 class="font-serif text-5xl text-brand-textmain mb-4 leading-tight">Chào mừng đến với<br><span class="text-brand-gold">KAORI Platform</span></h2>
+            <p class="text-brand-textmuted font-light text-lg max-w-xl mx-auto">
+                Vui lòng chọn cổng quản lý phù hợp với vai trò của bạn để tiếp tục.
+            </p>
+        </div>
+
+        <!-- Portal Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl w-full">
+
+            <!-- Card 1: Tenant Admin -->
+            <a href="quan-ly-tenant/index.html" class="portal-card block bg-white rounded-3xl shadow-soft border border-brand-cream/80 p-8 text-center group animate-fadeup animate-delay-1">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-textmain to-[#6B6460] flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                    <i data-lucide="shield-check" class="w-9 h-9 text-white" stroke-width="1.5"></i>
+                </div>
+                <h3 class="font-serif text-2xl text-brand-textmain mb-2">Quản Lý Hệ Thống</h3>
+                <p class="text-xs text-brand-gold font-light tracking-widest uppercase mb-4">Tenant Administrator</p>
+                <p class="text-brand-textmuted text-sm font-light leading-relaxed mb-6">
+                    Quản lý toàn bộ nền tảng: tổ chức, gói dịch vụ, cấu hình hệ thống, nhật ký kiểm tra và phân tích tổng thể.
+                </p>
+                <div class="space-y-2 text-left mb-6">
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Quản lý tổ chức & tenant
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Gói đăng ký & thanh toán
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Cấu hình hệ thống toàn cục
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Audit logs & bảo mật
+                    </div>
+                </div>
+                <span class="inline-flex items-center gap-2 bg-brand-textmain text-white px-6 py-2.5 rounded-full text-sm font-medium group-hover:bg-brand-textmuted transition">
+                    Truy cập <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </span>
+            </a>
+
+            <!-- Card 2: Organization Owner -->
+            <a href="quan-ly-to-chuc/index.html" class="portal-card block bg-white rounded-3xl shadow-soft border border-brand-cream/80 p-8 text-center group animate-fadeup animate-delay-2 relative overflow-hidden">
+                <!-- Featured badge -->
+                <div class="absolute top-5 right-5 bg-brand-gold text-white text-xs px-3 py-1 rounded-full font-medium">Chủ Sở Hữu</div>
+                <div class="absolute -right-12 -top-12 w-40 h-40 bg-brand-gold/5 rounded-full"></div>
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-gold to-brand-goldhover flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                    <i data-lucide="building-2" class="w-9 h-9 text-white" stroke-width="1.5"></i>
+                </div>
+                <h3 class="font-serif text-2xl text-brand-textmain mb-2">Quản Lý Tổ Chức</h3>
+                <p class="text-xs text-brand-gold font-light tracking-widest uppercase mb-4">Organization Owner</p>
+                <p class="text-brand-textmuted text-sm font-light leading-relaxed mb-6">
+                    Quản lý tổ chức của bạn: tạo chi nhánh, thuê quản lý, phân quyền, theo dõi doanh thu và hiệu suất tổng thể.
+                </p>
+                <div class="space-y-2 text-left mb-6">
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Tạo & quản lý chi nhánh
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Thuê quản lý (Manager)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Phân quyền linh hoạt (RBAC)
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Báo cáo doanh thu đa chi nhánh
+                    </div>
+                </div>
+                <span class="inline-flex items-center gap-2 bg-brand-gold text-white px-6 py-2.5 rounded-full text-sm font-medium group-hover:bg-brand-goldhover transition">
+                    Truy cập <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </span>
+            </a>
+
+            <!-- Card 3: Branch Manager / Staff -->
+            <a href="quan-ly-chi-nhanh/index.html" class="portal-card block bg-white rounded-3xl shadow-soft border border-brand-cream/80 p-8 text-center group animate-fadeup animate-delay-3">
+                <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-brand-rose to-[#C4A0A0] flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                    <i data-lucide="store" class="w-9 h-9 text-white" stroke-width="1.5"></i>
+                </div>
+                <h3 class="font-serif text-2xl text-brand-textmain mb-2">Quản Lý Chi Nhánh</h3>
+                <p class="text-xs text-brand-gold font-light tracking-widest uppercase mb-4">Branch Manager & Staff</p>
+                <p class="text-brand-textmuted text-sm font-light leading-relaxed mb-6">
+                    Vận hành chi nhánh hàng ngày: lịch đặt chỗ, nhân viên, dịch vụ, phòng, khách hàng và báo cáo chi nhánh.
+                </p>
+                <div class="space-y-2 text-left mb-6">
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Lịch đặt chỗ & booking
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Quản lý nhân viên & ca làm
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Quản lý phòng & thiết bị
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-brand-textmuted">
+                        <i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>
+                        Khách hàng & dịch vụ
+                    </div>
+                </div>
+                <span class="inline-flex items-center gap-2 bg-brand-rose text-white px-6 py-2.5 rounded-full text-sm font-medium group-hover:bg-[#C4A0A0] transition">
+                    Truy cập <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </span>
+            </a>
+
+        </div>
+
+        <!-- Footer info -->
+        <div class="mt-16 animate-fadeup animate-delay-4 text-center">
+            <p class="text-brand-textmuted text-sm font-light">
+                Cần hỗ trợ? <a href="#" class="text-brand-gold hover:underline">Liên hệ quản trị viên</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Bottom bar -->
+    <footer class="py-4 px-12 border-t border-brand-cream/50 flex items-center justify-between">
+        <p class="text-xs text-brand-textmuted">© 2026 Kaori Spa Platform. All rights reserved.</p>
+        <div class="flex items-center gap-6">
+            <a href="#" class="text-xs text-brand-textmuted hover:text-brand-gold transition">Chính sách bảo mật</a>
+            <a href="#" class="text-xs text-brand-textmuted hover:text-brand-gold transition">Điều khoản sử dụng</a>
+            <a href="#" class="text-xs text-brand-textmuted hover:text-brand-gold transition">Hỗ trợ kỹ thuật</a>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

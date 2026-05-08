@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Profile | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Tabs styling */
+        .tab-btn {
+            @apply py-4 px-6 text-sm font-medium border-b-2 transition-colors duration-200 outline-none whitespace-nowrap;
+        }
+        .tab-btn.active {
+            @apply border-brand-gold text-brand-gold;
+        }
+        .tab-btn.inactive {
+            @apply border-transparent text-brand-textmuted hover:text-brand-textmain hover:bg-brand-cream/20;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+        
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white relative">
+
+    <!-- Sticky Header -->
+    <header class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-brand-cream shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-6 md:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                <button class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold transition mr-4 shadow-sm">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div class="hidden sm:block flex-1 bg-brand-ivory rounded-full px-4 py-2 border border-brand-cream/50 w-72 transition focus-within:border-brand-gold focus-within:bg-white ml-2">
+                    <div class="flex items-center">
+                        <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                        <input type="text" placeholder="Search platform..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Add New Staff
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-clock" class="w-4 h-4 mr-2"></i> Edit Schedule
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">HR Manager</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex-1 w-full flex pt-20 h-screen overflow-hidden max-w-[1600px] mx-auto">
+        
+<div id="sidebar-root"></div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-8 scroll-smooth">
+            <div class="max-w-7xl mx-auto pb-24 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Staff List</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Anna Nguyen</span>
+                </div>
+
+                <!-- PROFILE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-80 h-full bg-gradient-to-bl from-brand-gold/10 to-transparent pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex items-center mb-6 md:mb-0">
+                        <div class="w-24 h-24 rounded-full bg-brand-ivory border-4 border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-3xl mr-6 shadow-sm relative">
+                            AN
+                            <div class="absolute bottom-0 right-0 w-5 h-5 bg-green-500 border-2 border-white rounded-full" title="Active"></div>
+                        </div>
+                        <div>
+                            <h2 class="font-serif text-3xl text-brand-textmain tracking-wide mb-1">Anna Nguyen</h2>
+                            <div class="flex flex-wrap gap-2 mt-2 text-sm text-brand-textmain font-medium">
+                                <span class="flex items-center text-brand-gold"><i data-lucide="award" class="w-4 h-4 mr-1.5"></i> Senior Therapist</span>
+                                <span class="text-brand-cream mx-2">|</span>
+                                <span class="flex items-center"><i data-lucide="store" class="w-4 h-4 mr-1.5 text-brand-textmuted"></i> District 1 Spa</span>
+                                <span class="text-brand-cream mx-2">|</span>
+                                <span class="flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-1.5 text-brand-textmuted"></i> Hired Jan 2021</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                                More Actions <i data-lucide="chevron-down" class="w-4 h-4 ml-2 text-brand-textmuted"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-56 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="key" class="w-4 h-4 mr-3"></i> Reset Password
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="arrow-right-left" class="w-4 h-4 mr-3"></i> Transfer Branch
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="shield" class="w-4 h-4 mr-3"></i> Change Role
+                                </a>
+                                <div class="h-px bg-brand-cream my-1 mx-2"></div>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition">
+                                    <i data-lucide="user-x" class="w-4 h-4 mr-3"></i> Disable Account
+                                </a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="edit-2" class="w-4 h-4 mr-2"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TABS CONTAINER -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col min-h-[600px]">
+                    
+                    <!-- Tabs Navigation -->
+                    <div class="flex overflow-x-auto border-b border-brand-cream bg-brand-ivory/30 px-2 hide-scroll">
+                        <button class="tab-btn active" onclick="switchTab(this, 'tab-overview')">Overview</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-services')">Schedule & Services</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-performance')">Performance & Pay</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-bookings')">Bookings & Reviews</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-activity')">Activity Log</button>
+                    </div>
+
+                    <!-- TAB 1: OVERVIEW -->
+                    <div id="tab-overview" class="tab-content active p-6 md:p-8">
+                        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                            
+                            <!-- Left Col -->
+                            <div class="space-y-8">
+                                <!-- Personal Info -->
+                                <div>
+                                    <h3 class="font-serif text-xl text-brand-textmain mb-4 border-b border-brand-cream pb-2">Personal Information</h3>
+                                    <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-6">
+                                        <div class="grid grid-cols-2 gap-y-4 gap-x-6">
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Full Name</p>
+                                                <p class="text-sm font-medium text-brand-textmain">Anna Nguyen</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Gender</p>
+                                                <p class="text-sm font-medium text-brand-textmain">Female</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Phone Number</p>
+                                                <p class="text-sm font-medium text-brand-textmain font-mono">+84 912 345 678</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Email</p>
+                                                <p class="text-sm font-medium text-brand-textmain">anna.n@lotusspa.com</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Date of Birth</p>
+                                                <p class="text-sm font-medium text-brand-textmain">Sep 14, 1992</p>
+                                            </div>
+                                            <div class="col-span-2 mt-2">
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Home Address</p>
+                                                <p class="text-sm font-medium text-brand-textmain">Apt 4B, Lotus Residences, District 2, HCMC</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Employment Info -->
+                                <div>
+                                    <h3 class="font-serif text-xl text-brand-textmain mb-4 border-b border-brand-cream pb-2">Employment Information</h3>
+                                    <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-6">
+                                        <div class="grid grid-cols-2 gap-y-4 gap-x-6">
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Employee ID</p>
+                                                <p class="text-sm font-medium text-brand-textmain font-mono">EMP-0042</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Department</p>
+                                                <p class="text-sm font-medium text-brand-textmain">Therapy & Wellness</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Hire Date</p>
+                                                <p class="text-sm font-medium text-brand-textmain">Jan 15, 2021</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Contract Type</p>
+                                                <p class="text-sm font-medium text-brand-textmain">Full-Time</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Col -->
+                            <div class="space-y-8">
+                                <!-- Roles & Permissions -->
+                                <div>
+                                    <h3 class="font-serif text-xl text-brand-textmain mb-4 border-b border-brand-cream pb-2">Roles & Permissions</h3>
+                                    <div class="bg-white rounded-2xl border border-brand-cream p-6 shadow-sm relative overflow-hidden">
+                                        <div class="absolute right-0 top-0 w-24 h-full bg-brand-gold/5"></div>
+                                        <div class="flex justify-between items-start relative z-10">
+                                            <div>
+                                                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">System Role</p>
+                                                <h4 class="text-lg font-serif text-brand-gold">Senior Therapist</h4>
+                                                
+                                                <div class="mt-4 space-y-2">
+                                                    <div class="flex items-center text-sm text-brand-textmain">
+                                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-2"></i> View own schedule & bookings
+                                                    </div>
+                                                    <div class="flex items-center text-sm text-brand-textmain">
+                                                        <i data-lucide="check-circle" class="w-4 h-4 text-green-500 mr-2"></i> Access client health notes
+                                                    </div>
+                                                    <div class="flex items-center text-sm text-brand-textmuted">
+                                                        <i data-lucide="x-circle" class="w-4 h-4 text-brand-rose mr-2"></i> Cannot edit pricing or roles
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition border border-brand-gold/30 bg-white px-3 py-1.5 rounded-lg shadow-sm">Edit Role</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Emergency Contact -->
+                                <div>
+                                    <h3 class="font-serif text-xl text-brand-textmain mb-4 border-b border-brand-cream pb-2">Emergency Contact</h3>
+                                    <div class="bg-brand-rose/5 rounded-2xl border border-brand-rose/20 p-6">
+                                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-rose mb-1">Primary Contact</p>
+                                        <p class="text-sm font-medium text-brand-textmain mb-1">David Nguyen (Husband)</p>
+                                        <p class="text-sm text-brand-textmain font-mono flex items-center"><i data-lucide="phone" class="w-3.5 h-3.5 mr-2 text-brand-rose"></i> +84 988 777 666</p>
+                                    </div>
+                                </div>
+
+                                <!-- Internal Notes -->
+                                <div>
+                                    <div class="flex justify-between items-center mb-4 border-b border-brand-cream pb-2">
+                                        <h3 class="font-serif text-xl text-brand-textmain">HR Notes</h3>
+                                        <button class="text-[10px] uppercase tracking-wider font-bold text-brand-gold hover:text-brand-goldhover transition">+ Add Note</button>
+                                    </div>
+                                    <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-5">
+                                        <p class="text-sm text-brand-textmain italic leading-relaxed">"Completed advanced hot stone certification in Nov 2025. Excellent client feedback. Promoted to Senior Therapist Jan 2026."</p>
+                                        <p class="text-[10px] text-brand-textmuted font-mono mt-3 text-right">- Sarah M. (Manager)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: SCHEDULE & SERVICES -->
+                    <div id="tab-services" class="tab-content p-6 md:p-8">
+                        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                            
+                            <!-- Weekly Schedule -->
+                            <div>
+                                <div class="flex justify-between items-center mb-6">
+                                    <h3 class="font-serif text-xl text-brand-textmain">Weekly Work Schedule</h3>
+                                    <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition border border-brand-gold/30 bg-white px-3 py-1.5 rounded-lg shadow-sm">Edit Schedule</button>
+                                </div>
+
+                                <div class="bg-white border border-brand-cream rounded-2xl overflow-hidden shadow-sm">
+                                    <table class="w-full text-left">
+                                        <thead>
+                                            <tr class="bg-brand-ivory/50 border-b border-brand-cream text-[10px] uppercase tracking-widest text-brand-textmuted">
+                                                <th class="py-3 px-5 font-semibold">Day</th>
+                                                <th class="py-3 px-5 font-semibold text-center">Shift</th>
+                                                <th class="py-3 px-5 font-semibold text-center">Break</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                            <tr>
+                                                <td class="py-3 px-5 font-medium">Monday</td>
+                                                <td class="py-3 px-5 text-center font-mono">09:00 - 17:00</td>
+                                                <td class="py-3 px-5 text-center text-brand-textmuted font-mono">12:00 - 13:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3 px-5 font-medium">Tuesday</td>
+                                                <td class="py-3 px-5 text-center font-mono">09:00 - 17:00</td>
+                                                <td class="py-3 px-5 text-center text-brand-textmuted font-mono">12:00 - 13:00</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3 px-5 font-medium">Wednesday</td>
+                                                <td class="py-3 px-5 text-center font-mono">10:00 - 18:00</td>
+                                                <td class="py-3 px-5 text-center text-brand-textmuted font-mono">13:30 - 14:30</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3 px-5 font-medium">Thursday</td>
+                                                <td class="py-3 px-5 text-center font-mono">10:00 - 18:00</td>
+                                                <td class="py-3 px-5 text-center text-brand-textmuted font-mono">13:30 - 14:30</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3 px-5 font-medium">Friday</td>
+                                                <td class="py-3 px-5 text-center font-mono">09:00 - 17:00</td>
+                                                <td class="py-3 px-5 text-center text-brand-textmuted font-mono">12:00 - 13:00</td>
+                                            </tr>
+                                            <tr class="bg-brand-rose/5">
+                                                <td class="py-3 px-5 font-medium text-brand-rose">Saturday</td>
+                                                <td colspan="2" class="py-3 px-5 text-center font-bold text-brand-rose uppercase tracking-widest text-[10px]">Off Day</td>
+                                            </tr>
+                                            <tr class="bg-brand-rose/5">
+                                                <td class="py-3 px-5 font-medium text-brand-rose">Sunday</td>
+                                                <td colspan="2" class="py-3 px-5 text-center font-bold text-brand-rose uppercase tracking-widest text-[10px]">Off Day</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+</div>
+</div>
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'nv-danhsach' });</script>
+</body>
+</html>

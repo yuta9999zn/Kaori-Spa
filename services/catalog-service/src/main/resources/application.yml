@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: catalog-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/kaori_catalog}
+    username: ${DB_USER:kaori}
+    password: ${DB_PASS:kaori}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: catalog
+
+server:
+  port: ${PORT:8086}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Customer | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.75rem;
+            height: 1.5rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1.25rem);
+        }
+
+        /* Section Navigation highlight */
+        .nav-link.active {
+            @apply text-brand-gold border-l-2 border-brand-gold font-medium bg-brand-gold/5;
+        }
+
+        /* Custom Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm text-brand-gold;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white relative">
+
+    <!-- Sticky Header for the Form -->
+    <header class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-brand-cream shadow-sm">
+        <div class="max-w-[1400px] mx-auto px-6 md:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                <button class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold transition mr-4 shadow-sm">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <h1 class="font-serif text-xl md:text-2xl text-brand-textmain">Create Customer</h1>
+                    <div class="text-xs text-brand-textmuted font-medium flex items-center mt-0.5">
+                        <span>CRM</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span>Customers</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span class="text-brand-gold">Create</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3 md:space-x-4">
+                <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm hidden sm:block">
+                    Cancel
+                </button>
+                <button class="px-6 md:px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                    <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Profile
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="flex-1 w-full flex pt-20 h-screen overflow-hidden max-w-[1400px] mx-auto">
+        
+<div id="sidebar-root"></div>
+
+        <!-- Form Content Area -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-8 scroll-smooth" id="form-scroll-area">
+            <div class="max-w-3xl mx-auto space-y-8 md:space-y-10 pb-24">
+                
+                <!-- SECTION 1: Basic Information -->
+                <section id="basic-info" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Basic Information</h3>
+                                <p class="text-xs text-brand-textmuted">Client's core identity details.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="spa-label">First Name <span class="text-brand-rose">*</span></label>
+                                <input type="text" class="spa-input font-medium" placeholder="e.g. Jane">
+                            </div>
+                            <div>
+                                <label class="spa-label">Last Name <span class="text-brand-rose">*</span></label>
+                                <input type="text" class="spa-input font-medium" placeholder="e.g. Doe">
+                            </div>
+                            
+                            <div>
+                                <label class="spa-label">Gender</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                    <option value="" disabled selected>Select gender...</option>
+                                    <option value="female">Female</option>
+                                    <option value="male">Male</option>
+                                    <option value="other">Other / Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="spa-label">Date of Birth</label>
+                                <input type="date" class="spa-input text-brand-textmuted">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: Contact Information -->
+                <section id="contact-info" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <i data-lucide="phone" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Contact Details</h3>
+                                <p class="text-xs text-brand-textmuted">How we reach out for bookings and promotions.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            
+                            <!-- Duplicate Warning Demo Banner -->
+                            <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600 mr-3 mt-0.5 shrink-0"></i>
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-semibold text-amber-800">Duplicate Phone Number Detected</h4>
+                                    <p class="text-xs text-amber-700 mt-1">A customer named <strong>Jane D.</strong> already exists with this phone number. Do you want to view their profile or create a new one anyway?</p>
+                                    <div class="mt-3 flex space-x-3">
+                                        <button class="text-xs font-bold uppercase tracking-wider text-amber-800 hover:text-amber-900 transition">View Profile</button>
+                                        <button class="text-xs font-bold uppercase tracking-wider text-amber-600 hover:text-amber-800 transition">Dismiss</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="spa-label">Phone Number <span class="text-brand-rose">*</span></label>
+                                    <input type="tel" class="spa-input font-medium border-amber-300 ring-4 ring-amber-100" placeholder="+84" value="+84 912 345 678">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Email Address (Optional)</label>
+                                    <input type="email" class="spa-input" placeholder="client@example.com">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="spa-label">Home Address (Optional)</label>
+                                <input type="text" class="spa-input mb-3" placeholder="Street Address">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <input type="text" class="spa-input" placeholder="City / District">
+                                    <input type="text" class="spa-input" placeholder="State / Province">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: Customer Details -->
+                <section id="customer-details" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Membership & Status</h3>
+                                <p class="text-xs text-brand-textmuted">Manage access and loyalty tiers.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="spa-label">Membership Level</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                    <option value="none" selected>Regular (None)</option>
+                                    <option value="silver">Silver Member</option>
+                                    <option value="gold">Gold Member</option>
+                                    <option value="vip">VIP</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="spa-label">Account Status</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                    <option value="active" selected>Active</option>
+                                    <option value="inactive">Inactive</option>
+                                    <option value="blocked">Blocked (Cannot Book)</option>
+                                </select>
+                            </div>
+
+                            <div class="md:col-span-2 mt-2">
+                                <label class="spa-label">Registration Branch</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                    <option value="downtown" selected>District 1 Spa (Default)</option>
+                                    <option value="westside">Westside Retreat</option>
+                                    <option value="airport">Airport Branch</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: Health & Preferences -->
+                <section id="health-prefs" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <i data-lucide="heart" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Health & Preferences</h3>
+                                <p class="text-xs text-brand-textmuted">Important conditions and comfort settings for treatments.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="spa-label">Preferred Therapist</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                        <option value="none">No Preference</option>
+                                        <option value="anna">Anna Nguyen</option>
+                                        <option value="elena">Elena Rodriguez</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Preferred Room Type</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                        <option value="none">Any Room</option>
+                                        <option value="quiet">Quiet Zone Room</option>
+                                        <option value="vip">VIP Suite</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="spa-label mb-3">Massage Pressure Preference</label>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="pressure" value="light" class="peer sr-only radio-card-input">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold text-brand-textmain font-medium text-sm">
+                                            Light
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="pressure" value="medium" class="peer sr-only radio-card-input" checked>
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold text-brand-textmain font-medium text-sm">
+                                            Medium
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="pressure" value="strong" class="peer sr-only radio-card-input">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold text-brand-textmain font-medium text-sm">
+                                            Strong
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="h-px bg-brand-cream/50 w-full my-6"></div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="spa-label">Skin Condition</label>
+                                    <input type="text" class="spa-input" placeholder="e.g. Sensitive, Oily, Dry...">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Known Allergies</label>
+                                    <input type="text" class="spa-input border-brand-rose focus:ring-brand-rose/20 placeholder-red-300" placeholder="e.g. Lavender oil, Nut allergies...">
+                                    <p class="text-[10px] text-brand-rose mt-1.5 ml-1">Critical: Triggers alerts during service booking.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: CRM Attributes -->
+                <section id="crm-attributes" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <i data-lucide="tag" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">CRM & Marketing</h3>
+                                <p class="text-xs text-brand-textmuted">Tags, referral tracking, and communication consent.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-8">
+                            
+                            <div>
+                                <label class="spa-label mb-2">Customer Tags</label>
+                                <div class="p-4 border border-brand-cream rounded-xl bg-brand-ivory/30 min-h-[60px] flex flex-wrap gap-2 items-center">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-brand-gold/10 text-brand-gold border border-brand-gold/20">New Customer <button class="ml-1.5 opacity-50 hover:opacity-100"><i data-lucide="x" class="w-3 h-3"></i></button></span>
+                                    <input type="text" class="bg-transparent border-none outline-none text-sm w-32 placeholder-brand-textmuted ml-2" placeholder="Type to add...">
+                                </div>
+                                <div class="flex gap-2 mt-2">
+                                    <span class="text-[10px] text-brand-textmuted">Suggested:</span>
+                                    <button class="text-[10px] uppercase font-bold text-brand-gold hover:underline">VIP</button>
+                                    <button class="text-[10px] uppercase font-bold text-brand-gold hover:underline">Local Resident</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="spa-label">Referral Source</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                        <option value="" disabled selected>How did they hear about us?</option>
+                                        <option value="walkin">Walk-in</option>
+                                        <option value="friend">Friend / Family</option>
+                                        <option value="instagram">Instagram</option>
+                                        <option value="google">Google Search</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label class="spa-label mb-4">Marketing Consent</label>
+                                    <div class="space-y-4 bg-brand-ivory/50 p-4 rounded-xl border border-brand-cream">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm font-medium text-brand-textmain">SMS Promotions</span>
+                                            <div class="relative inline-block w-11 align-middle select-none shrink-0">
+                                                <input type="checkbox" id="tgl-sms" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="tgl-sms" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm font-medium text-brand-textmain">Email Newsletters</span>
+                                            <div class="relative inline-block w-11 align-middle select-none shrink-0">
+                                                <input type="checkbox" id="tgl-email" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="tgl-email" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 6: Internal Notes -->
+                <section id="internal-notes" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <i data-lucide="file-text" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Internal Notes</h3>
+                                <p class="text-xs text-brand-textmuted">Staff-only observations and preferences.</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <textarea class="spa-input h-32 resize-y leading-relaxed" placeholder="Type any additional context, preferences, or warnings for staff..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="h-8"></div> <!-- Bottom padding -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Scroll spy for sidebar navigation
+        const scrollArea = document.getElementById('form-scroll-area');
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        scrollArea.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                // Accounting for sticky header height and padding
+                if (scrollArea.scrollTop >= (sectionTop - 140)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kh-taosua' });</script>
+</body>
+</html>

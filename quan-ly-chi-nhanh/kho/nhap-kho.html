@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Nhap Kho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .form-label{font-size:12px;color:#8B837C;margin-bottom:5px;display:block}
+        .form-input{width:100%;border:1px solid #F4EFEA;border-radius:12px;padding:10px 14px;font-size:13px;background:#FAF9F6;outline:none;transition:border .15s}
+        .form-input:focus{border-color:#C9A87C}
+        .row-item{background:#FAF9F6;border-radius:14px;padding:14px 16px;border:1px solid #F4EFEA;transition:all .15s}
+        .row-item:hover{border-color:#D9B8B5}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <a href="index.html" class="text-brand-textmuted hover:text-brand-gold transition">
+            <i data-lucide="arrow-left" class="w-4 h-4" stroke-width="1.5"></i>
+        </a>
+        <i data-lucide="package-plus" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Nhap Kho</h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <button onclick="saveDraft()" class="border border-brand-cream text-brand-textmuted px-4 py-2 rounded-full text-sm hover:border-brand-gold hover:text-brand-gold transition">
+            Luu nhap
+        </button>
+        <button onclick="submitForm()"
+            class="bg-brand-gold hover:bg-brand-goldhover text-white px-5 py-2 rounded-full text-sm font-medium transition flex items-center gap-2">
+            <i data-lucide="check" class="w-4 h-4"></i> Xac nhan nhap kho
+        </button>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-5xl mx-auto p-8 grid grid-cols-3 gap-6">
+
+    <!-- Main form -->
+    <div class="col-span-2 flex flex-col gap-5">
+
+        <!-- Supplier & receipt info -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <p class="font-medium text-sm mb-4 flex items-center gap-2">
+                <i data-lucide="truck" class="w-4 h-4 text-brand-gold"></i> Thong tin nhap hang
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="form-label">Nha cung cap *</label>
+                    <select class="form-input" id="supplier">
+                        <option value="">-- Chon nha cung cap --</option>
+                        <option>Spa Supply Co.</option>
+                        <option>Viet Beauty Import</option>
+                        <option>Natural Essence Ltd.</option>
+                        <option>ProSpa Vietnam</option>
+                        <option>Khac (nhap tay)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">So hoa don / Phieu giao hang</label>
+                    <input type="text" class="form-input" id="invoice-no" placeholder="Vd: INV-20240115-001">
+                </div>
+                <div>
+                    <label class="form-label">Ngay nhap kho *</label>
+                    <input type="date" class="form-input" id="receipt-date" value="2026-04-14">
+                </div>
+                <div>
+                    <label class="form-label">Nguoi nhan hang</label>
+                    <select class="form-input" id="receiver">
+                        <option>Nguyen Thi Hoa (Quan ly)</option>
+                        <option>Le Van Nam (Thu kho)</option>
+                    </select>
+                </div>
+                <div class="col-span-2">
+                    <label class="form-label">Ghi chu phieu nhap</label>
+                    <input type="text" class="form-input" id="receipt-note" placeholder="Ghi chu them ve lo hang, dieu kien giao hang...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Product rows -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <p class="font-medium text-sm flex items-center gap-2">
+                    <i data-lucide="list" class="w-4 h-4 text-brand-gold"></i> Danh sach hang nhap
+                </p>
+                <button onclick="addRow()" class="text-sm text-brand-gold hover:underline flex items-center gap-1">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Them san pham
+                </button>
+            </div>
+
+            <!-- Table header -->
+            <div class="grid grid-cols-12 gap-2 text-xs text-brand-textmuted font-medium px-1 mb-2">
+                <div class="col-span-4">San pham</div>
+                <div class="col-span-2 text-center">So luong</div>
+                <div class="col-span-1 text-center">DVT</div>
+                <div class="col-span-2 text-center">Don gia</div>
+                <div class="col-span-2 text-center">So lo</div>
+                <div class="col-span-1"></div>
+            </div>
+
+            <div id="rows-container" class="flex flex-col gap-2"></div>
+
+            <div class="mt-4 pt-4 border-t border-brand-cream flex items-center justify-between">
+                <p class="text-sm text-brand-textmuted">Tong gia tri lo hang</p>
+                <p class="text-base font-medium text-brand-gold" id="total-value">0 ₫</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Summary + History -->
+    <div class="col-span-1 flex flex-col gap-5">
+
+        <!-- Summary card -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="font-medium text-sm mb-4">Tom tat nhap kho</p>
+            <div class="flex flex-col gap-2.5">
+                <div class="flex justify-between text-sm">
+                    <span class="text-brand-textmuted">So loai san pham</span>
+                    <span class="font-medium" id="sum-types">0</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-brand-textmuted">Tong so luong</span>
+                    <span class="font-medium" id="sum-qty">0</span>
+                </div>
+                <div class="border-t border-brand-cream pt-2.5 flex justify-between text-sm">
+                    <span class="text-brand-textmuted">Tong gia tri</span>
+                    <span class="font-medium text-brand-gold" id="sum-value">0 ₫</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick add from low-stock alerts -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="font-medium text-sm mb-3 flex items-center gap-2">
+                <i data-lucide="alert-triangle" class="w-4 h-4 text-orange-500"></i>
+                Hang sap het / het kho
+            </p>
+            <div class="flex flex-col gap-2" id="low-stock-list"></div>
+            <p class="text-xs text-brand-textmuted mt-2">Nhan de them vao phieu nhap</p>
+        </div>
+
+        <!-- Recent receipts -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="font-medium text-sm mb-3">Phieu nhap gan nhat</p>
+            <div class="flex flex-col gap-2">
+                <div class="rounded-xl bg-brand-ivory p-3">
+                    <p class="text-xs font-medium">INV-2401-0042</p>
+                    <p class="text-xs text-brand-textmuted">12/04 • Spa Supply Co. • 2,400,000₫</p>
+                </div>
+                <div class="rounded-xl bg-brand-ivory p-3">
+                    <p class="text-xs font-medium">INV-2401-0038</p>
+                    <p class="text-xs text-brand-textmuted">08/04 • Viet Beauty • 1,850,000₫</p>
+                </div>
+                <div class="rounded-xl bg-brand-ivory p-3">
+                    <p class="text-xs font-medium">INV-2401-0031</p>
+                    <p class="text-xs text-brand-textmuted">01/04 • Natural Essence • 3,120,000₫</p>
+                </div>
+            </div>
+            <a href="#" class="text-xs text-brand-gold hover:underline mt-2 block">Xem tat ca lich su nhap kho →</a>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+
+<!-- Success toast -->
+<div id="toast" class="hidden fixed bottom-8 right-8 bg-white border border-green-200 shadow-lg rounded-2xl px-5 py-4 flex items-center gap-3 z-50">
+    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
+        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-green-700">Nhap kho thanh cong!</p>
+        <p class="text-xs text-brand-textmuted" id="toast-msg">—</p>
+    </div>
+</div>
+
+<script>
+const PRODUCTS = [
+    { id:'SP001', name:'Dau Massage Rose',     unit:'Chai', warn:10, stock:6,  cat:'Dau massage' },
+    { id:'SP002', name:'Ong Hut Sinh Hoc',     unit:'Hop',  warn:20, stock:0,  cat:'Tieu hao' },
+    { id:'SP003', name:'Dau Massage Hot Stone',unit:'Chai', warn:5,  stock:0,  cat:'Dau massage' },
+    { id:'SP004', name:'Khan Nho',             unit:'Chiec',warn:50, stock:0,  cat:'Vai' },
+    { id:'SP005', name:'Tinh Dau Lavender',    unit:'Chai', warn:8,  stock:14, cat:'Tinh dau' },
+    { id:'SP006', name:'Muoi Tam Himalaya',    unit:'Tui',  warn:10, stock:3,  cat:'Khoang chat' },
+    { id:'SP007', name:'Kem Duong Da Collagen',unit:'Lop',  warn:6,  stock:2,  cat:'My pham' },
+    { id:'SP008', name:'Da nong (Hot Stone)',  unit:'Bo',   warn:3,  stock:5,  cat:'Dung cu' },
+];
+
+const LOW_STOCK = PRODUCTS.filter(p => p.stock <= p.warn);
+let rows = [];
+let rowId = 0;
+
+function renderLowStock() {
+    const el = document.getElementById('low-stock-list');
+    el.innerHTML = LOW_STOCK.slice(0, 5).map(p => `
+        <div class="flex items-center justify-between text-xs cursor-pointer hover:bg-brand-cream rounded-lg px-2 py-1.5 transition" onclick="addRowForProduct('${p.id}')">
+            <span class="${p.stock===0?'text-red-600':'text-orange-600'} font-medium">${p.name}</span>
+            <span class="text-brand-textmuted">${p.stock===0?'Het':p.stock+' '+p.unit}</span>
+        </div>`).join('');
+}
+
+function addRow(productId) {
+    rowId++;
+    const id = rowId;
+    rows.push({ id, productId: productId || '', qty: 1, unitPrice: 0, batchNo: '' });
+    renderRows();
+}
+
+function addRowForProduct(productId) {
+    const exists = rows.find(r => r.productId === productId);
+    if (exists) { alert('San pham nay da co trong danh sach.'); return; }
+    addRow(productId);
+}
+
+function renderRows() {
+    const container = document.getElementById('rows-container');
+    if (rows.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-brand-textmuted text-sm">
+            <i data-lucide="package" class="w-8 h-8 mx-auto mb-2 opacity-30"></i>
+            <p>Chua co san pham nao. Nhan "+ Them san pham" de bat dau.</p>
+        </div>`;
+        lucide.createIcons();
+        updateSummary();
+        return;
+    }
+    container.innerHTML = rows.map(row => {
+        const p = PRODUCTS.find(p => p.id === row.productId);
+        return `<div class="row-item grid grid-cols-12 gap-2 items-center">
+            <div class="col-span-4">
+                <select class="form-input" onchange="updateRow(${row.id},'productId',this.value)">
+                    <option value="">-- Chon san pham --</option>
+                    ${PRODUCTS.map(p => `<option value="${p.id}" ${p.id===row.productId?'selected':''}>${p.name}</option>`).join('')}
+                </select>
+            </div>
+            <div class="col-span-2">
+                <input type="number" min="1" class="form-input text-center" value="${row.qty}" onchange="updateRow(${row.id},'qty',+this.value)">
+            </div>
+            <div class="col-span-1 text-center text-xs text-brand-textmuted">${p?p.unit:'—'}</div>
+            <div class="col-span-2">
+                <input type="number" min="0" class="form-input text-right" value="${row.unitPrice}" placeholder="0" onchange="updateRow(${row.id},'unitPrice',+this.value)">
+            </div>
+            <div class="col-span-2">
+                <input type="text" class="form-input" value="${row.batchNo}" placeholder="Lo hang..." onchange="updateRow(${row.id},'batchNo',this.value)">
+            </div>
+            <div class="col-span-1 flex justify-end">
+                <button onclick="removeRow(${row.id})" class="p-1.5 rounded-lg hover:bg-red-50 text-brand-textmuted hover:text-red-500 transition">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        </div>`;
+    }).join('');
+    lucide.createIcons();
+    updateSummary();
+}
+
+function updateRow(id, field, value) {
+    const row = rows.find(r => r.id === id);
+    if (row) { row[field] = value; updateSummary(); }
+}
+
+function removeRow(id) {
+    rows = rows.filter(r => r.id !== id);
+    renderRows();
+}
+
+function updateSummary() {
+    let totalQty = 0, totalVal = 0;
+    rows.forEach(r => { totalQty += r.qty; totalVal += r.qty * r.unitPrice; });
+    document.getElementById('sum-types').textContent = rows.filter(r => r.productId).length;
+    document.getElementById('sum-qty').textContent = totalQty;
+    const fmtVal = totalVal.toLocaleString('vi-VN') + ' ₫';
+    document.getElementById('sum-value').textContent = fmtVal;
+    document.getElementById('total-value').textContent = fmtVal;
+}
+
+function saveDraft() {
+    showToast('Da luu nhap. Ban co the tiep tuc sau.');
+}
+
+function submitForm() {
+    const supplier  = document.getElementById('supplier').value;
+    if (!supplier) { alert('Vui long chon nha cung cap.'); return; }
+    const invoiceNo = document.getElementById('invoice-no').value || '';
+    const validRows = rows.filter(r => r.productId && r.qty > 0);
+    if (validRows.length === 0) { alert('Vui long them it nhat mot san pham.'); return; }
+    const totalVal = validRows.reduce((s, r) => s + r.qty * r.unitPrice, 0);
+
+    // Persist inventory movements to AuraDB (localStorage)
+    validRows.forEach(r => {
+        AuraDB.addInventoryMove({
+            productId: r.productId,
+            delta:     +r.qty,
+            type:      'nhap',
+            note:      supplier + (invoiceNo ? ' / ' + invoiceNo : ''),
+            receipt:   invoiceNo,
+        });
+    });
+
+    showToast(`${validRows.length} san pham • ${totalVal.toLocaleString('vi-VN')} ₫ da duoc nhap kho.`);
+    setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.remove('hidden');
+    setTimeout(() => t.classList.add('hidden'), 4000);
+}
+
+renderLowStock();
+renderRows();
+</script>
+
+<script src="../shared/data-store.js"></script>
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'nhap-kho' });</script>
+</body>
+</html>

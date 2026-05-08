@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Lịch Phòng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6', cream: '#F4EFEA', gold: '#C9A87C',
+                            goldhover: '#B5956A', rose: '#D9B8B5', lavender: '#DCD6DD',
+                            textmain: '#4A443E', textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Jost', 'sans-serif'] },
+                    boxShadow: { 'soft': '0 10px 40px -10px rgba(74,68,62,0.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #FAF9F6; }
+        ::-webkit-scrollbar-thumb { background: #D9B8B5; border-radius: 10px; }
+        .timeline-cell { min-height: 60px; border-right: 1px solid #F4EFEA; border-bottom: 1px solid #F4EFEA; position: relative; }
+        .booking-block { position: absolute; left: 4px; right: 4px; border-radius: 8px; padding: 4px 8px; font-size: 11px; cursor: pointer; overflow: hidden; transition: opacity 0.15s; z-index: 5; }
+        .booking-block:hover { opacity: 0.85; }
+        .block-occupied { background: #fecdd3; border-left: 3px solid #e11d48; color: #9f1239; }
+        .block-scheduled { background: #dbeafe; border-left: 3px solid #3b82f6; color: #1e40af; }
+        .block-vip { background: #fef9c3; border-left: 3px solid #ca8a04; color: #92400e; }
+        .time-header { background: #FAF9F6; font-size: 11px; color: #8B837C; text-align: right; padding: 0 8px; display: flex; align-items: center; justify-content: flex-end; border-right: 1px solid #F4EFEA; border-bottom: 1px solid #F4EFEA; }
+        .room-header { background: white; padding: 12px; text-align: center; border-right: 1px solid #F4EFEA; border-bottom: 2px solid #C9A87C; position: sticky; top: 0; z-index: 10; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+    <!-- Top Nav -->
+    <header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between sticky top-0 z-20 shadow-soft">
+        <div class="flex items-center gap-4">
+            <a href="index.html" class="flex items-center gap-2 text-brand-textmuted hover:text-brand-gold transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span class="text-sm">Danh Sách Phòng</span>
+            </a>
+            <div class="w-px h-5 bg-brand-cream"></div>
+            <div class="flex items-center gap-2">
+                <i data-lucide="flower-2" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+                <span class="font-serif text-lg tracking-widest">AURA</span>
+            </div>
+            <div class="w-px h-5 bg-brand-cream"></div>
+            <h1 class="font-serif text-xl">Lịch Phòng</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- Date Navigation -->
+            <div class="flex items-center gap-2 bg-brand-ivory rounded-full px-4 py-2 border border-brand-cream shadow-sm">
+                <button onclick="changeDate(-1)" class="hover:text-brand-gold transition"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                <span class="text-sm font-medium px-2" id="current-date-display">Thứ Hai, 14/04/2024</span>
+                <button onclick="changeDate(1)" class="hover:text-brand-gold transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+            </div>
+            <button onclick="goToday()" class="px-4 py-2 bg-white border border-brand-cream rounded-full text-sm hover:border-brand-gold hover:text-brand-gold transition">Hôm nay</button>
+            <!-- View Toggle -->
+            <div class="flex bg-white border border-brand-cream rounded-full p-1 shadow-sm">
+                <button onclick="setView('day')" class="view-btn px-4 py-1.5 rounded-full text-sm transition bg-brand-gold text-white" id="btn-day">Ngày</button>
+                <button onclick="setView('week')" class="view-btn px-4 py-1.5 rounded-full text-sm transition text-brand-textmuted hover:text-brand-textmain" id="btn-week">Tuần</button>
+            </div>
+            <a href="them-phong.html" class="bg-brand-gold hover:bg-brand-goldhover text-white px-5 py-2.5 rounded-full text-sm transition flex items-center gap-2">
+                <i data-lucide="plus" class="w-4 h-4"></i> Thêm Phòng
+            </a>
+        </div>
+    </header>
+
+    <div class="flex-1 overflow-hidden flex flex-col p-6 gap-4">
+
+        <!-- Legend -->
+        <div class="flex items-center gap-6 bg-white rounded-2xl p-4 shadow-soft border border-brand-cream/50">
+            <span class="text-xs text-brand-textmuted font-medium uppercase tracking-wide">Chú thích:</span>
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded bg-red-200 border-l-4 border-red-600"></div>
+                <span class="text-xs text-brand-textmuted">Đang sử dụng</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded bg-blue-200 border-l-4 border-blue-600"></div>
+                <span class="text-xs text-brand-textmuted">Đã đặt lịch</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded bg-yellow-200 border-l-4 border-yellow-600"></div>
+                <span class="text-xs text-brand-textmuted">VIP</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded bg-white border border-green-300"></div>
+                <span class="text-xs text-brand-textmuted">Trống</span>
+            </div>
+            <div class="ml-auto flex items-center gap-3">
+                <span class="text-xs text-brand-textmuted">Lọc theo loại:</span>
+                <select class="text-xs border border-brand-cream rounded-xl px-3 py-1.5 bg-white outline-none">
+                    <option>Tất cả phòng</option>
+                    <option>Phòng Nữ</option>
+                    <option>Phòng Nam</option>
+                    <option>Phòng Chung</option>
+                    <option>Phòng VIP</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="flex-1 bg-white rounded-2xl shadow-soft border border-brand-cream/50 overflow-auto">
+            <div class="min-w-max">
+                <!-- Header Row -->
+                <div class="grid sticky top-0 z-10" style="grid-template-columns: 80px repeat(8, 160px);">
+                    <div class="room-header"></div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 01</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full">Nữ</span>
+                            <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Massage</span>
+                        </div>
+                    </div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 02</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full">Nữ</span>
+                            <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Facial</span>
+                        </div>
+                    </div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 03</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full">Nữ</span>
+                            <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Massage</span>
+                        </div>
+                    </div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 04</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">Nam</span>
+                            <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Massage</span>
+                        </div>
+                    </div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 05</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full">Nam/Nữ</span>
+                            <span class="text-xs bg-brand-gold/10 text-brand-gold px-2 py-0.5 rounded-full">VIP</span>
+                        </div>
+                    </div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 06</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full">Nữ</span>
+                            <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Facial</span>
+                        </div>
+                    </div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 07</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-purple-50 text-purple-600 px-2 py-0.5 rounded-full">Nam/Nữ</span>
+                            <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Massage</span>
+                        </div>
+                    </div>
+                    <div class="room-header">
+                        <p class="font-serif text-sm">Phòng 08</p>
+                        <div class="flex items-center justify-center gap-1 mt-1">
+                            <span class="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">Nam</span>
+                            <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Scrub</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Slots -->
+                <div id="calendar-body">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const hours = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00'];
+
+        // Sample bookings: { room: 1-8, startHour: 8-21, duration: hours, label, type: 'occupied'|'scheduled'|'vip' }
+        const bookings = [
+            { room: 1, startHour: 10, duration: 1.5, label: 'Nguyễn T. Hoa\nDeep Tissue', type: 'occupied' },
+            { room: 1, startHour: 8, duration: 1, label: 'Phạm M. Anh\nSwedish', type: 'occupied' },
+            { room: 1, startHour: 14, duration: 1, label: 'Lê T. Hà\nSwedish', type: 'scheduled' },
+            { room: 2, startHour: 9, duration: 1, label: 'Trịnh T. Lan\nHydraFacial', type: 'occupied' },
+            { room: 2, startHour: 14, duration: 1, label: 'Cao T. Nhi\nFacial', type: 'scheduled' },
+            { room: 2, startHour: 16, duration: 1, label: 'Vũ T. Mai\nLED Therapy', type: 'scheduled' },
+            { room: 3, startHour: 10, duration: 1.5, label: 'Trần T. Lan\nSwedish', type: 'occupied' },
+            { room: 3, startHour: 13, duration: 1, label: 'Phan T. Linh\nMassage', type: 'scheduled' },
+            { room: 4, startHour: 11, duration: 1, label: 'Trần V. Nam\nHydraFacial', type: 'occupied' },
+            { room: 4, startHour: 14, duration: 1.5, label: 'Hồ V. Minh\nDeep Tissue', type: 'scheduled' },
+            { room: 5, startHour: 15, duration: 1.5, label: 'VIP Session\nCouple Massage', type: 'vip' },
+            { room: 6, startHour: 10, duration: 1, label: 'Phạm T. Hương\nLava Facial', type: 'occupied' },
+            { room: 6, startHour: 13, duration: 1, label: 'Bùi T. Thoa\nFacial', type: 'scheduled' },
+            { room: 7, startHour: 9, duration: 1, label: 'Đang dọn vệ sinh', type: 'scheduled' },
+            { room: 7, startHour: 11, duration: 1, label: 'Lê V. Hùng\nMassage', type: 'scheduled' },
+            { room: 8, startHour: 9, duration: 1, label: 'Nguyễn V. Dũng\nBody Scrub', type: 'occupied' },
+        ];
+
+        function renderCalendar() {
+            const body = document.getElementById('calendar-body');
+            body.innerHTML = '';
+            const totalCols = 8;
+            const startHour = 8;
+            const cellHeight = 60; // px per hour
+
+            hours.forEach((hour, idx) => {
+                const row = document.createElement('div');
+                row.className = 'grid';
+                row.style.gridTemplateColumns = `80px repeat(${totalCols}, 160px)`;
+                row.style.position = 'relative';
+
+                // Time label
+                const timeCell = document.createElement('div');
+                timeCell.className = 'time-header';
+                timeCell.style.height = cellHeight + 'px';
+                timeCell.textContent = hour;
+                row.appendChild(timeCell);
+
+                // Room cells
+                for (let r = 1; r <= totalCols; r++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'timeline-cell';
+                    cell.style.height = cellHeight + 'px';
+                    cell.style.cursor = 'pointer';
+                    cell.onclick = () => showBookingForm(r, hour);
+                    cell.innerHTML = `<div class="absolute inset-0 hover:bg-brand-gold/5 transition"></div>`;
+                    row.appendChild(cell);
+                }
+
+                body.appendChild(row);
+            });
+
+            // Now render booking blocks
+            const gridEl = body.parentElement;
+            bookings.forEach(b => {
+                const block = document.createElement('div');
+                block.className = `booking-block block-${b.type}`;
+                const topOffset = ((b.startHour - startHour) * cellHeight) + 56; // 56px header
+                const leftOffset = 80 + ((b.room - 1) * 160) + 4;
+                const height = b.duration * cellHeight - 8;
+
+                block.style.top = topOffset + 'px';
+                block.style.left = leftOffset + 'px';
+                block.style.width = '152px';
+                block.style.height = height + 'px';
+                block.style.position = 'absolute';
+                block.style.zIndex = '10';
+                block.innerHTML = b.label.replace('\n', '<br>');
+                block.title = b.label;
+
+                gridEl.style.position = 'relative';
+                gridEl.appendChild(block);
+            });
+        }
+
+        function showBookingForm(room, time) {
+            if (confirm(`Tạo booking cho Phòng ${String(room).padStart(2,'0')} lúc ${time}?`)) {
+                window.location.href = '../../31Create booking.html';
+            }
+        }
+
+        let currentDate = new Date(2024, 3, 14); // April 14 2024
+        const dayNames = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+
+        function updateDateDisplay() {
+            const d = currentDate;
+            document.getElementById('current-date-display').textContent =
+                `${dayNames[d.getDay()]}, ${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+        }
+
+        function changeDate(delta) {
+            currentDate.setDate(currentDate.getDate() + delta);
+            updateDateDisplay();
+        }
+
+        function goToday() {
+            currentDate = new Date();
+            updateDateDisplay();
+        }
+
+        function setView(view) {
+            document.querySelectorAll('.view-btn').forEach(b => {
+                b.classList.remove('bg-brand-gold', 'text-white');
+                b.classList.add('text-brand-textmuted');
+            });
+            const btn = document.getElementById('btn-' + view);
+            btn.classList.add('bg-brand-gold', 'text-white');
+            btn.classList.remove('text-brand-textmuted');
+        }
+
+        updateDateDisplay();
+        renderCalendar();
+    </script>
+</div>
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'lich-phong' });</script>
+</body>
+</html>

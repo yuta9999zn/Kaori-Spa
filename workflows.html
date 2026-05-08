@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Tất Cả Workflows</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C' }
+                    },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .wf-step{display:flex;align-items:flex-start;gap:12px;padding:10px 0}
+        .wf-step:not(:last-child){border-bottom:1px dashed #F4EFEA}
+        .step-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:1px}
+        .check-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:500}
+        .arrow{display:flex;align-items:center;justify-content:center;color:#8B837C;padding:0 4px;font-size:18px;line-height:1}
+        .wf-card{background:white;border-radius:20px;border:1px solid #F4EFEA;box-shadow:0 10px 40px -10px rgba(74,68,62,.06);overflow:hidden;margin-bottom:32px}
+        .wf-header{padding:20px 24px 16px;border-bottom:1px solid #F4EFEA;display:flex;align-items:center;gap:14px}
+        .wf-body{padding:20px 24px}
+        .file-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;background:#FAF9F6;border:1px solid #F4EFEA;border-radius:8px;font-size:11px;color:#8B837C;font-family:'Jost',sans-serif;text-decoration:none;transition:all .15s}
+        .file-chip:hover{border-color:#C9A87C;color:#C9A87C;background:rgba(201,168,124,.06)}
+        .badge-new{background:#dcfce7;color:#16a34a;font-size:10px;padding:2px 7px;border-radius:999px;font-weight:600}
+        .badge-missing{background:#fee2e2;color:#dc2626;font-size:10px;padding:2px 7px;border-radius:999px;font-weight:600}
+        .badge-done{background:#dbeafe;color:#1d4ed8;font-size:10px;padding:2px 7px;border-radius:999px;font-weight:600}
+        .badge-wip{background:#fef9c3;color:#a16207;font-size:10px;padding:2px 7px;border-radius:999px;font-weight:600}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans min-h-screen">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-10 py-5 flex items-center justify-between sticky top-0 z-20 shadow-soft">
+    <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-2 text-brand-textmuted hover:text-brand-gold transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </a>
+        <i data-lucide="flower-2" class="text-brand-gold w-6 h-6" stroke-width="1.5"></i>
+        <h1 class="font-serif text-2xl tracking-widest">AURA</h1>
+        <div class="w-px h-5 bg-brand-cream"></div>
+        <span class="font-serif text-xl">Tất Cả Workflows & Màn Hình</span>
+    </div>
+    <div class="flex items-center gap-3">
+        <span class="text-xs text-brand-textmuted bg-brand-cream px-3 py-1.5 rounded-full">v2.1 — Cập nhật 14/04/2026</span>
+    </div>
+</header>
+
+<div class="max-w-6xl mx-auto px-8 py-10">
+
+    <!-- Overview grid -->
+    <div class="grid grid-cols-4 gap-5 mb-10">
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-brand-cream/50 text-center">
+            <p class="font-serif text-3xl text-brand-gold mb-1">12</p>
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Workflows Chính</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-brand-cream/50 text-center">
+            <p class="font-serif text-3xl text-brand-textmain mb-1">88+</p>
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Màn Hình HTML</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-brand-cream/50 text-center">
+            <p class="font-serif text-3xl text-green-600 mb-1">3</p>
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Portal (Cổng Đăng Nhập)</p>
+        </div>
+        <div class="bg-white rounded-2xl p-5 shadow-soft border border-brand-cream/50 text-center">
+            <p class="font-serif text-3xl text-brand-rose mb-1">5</p>
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Nhóm Vai Trò</p>
+        </div>
+    </div>
+
+    <!-- Portal Map -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6 mb-10">
+        <h2 class="font-serif text-xl mb-5">Sơ Đồ Phân Quyền & Cổng Truy Cập</h2>
+        <div class="grid grid-cols-3 gap-6">
+            <div class="p-4 rounded-xl border-2 border-brand-textmain/20 bg-brand-ivory text-center">
+                <div class="w-12 h-12 rounded-xl bg-brand-textmain/10 flex items-center justify-center mx-auto mb-3"><i data-lucide="shield-check" class="w-6 h-6 text-brand-textmain"></i></div>
+                <p class="font-medium text-sm mb-1">Tenant Admin</p>
+                <p class="text-xs text-brand-textmuted mb-2">Quản lý toàn hệ thống</p>
+                <a href="quan-ly-tenant/index.html" class="file-chip text-xs">→ Portal Tenant</a>
+            </div>
+            <div class="p-4 rounded-xl border-2 border-brand-gold/40 bg-brand-gold/5 text-center">
+                <div class="w-12 h-12 rounded-xl bg-brand-gold/10 flex items-center justify-center mx-auto mb-3"><i data-lucide="building-2" class="w-6 h-6 text-brand-gold"></i></div>
+                <p class="font-medium text-sm mb-1">Organization Owner</p>
+                <p class="text-xs text-brand-textmuted mb-2">Chủ tổ chức / chủ spa</p>
+                <a href="quan-ly-to-chuc/index.html" class="file-chip text-xs">→ Portal Tổ Chức</a>
+            </div>
+            <div class="p-4 rounded-xl border-2 border-brand-rose/40 bg-brand-rose/5 text-center">
+                <div class="w-12 h-12 rounded-xl bg-brand-rose/10 flex items-center justify-center mx-auto mb-3"><i data-lucide="store" class="w-6 h-6 text-brand-rose"></i></div>
+                <p class="font-medium text-sm mb-1">Branch Manager / Staff</p>
+                <p class="text-xs text-brand-textmuted mb-2">Quản lý & nhân viên chi nhánh</p>
+                <a href="quan-ly-chi-nhanh/index.html" class="file-chip text-xs">→ Portal Chi Nhánh</a>
+            </div>
+        </div>
+        <div class="mt-4 p-3 bg-brand-ivory rounded-xl text-xs text-brand-textmuted flex items-start gap-2">
+            <i data-lucide="info" class="w-4 h-4 text-brand-gold flex-shrink-0 mt-0.5"></i>
+            <span>Tenant tạo và quản lý nhiều <strong>Tổ Chức</strong>. Mỗi Tổ Chức có nhiều <strong>Chi Nhánh</strong>. Mỗi Chi Nhánh có <strong>Manager</strong> và <strong>Staff</strong>. Tổ Chức có thể thuê <strong>Manager</strong> để quản lý chi nhánh thay mình.</span>
+        </div>
+    </div>
+
+    <!-- AuraDB Data Layer Section -->
+    <div class="wf-card" style="border-color:#dbeafe">
+        <div class="wf-header" style="background:#eff6ff">
+            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="database" class="w-5 h-5 text-blue-600"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h2 class="font-serif text-lg">Data Layer — AuraDB (localStorage)</h2>
+                    <span class="badge-done">v2.1 MỚI</span>
+                </div>
+                <p class="text-xs text-brand-textmuted mt-0.5">Lớp dữ liệu dùng chung — tất cả màn hình đọc/ghi qua <code style="font-family:monospace;background:#eff6ff;padding:1px 5px;border-radius:4px">shared/data-store.js</code></p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="grid grid-cols-2 gap-6">
+                <div>
+                    <p class="text-xs text-brand-textmuted uppercase tracking-wide font-medium mb-3">Luồng Dữ Liệu Thực (Live Data Flow)</p>
+                    <div class="space-y-2 text-xs">
+                        <div class="flex items-center gap-2 p-2 bg-blue-50 rounded-xl">
+                            <span class="text-blue-600 font-medium w-32 flex-shrink-0">thanh-toan.html</span>
+                            <span class="text-brand-textmuted">→</span>
+                            <span>AuraDB.addTransaction() → Báo cáo ngày tự hiện số</span>
+                        </div>
+                        <div class="flex items-center gap-2 p-2 bg-green-50 rounded-xl">
+                            <span class="text-green-700 font-medium w-32 flex-shrink-0">nhap-kho.html</span>
+                            <span class="text-brand-textmuted">→</span>
+                            <span>AuraDB.addInventoryMove(+n) → Tồn kho tự cộng</span>
+                        </div>
+                        <div class="flex items-center gap-2 p-2 bg-orange-50 rounded-xl">
+                            <span class="text-orange-600 font-medium w-32 flex-shrink-0">xuat-kho.html</span>
+                            <span class="text-brand-textmuted">→</span>
+                            <span>AuraDB.addInventoryMove(-n) → Tồn kho tự trừ</span>
+                        </div>
+                        <div class="flex items-center gap-2 p-2 bg-purple-50 rounded-xl">
+                            <span class="text-purple-700 font-medium w-32 flex-shrink-0">lieu-trinh.html</span>
+                            <span class="text-brand-textmuted">→</span>
+                            <span>AuraDB.recordComboSession() → Cập nhật tiến độ combo</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs text-brand-textmuted uppercase tracking-wide font-medium mb-3">Khái Niệm Combo / Gói Dịch Vụ</p>
+                    <div class="space-y-3">
+                        <div class="p-3 rounded-xl border-l-4 border-brand-gold bg-brand-gold/5">
+                            <p class="text-sm font-semibold text-brand-textmain mb-0.5">Combo Buổi (Liệu Trình)</p>
+                            <p class="text-xs text-brand-textmuted">1 dịch vụ × nhiều lần sử dụng. Ví dụ: "Mua 10 buổi triệt nách" — mỗi lần đến dùng 1 buổi, theo dõi tiến độ qua session dots.</p>
+                            <a href="quan-ly-chi-nhanh/bao-cao/lieu-trinh.html" class="file-chip mt-1.5 inline-flex">→ lieu-trinh.html</a>
+                        </div>
+                        <div class="p-3 rounded-xl border-l-4 border-brand-rose bg-brand-rose/5">
+                            <p class="text-sm font-semibold text-brand-textmain mb-0.5">Gói Combo (Nhiều Dịch Vụ)</p>
+                            <p class="text-xs text-brand-textmuted">Nhiều dịch vụ khác nhau gộp trong 1 gói. Ví dụ: "Gói Bridal = triệt nách + triệt chân + facial". Mỗi dịch vụ trong gói có thể có số buổi riêng.</p>
+                            <a href="quan-ly-chi-nhanh/dich-vu/goi-dich-vu.html" class="file-chip mt-1.5 inline-flex">→ goi-dich-vu.html</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/shared/data-store.js" class="file-chip"><i data-lucide="file-code" class="w-3 h-3"></i>shared/data-store.js <span class="badge-done">Core</span></a>
+                <a href="quan-ly-chi-nhanh/bao-cao/bao-cao-ngay.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>bao-cao-ngay.html <span class="badge-done">AuraDB ✓</span></a>
+                <a href="quan-ly-chi-nhanh/kho/index.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>kho/index.html <span class="badge-done">AuraDB ✓</span></a>
+                <a href="quan-ly-chi-nhanh/bao-cao/lieu-trinh.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>lieu-trinh.html <span class="badge-done">AuraDB ✓</span></a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="calendar-check" class="w-5 h-5 text-blue-600"></i>
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h2 class="font-serif text-lg">WF-01 · Quy Trình Đặt Lịch (Booking)</h2>
+                    <span class="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full font-medium">Workflow Chính</span>
+                </div>
+                <p class="text-xs text-brand-textmuted mt-0.5">Từ khi khách chọn dịch vụ → đến khi thanh toán xong</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <!-- Steps -->
+            <div class="mb-5">
+                <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-3 font-medium">Luồng Xử Lý</p>
+                <div class="grid grid-cols-1 gap-0">
+                    <div class="wf-step">
+                        <div class="step-num bg-blue-100 text-blue-700">1</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Chọn Khách Hàng</p>
+                            <p class="text-xs text-brand-textmuted">Tìm kiếm trong DB hoặc tạo mới. Ghi nhận giới tính (quan trọng cho bước sau).</p>
+                        </div>
+                    </div>
+                    <div class="wf-step">
+                        <div class="step-num bg-blue-100 text-blue-700">2</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Chọn Dịch Vụ</p>
+                            <p class="text-xs text-brand-textmuted">Lọc dịch vụ phù hợp giới tính khách. Ghi nhận: thời lượng, kỹ năng yêu cầu, giá.</p>
+                            <div class="flex gap-1.5 mt-1.5">
+                                <span class="check-tag bg-blue-50 text-blue-700"><i data-lucide="filter" class="w-3 h-3"></i> Lọc giới tính</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wf-step">
+                        <div class="step-num bg-blue-100 text-blue-700">3</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Chọn Ngày & Giờ</p>
+                            <p class="text-xs text-brand-textmuted">Hiển thị khung giờ còn trống (blocked nếu đã có booking hoặc ngoài giờ hoạt động).</p>
+                        </div>
+                    </div>
+                    <div class="wf-step">
+                        <div class="step-num bg-orange-100 text-orange-700">4</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Chọn Nhân Viên <span class="text-orange-600 font-semibold">[4 kiểm tra]</span></p>
+                            <p class="text-xs text-brand-textmuted mb-1.5">Hệ thống tự động kiểm tra và hiển thị trạng thái từng nhân viên:</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="check-tag bg-green-50 text-green-700">✓ Có kỹ năng dịch vụ</span>
+                                <span class="check-tag bg-green-50 text-green-700">✓ Đang trong ca làm</span>
+                                <span class="check-tag bg-yellow-50 text-yellow-700">⚠ Không nghỉ giải lao</span>
+                                <span class="check-tag bg-yellow-50 text-yellow-700">⚠ Không đang phục vụ khách</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wf-step">
+                        <div class="step-num bg-orange-100 text-orange-700">5</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Chọn Phòng & Giường <span class="text-orange-600 font-semibold">[3 kiểm tra]</span></p>
+                            <p class="text-xs text-brand-textmuted mb-1.5">Chỉ hiển thị phòng thoả mãn ĐỦ 3 điều kiện:</p>
+                            <div class="flex flex-wrap gap-1.5">
+                                <span class="check-tag bg-green-50 text-green-700">✓ Hỗ trợ dịch vụ đã chọn</span>
+                                <span class="check-tag bg-pink-50 text-pink-700">✓ Đúng giới tính khách</span>
+                                <span class="check-tag bg-green-50 text-green-700">✓ Có ít nhất 1 giường trống</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wf-step">
+                        <div class="step-num bg-blue-100 text-blue-700">6</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Xác Nhận & Lưu Booking</p>
+                            <p class="text-xs text-brand-textmuted">Tóm tắt đầy đủ, ghi chú sức khỏe/yêu cầu đặc biệt, gửi xác nhận.</p>
+                        </div>
+                    </div>
+                    <div class="wf-step">
+                        <div class="step-num bg-green-100 text-green-700">7</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Check-in Khi Khách Đến</p>
+                            <p class="text-xs text-brand-textmuted">Quét/tìm booking, xác nhận danh tính, gán phòng/giường, cập nhật trạng thái → "Đang Phục Vụ".</p>
+                        </div>
+                    </div>
+                    <div class="wf-step">
+                        <div class="step-num bg-green-100 text-green-700">8</div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium">Thanh Toán & Checkout</p>
+                            <p class="text-xs text-brand-textmuted">Tính tổng (có thể trừ điểm thưởng/gói), ghi doanh thu, giải phóng phòng/giường, cộng điểm.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Files -->
+            <div>
+                <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-2 font-medium">Màn Hình Liên Quan</p>
+                <div class="flex flex-wrap gap-2">
+                    <a href="quan-ly-chi-nhanh/booking/tao-booking.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>tao-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/lich-booking.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>lich-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/chi-tiet-booking.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>chi-tiet-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/doi-lich.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>doi-lich.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/giai-quyet-xung-dot.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>giai-quyet-xung-dot.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/danh-sach-cho.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>danh-sach-cho.html</a>
+                    <a href="quan-ly-chi-nhanh/check-in.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>check-in.html <span class="badge-done">DONE</span></a>
+                    <a href="quan-ly-chi-nhanh/booking/thanh-toan.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>thanh-toan.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/lich-su.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>lich-su.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/quy-tac.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>quy-tac.html</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 2: WALK-IN -->
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0"><i data-lucide="user-check" class="w-5 h-5 text-green-600"></i></div>
+            <div>
+                <h2 class="font-serif text-lg">WF-02 · Khách Walk-in (Đến Thẳng)</h2>
+                <p class="text-xs text-brand-textmuted mt-0.5">Khách đến mà không có lịch đặt trước</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="grid grid-cols-7 items-center gap-1 text-sm mb-4">
+                <div class="bg-green-50 text-green-800 text-center p-2 rounded-xl text-xs font-medium">Khách đến<br>quầy lễ tân</div>
+                <div class="arrow">→</div>
+                <div class="bg-brand-ivory text-center p-2 rounded-xl text-xs font-medium border border-brand-cream">Kiểm tra<br>slot trống</div>
+                <div class="arrow">→</div>
+                <div class="bg-blue-50 text-blue-800 text-center p-2 rounded-xl text-xs font-medium">Tạo booking<br>ngay</div>
+                <div class="arrow">→</div>
+                <div class="bg-brand-gold/10 text-brand-gold text-center p-2 rounded-xl text-xs font-medium">Check-in &<br>Thanh toán</div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/check-in.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>check-in.html <span class="badge-new">NEW</span></a>
+                <a href="quan-ly-chi-nhanh/booking/tao-booking.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>tao-booking.html</a>
+                <a href="quan-ly-chi-nhanh/booking/thanh-toan.html" class="file-chip"><i data-lucide="file" class="w-3 h-3"></i>thanh-toan.html</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 3: STAFF MANAGEMENT -->
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0"><i data-lucide="users" class="w-5 h-5 text-purple-600"></i></div>
+            <div>
+                <h2 class="font-serif text-lg">WF-03 · Quản Lý Nhân Viên</h2>
+                <p class="text-xs text-brand-textmuted mt-0.5">Tuyển dụng → Onboard → Phân ca → Đánh giá → Tính lương</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="mb-4 grid grid-cols-5 gap-2 text-xs">
+                <div class="bg-purple-50 p-3 rounded-xl text-center"><span class="font-medium text-purple-800">Tạo hồ sơ NV</span><br><span class="text-brand-textmuted">Tên, CCCD, liên hệ</span></div>
+                <div class="flex items-center justify-center text-brand-textmuted">→</div>
+                <div class="bg-purple-50 p-3 rounded-xl text-center"><span class="font-medium text-purple-800">Gán kỹ năng</span><br><span class="text-brand-textmuted">Massage, Facial...</span></div>
+                <div class="flex items-center justify-center text-brand-textmuted">→</div>
+                <div class="bg-purple-50 p-3 rounded-xl text-center"><span class="font-medium text-purple-800">Xếp lịch ca</span><br><span class="text-brand-textmuted">Ca sáng/chiều/tối</span></div>
+            </div>
+            <div class="grid grid-cols-5 gap-2 text-xs mb-5">
+                <div></div><div></div>
+                <div class="flex items-center justify-center text-brand-textmuted">↓</div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-xs mb-4">
+                <div class="bg-green-50 p-3 rounded-xl text-center"><span class="font-medium text-green-800">Check-in/out ca</span><br><span class="text-brand-textmuted">Điểm danh hàng ngày</span></div>
+                <div class="bg-yellow-50 p-3 rounded-xl text-center"><span class="font-medium text-yellow-800">Theo dõi hiệu suất</span><br><span class="text-brand-textmuted">Số lịch, đánh giá khách</span></div>
+                <div class="bg-brand-gold/10 p-3 rounded-xl text-center"><span class="font-medium text-brand-goldhover">Tính hoa hồng</span><br><span class="text-brand-textmuted">Doanh thu / cố định</span></div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/nhan-vien/tong-quan.html" class="file-chip">tong-quan.html</a>
+                <a href="quan-ly-chi-nhanh/nhan-vien/danh-sach.html" class="file-chip">danh-sach.html</a>
+                <a href="quan-ly-chi-nhanh/nhan-vien/tao-sua.html" class="file-chip">tao-sua.html</a>
+                <a href="quan-ly-chi-nhanh/nhan-vien/ky-nang-dich-vu.html" class="file-chip">ky-nang-dich-vu.html</a>
+                <a href="quan-ly-chi-nhanh/nhan-vien/lich-lam-viec.html" class="file-chip">lich-lam-viec.html</a>
+                <a href="quan-ly-chi-nhanh/nhan-vien/hieu-suat.html" class="file-chip">hieu-suat.html</a>
+                <a href="quan-ly-chi-nhanh/nhan-vien/hoa-hong-luong.html" class="file-chip">hoa-hong-luong.html</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 4: CUSTOMER JOURNEY -->
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center flex-shrink-0"><i data-lucide="heart" class="w-5 h-5 text-pink-600"></i></div>
+            <div>
+                <h2 class="font-serif text-lg">WF-04 · Hành Trình Khách Hàng</h2>
+                <p class="text-xs text-brand-textmuted mt-0.5">Lần đầu ghé thăm → Thành viên trung thành</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="flex items-center gap-1 flex-wrap text-xs mb-4">
+                <div class="bg-pink-50 text-pink-700 px-3 py-2 rounded-xl font-medium">Đăng ký / Tạo hồ sơ</div>
+                <div class="arrow">→</div>
+                <div class="bg-pink-50 text-pink-700 px-3 py-2 rounded-xl font-medium">Điền thông tin sức khỏe</div>
+                <div class="arrow">→</div>
+                <div class="bg-pink-50 text-pink-700 px-3 py-2 rounded-xl font-medium">Booking lần đầu</div>
+                <div class="arrow">→</div>
+                <div class="bg-pink-50 text-pink-700 px-3 py-2 rounded-xl font-medium">Tích điểm thưởng</div>
+                <div class="arrow">→</div>
+                <div class="bg-brand-gold/10 text-brand-goldhover px-3 py-2 rounded-xl font-medium">Mua gói / Thành viên</div>
+                <div class="arrow">→</div>
+                <div class="bg-green-50 text-green-700 px-3 py-2 rounded-xl font-medium">Khách VIP thường xuyên</div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/khach-hang/danh-sach.html" class="file-chip">danh-sach.html</a>
+                <a href="quan-ly-chi-nhanh/khach-hang/tao-sua.html" class="file-chip">tao-sua.html</a>
+                <a href="quan-ly-chi-nhanh/khach-hang/ghi-chu-suc-khoe.html" class="file-chip">ghi-chu-suc-khoe.html</a>
+                <a href="quan-ly-chi-nhanh/khach-hang/diem-thuong.html" class="file-chip">diem-thuong.html</a>
+                <a href="quan-ly-chi-nhanh/khach-hang/goi-thanh-vien.html" class="file-chip">goi-thanh-vien.html</a>
+                <a href="quan-ly-chi-nhanh/khach-hang/lich-su-booking.html" class="file-chip">lich-su-booking.html</a>
+                <a href="quan-ly-chi-nhanh/khach-hang/phan-tich.html" class="file-chip">phan-tich.html</a>
+                <a href="quan-ly-chi-nhanh/khach-hang/giao-tiep.html" class="file-chip">giao-tiep.html</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 5: ROOM MANAGEMENT -->
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-brand-lavender/50 flex items-center justify-center flex-shrink-0"><i data-lucide="door-open" class="w-5 h-5 text-brand-textmuted"></i></div>
+            <div>
+                <h2 class="font-serif text-lg">WF-05 · Quản Lý Phòng & Giường</h2>
+                <p class="text-xs text-brand-textmuted mt-0.5">Thiết lập phòng → Giám sát real-time → Quản lý trạng thái</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="grid grid-cols-4 gap-3 text-xs mb-4">
+                <div class="bg-brand-ivory p-3 rounded-xl border border-brand-cream">
+                    <p class="font-medium mb-1">Tạo Phòng</p>
+                    <ul class="text-brand-textmuted space-y-0.5">
+                        <li>• Tên, tầng, loại</li>
+                        <li>• Giới tính phục vụ</li>
+                        <li>• Dịch vụ cho phép</li>
+                        <li>• Thời gian dọn dẹp</li>
+                    </ul>
+                </div>
+                <div class="bg-brand-ivory p-3 rounded-xl border border-brand-cream">
+                    <p class="font-medium mb-1">Cấu Hình Giường</p>
+                    <ul class="text-brand-textmuted space-y-0.5">
+                        <li>• Thêm/bớt giường</li>
+                        <li>• Loại: Standard/VIP</li>
+                        <li>• Đặt tên từng giường</li>
+                    </ul>
+                </div>
+                <div class="bg-brand-ivory p-3 rounded-xl border border-brand-cream">
+                    <p class="font-medium mb-1">Giám Sát Real-time</p>
+                    <ul class="text-brand-textmuted space-y-0.5">
+                        <li>• Trạng thái phòng/giường</li>
+                        <li>• Khách đang phục vụ</li>
+                        <li>• Thời gian kết thúc</li>
+                    </ul>
+                </div>
+                <div class="bg-brand-ivory p-3 rounded-xl border border-brand-cream">
+                    <p class="font-medium mb-1">Cập Nhật Trạng Thái</p>
+                    <ul class="text-brand-textmuted space-y-0.5">
+                        <li>• Trống / Có khách</li>
+                        <li>• Đang dọn / Bảo trì</li>
+                        <li>• Đánh dấu dọn xong</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/phong/index.html" class="file-chip">phong/index.html <span class="badge-new">NEW</span></a>
+                <a href="quan-ly-chi-nhanh/phong/them-phong.html" class="file-chip">them-phong.html <span class="badge-new">NEW</span></a>
+                <a href="quan-ly-chi-nhanh/phong/lich-phong.html" class="file-chip">lich-phong.html <span class="badge-new">NEW</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 6: SERVICE SETUP -->
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-yellow-50 flex items-center justify-center flex-shrink-0"><i data-lucide="sparkles" class="w-5 h-5 text-yellow-600"></i></div>
+            <div>
+                <h2 class="font-serif text-lg">WF-06 · Thiết Lập Dịch Vụ</h2>
+                <p class="text-xs text-brand-textmuted mt-0.5">Tạo danh mục → Tạo dịch vụ → Gán phòng/nhân viên → Đặt quy tắc</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="flex items-center gap-1 flex-wrap text-xs mb-4">
+                <div class="bg-yellow-50 text-yellow-800 px-3 py-2 rounded-xl font-medium">Tạo danh mục DV</div>
+                <div class="arrow">→</div>
+                <div class="bg-yellow-50 text-yellow-800 px-3 py-2 rounded-xl font-medium">Tạo dịch vụ</div>
+                <div class="arrow">→</div>
+                <div class="bg-yellow-50 text-yellow-800 px-3 py-2 rounded-xl font-medium">Gán kỹ năng NV</div>
+                <div class="arrow">→</div>
+                <div class="bg-yellow-50 text-yellow-800 px-3 py-2 rounded-xl font-medium">Quy tắc phòng</div>
+                <div class="arrow">→</div>
+                <div class="bg-yellow-50 text-yellow-800 px-3 py-2 rounded-xl font-medium">Gói dịch vụ</div>
+                <div class="arrow">→</div>
+                <div class="bg-green-50 text-green-700 px-3 py-2 rounded-xl font-medium">Publish online</div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/dich-vu/danh-muc.html" class="file-chip">danh-muc.html</a>
+                <a href="quan-ly-chi-nhanh/dich-vu/danh-sach.html" class="file-chip">danh-sach.html</a>
+                <a href="quan-ly-chi-nhanh/dich-vu/tao-sua.html" class="file-chip">tao-sua.html</a>
+                <a href="quan-ly-chi-nhanh/dich-vu/goi-dich-vu.html" class="file-chip">goi-dich-vu.html</a>
+                <a href="quan-ly-chi-nhanh/dich-vu/quy-tac-kha-dung.html" class="file-chip">quy-tac-kha-dung.html</a>
+                <a href="quan-ly-chi-nhanh/dich-vu/tong-quan.html" class="file-chip">tong-quan.html</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 7: INVENTORY -->
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center flex-shrink-0"><i data-lucide="package-2" class="w-5 h-5 text-orange-600"></i></div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h2 class="font-serif text-lg">WF-07 · Quản Lý Kho & Vật Tư</h2>
+                    <span class="badge-new">NEW MODULE</span>
+                </div>
+                <p class="text-xs text-brand-textmuted mt-0.5">Nhập kho → Theo dõi tồn kho → Cảnh báo thiếu hàng → Xuất kho</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="grid grid-cols-4 gap-3 text-xs mb-4">
+                <div class="bg-orange-50 p-3 rounded-xl">
+                    <p class="font-medium text-orange-800 mb-1">Tạo Danh Mục Kho</p>
+                    <p class="text-brand-textmuted">Mỹ phẩm, khăn, dầu massage, thiết bị tiêu hao...</p>
+                </div>
+                <div class="bg-orange-50 p-3 rounded-xl">
+                    <p class="font-medium text-orange-800 mb-1">Nhập Kho</p>
+                    <p class="text-brand-textmuted">Ghi nhận lô hàng nhập, ngày, nhà cung cấp, số lượng, giá.</p>
+                </div>
+                <div class="bg-orange-50 p-3 rounded-xl">
+                    <p class="font-medium text-orange-800 mb-1">Theo Dõi Tồn Kho</p>
+                    <p class="text-brand-textmuted">Cảnh báo khi sắp hết. Liên kết với dịch vụ tiêu thụ.</p>
+                </div>
+                <div class="bg-orange-50 p-3 rounded-xl">
+                    <p class="font-medium text-orange-800 mb-1">Xuất Kho / Báo Cáo</p>
+                    <p class="text-brand-textmuted">Ghi sử dụng theo dịch vụ. Báo cáo chi phí vật tư.</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/kho/index.html" class="file-chip">kho/index.html <span class="badge-done">AuraDB ✓</span></a>
+                <a href="quan-ly-chi-nhanh/kho/nhap-kho.html" class="file-chip">nhap-kho.html <span class="badge-done">AuraDB ✓</span></a>
+                <a href="quan-ly-chi-nhanh/kho/xuat-kho.html" class="file-chip">xuat-kho.html <span class="badge-done">AuraDB ✓</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 8: NOTIFICATIONS -->
+    <div class="wf-card">
+        <div class="wf-header">
+            <div class="w-10 h-10 rounded-xl bg-brand-rose/20 flex items-center justify-center flex-shrink-0"><i data-lucide="bell" class="w-5 h-5 text-brand-rose"></i></div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h2 class="font-serif text-lg">WF-08 · Thông Báo & Nhắc Nhở</h2>
+                    <span class="badge-new">NEW MODULE</span>
+                </div>
+                <p class="text-xs text-brand-textmuted mt-0.5">Tự động gửi thông báo booking, nhắc nhở, hủy, gán nhân viên</p>
+            </div>
+        </div>
+        <div class="wf-body">
+            <div class="grid grid-cols-3 gap-3 text-xs mb-4">
+                <div class="p-3 rounded-xl bg-brand-ivory border border-brand-cream">
+                    <p class="font-medium mb-1">Thông Báo Hệ Thống</p>
+                    <ul class="text-brand-textmuted space-y-1">
+                        <li>• Booking mới được tạo</li>
+                        <li>• Booking bị hủy</li>
+                        <li>• Đổi lịch</li>
+                        <li>• Nhân viên được gán</li>
+                    </ul>
+                </div>
+                <div class="p-3 rounded-xl bg-brand-ivory border border-brand-cream">
+                    <p class="font-medium mb-1">Nhắc Nhở Khách</p>
+                    <ul class="text-brand-textmuted space-y-1">
+                        <li>• 24 giờ trước buổi hẹn</li>
+                        <li>• 2 giờ trước buổi hẹn</li>
+                        <li>• Nhắc nhở điểm thưởng</li>
+                        <li>• Gói sắp hết hạn</li>
+                    </ul>
+                </div>
+                <div class="p-3 rounded-xl bg-brand-ivory border border-brand-cream">
+                    <p class="font-medium mb-1">Cảnh Báo Vận Hành</p>
+                    <ul class="text-brand-textmuted space-y-1">
+                        <li>• Kho sắp hết</li>
+                        <li>• Phòng chờ dọn lâu</li>
+                        <li>• NV vắng mặt</li>
+                        <li>• Xung đột lịch</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="quan-ly-chi-nhanh/thong-bao/index.html" class="file-chip">thong-bao/index.html <span class="badge-done">DONE</span></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 9 + 10 combined -->
+    <div class="grid grid-cols-2 gap-6 mb-8">
+        <!-- WF 9: ORG SETUP -->
+        <div class="wf-card mb-0">
+            <div class="wf-header">
+                <div class="w-10 h-10 rounded-xl bg-brand-gold/10 flex items-center justify-center flex-shrink-0"><i data-lucide="building-2" class="w-5 h-5 text-brand-gold"></i></div>
+                <div>
+                    <h2 class="font-serif text-base">WF-09 · Thiết Lập Tổ Chức</h2>
+                    <p class="text-xs text-brand-textmuted mt-0.5">Tạo org → Chi nhánh → Phân quyền</p>
+                </div>
+            </div>
+            <div class="wf-body">
+                <div class="space-y-1.5 text-xs text-brand-textmuted mb-4">
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold flex-shrink-0">1</span> Đăng ký tổ chức, cấu hình thương hiệu</div>
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold flex-shrink-0">2</span> Tạo chi nhánh, gán địa chỉ, giờ hoạt động</div>
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold flex-shrink-0">3</span> Tạo vai trò, phân quyền (RBAC)</div>
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold flex-shrink-0">4</span> Mời / thuê Manager cho chi nhánh</div>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    <a href="quan-ly-to-chuc/index.html" class="file-chip text-xs">to-chuc/index.html</a>
+                    <a href="quan-ly-to-chuc/chi-nhanh.html" class="file-chip text-xs">chi-nhanh.html</a>
+                    <a href="quan-ly-to-chuc/vai-tro-quyen-han.html" class="file-chip text-xs">vai-tro-quyen-han.html</a>
+                    <a href="quan-ly-to-chuc/ma-tran-quyen.html" class="file-chip text-xs">ma-tran-quyen.html</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- WF 10: REPORTS -->
+        <div class="wf-card mb-0">
+            <div class="wf-header">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0"><i data-lucide="bar-chart" class="w-5 h-5 text-indigo-600"></i></div>
+                <div>
+                    <h2 class="font-serif text-base">WF-10 · Báo Cáo & Thống Kê</h2>
+                    <p class="text-xs text-brand-textmuted mt-0.5">Doanh thu, booking, nhân viên, khách hàng</p>
+                </div>
+            </div>
+            <div class="wf-body">
+                <div class="space-y-1.5 text-xs text-brand-textmuted mb-4">
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">→</span> Doanh thu theo ngày/tuần/tháng</div>
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">→</span> Hiệu suất nhân viên & hoa hồng</div>
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">→</span> Phân tích khách hàng & retention</div>
+                    <div class="flex items-center gap-2"><span class="w-5 h-5 rounded-full bg-indigo-50 flex items-center justify-center text-indigo-600 flex-shrink-0">→</span> Tỉ lệ lấp đầy phòng</div>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    <a href="quan-ly-chi-nhanh/bao-cao/bao-cao-chi-nhanh.html" class="file-chip text-xs">bao-cao-chi-nhanh.html</a>
+                    <a href="quan-ly-chi-nhanh/bao-cao/phan-tich-booking.html" class="file-chip text-xs">phan-tich-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/bao-cao/phan-tich-khach.html" class="file-chip text-xs">phan-tich-khach.html</a>
+                    <a href="quan-ly-chi-nhanh/bao-cao/hieu-suat-nv.html" class="file-chip text-xs">hieu-suat-nv.html</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- WF 11: CONTENT/SEO & WF 12: TENANT ADMIN -->
+    <div class="grid grid-cols-2 gap-6 mb-8">
+        <div class="wf-card mb-0">
+            <div class="wf-header">
+                <div class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center flex-shrink-0"><i data-lucide="edit-3" class="w-5 h-5 text-teal-600"></i></div>
+                <div>
+                    <h2 class="font-serif text-base">WF-11 · Nội Dung & SEO</h2>
+                    <p class="text-xs text-brand-textmuted mt-0.5">Viết bài → Upload media → Tối ưu SEO → Publish</p>
+                </div>
+            </div>
+            <div class="wf-body">
+                <div class="flex flex-wrap gap-1.5">
+                    <a href="quan-ly-chi-nhanh/noi-dung/bai-viet.html" class="file-chip text-xs">bai-viet.html</a>
+                    <a href="quan-ly-chi-nhanh/noi-dung/tao-sua-bai.html" class="file-chip text-xs">tao-sua-bai.html</a>
+                    <a href="quan-ly-chi-nhanh/noi-dung/thu-vien-media.html" class="file-chip text-xs">thu-vien-media.html</a>
+                    <a href="quan-ly-chi-nhanh/noi-dung/seo.html" class="file-chip text-xs">seo.html</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="wf-card mb-0">
+            <div class="wf-header">
+                <div class="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center flex-shrink-0"><i data-lucide="shield-check" class="w-5 h-5 text-gray-600"></i></div>
+                <div>
+                    <h2 class="font-serif text-base">WF-12 · Quản Lý Tenant (System)</h2>
+                    <p class="text-xs text-brand-textmuted mt-0.5">Tạo tenant → Gói → Tính năng → Monitor</p>
+                </div>
+            </div>
+            <div class="wf-body">
+                <div class="flex flex-wrap gap-1.5">
+                    <a href="quan-ly-tenant/index.html" class="file-chip text-xs">tenant/index.html</a>
+                    <a href="quan-ly-tenant/tong-quan-tenant.html" class="file-chip text-xs">tong-quan.html</a>
+                    <a href="quan-ly-tenant/goi-dang-ky.html" class="file-chip text-xs">goi-dang-ky.html</a>
+                    <a href="quan-ly-tenant/tinh-nang.html" class="file-chip text-xs">tinh-nang.html</a>
+                    <a href="quan-ly-tenant/lich-su-truy-cap.html" class="file-chip text-xs">lich-su-truy-cap.html</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Screen Inventory -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6 mb-6">
+        <h2 class="font-serif text-xl mb-4">Danh Sách Đầy Đủ Tất Cả Màn Hình</h2>
+        <div class="grid grid-cols-3 gap-6 text-xs">
+            <div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2">Portal Tenant (11 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-tenant/index.html" class="file-chip block">index.html — Dashboard</a>
+                    <a href="quan-ly-tenant/tong-quan-tenant.html" class="file-chip block">tong-quan-tenant.html</a>
+                    <a href="quan-ly-tenant/cai-dat-to-chuc.html" class="file-chip block">cai-dat-to-chuc.html</a>
+                    <a href="quan-ly-tenant/bao-cao-phan-tich.html" class="file-chip block">bao-cao-phan-tich.html</a>
+                    <a href="quan-ly-tenant/thanh-vien.html" class="file-chip block">thanh-vien.html</a>
+                    <a href="quan-ly-tenant/goi-dang-ky.html" class="file-chip block">goi-dang-ky.html</a>
+                    <a href="quan-ly-tenant/tich-hop.html" class="file-chip block">tich-hop.html</a>
+                    <a href="quan-ly-tenant/tinh-nang.html" class="file-chip block">tinh-nang.html</a>
+                    <a href="quan-ly-tenant/lich-su-truy-cap.html" class="file-chip block">lich-su-truy-cap.html</a>
+                    <a href="quan-ly-tenant/thuong-hieu.html" class="file-chip block">thuong-hieu.html</a>
+                    <a href="quan-ly-tenant/domain-url.html" class="file-chip block">domain-url.html</a>
+                </div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2 mt-5">Portal Tổ Chức (13 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-to-chuc/index.html" class="file-chip block">index.html — Dashboard</a>
+                    <a href="quan-ly-to-chuc/chi-nhanh.html" class="file-chip block">chi-nhanh.html</a>
+                    <a href="quan-ly-to-chuc/chi-tiet-chi-nhanh.html" class="file-chip block">chi-tiet-chi-nhanh.html</a>
+                    <a href="quan-ly-to-chuc/bao-cao-chi-nhanh.html" class="file-chip block">bao-cao-chi-nhanh.html</a>
+                    <a href="quan-ly-to-chuc/cau-hinh-dich-vu.html" class="file-chip block">cau-hinh-dich-vu.html</a>
+                    <a href="quan-ly-to-chuc/vai-tro-quyen-han.html" class="file-chip block">vai-tro-quyen-han.html</a>
+                    <a href="quan-ly-to-chuc/danh-sach-vai-tro.html" class="file-chip block">danh-sach-vai-tro.html</a>
+                    <a href="quan-ly-to-chuc/tao-sua-vai-tro.html" class="file-chip block">tao-sua-vai-tro.html</a>
+                    <a href="quan-ly-to-chuc/ma-tran-quyen.html" class="file-chip block">ma-tran-quyen.html</a>
+                    <a href="quan-ly-to-chuc/gan-vai-tro.html" class="file-chip block">gan-vai-tro.html</a>
+                    <a href="quan-ly-to-chuc/kiem-tra-quyen.html" class="file-chip block">kiem-tra-quyen.html</a>
+                    <a href="quan-ly-to-chuc/cai-dat-chung.html" class="file-chip block">cai-dat-chung.html</a>
+                    <a href="quan-ly-to-chuc/thuong-hieu.html" class="file-chip block">thuong-hieu.html</a>
+                </div>
+            </div>
+            <div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2">Booking (13 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-chi-nhanh/booking/lich-booking.html" class="file-chip block">lich-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/tao-booking.html" class="file-chip block">tao-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/chi-tiet-booking.html" class="file-chip block">chi-tiet-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/doi-lich.html" class="file-chip block">doi-lich.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/thanh-toan.html" class="file-chip block">thanh-toan.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/danh-sach-cho.html" class="file-chip block">danh-sach-cho.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/lich-su.html" class="file-chip block">lich-su.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/giai-quyet-xung-dot.html" class="file-chip block">giai-quyet-xung-dot.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/khung-gio.html" class="file-chip block">khung-gio.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/quy-tac.html" class="file-chip block">quy-tac.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/cai-dat-online.html" class="file-chip block">cai-dat-online.html</a>
+                    <a href="quan-ly-chi-nhanh/booking/phan-tich.html" class="file-chip block">phan-tich.html</a>
+                </div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2 mt-4">Nhân Viên (8 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-chi-nhanh/nhan-vien/tong-quan.html" class="file-chip block">tong-quan.html</a>
+                    <a href="quan-ly-chi-nhanh/nhan-vien/danh-sach.html" class="file-chip block">danh-sach.html</a>
+                    <a href="quan-ly-chi-nhanh/nhan-vien/tao-sua.html" class="file-chip block">tao-sua.html</a>
+                    <a href="quan-ly-chi-nhanh/nhan-vien/ky-nang-dich-vu.html" class="file-chip block">ky-nang-dich-vu.html</a>
+                    <a href="quan-ly-chi-nhanh/nhan-vien/lich-lam-viec.html" class="file-chip block">lich-lam-viec.html</a>
+                    <a href="quan-ly-chi-nhanh/nhan-vien/hieu-suat.html" class="file-chip block">hieu-suat.html</a>
+                    <a href="quan-ly-chi-nhanh/nhan-vien/hoa-hong-luong.html" class="file-chip block">hoa-hong-luong.html</a>
+                    <a href="quan-ly-chi-nhanh/nhan-vien/ho-so.html" class="file-chip block">ho-so.html</a>
+                </div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2 mt-4">Phòng (3 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-chi-nhanh/phong/index.html" class="file-chip block">index.html <span class="badge-new">NEW</span></a>
+                    <a href="quan-ly-chi-nhanh/phong/them-phong.html" class="file-chip block">them-phong.html <span class="badge-new">NEW</span></a>
+                    <a href="quan-ly-chi-nhanh/phong/lich-phong.html" class="file-chip block">lich-phong.html <span class="badge-new">NEW</span></a>
+                </div>
+            </div>
+            <div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2">Khách Hàng (12 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-chi-nhanh/khach-hang/danh-sach.html" class="file-chip block">danh-sach.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/tao-sua.html" class="file-chip block">tao-sua.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/ho-so.html" class="file-chip block">ho-so.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/lich-su-booking.html" class="file-chip block">lich-su-booking.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/lich-su-thanh-toan.html" class="file-chip block">lich-su-thanh-toan.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/goi-thanh-vien.html" class="file-chip block">goi-thanh-vien.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/diem-thuong.html" class="file-chip block">diem-thuong.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/ghi-chu-suc-khoe.html" class="file-chip block">ghi-chu-suc-khoe.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/phan-khuc.html" class="file-chip block">phan-khuc.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/phan-tich.html" class="file-chip block">phan-tich.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/import-export.html" class="file-chip block">import-export.html</a>
+                    <a href="quan-ly-chi-nhanh/khach-hang/giao-tiep.html" class="file-chip block">giao-tiep.html</a>
+                </div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2 mt-4">Kho (3 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-chi-nhanh/kho/index.html" class="file-chip block">index.html <span class="badge-done">AuraDB ✓</span></a>
+                    <a href="quan-ly-chi-nhanh/kho/nhap-kho.html" class="file-chip block">nhap-kho.html <span class="badge-done">AuraDB ✓</span></a>
+                    <a href="quan-ly-chi-nhanh/kho/xuat-kho.html" class="file-chip block">xuat-kho.html <span class="badge-done">AuraDB ✓</span></a>
+                </div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2 mt-4">Thông Báo + Check-in</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-chi-nhanh/check-in.html" class="file-chip block">check-in.html <span class="badge-done">DONE</span></a>
+                    <a href="quan-ly-chi-nhanh/thong-bao/index.html" class="file-chip block">thong-bao/index.html <span class="badge-done">DONE</span></a>
+                </div>
+                <p class="font-medium text-brand-textmuted uppercase tracking-wide mb-2 mt-4">Dịch Vụ (9 file)</p>
+                <div class="space-y-1">
+                    <a href="quan-ly-chi-nhanh/dich-vu/tong-quan.html" class="file-chip block">tong-quan.html</a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/danh-muc.html" class="file-chip block">danh-muc.html</a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/danh-sach.html" class="file-chip block">danh-sach.html</a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/tao-sua.html" class="file-chip block">tao-sua.html</a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/chi-tiet.html" class="file-chip block">chi-tiet.html</a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/goi-dich-vu.html" class="file-chip block">goi-dich-vu.html <span class="badge-wip">COMBO GÓI</span></a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/quy-tac-kha-dung.html" class="file-chip block">quy-tac-kha-dung.html</a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/import-dong-bo.html" class="file-chip block">import-dong-bo.html</a>
+                    <a href="quan-ly-chi-nhanh/dich-vu/noi-dung.html" class="file-chip block">noi-dung.html</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Guide link -->
+    <div class="wf-card" style="border-color:#f3e8ff">
+        <div class="wf-header" style="background:#faf5ff">
+            <div class="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="book-open" class="w-5 h-5 text-purple-600"></i>
+            </div>
+            <div class="flex-1 flex items-center justify-between">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h2 class="font-serif text-lg">Developer Guide</h2>
+                        <span class="badge-done">v2.1</span>
+                    </div>
+                    <p class="text-xs text-brand-textmuted mt-0.5">Kiến trúc, AuraDB API, data flows, combo model, cách thêm màn hình mới</p>
+                </div>
+                <a href="docs/developer-guide.html" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition">
+                    <i data-lucide="external-link" class="w-4 h-4"></i> Mở Dev Guide
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /max-w -->
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Health Profile | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+        
+        /* Note Type Badges */
+        .badge-therapist { @apply bg-blue-50 text-blue-700 border-blue-200; }
+        .badge-health { @apply bg-red-50 text-red-700 border-red-200; }
+        .badge-pref { @apply bg-brand-gold/10 text-brand-goldhover border-brand-gold/30; }
+        .badge-incident { @apply bg-purple-50 text-purple-700 border-purple-200; }
+        .badge-general { @apply bg-gray-100 text-gray-700 border-gray-200; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Global search across platform..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Add Customer
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Customers</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">John Doe</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Health Profile & Notes</span>
+                </div>
+
+                <!-- CRITICAL HEALTH ALERTS BANNER -->
+                <div class="bg-red-50 border border-red-200 rounded-2xl p-5 flex items-start shadow-sm relative overflow-hidden">
+                    <div class="absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-red-100/50 to-transparent pointer-events-none"></div>
+                    <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 mr-4 shrink-0 shadow-sm border border-white">
+                        <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-base font-bold text-red-700 tracking-wide uppercase">Critical Health Alerts</h3>
+                        <ul class="mt-2 space-y-1.5">
+                            <li class="flex items-center text-sm text-red-600 font-medium">
+                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span> Severe Allergy: Lavender Oil & Peppermint
+                            </li>
+                            <li class="flex items-center text-sm text-red-600 font-medium">
+                                <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-2"></span> Contraindication: Avoid direct pressure on lower lumbar spine (Surgery 2024)
+                            </li>
+                        </ul>
+                    </div>
+                    <button class="p-2 text-red-400 hover:text-red-700 hover:bg-red-100 rounded-full transition" onclick="togglePanel('healthProfilePanel')">
+                        <i data-lucide="edit-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex items-center mb-6 md:mb-0">
+                        <div class="w-16 h-16 rounded-full bg-brand-ivory border-2 border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-2xl mr-5 shadow-sm">JD</div>
+                        <div>
+                            <div class="flex items-center space-x-3 mb-1">
+                                <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">John Doe</h2>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
+                                    VIP
+                                </span>
+                            </div>
+                            <p class="text-brand-textmuted text-sm flex items-center"><i data-lucide="stethoscope" class="w-3.5 h-3.5 mr-1.5"></i> Health Profile & Clinical Notes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                                <i data-lucide="more-horizontal" class="w-4 h-4 mr-2"></i> Options
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Notes (PDF)
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh Data
+                                </a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-brand-ivory rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center" onclick="togglePanel('healthProfilePanel')">
+                            <i data-lucide="heart-pulse" class="w-4 h-4 mr-2 text-brand-rose"></i> Update Health Info
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center" onclick="togglePanel('addNotePanel')">
+                            <i data-lucide="file-plus" class="w-4 h-4 mr-2"></i> Add Note
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT COLUMN: SUMMARY CARDS (Width 1/3) -->
+                    <div class="xl:col-span-1 space-y-6">
+                        
+                        <!-- Core Health Summary -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 flex flex-col relative overflow-hidden">
+                            <div class="flex items-center justify-between mb-5 border-b border-brand-cream/50 pb-3">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="activity" class="w-5 h-5 mr-2 text-brand-gold"></i> Core Health
+                                </h3>
+                            </div>
+
+                            <ul class="space-y-4">
+                                <li class="flex flex-col">
+                                    <span class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Skin Type & Condition</span>
+                                    <span class="text-sm font-medium text-brand-textmain flex items-center">Sensitive <span class="mx-2 text-brand-cream">|</span> Mild Rosacea</span>
+                                </li>
+                                <li class="flex flex-col">
+                                    <span class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Medical History / Injuries</span>
+                                    <span class="text-sm text-brand-textmain leading-relaxed">L5 spinal fusion (Jan 2024). Prone to tension headaches.</span>
+                                </li>
+                                <li class="flex flex-col">
+                                    <span class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Last Intake Update</span>
+                                    <span class="text-xs font-mono text-brand-textmuted">Feb 15, 2026 by Anna N.</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Treatment Preferences -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 flex flex-col relative overflow-hidden">
+                            <div class="flex items-center justify-between mb-5 border-b border-brand-cream/50 pb-3">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="sliders-horizontal" class="w-5 h-5 mr-2 text-brand-gold"></i> Service Preferences
+                                </h3>
+                            </div>
+
+                            <div class="space-y-4">
+                                <div class="bg-brand-ivory/50 rounded-xl p-3 border border-brand-cream flex items-center justify-between">
+                                    <span class="text-xs font-semibold text-brand-textmuted uppercase tracking-wider">Massage Pressure</span>
+                                    <span class="text-sm font-medium text-brand-textmain">Light to Medium</span>
+                                </div>
+                                <div class="bg-brand-ivory/50 rounded-xl p-3 border border-brand-cream flex items-center justify-between">
+                                    <span class="text-xs font-semibold text-brand-textmuted uppercase tracking-wider">Preferred Staff</span>
+                                    <span class="text-sm font-medium text-brand-textmain flex items-center"><div class="w-4 h-4 rounded-full bg-brand-cream text-[8px] flex items-center justify-center mr-1.5 font-serif">AN</div> Anna N.</span>
+                                </div>
+                                <div class="bg-brand-ivory/50 rounded-xl p-3 border border-brand-cream flex items-center justify-between">
+                                    <span class="text-xs font-semibold text-brand-textmuted uppercase tracking-wider">Room Vibe</span>
+                                    <span class="text-sm font-medium text-brand-textmain">Quiet Zone, Dim</span>
+                                </div>
+                                <div class="bg-brand-ivory/50 rounded-xl p-3 border border-brand-cream flex items-center justify-between">
+                                    <span class="text-xs font-semibold text-brand-textmuted uppercase tracking-wider">Preferred Time</span>
+                                    <span class="text-sm font-medium text-brand-textmain">Early Mornings</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: NOTES TIMELINE (Width 2/3) -->
+                    <div class="xl:col-span-2">
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 flex flex-col min-h-full">
+                            
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 border-b border-brand-cream/50 pb-4 gap-4">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="clipboard-list" class="w-5 h-5 mr-3 text-brand-gold"></i> Chronological Notes
+                                </h3>
+                                
+                                <div class="flex items-center space-x-2">
+                                    <select class="spa-input w-auto min-w-[140px] py-1.5 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1em] cursor-pointer text-xs font-medium bg-brand-ivory">
+                                        <option value="">All Note Types</option>
+                                        <option>Therapist Notes</option>
+                                        <option>Health Updates</option>
+                                        <option>Preferences</option>
+                                        <option>Incidents</option>
+                                    </select>
+                                    <button class="p-1.5 text-brand-textmuted hover:text-brand-gold border border-brand-cream bg-brand-ivory rounded-lg transition shadow-sm" title="Sort Order">
+                                        <i data-lucide="arrow-down-up" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                                <div class="relative pl-4 space-y-8 before:absolute before:inset-0 before:ml-[23px] before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-brand-cream">
+                                    
+                                    <!-- Note Item 1: Therapist Note -->
+                                    <div class="relative flex items-start md:w-full">
+                                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-white rounded-full border-[3px] border-blue-400 shadow-sm -ml-[7px] md:-ml-[8px] mt-1.5 z-10"></div>
+                                        
+                                        <div class="ml-8 md:ml-0 md:w-1/2 md:pr-10 w-full">
+                                            <!-- Date for desktop left side alignment -->
+                                            <div class="hidden md:block text-right absolute right-1/2 pr-10 top-0">
+                                                <p class="font-mono text-xs font-medium text-brand-textmain">Mar 08, 2026</p>
+                                                <p class="text-[10px] text-brand-textmuted uppercase tracking-wider">11:15 AM</p>
+                                            </div>
+                                            
+                                            <div class="bg-white border border-brand-cream hover:border-brand-gold transition-colors rounded-2xl p-5 shadow-sm relative">
+                                                <!-- Date for mobile view -->
+                                                <div class="md:hidden flex justify-between items-center mb-3 border-b border-brand-cream/50 pb-2">
+                                                    <span class="font-mono text-[10px] text-brand-textmuted">Mar 08, 2026 • 11:15 AM</span>
+                                                </div>
+
+                                                <div class="flex justify-between items-start mb-3">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider badge-therapist border">
+                                                        Therapist Note
+                                                    </span>
+                                                    <span class="text-[10px] text-brand-textmuted font-mono bg-brand-ivory px-1.5 py-0.5 rounded border border-brand-cream">NOTE-2045</span>
+                                                </div>
+                                                
+                                                <p class="text-sm text-brand-textmain leading-relaxed mb-4">
+                                                    Client requested extra focus on upper shoulders today. Handled well with medium pressure. Avoided lower back entirely as requested. Client seemed very relaxed post-treatment.
+                                                </p>
+                                                
+                                                <div class="flex items-center justify-between mt-auto pt-3 border-t border-brand-cream/50">
+                                                    <div class="flex items-center">
+                                                        <div class="w-5 h-5 rounded-full bg-brand-cream text-brand-textmain flex items-center justify-center font-serif text-[8px] mr-2">AN</div>
+                                                        <span class="text-xs text-brand-textmuted font-medium">Anna Nguyen</span>
+                                                    </div>
+                                                    <button class="text-xs text-brand-gold hover:text-brand-goldhover transition font-medium flex items-center">
+                                                        <i data-lucide="link" class="w-3 h-3 mr-1"></i> BK-10425
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Note Item 2: Health Note -->
+                                    <div class="relative flex items-start md:w-full">
+                                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-white rounded-full border-[3px] border-red-400 shadow-sm -ml-[7px] md:-ml-[8px] mt-1.5 z-10"></div>
+                                        
+                                        <div class="ml-8 md:ml-[50%] md:pl-10 w-full">
+                                            <!-- Date for desktop right side alignment -->
+                                            <div class="hidden md:block text-left absolute left-1/2 pl-10 top-0">
+                                                <p class="font-mono text-xs font-medium text-brand-textmain">Feb 15, 2026</p>
+                                                <p class="text-[10px] text-brand-textmuted uppercase tracking-wider">14:20 PM</p>
+                                            </div>
+                                            
+                                            <div class="bg-red-50/30 border border-red-100 hover:border-red-200 transition-colors rounded-2xl p-5 shadow-sm relative">
+                                                <!-- Date for mobile -->
+                                                <div class="md:hidden flex justify-between items-center mb-3 border-b border-red-100 pb-2">
+                                                    <span class="font-mono text-[10px] text-brand-textmuted">Feb 15, 2026 • 14:20 PM</span>
+                                                </div>
+
+                                                <div class="flex justify-between items-start mb-3">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider badge-health border">
+                                                        Health Alert Update
+                                                    </span>
+                                                    <span class="text-[10px] text-brand-textmuted font-mono bg-white px-1.5 py-0.5 rounded border border-brand-cream">NOTE-1988</span>
+                                                </div>
+                                                
+                                                <p class="text-sm text-brand-textmain leading-relaxed mb-4 font-medium">
+                                                    Client reported mild skin reaction to standard massage oil during last visit. Added lavender and peppermint to allergy list. Switched profile preference to hypoallergenic lotion only.
+                                                </p>
+                                                
+                                                <div class="flex items-center justify-between mt-auto pt-3 border-t border-red-100">
+                                                    <div class="flex items-center">
+                                                        <div class="w-5 h-5 rounded-full bg-white border border-red-200 text-red-700 flex items-center justify-center text-[10px] mr-2"><i data-lucide="shield-check" class="w-3 h-3"></i></div>
+                                                        <span class="text-xs text-red-700 font-medium">Manager Review</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Note Item 3: Preference Update -->
+                                    <div class="relative flex items-start md:w-full">
+                                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-white rounded-full border-[3px] border-brand-gold shadow-sm -ml-[7px] md:-ml-[8px] mt-1.5 z-10"></div>
+                                        
+                                        <div class="ml-8 md:ml-0 md:w-1/2 md:pr-10 w-full">
+                                            <!-- Date for desktop -->
+                                            <div class="hidden md:block text-right absolute right-1/2 pr-10 top-0">
+                                                <p class="font-mono text-xs font-medium text-brand-textmain">Jan 10, 2025</p>
+                                                <p class="text-[10px] text-brand-textmuted uppercase tracking-wider">09:00 AM</p>
+                                            </div>
+                                            
+                                            <div class="bg-white border border-brand-cream hover:border-brand-gold transition-colors rounded-2xl p-5 shadow-sm relative">
+                                                <!-- Date for mobile -->
+                                                <div class="md:hidden flex justify-between items-center mb-3 border-b border-brand-cream/50 pb-2">
+                                                    <span class="font-mono text-[10px] text-brand-textmuted">Jan 10, 2025 • 09:00 AM</span>
+                                                </div>
+
+                                                <div class="flex justify-between items-start mb-3">
+                                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider badge-pref border">
+                                                        Customer Preference
+                                                    </span>
+                                                </div>
+                                                
+                                                <p class="text-sm text-brand-textmain leading-relaxed mb-4">
+                                                    Requested to permanently add "Quiet Zone Room" to profile. Prefers minimal conversation during treatments.
+                                                </p>
+                                                
+                                                <div class="flex items-center justify-between mt-auto pt-3 border-t border-brand-cream/50">
+                                                    <div class="flex items-center">
+                                                        <i data-lucide="monitor" class="w-4 h-4 mr-2 text-brand-textmuted"></i>
+                                                        <span class="text-xs text-brand-textmuted font-medium">Front Desk</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Timeline End padding -->
+                                    <div class="h-4 w-full"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Load More -->
+                            <div class="pt-4 border-t border-brand-cream/50 text-center shrink-0">
+                                <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition bg-brand-gold/5 px-4 py-2 rounded-full border border-brand-gold/20">Load Older Notes</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SLIDE-OUT: ADD NOTE DIALOG -->
+    <div id="addNotePanel" class="fixed inset-y-0 right-0 w-full max-w-md bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[60] flex flex-col border-l border-brand-cream">
+        
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <h3 class="font-serif text-xl text-brand-textmain flex items-center"><i data-lucide="file-plus" class="w-5 h-5 mr-2 text-brand-gold"></i> Add Clinical Note</h3>
+            <button onclick="togglePanel('addNotePanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+            
+            <div>
+                <label class="spa-label">Note Category <span class="text-brand-rose">*</span></label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="note_type" class="peer sr-only radio-card-input" checked>
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-blue-400">
+                            <span class="text-xs font-bold text-blue-700">Therapist Note</span>
+                        </div>
+                    </label>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="note_type" class="peer sr-only radio-card-input">
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-red-400">
+                            <span class="text-xs font-bold text-red-700">Health Alert</span>
+                        </div>
+                    </label>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="note_type" class="peer sr-only radio-card-input">
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold">
+                            <span class="text-xs font-bold text-brand-goldhover">Preference</span>
+                        </div>
+                    </label>
+                    <label class="relative cursor-pointer group">
+                        <input type="radio" name="note_type" class="peer sr-only radio-card-input">
+                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-gray-400">
+                            <span class="text-xs font-bold text-gray-600">General Info</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="spa-label">Related Service / Booking (Optional)</label>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer text-sm">
+                    <option value="">None (General Profile Note)</option>
+                    <option value="bk1">BK-10425 (Mar 10 - Deep Tissue)</option>
+                    <option value="bk2">BK-10210 (Feb 15 - Couples Retreat)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="spa-label">Note Content <span class="text-brand-rose">*</span></label>
+                <textarea class="spa-input h-32 resize-none" placeholder="Detailed observation or client request..."></textarea>
+            </div>
+
+            <div class="bg-brand-ivory/50 rounded-xl p-4 border border-brand-cream">
+                <label class="spa-label mb-3">Visibility Restriction</label>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer text-xs font-medium">
+                    <option value="all" selected>All Staff (Default)</option>
+                    <option value="therapists">Therapists & Management Only</option>
+                    <option value="management">Management Only (Confidential)</option>
+                </select>
+                <p class="text-[10px] text-brand-textmuted mt-2 ml-1">Restricts who can view this note on the client profile.</p>
+            </div>
+
+        </div>
+
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+            <button class="px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-xl text-sm font-medium transition shadow-sm" onclick="togglePanel('addNotePanel')">Cancel</button>
+            <button class="px-6 py-2.5 bg-brand-gold text-white rounded-xl hover:bg-brand-goldhover transition shadow-premium font-medium flex items-center" onclick="togglePanel('addNotePanel')">Save Note to Timeline</button>
+        </div>
+    </div>
+
+    <!-- SLIDE-OUT: UPDATE HEALTH PROFILE PANEL -->
+    <div id="healthProfilePanel" class="fixed inset-y-0 right-0 w-full max-w-lg bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[60] flex flex-col border-l border-brand-cream">
+        
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <h3 class="font-serif text-xl text-brand-textmain flex items-center"><i data-lucide="heart-pulse" class="w-5 h-5 mr-2 text-brand-rose"></i> Edit Health Info</h3>
+            <button onclick="togglePanel('healthProfilePanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+            
+            <div>
+                <h4 class="font-serif text-lg text-brand-textmain border-b border-brand-cream pb-2 mb-4">Contraindications & Allergies</h4>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label class="spa-label text-red-600">Known Allergies</label>
+                        <textarea class="spa-input border-red-200 focus:ring-red-100 placeholder-red-300 h-20 resize-none" placeholder="List specific allergies...">Lavender Oil, Peppermint</textarea>
+                    </div>
+                    <div>
+                        <label class="spa-label text-red-600">Medical Conditions / Injuries</label>
+                        <textarea class="spa-input border-red-200 focus:ring-red-100 placeholder-red-300 h-20 resize-none" placeholder="Recent surgeries, chronic pain, etc.">L5 spinal fusion (Jan 2024). Prone to tension headaches. Avoid direct pressure on lower lumbar spine.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="font-serif text-lg text-brand-textmain border-b border-brand-cream pb-2 mb-4">Wellness Attributes</h4>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="spa-label">Skin Type</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="normal">Normal</option>
+                            <option value="dry">Dry</option>
+                            <option value="oily">Oily</option>
+                            <option value="sensitive" selected>Sensitive</option>
+                            <option value="combination">Combination</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="spa-label">Massage Pressure</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="light">Light</option>
+                            <option value="medium" selected>Light to Medium</option>
+                            <option value="firm">Firm / Deep</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="spa-label">Additional Sensitivities</label>
+                        <input type="text" class="spa-input" placeholder="e.g. Mild Rosacea" value="Mild Rosacea">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+            <button class="px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-xl text-sm font-medium transition shadow-sm" onclick="togglePanel('healthProfilePanel')">Cancel</button>
+            <button class="px-6 py-2.5 bg-brand-gold text-white rounded-xl hover:bg-brand-goldhover transition shadow-premium font-medium flex items-center" onclick="togglePanel('healthProfilePanel')">Update Profile</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kh-suckhoe' });</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "Organization Console", "subtitle": "Organization Owner" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "branch": "Branches",
+    "member": "Members",
+    "role": "Roles & permissions",
+    "service": "Service catalog",
+    "voucher": "Vouchers",
+    "content": "Content",
+    "report": "Multi-branch reports",
+    "settings": "Settings",
+    "logout": "Sign out"
+  },
+  "dashboard": {
+    "title": "Your organization",
+    "kpi": {
+      "branches": "Branches",
+      "staff": "Staff",
+      "customers": "Customers",
+      "revenue": "Monthly revenue"
+    },
+    "branchSummary": "Branch performance"
+  },
+  "branch": {
+    "title": "Branches",
+    "create": "New branch",
+    "columns": { "code": "Code", "name": "Name", "address": "Address", "manager": "Manager", "status": "Status" }
+  },
+  "member": {
+    "title": "Members",
+    "invite": "Invite member",
+    "columns": { "name": "Name", "email": "Email", "role": "Role", "scope": "Scope", "status": "Status" }
+  },
+  "role": {
+    "title": "Permission matrix",
+    "subtitle": "Configure role × permission"
+  }
+}

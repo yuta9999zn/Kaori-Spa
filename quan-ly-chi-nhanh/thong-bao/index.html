@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Thong Bao</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .notif-item{border-left:3px solid transparent;transition:all .2s;cursor:pointer}
+        .notif-item:hover{background:#FAF9F6}
+        .notif-item.unread{background:rgba(201,168,124,.04);border-left-color:#C9A87C}
+        .notif-item.unread .notif-dot{display:block}
+        .notif-dot{display:none;width:8px;height:8px;border-radius:50%;background:#C9A87C;flex-shrink:0;margin-top:5px}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <i data-lucide="bell" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Trung Tam Thong Bao</h1>
+        <span class="text-xs bg-brand-rose text-white px-2.5 py-1 rounded-full font-medium" id="unread-count">8 chua doc</span>
+    </div>
+    <div class="flex items-center gap-3">
+        <button onclick="markAllRead()" class="text-sm text-brand-gold hover:underline">Danh dau tat ca da doc</button>
+        <button class="border border-brand-cream text-brand-textmuted px-4 py-2 rounded-full text-sm hover:border-brand-gold hover:text-brand-gold transition flex items-center gap-2">
+            <i data-lucide="settings" class="w-4 h-4"></i> Cai Dat TB
+        </button>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-4xl mx-auto p-8">
+
+    <!-- Filter tabs -->
+    <div class="flex items-center gap-2 mb-6">
+        <button onclick="setTab('all',this)" data-tab="all" class="tab-btn px-4 py-2 rounded-full text-sm border border-brand-gold bg-brand-gold/10 text-brand-gold font-medium transition">Tat ca</button>
+        <button onclick="setTab('booking',this)" data-tab="booking" class="tab-btn px-4 py-2 rounded-full text-sm border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition">Booking</button>
+        <button onclick="setTab('staff',this)" data-tab="staff" class="tab-btn px-4 py-2 rounded-full text-sm border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition">Nhan Vien</button>
+        <button onclick="setTab('inventory',this)" data-tab="inventory" class="tab-btn px-4 py-2 rounded-full text-sm border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition">Kho</button>
+        <button onclick="setTab('system',this)" data-tab="system" class="tab-btn px-4 py-2 rounded-full text-sm border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition">He Thong</button>
+        <div class="ml-auto flex items-center gap-2">
+            <label class="text-sm text-brand-textmuted flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="chk-unread" class="accent-brand-gold" onchange="toggleUnread(this.checked)">
+                Chi hien chua doc
+            </label>
+        </div>
+    </div>
+
+    <!-- Notifications list -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 overflow-hidden" id="notif-container">
+    </div>
+
+</div>
+</div>
+</div>
+
+<script>
+const NOTIFS = [
+    { id:1,  type:'booking', unread:true,  icon:'calendar-plus',   color:'text-blue-600',   bg:'bg-blue-50',   time:'2 phut truoc',   title:'Booking moi duoc tao',        body:'Nguyen Thi Hoa da dat lich Swedish Massage luc 14:00 hom nay. NV Minh Phuong duoc phan cong.',     action:{label:'Xem booking', href:'../booking/tao-booking.html'} },
+    { id:2,  type:'booking', unread:true,  icon:'calendar-x',      color:'text-red-600',    bg:'bg-red-50',    time:'15 phut truoc',  title:'Booking bi huy',              body:'Tran Van Nam huy lich Hot Stone luc 16:00. Ly do: Boi hop dot xuat. Phong 04 da duoc giai phong.', action:{label:'Xem lich su', href:'../booking/lich-su.html'} },
+    { id:3,  type:'booking', unread:true,  icon:'calendar-clock',  color:'text-orange-600', bg:'bg-orange-50', time:'32 phut truoc',  title:'Khach sap den',               body:'Le Thu Ha co booking HydraFacial luc 11:30 (con 30 phut). Phong 02 / Giuong A da san sang.',       action:{label:'Check-in', href:'../check-in.html'} },
+    { id:4,  type:'booking', unread:true,  icon:'bell-ring',       color:'text-brand-gold', bg:'bg-brand-gold/10', time:'1 gio truoc', title:'Nhac nho booking',           body:'Vo Thi Lan co booking Deep Tissue Massage luc 15:00. Nhan vien Lan Huong sap ket thuc ca nghi.',  action:{label:'Xem chi tiet', href:'../booking/chi-tiet-booking.html'} },
+    { id:5,  type:'staff',   unread:true,  icon:'user-x',          color:'text-red-600',    bg:'bg-red-50',    time:'2 gio truoc',   title:'Nhan vien vang mat',          body:'Duc Thanh (Ca 14:00-22:00) chua check-in. Co 3 booking duoc phan cong cho NV nay trong ca hom nay.', action:{label:'Xem lich lam', href:'../nhan-vien/lich-lam-viec.html'} },
+    { id:6,  type:'staff',   unread:false, icon:'user-check',      color:'text-green-600',  bg:'bg-green-50',  time:'3 gio truoc',   title:'Ca lam viec bat dau',         body:'Ca sang (08:00-17:00) da bat dau. 7/8 nhan vien da check-in. Nam Quan chua xac nhan.',             action:{label:'Xem chi tiet', href:'../nhan-vien/lich-lam-viec.html'} },
+    { id:7,  type:'inventory',unread:true, icon:'package-open',    color:'text-orange-600', bg:'bg-orange-50', time:'Hom qua',       title:'Canh bao kho - Sap het hang', body:'Dau Massage Rose chi con 6 chai (muc canh bao: 10). Ong Hut da het. Can dat them hang gap.',         action:{label:'Nhap kho', href:'../kho/nhap-kho.html'} },
+    { id:8,  type:'inventory',unread:true, icon:'alert-triangle',  color:'text-red-600',    bg:'bg-red-50',    time:'Hom qua',       title:'San pham het kho',            body:'3 san pham da het kho: Ong Hut, Dau Massage Hot, Khan Nho. Anh huong den 5 dich vu.',              action:{label:'Xem kho', href:'../kho/index.html'} },
+    { id:9,  type:'booking', unread:false, icon:'credit-card',     color:'text-green-600',  bg:'bg-green-50',  time:'Hom qua',       title:'Thanh toan thanh cong',       body:'Pham Thu Huong thanh toan 680,000d cho Lava Shell Facial. Cong 68 diem thuong. Ma booking: BK-2401-0892.', action:{label:'Xem hoa don', href:'../booking/thanh-toan.html'} },
+    { id:10, type:'system',  unread:false, icon:'settings',        color:'text-brand-textmuted', bg:'bg-brand-cream', time:'2 ngay truoc', title:'Cap nhat he thong', body:'He thong da duoc nang cap len phien ban 2.1.0. Them tinh nang: bao cao kho, quan ly nhap/xuat, thong bao.', action:null },
+    { id:11, type:'system',  unread:false, icon:'shield-check',    color:'text-blue-600',   bg:'bg-blue-50',   time:'3 ngay truoc',  title:'Kiem tra bao mat tu dong',    body:'Quet bao mat dinh ky hoan tat. Khong phat hien van de. He thong hoat dong tot.',                    action:null },
+];
+
+let activeTab = 'all';
+let onlyUnread = false;
+
+function renderNotifs() {
+    let list = NOTIFS;
+    if (activeTab !== 'all') list = list.filter(n => n.type === activeTab);
+    if (onlyUnread) list = list.filter(n => n.unread);
+
+    const container = document.getElementById('notif-container');
+    if (list.length === 0) {
+        container.innerHTML = `<div class="flex flex-col items-center py-16 text-brand-textmuted">
+            <i data-lucide="bell-off" class="w-10 h-10 mb-3 opacity-30"></i>
+            <p class="text-sm">Khong co thong bao nao</p>
+        </div>`;
+        lucide.createIcons();
+        return;
+    }
+
+    container.innerHTML = list.map(n => `
+        <div class="notif-item p-5 ${n.unread?'unread':''} border-b border-brand-cream last:border-0" onclick="markRead(${n.id})">
+            <div class="flex items-start gap-4">
+                <div class="notif-dot"></div>
+                <div class="w-10 h-10 rounded-xl ${n.bg} flex items-center justify-center flex-shrink-0">
+                    <i data-lucide="${n.icon}" class="w-5 h-5 ${n.color}"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-3 mb-1">
+                        <p class="font-medium text-sm ${n.unread?'text-brand-textmain':'text-brand-textmuted'}">${n.title}</p>
+                        <span class="text-xs text-brand-textmuted flex-shrink-0">${n.time}</span>
+                    </div>
+                    <p class="text-xs text-brand-textmuted leading-relaxed mb-2">${n.body}</p>
+                    ${n.action ? `<a href="${n.action.href}" class="text-xs text-brand-gold hover:underline flex items-center gap-1" onclick="event.stopPropagation()">
+                        <i data-lucide="external-link" class="w-3 h-3"></i> ${n.action.label}
+                    </a>` : ''}
+                </div>
+                ${n.unread?`<button class="flex-shrink-0 p-1.5 rounded-lg hover:bg-brand-cream transition text-brand-textmuted" onclick="event.stopPropagation(); markRead(${n.id})" title="Danh dau da doc"><i data-lucide="check" class="w-3.5 h-3.5"></i></button>`:''}
+            </div>
+        </div>
+    `).join('');
+    lucide.createIcons();
+    updateCount();
+}
+
+function markRead(id) {
+    const n = NOTIFS.find(n => n.id === id);
+    if (n) n.unread = false;
+    renderNotifs();
+}
+
+function markAllRead() {
+    NOTIFS.forEach(n => n.unread = false);
+    renderNotifs();
+}
+
+function setTab(tab, btn) {
+    activeTab = tab;
+    document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('border-brand-gold','bg-brand-gold/10','text-brand-gold','font-medium');
+        b.classList.add('border-brand-cream','text-brand-textmuted');
+    });
+    btn.classList.add('border-brand-gold','bg-brand-gold/10','text-brand-gold','font-medium');
+    btn.classList.remove('border-brand-cream','text-brand-textmuted');
+    renderNotifs();
+}
+
+function toggleUnread(v) { onlyUnread = v; renderNotifs(); }
+
+function updateCount() {
+    const n = NOTIFS.filter(n => n.unread).length;
+    document.getElementById('unread-count').textContent = n + (n===1?' chua doc':' chua doc');
+}
+
+renderNotifs();
+</script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'thong-bao' });</script>
+</body>
+</html>

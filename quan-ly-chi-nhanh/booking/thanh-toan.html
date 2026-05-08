@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Checkout | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Custom Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm text-brand-gold;
+        }
+        .radio-card-input:checked + .radio-card-body .radio-card-icon {
+            @apply text-brand-gold opacity-100 scale-100;
+        }
+        .radio-card-input:disabled + .radio-card-body {
+            @apply opacity-50 cursor-not-allowed bg-gray-50 border-brand-cream;
+        }
+        
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center">
+                <button class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold transition mr-4 shadow-sm">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <h1 class="font-serif text-xl md:text-2xl text-brand-textmain tracking-wide">Checkout & Payment</h1>
+                    <div class="text-xs text-brand-textmuted font-medium flex items-center mt-0.5">
+                        <span>Bookings</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span>#BK-10425</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span class="text-brand-gold">Checkout</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="hidden lg:block text-right mr-2">
+                    <p class="text-sm font-medium text-brand-textmain">John Doe</p>
+                    <p class="text-xs text-brand-textmuted">Booking #BK-10425</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-brand-cream border-2 border-white shadow-sm flex items-center justify-center font-serif text-brand-textmain">JD</div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1400px] mx-auto pb-12">
+                
+                <!-- CONTEXT HEADER -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 flex flex-col md:flex-row md:items-center justify-between mb-8 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex flex-col md:flex-row md:items-center gap-6">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-0.5">Service Time</p>
+                            <h3 class="font-serif text-xl text-brand-textmain">Today, 10:00 AM – 11:00 AM</h3>
+                        </div>
+                        <div class="h-8 w-px bg-brand-cream hidden md:block"></div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-0.5">Primary Staff</p>
+                            <p class="text-sm font-medium text-brand-textmain flex items-center"><i data-lucide="user" class="w-4 h-4 mr-1.5 text-brand-gold"></i> Anna Nguyen</p>
+                        </div>
+                        <div class="h-8 w-px bg-brand-cream hidden md:block"></div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-0.5">Booking Status</p>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">
+                                Completed
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 mt-6 md:mt-0 flex space-x-3 shrink-0">
+                        <button class="px-6 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-full text-sm font-medium transition shadow-sm">
+                            Cancel Checkout
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT COLUMN: INVOICE & DISCOUNTS -->
+                    <div class="xl:col-span-2 space-y-6">
+                        
+                        <!-- 1. Customer Information -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="user" class="w-5 h-5 mr-3 text-brand-gold"></i> Customer Overview
+                                </h3>
+                                <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">Edit Profile</button>
+                            </div>
+                            
+                            <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-4 flex flex-wrap items-center gap-x-8 gap-y-4">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 rounded-full bg-white border border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-lg mr-3 shadow-sm">JD</div>
+                                    <div>
+                                        <p class="font-medium text-brand-textmain">John Doe</p>
+                                        <p class="text-[10px] text-brand-textmuted">+84 912 345 678</p>
+                                    </div>
+                                </div>
+                                <div class="h-8 w-px bg-brand-cream hidden md:block"></div>
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Membership</p>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded bg-brand-gold/10 text-brand-gold text-[10px] font-bold uppercase tracking-wider border border-brand-gold/20">
+                                        <i data-lucide="crown" class="w-3 h-3 mr-1"></i> Gold Member
+                                    </span>
+                                </div>
+                                <div class="h-8 w-px bg-brand-cream hidden md:block"></div>
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Loyalty Points</p>
+                                    <p class="text-sm font-medium text-brand-textmain">320 <span class="text-[10px] text-brand-textmuted font-normal">($32 value)</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Services & Add-ons (Invoice Table) -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-4 flex items-center">
+                                <i data-lucide="receipt" class="w-5 h-5 mr-3 text-brand-gold"></i> Service Summary
+                            </h3>
+                            
+                            <div class="overflow-x-auto border border-brand-cream rounded-2xl mb-4">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/50 border-b border-brand-cream">
+                                            <th class="py-3 px-4 font-semibold w-1/2">Item Description</th>
+                                            <th class="py-3 px-4 font-semibold text-center">Qty / Dur</th>
+                                            <th class="py-3 px-4 font-semibold text-right">Unit Price</th>
+                                            <th class="py-3 px-4 font-semibold text-right">Total</th>
+                                            <th class="py-3 px-3 font-semibold text-center"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm text-brand-textmain divide-y divide-brand-cream/50">
+                                        <!-- Service Row -->
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-4 px-4">
+                                                <p class="font-medium text-brand-textmain">Deep Tissue Massage</p>
+                                                <p class="text-[10px] text-brand-textmuted mt-0.5">Staff: Anna Nguyen</p>
+                                            </td>
+                                            <td class="py-4 px-4 text-center">
+                                                <span class="text-brand-textmain">1</span> <span class="text-brand-textmuted text-xs">(60m)</span>
+                                            </td>
+                                            <td class="py-4 px-4 text-right text-brand-textmuted font-serif">$80.00</td>
+                                            <td class="py-4 px-4 text-right font-medium font-serif">$80.00</td>
+                                            <td class="py-4 px-3 text-center">
+                                                <button class="text-brand-textmuted hover:text-brand-rose transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                            </td>
+                                        </tr>
+                                        <!-- Product / Add-on Row -->
+                                        <tr class="hover:bg-brand-ivory/30 transition bg-brand-gold/5">
+                                            <td class="py-4 px-4">
+                                                <p class="font-medium text-brand-textmain">Lavender Essential Oil</p>
+                                                <p class="text-[10px] text-brand-textmuted mt-0.5">Retail Product</p>
+                                            </td>
+                                            <td class="py-4 px-4 text-center">
+                                                <div class="inline-flex items-center bg-white border border-brand-cream rounded-md p-0.5 shadow-sm">
+                                                    <button class="w-6 h-6 flex items-center justify-center text-brand-textmuted hover:text-brand-gold rounded transition">-</button>
+                                                    <span class="w-6 text-center text-xs font-medium text-brand-textmain">1</span>
+                                                    <button class="w-6 h-6 flex items-center justify-center text-brand-textmuted hover:text-brand-gold rounded transition">+</button>
+                                                </div>
+                                            </td>
+                                            <td class="py-4 px-4 text-right text-brand-textmuted font-serif">$15.00</td>
+                                            <td class="py-4 px-4 text-right font-medium font-serif">$15.00</td>
+                                            <td class="py-4 px-3 text-center">
+                                                <button class="text-brand-textmuted hover:text-brand-rose transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="flex space-x-3">
+                                <button class="px-4 py-2 border border-brand-cream bg-white hover:border-brand-gold text-brand-textmain rounded-xl text-xs font-medium transition shadow-sm flex items-center">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5 mr-1.5 text-brand-gold"></i> Add Extra Service
+                                </button>
+                                <button class="px-4 py-2 border border-brand-cream bg-white hover:border-brand-gold text-brand-textmain rounded-xl text-xs font-medium transition shadow-sm flex items-center">
+                                    <i data-lucide="shopping-bag" class="w-3.5 h-3.5 mr-1.5 text-brand-gold"></i> Add Retail Product
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 3. Discounts & Packages -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-4 border-b border-brand-cream/50 pb-4 flex items-center">
+                                <i data-lucide="tag" class="w-5 h-5 mr-3 text-brand-gold"></i> Discounts & Packages
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                
+                                <!-- Available Packages -->
+                                <div>
+                                    <label class="spa-label flex justify-between">Customer Packages <span class="text-brand-gold bg-brand-gold/10 px-1.5 rounded">1 Active</span></label>
+                                    <div class="bg-brand-ivory/50 rounded-xl border border-brand-cream p-4">
+                                        <div class="flex items-start justify-between mb-3">
+                                            <div>
+                                                <p class="text-sm font-medium text-brand-textmain">Relaxation Package</p>
+                                                <p class="text-xs text-brand-textmuted mt-0.5">2 of 3 sessions remaining</p>
+                                            </div>
+                                            <i data-lucide="layers" class="w-5 h-5 text-brand-gold opacity-50"></i>
+                                        </div>
+                                        <button class="w-full py-2 bg-brand-gold text-white rounded-lg text-xs font-medium hover:bg-brand-goldhover transition shadow-sm">
+                                            Apply Package Session
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Manual Discount -->
+                                <div>
+                                    <label class="spa-label">Apply Discount</label>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center space-x-2">
+                                            <select class="spa-input w-24 py-2 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1em] cursor-pointer">
+                                                <option value="percent">%</option>
+                                                <option value="fixed">$</option>
+                                            </select>
+                                            <input type="number" class="spa-input py-2" placeholder="Value" value="10">
+                                            <button class="px-4 py-2 bg-brand-ivory border border-brand-cream hover:border-brand-gold text-brand-textmain rounded-xl text-sm font-medium transition">Apply</button>
+                                        </div>
+                                        <input type="text" class="spa-input py-2 text-xs" placeholder="Reason (e.g. Loyalty Discount)" value="Loyalty Discount">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: CHECKOUT PANEL -->
+                    <div class="xl:col-span-1">
+                        <div class="bg-white rounded-3xl p-6 shadow-premium border border-brand-gold/30 sticky top-28 flex flex-col">
+                            
+                            <!-- Timeline Indicator -->
+                            <div class="flex items-center justify-between mb-6 px-2">
+                                <div class="flex flex-col items-center">
+                                    <div class="w-4 h-4 rounded-full bg-brand-gold text-white flex items-center justify-center mb-1"><i data-lucide="check" class="w-3 h-3"></i></div>
+                                    <span class="text-[8px] uppercase tracking-wider font-semibold text-brand-textmuted">Booked</span>
+                                </div>
+                                <div class="flex-1 h-px bg-brand-gold/50 mx-2"></div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-4 h-4 rounded-full bg-brand-gold text-white flex items-center justify-center mb-1"><i data-lucide="check" class="w-3 h-3"></i></div>
+                                    <span class="text-[8px] uppercase tracking-wider font-semibold text-brand-textmuted">Arrived</span>
+                                </div>
+                                <div class="flex-1 h-px bg-brand-gold/50 mx-2"></div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-4 h-4 rounded-full bg-brand-gold text-white flex items-center justify-center mb-1"><i data-lucide="check" class="w-3 h-3"></i></div>
+                                    <span class="text-[8px] uppercase tracking-wider font-semibold text-brand-textmuted">Done</span>
+                                </div>
+                                <div class="flex-1 h-px bg-brand-cream border border-dashed border-brand-cream mx-2"></div>
+                                <div class="flex flex-col items-center">
+                                    <div class="w-4 h-4 rounded-full bg-white border-2 border-brand-gold mb-1"></div>
+                                    <span class="text-[8px] uppercase tracking-wider font-semibold text-brand-gold">Pay</span>
+                                </div>
+                            </div>
+
+                            <h3 class="font-serif text-xl text-brand-textmain mb-4 border-b border-brand-cream/50 pb-3">Payment Summary</h3>
+
+                            <!-- Calculation Breakdown -->
+                            <div class="space-y-3 mb-6 flex-1">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-brand-textmuted">Services Total</span>
+                                    <span class="font-medium text-brand-textmain font-serif">$80.00</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-brand-textmuted">Add-ons / Products</span>
+                                    <span class="font-medium text-brand-textmain font-serif">$15.00</span>
+                                </div>
+                                <div class="flex justify-between text-sm text-green-600 bg-green-50/50 p-1.5 -mx-1.5 rounded">
+                                    <span class="flex items-center"><i data-lucide="tag" class="w-3.5 h-3.5 mr-1.5"></i> Discount (10%)</span>
+                                    <span class="font-medium font-serif">-$9.50</span>
+                                </div>
+                                <div class="flex justify-between text-sm pt-2">
+                                    <span class="text-brand-textmuted">Subtotal</span>
+                                    <span class="font-medium text-brand-textmain font-serif">$85.50</span>
+                                </div>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-brand-textmuted">Tax (10%)</span>
+                                    <span class="font-medium text-brand-textmain font-serif">$8.55</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t-2 border-dashed border-brand-cream pt-4 mb-6">
+                                <div class="flex justify-between items-end">
+                                    <span class="text-sm text-brand-textmuted uppercase tracking-widest font-semibold mb-1">Total Due</span>
+                                    <span class="font-serif text-4xl text-brand-gold font-medium">$94.05</span>
+                                </div>
+                            </div>
+
+                            <!-- Payment Methods -->
+                            <div class="mb-6">
+                                <label class="spa-label mb-3">Phương Thức Thanh Toán</label>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="payment_method" value="tm" class="peer sr-only radio-card-input" checked onchange="onPaymentChange(this.value)">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold flex flex-col items-center justify-center">
+                                            <i data-lucide="banknote" class="w-5 h-5 mb-1 text-brand-textmuted group-hover:text-brand-gold radio-card-icon transition-colors"></i>
+                                            <span class="text-[10px] font-medium text-brand-textmain">Tiền mặt</span>
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="payment_method" value="the" class="peer sr-only radio-card-input" onchange="onPaymentChange(this.value)">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold flex flex-col items-center justify-center">
+                                            <i data-lucide="credit-card" class="w-5 h-5 mb-1 text-brand-textmuted group-hover:text-brand-gold radio-card-icon transition-colors"></i>
+                                            <span class="text-[10px] font-medium text-brand-textmain">Thẻ (LPB)</span>
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="payment_method" value="ck-loc" class="peer sr-only radio-card-input" onchange="onPaymentChange(this.value)">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold flex flex-col items-center justify-center gap-0.5">
+                                            <i data-lucide="smartphone" class="w-5 h-5 mb-0.5 text-brand-textmuted group-hover:text-brand-gold radio-card-icon transition-colors"></i>
+                                            <span class="text-[10px] font-medium text-brand-textmain">CK TK Lộc</span>
+                                            <span class="text-[9px] text-brand-textmuted">(TK cá nhân)</span>
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="payment_method" value="ck-cty" class="peer sr-only radio-card-input" onchange="onPaymentChange(this.value)">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold flex flex-col items-center justify-center gap-0.5">
+                                            <i data-lucide="building-2" class="w-5 h-5 mb-0.5 text-brand-textmuted group-hover:text-brand-gold radio-card-icon transition-colors"></i>
+                                            <span class="text-[10px] font-medium text-brand-textmain">CK TK Công Ty</span>
+                                            <span class="text-[9px] text-brand-textmuted">(BIDV)</span>
+                                        </div>
+                                    </label>
+                                </div>
+                                <!-- QR hint when bank transfer selected -->
+                                <div id="ck-hint" class="hidden mt-3 p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-700">
+                                    <p class="font-medium mb-0.5">Nhắc khách chụp màn hình xác nhận chuyển khoản.</p>
+                                    <p class="text-blue-500" id="ck-hint-detail">—</p>
+                                </div>
+                                <div class="mt-3 text-right">
+                                    <button class="text-[10px] uppercase tracking-wider font-semibold text-brand-textmuted hover:text-brand-gold transition border-b border-transparent hover:border-brand-gold">Thanh toán ghép nhiều hình thức</button>
+                                </div>
+                            </div>
+
+                            <!-- Final Action Dropdown -->
+                            <div class="pt-2 shrink-0">
+                                <div class="relative dropdown-container">
+                                    <button class="w-full py-4 bg-brand-gold text-white rounded-xl text-base tracking-wide font-medium hover:bg-brand-goldhover transition shadow-premium flex items-center justify-center group">
+                                        Hoàn Tất Thanh Toán <i data-lucide="chevron-down" class="w-4 h-4 ml-2"></i>
+                                    </button>
+                                    <div class="dropdown-menu absolute bottom-full left-0 right-0 mb-2 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                        <a href="#" onclick="completePay('print'); return false;" class="flex items-center px-4 py-3 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                            <i data-lucide="printer" class="w-4 h-4 mr-3"></i> Hoàn tất & In hoá đơn
+                                        </a>
+                                        <a href="#" onclick="completePay('email'); return false;" class="flex items-center px-4 py-3 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                            <i data-lucide="mail" class="w-4 h-4 mr-3"></i> Hoàn tất & Gửi email
+                                        </a>
+                                        <a href="#" onclick="completePay('none'); return false;" class="flex items-center px-4 py-3 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                            <i data-lucide="check-circle" class="w-4 h-4 mr-3"></i> Hoàn tất (Không in)
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- Success flash -->
+                                <div id="pay-success" class="hidden mt-3 p-3 bg-green-50 border border-green-100 rounded-xl text-xs text-green-700 flex items-center gap-2">
+                                    <i data-lucide="check-circle" class="w-4 h-4 text-green-600 flex-shrink-0"></i>
+                                    <span>Thanh toán đã được ghi vào <strong>Báo Cáo Ngày</strong>. <a href="../bao-cao/bao-cao-ngay.html" class="underline">Xem ngay →</a></span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // ── Booking context for this checkout page ──────────────────────────
+        // In a real system these would come from URL params / session storage.
+        const CHECKOUT = {
+            bookingId: 'BK-10425',
+            customer:  'John Doe',
+            service:   'Deep Tissue Massage',
+            type:      'dv',       // 'dv' = service, 'mp' = cosmetics
+            amount:    680000,     // total after discount (VND)
+        };
+
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        function onPaymentChange(val) {
+            const hint = document.getElementById('ck-hint');
+            const detail = document.getElementById('ck-hint-detail');
+            if (val === 'ck-loc') {
+                hint.classList.remove('hidden');
+                detail.textContent = 'TK Lộc — TK cá nhân. Nhắc khách ghi nội dung: Tên + Mã booking.';
+            } else if (val === 'ck-cty') {
+                hint.classList.remove('hidden');
+                detail.textContent = 'TK Công Ty (BIDV) — nhắc khách ghi nội dung: Tên + Mã booking.';
+            } else {
+                hint.classList.add('hidden');
+            }
+        }
+
+        function completePay(action) {
+            // Read selected payment method
+            const methodEl = document.querySelector('input[name="payment_method"]:checked');
+            const method   = methodEl ? methodEl.value : 'tm';
+
+            // Save to AuraDB (shared localStorage data store)
+            AuraDB.addTransaction({
+                date:      new Date().toISOString().slice(0, 10),
+                type:      CHECKOUT.type,
+                method:    method,
+                amount:    CHECKOUT.amount,
+                bookingId: CHECKOUT.bookingId,
+                customer:  CHECKOUT.customer,
+                service:   CHECKOUT.service,
+            });
+
+            // Show success flash
+            document.getElementById('pay-success').classList.remove('hidden');
+            lucide.createIcons();
+
+            // Optional print
+            if (action === 'print') {
+                setTimeout(() => window.print(), 300);
+            }
+        }
+    </script>
+<script src="../shared/data-store.js"></script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'thanh-toan' });</script>
+</body>
+</html>

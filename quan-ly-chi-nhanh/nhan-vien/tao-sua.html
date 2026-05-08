@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Staff | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.75rem;
+            height: 1.5rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1.25rem);
+        }
+
+        /* Section Navigation highlight */
+        .nav-link.active {
+            @apply text-brand-gold border-l-2 border-brand-gold font-medium bg-brand-gold/5;
+        }
+
+        /* Custom Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm;
+        }
+        .radio-card-input:checked + .radio-card-body .radio-card-icon {
+            @apply text-brand-gold opacity-100 scale-100;
+        }
+        
+        /* Schedule Grid Styling */
+        .schedule-row.disabled {
+            @apply opacity-50 bg-gray-50;
+        }
+        .schedule-row.disabled input {
+            @apply cursor-not-allowed bg-gray-100 text-gray-400 border-gray-200 shadow-none;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white relative">
+
+    <!-- Sticky Global Header -->
+    <header class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-brand-cream shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-6 md:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                <button class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold transition mr-4 shadow-sm">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <h1 class="font-serif text-xl md:text-2xl text-brand-textmain">Add New Staff</h1>
+                    <div class="text-xs text-brand-textmuted font-medium flex items-center mt-0.5">
+                        <span>Operations</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span>Staff</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span class="text-brand-gold">Create</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-3 md:space-x-4">
+                <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm hidden sm:block">
+                    Cancel
+                </button>
+                <button class="px-6 md:px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                    <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Profile
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <main class="flex-1 w-full flex pt-20 h-screen overflow-hidden max-w-[1400px] mx-auto">
+        
+<div id="sidebar-root"></div>
+
+        <!-- Form Content Area -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-8 scroll-smooth" id="form-scroll-area">
+            <div class="max-w-3xl mx-auto space-y-8 md:space-y-10 pb-24">
+                
+                <!-- SECTION 1: Basic Information -->
+                <section id="basic-info" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <span class="font-serif font-bold">1</span>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Basic Information</h3>
+                                <p class="text-xs text-brand-textmuted">Personal details and contact information.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-8 mb-6">
+                            <!-- Photo Upload -->
+                            <div class="flex flex-col items-center justify-center space-y-3 shrink-0">
+                                <div class="w-28 h-28 rounded-full border-2 border-dashed border-brand-gold/50 bg-brand-ivory flex flex-col items-center justify-center text-brand-gold hover:bg-brand-gold/5 transition cursor-pointer shadow-sm relative overflow-hidden group">
+                                    <i data-lucide="camera" class="w-6 h-6 mb-1 opacity-70 group-hover:opacity-100 transition-opacity"></i>
+                                    <span class="text-[10px] font-medium uppercase tracking-wider">Upload</span>
+                                    <input type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                </div>
+                                <span class="text-[10px] text-brand-textmuted uppercase tracking-widest font-semibold">Profile Photo</span>
+                            </div>
+
+                            <!-- Core Fields -->
+                            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div>
+                                    <label class="spa-label">First Name <span class="text-brand-rose">*</span></label>
+                                    <input type="text" class="spa-input font-medium" placeholder="e.g. Sarah">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Last Name <span class="text-brand-rose">*</span></label>
+                                    <input type="text" class="spa-input font-medium" placeholder="e.g. Miller">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Phone Number <span class="text-brand-rose">*</span></label>
+                                    <input type="tel" class="spa-input" placeholder="+84 000 000 000">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Email Address</label>
+                                    <input type="email" class="spa-input" placeholder="sarah@lotusspa.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="spa-label">Gender</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                    <option value="" disabled selected>Select gender...</option>
+                                    <option value="female">Female</option>
+                                    <option value="male">Male</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="spa-label">Date of Birth</label>
+                                <input type="date" class="spa-input text-brand-textmuted">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="spa-label">Residential Address</label>
+                                <input type="text" class="spa-input" placeholder="Full address">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 2: Employment Details -->
+                <section id="employment-details" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <span class="font-serif font-bold">2</span>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Employment Details</h3>
+                                <p class="text-xs text-brand-textmuted">Internal HR identifiers and status.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="spa-label">Employee ID</label>
+                                <input type="text" class="spa-input font-mono bg-brand-ivory/50" placeholder="Auto-generated" readonly>
+                            </div>
+                            <div>
+                                <label class="spa-label">Job Title <span class="text-brand-rose">*</span></label>
+                                <input type="text" class="spa-input" placeholder="e.g. Senior Therapist">
+                            </div>
+                            <div>
+                                <label class="spa-label">Department</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                    <option value="therapy">Therapy & Wellness</option>
+                                    <option value="beauty">Beauty & Aesthetics</option>
+                                    <option value="frontdesk">Front Desk & Operations</option>
+                                    <option value="management">Management</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="spa-label">Hire Date</label>
+                                <input type="date" class="spa-input text-brand-textmuted">
+                            </div>
+                            <div>
+                                <label class="spa-label">Contract Type</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                    <option value="full">Full-Time</option>
+                                    <option value="part">Part-Time</option>
+                                    <option value="contract">Freelance / Contractor</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="spa-label">Employment Status</label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium text-green-700 bg-green-50 border-green-200">
+                                    <option value="active" selected>Active</option>
+                                    <option value="leave">On Leave</option>
+                                    <option value="suspended">Suspended</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 3: Role & Branch -->
+                <section id="role-branch" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <span class="font-serif font-bold">3</span>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Role & Branch Assignment</h3>
+                                <p class="text-xs text-brand-textmuted">System access level and primary location.</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <label class="spa-label mb-3">System Role <span class="text-brand-rose">*</span></label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="system_role" class="peer sr-only radio-card-input">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm relative overflow-hidden">
+                                            <div class="flex justify-between items-start mb-1">
+                                                <span class="font-medium text-brand-textmain text-sm">Branch Manager</span>
+                                                <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity"></i>
+                                            </div>
+                                            <p class="text-[10px] text-brand-textmuted leading-relaxed">Full access to branch schedules, reporting, and staff.</p>
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="system_role" class="peer sr-only radio-card-input">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm relative overflow-hidden">
+                                            <div class="flex justify-between items-start mb-1">
+                                                <span class="font-medium text-brand-textmain text-sm">Receptionist</span>
+                                                <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity"></i>
+                                            </div>
+                                            <p class="text-[10px] text-brand-textmuted leading-relaxed">Manage bookings, checkout, and customer profiles.</p>
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="system_role" class="peer sr-only radio-card-input" checked>
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm relative overflow-hidden">
+                                            <div class="flex justify-between items-start mb-1">
+                                                <span class="font-medium text-brand-textmain text-sm">Therapist</span>
+                                                <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity"></i>
+                                            </div>
+                                            <p class="text-[10px] text-brand-textmuted leading-relaxed">View own schedule, clinical notes, and commissions.</p>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 border-t border-brand-cream/50">
+                                <label class="spa-label mb-3">Primary Branch Assignment <span class="text-brand-rose">*</span></label>
+                                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer text-sm font-medium w-full md:w-1/2 border-brand-gold shadow-inner-soft">
+                                    <option value="" disabled>Select branch...</option>
+                                    <option value="d1" selected>District 1 Spa (Main)</option>
+                                    <option value="d7">District 7 Spa</option>
+                                    <option value="d3">District 3 Spa</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 4: Service Assignment -->
+                <section id="services-assigned" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center justify-between mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                    <span class="font-serif font-bold">4</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">Service Capabilities</h3>
+                                    <p class="text-xs text-brand-textmuted">Assign which treatments this staff member can perform.</p>
+                                </div>
+                            </div>
+                            <button class="px-4 py-2 border border-brand-cream bg-brand-ivory text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-xl text-xs font-medium transition shadow-sm flex items-center">
+                                <i data-lucide="plus" class="w-3.5 h-3.5 mr-1.5"></i> Assign Services
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto border border-brand-cream rounded-2xl">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="bg-brand-ivory/50 border-b border-brand-cream text-[10px] uppercase tracking-widest text-brand-textmuted">
+                                        <th class="py-3 px-5 font-semibold w-1/3">Service Name</th>
+                                        <th class="py-3 px-5 font-semibold text-center">Skill Level</th>
+                                        <th class="py-3 px-5 font-semibold text-center">Comm. Override</th>
+                                        <th class="py-3 px-5 font-semibold text-right">Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain bg-white">
+                                    <!-- Assigned Service 1 -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-5 font-medium">Deep Tissue Massage</td>
+                                        <td class="py-3 px-5 text-center">
+                                            <select class="spa-input py-1.5 px-3 text-xs w-32 mx-auto shadow-none">
+                                                <option>Junior</option>
+                                                <option>Senior</option>
+                                                <option selected>Expert</option>
+                                            </select>
+                                        </td>
+                                        <td class="py-3 px-5 text-center">
+                                            <div class="flex items-center justify-center">
+                                                <input type="number" class="spa-input py-1.5 px-3 text-xs w-20 text-center shadow-none" placeholder="Default" value="25">
+                                                <span class="text-xs text-brand-textmuted ml-2">%</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-5 text-right">
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-rose transition rounded-md"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                        </td>
+                                    </tr>
+                                    <!-- Assigned Service 2 -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-5 font-medium">Hydrating Facial</td>
+                                        <td class="py-3 px-5 text-center">
+                                            <select class="spa-input py-1.5 px-3 text-xs w-32 mx-auto shadow-none">
+                                                <option>Junior</option>
+                                                <option selected>Senior</option>
+                                                <option>Expert</option>
+                                            </select>
+                                        </td>
+                                        <td class="py-3 px-5 text-center">
+                                            <div class="flex items-center justify-center">
+                                                <input type="number" class="spa-input py-1.5 px-3 text-xs w-20 text-center shadow-none" placeholder="Default" value="">
+                                                <span class="text-xs text-brand-textmuted ml-2">%</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-5 text-right">
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-rose transition rounded-md"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                        </td>
+                                    </tr>
+                                    <!-- Empty state suggestion if needed -->
+                                    <!-- <tr><td colspan="4" class="p-8 text-center text-brand-textmuted text-sm italic">No services assigned yet.</td></tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-[10px] text-brand-textmuted mt-3 text-right">Leave override empty to use the default staff commission rate.</p>
+                    </div>
+                </section>
+
+                <!-- SECTION 5: Work Schedule -->
+                <section id="work-schedule" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 border-b border-brand-cream/50 pb-4 gap-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                    <span class="font-serif font-bold">5</span>
+                                </div>
+                                <div>
+                                    <h3 class="font-serif text-xl text-brand-textmain">Standard Work Schedule</h3>
+                                    <p class="text-xs text-brand-textmuted">Define the default weekly availability.</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-3 shrink-0">
+                                <button class="px-4 py-2 border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold rounded-xl text-xs font-medium transition shadow-sm">
+                                    Load Template
+                                </button>
+                                <button class="px-4 py-2 border border-brand-gold bg-brand-gold/5 text-brand-gold hover:bg-brand-gold/10 rounded-xl text-xs font-medium transition shadow-sm">
+                                    Copy Mon to All
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <!-- Headers -->
+                            <div class="hidden md:grid grid-cols-12 gap-4 text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted px-4 mb-2">
+                                <div class="col-span-2">Day</div>
+                                <div class="col-span-2 text-center">Working</div>
+                                <div class="col-span-4 text-center">Shift Hours (Start - End)</div>
+                                <div class="col-span-4 text-center">Break Hours (Start - End)</div>
+                            </div>
+
+                            <!-- Monday -->
+                            <div class="schedule-row grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 md:p-2 transition-opacity">
+                                <div class="md:col-span-2 font-medium text-brand-textmain text-sm flex justify-between md:block">
+                                    <span>Monday</span>
+                                    <!-- Mobile toggle -->
+                                    <div class="md:hidden relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                        <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:flex md:col-span-2 justify-center">
+                                    <div class="relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" id="tgl-mon" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked onchange="toggleRow(this)"/>
+                                        <label for="tgl-mon" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="09:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="18:00">
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="12:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="13:00">
+                                </div>
+                            </div>
+
+                            <!-- Tuesday -->
+                            <div class="schedule-row grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 md:p-2 transition-opacity">
+                                <div class="md:col-span-2 font-medium text-brand-textmain text-sm flex justify-between md:block">
+                                    <span>Tuesday</span>
+                                    <div class="md:hidden relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                        <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:flex md:col-span-2 justify-center">
+                                    <div class="relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" id="tgl-tue" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked onchange="toggleRow(this)"/>
+                                        <label for="tgl-tue" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="09:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="18:00">
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="12:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="13:00">
+                                </div>
+                            </div>
+
+                            <!-- Wednesday -->
+                            <div class="schedule-row grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 md:p-2 transition-opacity">
+                                <div class="md:col-span-2 font-medium text-brand-textmain text-sm flex justify-between md:block">
+                                    <span>Wednesday</span>
+                                    <div class="md:hidden relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                        <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:flex md:col-span-2 justify-center">
+                                    <div class="relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" id="tgl-wed" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked onchange="toggleRow(this)"/>
+                                        <label for="tgl-wed" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="10:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="19:00">
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="14:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="15:00">
+                                </div>
+                            </div>
+
+                            <!-- Thursday -->
+                            <div class="schedule-row grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 md:p-2 transition-opacity">
+                                <div class="md:col-span-2 font-medium text-brand-textmain text-sm flex justify-between md:block">
+                                    <span>Thursday</span>
+                                    <div class="md:hidden relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                        <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:flex md:col-span-2 justify-center">
+                                    <div class="relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" id="tgl-thu" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked onchange="toggleRow(this)"/>
+                                        <label for="tgl-thu" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="10:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="19:00">
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="14:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="15:00">
+                                </div>
+                            </div>
+
+                            <!-- Friday -->
+                            <div class="schedule-row grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 md:p-2 transition-opacity">
+                                <div class="md:col-span-2 font-medium text-brand-textmain text-sm flex justify-between md:block">
+                                    <span>Friday</span>
+                                    <div class="md:hidden relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                        <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:flex md:col-span-2 justify-center">
+                                    <div class="relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" id="tgl-fri" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked onchange="toggleRow(this)"/>
+                                        <label for="tgl-fri" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="09:00">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="15:00">
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="">
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" value="">
+                                </div>
+                            </div>
+
+                            <!-- Saturday (Off) -->
+                            <div class="schedule-row disabled grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-white border border-brand-cream rounded-xl p-3 md:p-2 transition-opacity">
+                                <div class="md:col-span-2 font-medium text-brand-textmain text-sm flex justify-between md:block">
+                                    <span>Saturday</span>
+                                    <div class="md:hidden relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:flex md:col-span-2 justify-center">
+                                    <div class="relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" id="tgl-sat" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" onchange="toggleRow(this)"/>
+                                        <label for="tgl-sat" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                </div>
+                            </div>
+
+                            <!-- Sunday (Off) -->
+                            <div class="schedule-row disabled grid grid-cols-1 md:grid-cols-12 gap-4 items-center bg-white border border-brand-cream rounded-xl p-3 md:p-2 transition-opacity">
+                                <div class="md:col-span-2 font-medium text-brand-textmain text-sm flex justify-between md:block">
+                                    <span>Sunday</span>
+                                    <div class="md:hidden relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                        <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="hidden md:flex md:col-span-2 justify-center">
+                                    <div class="relative inline-block w-11 align-middle select-none">
+                                        <input type="checkbox" id="tgl-sun" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" onchange="toggleRow(this)"/>
+                                        <label for="tgl-sun" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                    </div>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                </div>
+                                <div class="md:col-span-4 flex items-center space-x-2">
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                    <span class="text-brand-textmuted">-</span>
+                                    <input type="time" class="spa-input py-2 text-xs text-center" disabled>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- SECTION 6: Commission Configuration -->
+                <section id="commission" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <span class="font-serif font-bold">6</span>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Commission Configuration</h3>
+                                <p class="text-xs text-brand-textmuted">Define standard compensation structure.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <label class="spa-label">Commission Type</label>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="comm_type" class="peer sr-only radio-card-input" checked>
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold shadow-sm">
+                                            <span class="font-medium text-brand-textmain text-sm">% Percentage</span>
+                                        </div>
+                                    </label>
+                                    <label class="relative cursor-pointer group">
+                                        <input type="radio" name="comm_type" class="peer sr-only radio-card-input">
+                                        <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold shadow-sm">
+                                            <span class="font-medium text-brand-textmain text-sm">$ Fixed Amount</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="spa-label">Default Base Rate <span class="text-brand-rose">*</span></label>
+                                <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all bg-white">
+                                    <input type="number" class="w-full bg-transparent px-4 py-2.5 text-sm font-serif font-medium outline-none text-brand-textmain text-right" placeholder="0" value="20">
+                                    <span class="flex items-center px-4 bg-brand-ivory border-l border-brand-cream text-brand-textmuted text-sm font-medium">%</span>
+                                </div>
+                                <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1 leading-relaxed">This applies to all services unless a specific override is set in the Service Assignment section.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 7: Account Access -->
+                <section id="account-access" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <span class="font-serif font-bold">7</span>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Account Access</h3>
+                                <p class="text-xs text-brand-textmuted">System login credentials for the employee.</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-blue-50/50 border border-blue-100 rounded-xl p-4 flex items-start mb-6">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-500 mr-3 mt-0.5 shrink-0"></i>
+                            <div>
+                                <p class="text-xs text-blue-700 leading-relaxed">If you check "Send activation email", the system will email a secure setup link to the employee. They will choose their own password.</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                                <label class="spa-label">Login Email ID <span class="text-brand-rose">*</span></label>
+                                <input type="email" class="spa-input" placeholder="anna.n@lotusspa.com" value="anna.n@lotusspa.com">
+                            </div>
+                            <div>
+                                <label class="spa-label">Initial Password</label>
+                                <input type="password" class="spa-input font-mono placeholder-brand-textmuted/30" placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 pt-2">
+                            <div class="flex items-center justify-between p-4 bg-brand-ivory/50 rounded-xl border border-brand-cream">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Send account activation email</p>
+                                    <p class="text-xs text-brand-textmuted mt-0.5">Sends welcome email with login instructions.</p>
+                                </div>
+                                <div class="relative inline-block w-11 align-middle select-none shrink-0">
+                                    <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                    <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                    <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-brand-ivory/50 rounded-xl border border-brand-cream">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Require password change</p>
+                                    <p class="text-xs text-brand-textmuted mt-0.5">Force user to update password on first login.</p>
+                                </div>
+                                <div class="relative inline-block w-11 align-middle select-none shrink-0">
+                                    <input type="checkbox" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                    <label class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                    <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION 8: Internal Notes -->
+                <section id="internal-notes" class="scroll-mt-28">
+                    <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                        <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold shrink-0">
+                                <span class="font-serif font-bold">8</span>
+                            </div>
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">HR / Internal Notes</h3>
+                                <p class="text-xs text-brand-textmuted">Private notes visible only to Management and HR.</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <textarea class="spa-input h-32 resize-y leading-relaxed" placeholder="Type training status, certifications, or special skills here..."></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="h-8"></div> <!-- Bottom padding -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Scroll spy for sidebar navigation
+        const scrollArea = document.getElementById('form-scroll-area');
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        scrollArea.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                // Accounting for sticky header height and padding
+                if (scrollArea.scrollTop >= (sectionTop - 140)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Toggle Schedule Row Enable/Disable
+        function toggleRow(checkbox) {
+            const row = checkbox.closest('.schedule-row');
+            const inputs = row.querySelectorAll('input[type="time"]');
+            
+            if (checkbox.checked) {
+                row.classList.remove('disabled');
+                inputs.forEach(input => input.disabled = false);
+                row.classList.add('bg-brand-ivory/50');
+                row.classList.remove('bg-white');
+            } else {
+                row.classList.add('disabled');
+                inputs.forEach(input => {
+                    input.disabled = true;
+                    input.value = '';
+                });
+                row.classList.remove('bg-brand-ivory/50');
+                row.classList.add('bg-white');
+            }
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'nv-taosua' });</script>
+</body>
+</html>

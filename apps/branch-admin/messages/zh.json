@@ -1,0 +1,126 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "门店管理", "subtitle": "Branch Manager" },
+  "nav": {
+    "dashboard": "总览",
+    "booking": "预约",
+    "calendar": "周历",
+    "checkin": "签到",
+    "customer": "客户",
+    "service": "服务",
+    "staff": "员工",
+    "shift": "排班",
+    "attendance": "考勤",
+    "payroll": "工资",
+    "room": "房间",
+    "inventory": "库存",
+    "report": "报表",
+    "notification": "通知",
+    "content": "内容",
+    "settings": "设置",
+    "logout": "登出"
+  },
+  "dashboard": {
+    "title": "今日概览",
+    "subtitle": "更新于 {time}",
+    "kpi": {
+      "revenue": "今日营收",
+      "bookings": "预约",
+      "checkedIn": "已签到",
+      "pending": "待处理",
+      "newCustomers": "新客户"
+    },
+    "todayBookings": "今日预约",
+    "popularServices": "热门服务",
+    "noData": "暂无数据"
+  },
+  "booking": {
+    "title": "预约管理",
+    "create": "新建预约",
+    "filterAll": "全部",
+    "filterToday": "今日",
+    "filterUpcoming": "即将",
+    "filterDone": "已完成",
+    "columns": {
+      "code": "编号",
+      "customer": "客户",
+      "service": "服务",
+      "staff": "技师",
+      "room": "房间",
+      "time": "时间",
+      "status": "状态",
+      "amount": "金额"
+    },
+    "status": {
+      "pending": "待确认",
+      "confirmed": "已确认",
+      "in_progress": "进行中",
+      "done": "已完成",
+      "cancelled": "已取消"
+    }
+  },
+  "customer": {
+    "title": "客户",
+    "create": "添加客户",
+    "search": "按姓名、电话、邮箱搜索…",
+    "columns": {
+      "code": "编号",
+      "name": "姓名",
+      "phone": "电话",
+      "segment": "分群",
+      "lastVisit": "最后到访",
+      "points": "积分",
+      "spent": "累计消费"
+    },
+    "segments": { "vip": "VIP", "regular": "常客", "new": "新客", "dormant": "沉睡" }
+  },
+  "shift": {
+    "title": "排班管理",
+    "subtitle": "按月排班 — 早班 / 晚班 / 全天 / 休",
+    "month": "月份", "year": "年",
+    "prev": "上月", "next": "下月", "today": "今日",
+    "save": "保存", "saved": "已保存", "stats": "统计",
+    "type": { "SANG": "早班", "TOI": "晚班", "FULL": "全天", "NGHI": "休" },
+    "typeFull": {
+      "SANG": "早班 (09:00-15:00)",
+      "TOI": "晚班 (15:00-21:00)",
+      "FULL": "全天 (09:00-21:00)",
+      "NGHI": "休息日"
+    },
+    "legend": "点击单元格分配,再次点击清除"
+  },
+  "attendance": {
+    "title": "考勤",
+    "subtitle": "今日签到/签退",
+    "checkIn": "签到", "checkOut": "签退",
+    "expected": "预定", "in": "入", "out": "出", "worked": "工时", "minutes": "分",
+    "status": {
+      "scheduled": "已排班", "present": "准时", "late": "迟到",
+      "absent": "缺勤", "early_out": "早退", "off": "休息", "no_shift": "无班"
+    }
+  },
+  "room": {
+    "title": "房间与床位",
+    "subtitle": "管理房间、床位及可用状态",
+    "addRoom": "新增房间",
+    "addBed": "新增床位",
+    "floor": "楼层",
+    "capacity": "容纳",
+    "beds": "床位",
+    "noBeds": "该房间尚无床位",
+    "type": { "normal": "普通", "vip": "VIP", "couple": "情侣", "laser": "激光" },
+    "bedType": { "standard": "标准", "massage": "按摩", "laser": "激光", "vip": "VIP" },
+    "status": { "active": "可用", "maintenance": "维护", "retired": "停用" }
+  },
+  "common": {
+    "search": "搜索",
+    "filter": "筛选",
+    "loading": "加载中...",
+    "back": "返回",
+    "save": "保存",
+    "cancel": "取消",
+    "edit": "编辑",
+    "delete": "删除",
+    "view": "查看"
+  }
+}

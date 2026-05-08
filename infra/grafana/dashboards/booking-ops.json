@@ -1,0 +1,63 @@
+{
+  "title": "Kaori — Booking Operations",
+  "uid": "kaori-booking-ops",
+  "tags": ["kaori", "booking"],
+  "timezone": "Asia/Ho_Chi_Minh",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "1m",
+  "time": { "from": "now-7d", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "branch_id",
+        "label": "Branch",
+        "type": "query",
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "query": "SELECT DISTINCT branch_id FROM kaori.fact_bookings",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "piechart",
+      "title": "Tỉ lệ trạng thái booking (7 ngày)",
+      "gridPos": { "x": 0, "y": 0, "w": 8, "h": 8 },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT status, count() AS cnt FROM kaori.fact_bookings WHERE branch_id IN ($branch_id) AND event_ts >= now() - INTERVAL 7 DAY GROUP BY status"
+      }]
+    },
+    {
+      "type": "barchart",
+      "title": "Booking theo nguồn",
+      "gridPos": { "x": 8, "y": 0, "w": 8, "h": 8 },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT source, count() AS cnt FROM kaori.fact_bookings WHERE branch_id IN ($branch_id) AND event_ts >= now() - INTERVAL 7 DAY GROUP BY source"
+      }]
+    },
+    {
+      "type": "stat",
+      "title": "No-show + cancelled rate",
+      "gridPos": { "x": 16, "y": 0, "w": 8, "h": 4 },
+      "fieldConfig": { "defaults": { "unit": "percent" } },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT round(100 * countIf(status IN ('cancelled','no_show')) / nullIf(count(), 0), 2) AS pct FROM kaori.fact_bookings WHERE branch_id IN ($branch_id) AND event_ts >= now() - INTERVAL 7 DAY"
+      }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Booking theo giờ trong tuần",
+      "gridPos": { "x": 0, "y": 8, "w": 24, "h": 8 },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT toStartOfHour(start_at) AS time, count() AS bookings FROM kaori.fact_bookings WHERE branch_id IN ($branch_id) AND $__timeFilter(start_at) GROUP BY time ORDER BY time"
+      }]
+    }
+  ]
+}

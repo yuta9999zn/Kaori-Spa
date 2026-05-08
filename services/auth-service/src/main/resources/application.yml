@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/kaori_auth}
+    username: ${DB_USER:kaori}
+    password: ${DB_PASS:kaori}
+    hikari:
+      maximum-pool-size: 20
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc.time_zone: UTC
+        format_sql: false
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: auth
+
+server:
+  port: ${PORT:8081}
+  forward-headers-strategy: framework
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+  show-actuator: false
+
+kaori:
+  jwt:
+    issuer: kaori-auth
+    access-ttl-minutes: 10
+    refresh-ttl-days: 14
+    secret: ${JWT_SECRET:change-me-please-generate-256-bit-random-key-in-prod-only}
+  security:
+    bcrypt-rounds: 10
+    lockout-attempts: 10
+    lockout-window-minutes: 10
+
+logging:
+  level:
+    root: INFO
+    vn.kaori.spa: DEBUG

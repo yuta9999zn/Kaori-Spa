@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Payment History | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Custom Checkbox */
+        .spa-checkbox {
+            appearance: none;
+            width: 1.125rem;
+            height: 1.125rem;
+            border: 2px solid #D9B8B5;
+            border-radius: 0.25rem;
+            background-color: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .spa-checkbox:checked {
+            background-color: #C9A87C;
+            border-color: #C9A87C;
+        }
+        .spa-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Global search across platform..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Add Customer
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Customers</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">John Doe</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Payment History</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex items-center mb-6 md:mb-0">
+                        <div class="w-16 h-16 rounded-full bg-brand-ivory border-2 border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-2xl mr-5 shadow-sm">JD</div>
+                        <div>
+                            <div class="flex items-center space-x-3 mb-1">
+                                <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">John Doe</h2>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
+                                    <i data-lucide="crown" class="w-3 h-3 mr-1"></i> Gold Member
+                                </span>
+                            </div>
+                            <p class="text-brand-textmuted text-sm">Payment History & Financial Analytics</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                                <i data-lucide="more-horizontal" class="w-4 h-4 mr-2"></i> Options
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Payments
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh Data
+                                </a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-brand-ivory rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                            <i data-lucide="file-text" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Create Invoice
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Add Payment
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SUMMARY & ANALYTICS ROW -->
+                <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center lg:col-span-2 group overflow-hidden relative">
+                        <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-brand-gold/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Spending</p>
+                            <h3 class="font-serif text-4xl text-brand-textmain">$1,540.00</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Payments</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">12</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-red-500 mb-1">Total Refunds</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">$120.00</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Avg Payment Value</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">$128.33</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Preferred Method</p>
+                        <h3 class="font-serif text-xl text-brand-textmain mt-0.5 truncate flex items-center">
+                            <i data-lucide="credit-card" class="w-4 h-4 mr-2 text-brand-gold"></i> Credit Card
+                        </h3>
+                    </div>
+                </div>
+
+                <!-- MAIN TABLE AREA -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden relative">
+                    
+                    <!-- FILTER BAR -->
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30">
+                        <div class="flex flex-col xl:flex-row gap-4 justify-between items-center">
+                            
+                            <!-- Search -->
+                            <div class="flex items-center bg-white rounded-xl px-4 py-2.5 border border-brand-cream w-full xl:w-[350px] focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                <input type="text" placeholder="Search by Payment ID, Invoice, or Ref..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted/60 text-brand-textmain">
+                            </div>
+
+                            <!-- Filters -->
+                            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+                                
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">Date Range: All</option>
+                                    <option>Past 30 Days</option>
+                                    <option>Past 6 Months</option>
+                                    <option>Past Year</option>
+                                    <option>Custom Range...</option>
+                                </select>
+
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">Status: All</option>
+                                    <option>Paid</option>
+                                    <option>Pending</option>
+                                    <option>Partially Paid</option>
+                                    <option>Refunded</option>
+                                    <option>Failed</option>
+                                </select>
+
+                                <select class="spa-input w-auto min-w-[140px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">Type: All</option>
+                                    <option>Service Payment</option>
+                                    <option>Product Purchase</option>
+                                    <option>Package Purchase</option>
+                                    <option>Refund</option>
+                                </select>
+
+                                <button class="p-2.5 text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold bg-white rounded-xl transition shadow-sm" title="More Filters">
+                                    <i data-lucide="filter" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TABLE -->
+                        <div class="overflow-x-auto min-h-[400px]">
+                            <table class="w-full text-left border-collapse min-w-[1200px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-white border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold">Date</th>
+                                        <th class="py-4 px-4 font-semibold">Payment / Invoice ID</th>
+                                        <th class="py-4 px-4 font-semibold">Transaction Type</th>
+                                        <th class="py-4 px-4 font-semibold text-right">Amount</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Payment Method</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Status</th>
+                                        <th class="py-4 px-4 font-semibold">Branch</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 bg-white font-medium text-brand-textmain">
+                                    
+                                    <!-- Paid Row: Service Payment -->
+                                    <tr class="hover:bg-brand-ivory/30 transition cursor-pointer" onclick="togglePanel('invoiceDetailPanel')">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain">Mar 10, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">11:05 AM</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="font-mono text-xs font-semibold text-brand-textmain">PAY-2032</p>
+                                            <p class="font-mono text-[10px] text-brand-textmuted mt-0.5">INV-2045 • BK-10425</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain flex items-center"><i data-lucide="sparkles" class="w-3.5 h-3.5 mr-2 text-brand-gold"></i> Service Payment</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-right font-serif text-base text-brand-textmain">$80.00</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="credit-card" class="w-4 h-4 mr-1.5"></i> Card
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                                Paid
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain text-xs">Downtown Spa</p>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation()">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('invoiceDetailPanel')">
+                                                View
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="download" class="w-3 h-3 mr-2"></i> Download Invoice</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="mail" class="w-3 h-3 mr-2"></i> Email Receipt</a>
+                                                <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-red-600 hover:bg-red-50 transition" onclick="togglePanel('refundPanel')"><i data-lucide="corner-up-left" class="w-3 h-3 mr-2"></i> Issue Refund</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Refunded Row: Product -->
+                                    <tr class="hover:bg-brand-ivory/30 transition opacity-80 bg-red-50/10">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain">Mar 05, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">14:20 PM</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="font-mono text-xs font-semibold text-brand-textmain">PAY-1988</p>
+                                            <p class="font-mono text-[10px] text-brand-textmuted mt-0.5">INV-1902</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain flex items-center"><i data-lucide="shopping-bag" class="w-3.5 h-3.5 mr-2 text-brand-textmuted"></i> Product Return</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-right font-serif text-base text-red-600">-$45.00</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="credit-card" class="w-4 h-4 mr-1.5"></i> Card
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                                Refunded
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain text-xs">Downtown Spa</p>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2">
+                                                View
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Partially Paid: Package -->
+                                    <tr class="hover:bg-brand-ivory/30 transition bg-brand-gold/5">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain">Feb 14, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">09:15 AM</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="font-mono text-xs font-semibold text-brand-textmain">PAY-1850</p>
+                                            <p class="font-mono text-[10px] text-brand-textmuted mt-0.5">INV-1820</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain flex items-center"><i data-lucide="layers" class="w-3.5 h-3.5 mr-2 text-brand-gold"></i> Package Purchase</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-right font-serif text-base text-brand-textmain">$150.00 <span class="block text-[10px] font-sans text-brand-textmuted font-normal">of $300</span></td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="banknote" class="w-4 h-4 mr-1.5"></i> Cash
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200">
+                                                Partially Paid
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain text-xs">Westside Retreat</p>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2">
+                                                View
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="plus-circle" class="w-3 h-3 mr-2"></i> Add Payment</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="download" class="w-3 h-3 mr-2"></i> Download Invoice</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Paid Row: Service Payment via Gift Card -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="text-brand-textmain">Jan 10, 2026</p>
+                                            <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 font-mono">16:45 PM</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="font-mono text-xs font-semibold text-brand-textmain">PAY-1102</p>
+                                            <p class="font-mono text-[10px] text-brand-textmuted mt-0.5">INV-1090 • BK-09822</p>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain flex items-center"><i data-lucide="sparkles" class="w-3.5 h-3.5 mr-2 text-brand-gold"></i> Service Payment</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-right font-serif text-base text-brand-textmain">$120.00</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center text-xs text-brand-textmuted">
+                                                <i data-lucide="gift" class="w-4 h-4 mr-1.5"></i> Gift Card
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                                Paid
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <p class="text-brand-textmain text-xs">Downtown Spa</p>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('invoiceDetailPanel')">
+                                                View
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    
+                    <!-- Pagination Footer -->
+                    <div class="p-4 border-t border-brand-cream/50 flex justify-between items-center text-sm text-brand-textmuted bg-brand-ivory/20 mt-auto">
+                        <p>Showing <span class="font-medium text-brand-textmain">1</span> to <span class="font-medium text-brand-textmain">4</span> of <span class="font-medium text-brand-textmain">12</span> payments</p>
+                        <div class="flex space-x-1 sm:space-x-2">
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm opacity-50 cursor-not-allowed">Previous</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-gold bg-brand-gold text-white rounded-lg shadow-sm font-medium">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg transition shadow-sm font-medium">2</button>
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT INVOICE DETAIL PANEL -->
+    <div id="invoiceDetailPanel" class="fixed inset-y-0 right-0 w-full max-w-md bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-white shrink-0 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-gradient-to-bl from-green-500/10 to-transparent rounded-bl-full pointer-events-none"></div>
+            <div class="relative z-10">
+                <div class="flex items-center space-x-3 mb-1">
+                    <h3 class="font-serif text-xl text-brand-textmain">Invoice #INV-2045</h3>
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                        Paid
+                    </span>
+                </div>
+                <p class="text-xs text-brand-textmuted font-mono">Mar 10, 2026 • 11:05 AM</p>
+            </div>
+            <button onclick="togglePanel('invoiceDetailPanel')" class="relative z-10 p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-white">
+            
+            <!-- Company Header (Mock Receipt) -->
+            <div class="text-center pb-6 border-b border-dashed border-brand-cream">
+                <i data-lucide="flower-2" class="w-8 h-8 text-brand-gold mx-auto mb-2"></i>
+                <h4 class="font-serif text-lg text-brand-textmain tracking-widest uppercase">Lotus Spa</h4>
+                <p class="text-xs text-brand-textmuted">Downtown Branch</p>
+                <p class="text-[10px] text-brand-textmuted mt-1">123 Wellness Blvd, District 1</p>
+            </div>
+
+            <!-- Customer & Booking Info -->
+            <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-0.5">Billed To</p>
+                    <p class="font-medium text-brand-textmain">John Doe</p>
+                    <p class="text-xs text-brand-textmuted">+84 912 345 678</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-0.5">Booking Ref</p>
+                    <p class="font-mono text-brand-textmain cursor-pointer hover:text-brand-gold transition underline underline-offset-2">BK-10425</p>
+                </div>
+            </div>
+
+            <!-- Line Items -->
+            <div>
+                <h5 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-3 border-b border-brand-cream pb-1">Items</h5>
+                <div class="space-y-4 text-sm">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-medium text-brand-textmain">Deep Tissue Massage</p>
+                            <p class="text-xs text-brand-textmuted">1 x 60 min</p>
+                        </div>
+                        <span class="font-serif text-brand-textmain">$80.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculation Breakdown -->
+            <div class="pt-4 border-t border-brand-cream space-y-2 text-sm">
+                <div class="flex justify-between">
+                    <span class="text-brand-textmuted">Subtotal</span>
+                    <span class="font-serif text-brand-textmain">$80.00</span>
+                </div>
+                <div class="flex justify-between text-brand-gold">
+                    <span>Discount</span>
+                    <span class="font-serif">-$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-brand-textmuted">Tax (10%)</span>
+                    <span class="font-serif text-brand-textmain">$8.00</span>
+                </div>
+            </div>
+
+            <!-- Total -->
+            <div class="pt-4 border-t-2 border-brand-textmain flex justify-between items-end">
+                <span class="font-bold uppercase tracking-widest text-brand-textmain">Total</span>
+                <span class="font-serif text-3xl font-bold text-brand-textmain">$88.00</span>
+            </div>
+
+            <!-- Payment Details Box -->
+            <div class="bg-brand-ivory/50 rounded-xl border border-brand-cream p-4">
+                <h5 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2">Payment Details</h5>
+                <div class="flex justify-between items-center text-sm mb-1">
+                    <span class="text-brand-textmain flex items-center"><i data-lucide="credit-card" class="w-3.5 h-3.5 mr-1.5 text-brand-textmuted"></i> Credit Card (Visa)</span>
+                    <span class="font-serif text-brand-textmain">$88.00</span>
+                </div>
+                <p class="text-xs text-brand-textmuted font-mono">Auth: TXN-9988221</p>
+            </div>
+
+        </div>
+
+        <!-- Panel Footer Actions -->
+        <div class="p-6 border-t border-brand-cream bg-brand-ivory/30 shrink-0 space-y-3">
+            <div class="grid grid-cols-2 gap-3">
+                <button class="py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex items-center justify-center">
+                    <i data-lucide="download" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Download PDF
+                </button>
+                <button class="py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex items-center justify-center">
+                    <i data-lucide="mail" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Email Receipt
+                </button>
+            </div>
+            <button class="w-full py-3 bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 rounded-xl text-sm font-medium transition shadow-sm flex items-center justify-center" onclick="togglePanel('refundPanel')">
+                <i data-lucide="corner-up-left" class="w-4 h-4 mr-2"></i> Issue Refund
+            </button>
+        </div>
+    </div>
+
+    <!-- SLIDE-OUT REFUND MANAGEMENT PANEL (Nested/Secondary Panel) -->
+    <div id="refundPanel" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[60] flex flex-col border-l border-brand-cream">
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-brand-rose/5 shrink-0">
+            <h3 class="font-serif text-xl text-red-600 flex items-center"><i data-lucide="corner-up-left" class="w-5 h-5 mr-2"></i> Issue Refund</h3>
+            <button onclick="togglePanel('refundPanel')" class="p-2 text-brand-textmuted hover:text-red-600 rounded-full hover:bg-red-50 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        <div class="flex-1 p-6 space-y-6 custom-scrollbar overflow-y-auto">
+            
+            <div class="bg-gray-50 border border-brand-cream rounded-xl p-4 text-center">
+                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Max Refund Available</p>
+                <p class="font-serif text-3xl font-bold text-brand-textmain">$88.00</p>
+                <p class="text-xs text-brand-textmuted mt-1 font-mono">Invoice: INV-2045</p>
+            </div>
+
+            <div>
+                <label class="spa-label text-red-600">Refund Amount <span class="text-red-500">*</span></label>
+                <div class="flex rounded-xl overflow-hidden shadow-sm border border-red-200 focus-within:border-red-400 focus-within:ring-4 focus-within:ring-red-100 transition-all bg-white">
+                    <span class="flex items-center px-4 bg-red-50 border-r border-red-200 text-red-600 text-sm font-medium">$</span>
+                    <input type="number" class="w-full bg-transparent px-4 py-3 text-lg font-serif font-medium outline-none text-brand-textmain" placeholder="0.00" value="88.00" max="88">
+                </div>
+            </div>
+
+            <div>
+                <label class="spa-label">Refund Method</label>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                    <option value="original" selected>Original Method (Card **4242)</option>
+                    <option value="cash">Cash</option>
+                    <option value="credit">Store Credit</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="spa-label">Reason for Refund <span class="text-brand-rose">*</span></label>
+                <textarea class="spa-input h-24 resize-none" placeholder="Explain why this refund is being processed..."></textarea>
+            </div>
+
+        </div>
+        <div class="p-6 border-t border-brand-cream bg-white flex justify-end space-x-3 shrink-0">
+            <button class="px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-xl text-sm font-medium transition shadow-sm" onclick="togglePanel('refundPanel')">Cancel</button>
+            <button class="px-6 py-2.5 bg-red-600 text-white rounded-xl hover:bg-red-700 transition shadow-sm font-medium flex items-center" onclick="togglePanel('refundPanel')">Process Refund</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kh-danhsach' });</script>
+</body>
+</html>

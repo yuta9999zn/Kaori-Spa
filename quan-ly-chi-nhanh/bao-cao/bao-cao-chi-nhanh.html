@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Tổng Hợp Tháng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .kpi-card{background:#fff;border-radius:16px;padding:20px 22px;border:1px solid rgba(244,239,234,.8);box-shadow:0 10px 40px -10px rgba(74,68,62,.06)}
+        .kpi-val{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2;margin:4px 0 2px}
+        .kpi-sub{font-size:11px;color:#8B837C}
+        .badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+        .badge-up{background:#f0fdf4;color:#16a34a}
+        .badge-down{background:#fef2f2;color:#dc2626}
+        .table-row:hover{background:#FAF9F6}
+        .payment-bar{height:8px;border-radius:4px;transition:width .4s}
+        .section-header{font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:#8B837C;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+        .month-tab{padding:5px 12px;border-radius:16px;font-size:12px;cursor:pointer;transition:all .15s;border:1px solid transparent}
+        .month-tab.active{background:rgba(201,168,124,.1);border-color:#C9A87C;color:#C9A87C;font-weight:500}
+        .month-tab:not(.active){color:#8B837C;border-color:#F4EFEA}
+        .month-tab:not(.active):hover{border-color:#C9A87C;color:#C9A87C}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <i data-lucide="bar-chart" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Tổng Hợp Tháng</h1>
+        <span id="data-source-badge"></span>
+    </div>
+    <div class="flex items-center gap-4">
+        <!-- Month selector -->
+        <div class="flex gap-1.5" id="month-tabs">
+            <button class="month-tab" onclick="setMonth(1,this)">T1</button>
+            <button class="month-tab" onclick="setMonth(2,this)">T2</button>
+            <button class="month-tab" onclick="setMonth(3,this)">T3</button>
+            <button class="month-tab active" onclick="setMonth(4,this)">T4</button>
+            <button class="month-tab" onclick="setMonth(5,this)">T5</button>
+            <button class="month-tab" onclick="setMonth(6,this)">T6</button>
+            <button class="month-tab" onclick="setMonth(7,this)">T7</button>
+            <button class="month-tab" onclick="setMonth(8,this)">T8</button>
+            <button class="month-tab" onclick="setMonth(9,this)">T9</button>
+            <button class="month-tab" onclick="setMonth(10,this)">T10</button>
+            <button class="month-tab" onclick="setMonth(11,this)">T11</button>
+            <button class="month-tab" onclick="setMonth(12,this)">T12</button>
+        </div>
+        <select id="year-sel" class="border border-brand-cream rounded-xl px-3 py-2 text-sm bg-brand-ivory focus:outline-none focus:border-brand-gold" onchange="render()">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026" selected>2026</option>
+        </select>
+        <button onclick="exportReport()" class="bg-brand-gold hover:bg-brand-goldhover text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i> Xuất báo cáo
+        </button>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-6xl mx-auto p-8 flex flex-col gap-6">
+
+    <!-- KPI Row -->
+    <div class="grid grid-cols-4 gap-4">
+        <div class="kpi-card">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs text-brand-textmuted uppercase tracking-wide">Doanh Thu Tổng</p>
+                    <p class="kpi-val text-brand-gold" id="kpi-total">—</p>
+                    <p class="kpi-sub" id="kpi-total-sub">—</p>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-brand-gold/10 flex items-center justify-center">
+                    <i data-lucide="trending-up" class="w-4 h-4 text-brand-gold"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs text-brand-textmuted uppercase tracking-wide">Dịch Vụ</p>
+                    <p class="kpi-val text-blue-600" id="kpi-dv">—</p>
+                    <p class="kpi-sub" id="kpi-dv-sub">—</p>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-blue-500"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs text-brand-textmuted uppercase tracking-wide">Mỹ Phẩm</p>
+                    <p class="kpi-val text-brand-rose" id="kpi-mp">—</p>
+                    <p class="kpi-sub" id="kpi-mp-sub">—</p>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-brand-rose/10 flex items-center justify-center">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-brand-rose"></i>
+                </div>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-xs text-brand-textmuted uppercase tracking-wide">Chi Phí</p>
+                    <p class="kpi-val text-red-500" id="kpi-cp">—</p>
+                    <p class="kpi-sub" id="kpi-cp-sub">—</p>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center">
+                    <i data-lucide="receipt" class="w-4 h-4 text-red-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts + Breakdown -->
+    <div class="grid grid-cols-3 gap-6">
+
+        <!-- Revenue chart -->
+        <div class="col-span-2 bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <div class="section-header">
+                <i data-lucide="area-chart" class="w-3.5 h-3.5 text-brand-gold"></i>
+                Doanh Thu Theo Ngày — Tháng <span id="chart-month-label">4</span>
+            </div>
+            <canvas id="daily-chart" height="100"></canvas>
+        </div>
+
+        <!-- Payment method breakdown -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <div class="section-header">
+                <i data-lucide="pie-chart" class="w-3.5 h-3.5 text-brand-gold"></i>
+                Cơ Cấu Thanh Toán
+            </div>
+            <canvas id="payment-chart" height="160"></canvas>
+            <div class="mt-4 space-y-2" id="payment-legend"></div>
+        </div>
+    </div>
+
+    <!-- P&L Table + Expense Breakdown -->
+    <div class="grid grid-cols-2 gap-6">
+
+        <!-- Monthly P&L summary -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <div class="section-header">
+                <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-brand-gold"></i>
+                Báo Cáo Kết Quả (P&L)
+            </div>
+            <table class="w-full text-sm">
+                <tbody id="pl-table"></tbody>
+            </table>
+            <div class="mt-4 pt-3 border-t border-brand-cream flex justify-between items-center">
+                <span class="text-sm font-medium">Lợi nhuận tháng</span>
+                <span class="text-base font-semibold text-brand-gold" id="profit-val">—</span>
+            </div>
+        </div>
+
+        <!-- Daily log table -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <div class="section-header mb-0">
+                    <i data-lucide="calendar" class="w-3.5 h-3.5 text-brand-gold"></i>
+                    Nhật Ký Từng Ngày
+                </div>
+                <a href="bao-cao-ngay.html" class="text-xs text-brand-gold hover:underline flex items-center gap-1">
+                    <i data-lucide="plus" class="w-3 h-3"></i> Thêm ngày mới
+                </a>
+            </div>
+            <div class="overflow-y-auto" style="max-height:300px">
+                <table class="w-full text-xs">
+                    <thead>
+                        <tr class="text-brand-textmuted border-b border-brand-cream">
+                            <th class="text-left pb-2 font-medium">Ngày</th>
+                            <th class="text-right pb-2 font-medium">DV</th>
+                            <th class="text-right pb-2 font-medium">MP</th>
+                            <th class="text-right pb-2 font-medium">Tổng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="daily-table"></tbody>
+                </table>
+            </div>
+            <div class="mt-3 pt-2 border-t border-brand-cream flex justify-between text-xs text-brand-textmuted">
+                <span>Số ngày làm việc:</span>
+                <span id="working-days" class="font-medium text-brand-textmain">—</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Yearly overview -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+        <div class="section-header">
+            <i data-lucide="bar-chart-2" class="w-3.5 h-3.5 text-brand-gold"></i>
+            Tổng Quan Năm <span id="year-label-chart">2026</span>
+        </div>
+        <canvas id="yearly-chart" height="60"></canvas>
+    </div>
+
+</div>
+</div>
+</div>
+
+<!-- Export toast -->
+<div id="toast" class="hidden fixed bottom-8 right-8 bg-white border border-green-200 shadow-lg rounded-2xl px-5 py-4 flex items-center gap-3 z-50">
+    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-green-700">Xuất thành công</p>
+        <p class="text-xs text-brand-textmuted" id="toast-msg">—</p>
+    </div>
+</div>
+
+<script>
+// ─── Mock data ──────────────────────────────────────────────
+const MONTHLY_DATA = {
+    2024: {
+        1:  { dv:[0,1400,1600,1200,0,1700,1500,1800,0,1400,1600,1500,0,1300,1700,1600,0,1400,1600,1500,0,1500,1700,1400,0,1200,1500,1600,0,1300,1500], mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], cp:2800, tm_r:0.35, the_r:0.01, ck_loc_r:0.38, ck_cty_r:0.26 },
+        2:  { dv:[1500,1700,0,1400,1600,1800,0,1500,1300,1700,1600,0,1400,1600,1800,0,1500,1400,1600,1700,0,1300,1500,1700,1600,0,1400,1600],            mp:[0,0,0,0,0,0,0,0,0,300,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],        cp:2600, tm_r:0.34, the_r:0.01, ck_loc_r:0.39, ck_cty_r:0.26 },
+        3:  { dv:[1600,1800,0,1500,1700,1900,0,1600,1400,1800,1700,0,1600,1500,1800,1700,0,1400,1700,1900,1700,0,1500,1700,1900,1700,0,1500,1600,1800,1600], mp:[0,0,0,0,0,600,0,0,0,0,0,0,800,0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,0,0], cp:3000, tm_r:0.33, the_r:0.01, ck_loc_r:0.40, ck_cty_r:0.26 },
+        4:  { dv:[0,1500,1700,1900,0,1600,1800,2000,0,1500,1700,1900,0,1600,1800,1700,0,1500,1700,1900,1700,0,1600,1800,0,1600,1700,1800,0,1500],          mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],    cp:3100, tm_r:0.32, the_r:0.01, ck_loc_r:0.41, ck_cty_r:0.26 },
+        5:  { dv:[0,1600,1800,2000,0,1700,1900,2100,0,1600,1800,2000,0,1700,1900,1800,0,1600,1800,2000,1800,0,1700,1900,0,1700,1800,1900,0,1600,1800],     mp:[0,0,0,0,0,0,0,300,0,0,0,0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,0,0,0,0], cp:3200, tm_r:0.31, the_r:0.01, ck_loc_r:0.42, ck_cty_r:0.26 },
+        6:  { dv:[0,1700,1900,0,1800,2000,2200,0,1700,1900,2100,0,1800,2000,1900,0,1800,2000,2200,2000,0,1900,2100,0,1900,2000,2100,0,1800,2000],          mp:[0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],    cp:3300, tm_r:0.30, the_r:0.01, ck_loc_r:0.43, ck_cty_r:0.26 },
+        7:  { dv:[0,1800,2000,0,1900,2100,2300,0,1800,2000,2200,0,1900,2100,2000,0,1900,2100,2300,2100,0,2000,2200,0,2000,2100,2200,0,1900,2100,1900],     mp:[0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,0,0,700,0,0,0,0,0,0,0,0,0,0,0,0], cp:3400, tm_r:0.30, the_r:0.02, ck_loc_r:0.42, ck_cty_r:0.26 },
+        8:  { dv:[0,1900,2100,0,2000,2200,2400,0,1900,2100,2300,0,2000,2200,2100,0,2000,2200,2400,2200,0,2100,2300,0,2100,2200,2300,0,2000,2200,2000],     mp:[0,0,0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,800,0,0,0,0,0,0,0,0], cp:3500, tm_r:0.30, the_r:0.02, ck_loc_r:0.42, ck_cty_r:0.26 },
+        9:  { dv:[0,2000,2200,0,2100,2300,2500,0,2000,2200,2400,0,2100,2300,2200,0,2100,2300,2500,2300,0,2200,2400,0,2200,2300,2400,0,2100,2300],          mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,0,0,0],    cp:3600, tm_r:0.29, the_r:0.02, ck_loc_r:0.43, ck_cty_r:0.26 },
+        10: { dv:[0,2100,2300,0,2200,2400,2600,0,2100,2300,2500,0,2200,2400,2300,0,2200,2400,2600,2400,0,2300,2500,0,2300,2400,2500,0,2200,2400,2200],     mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,400,0,0,0,0,900,0,0,0,0,0,0,0,0,0,0,0], cp:3700, tm_r:0.29, the_r:0.02, ck_loc_r:0.43, ck_cty_r:0.26 },
+        11: { dv:[0,2200,2400,0,2300,2500,2700,0,2200,2400,2600,0,2300,2500,2400,0,2300,2500,2700,2500,0,2400,2600,0,2400,2500,2600,0,2300,2500],          mp:[0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1200,0,0,0,0],  cp:3800, tm_r:0.28, the_r:0.02, ck_loc_r:0.44, ck_cty_r:0.26 },
+        12: { dv:[0,2300,2500,2700,0,2400,2600,2800,0,2300,2500,2700,0,2400,2600,2500,0,2400,2600,2800,2600,0,2500,2700,2900,2700,0,2600,2800,2700,2500],  mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,800,0,0,0,0,0,0,0,0,1500,0,0,0,0,0,0,0,0], cp:4200, tm_r:0.28, the_r:0.02, ck_loc_r:0.44, ck_cty_r:0.26 },
+    },
+    2025: {
+        1:  { dv:[0,1700,1900,2100,0,1800,2000,2200,0,1700,1900,2100,0,1800,2000,1900,0,1800,2000,2200,2000,0,1900,2100,2300,2100,0,2000,2200,2000,1800],  mp:[0,0,0,0,0,0,0,300,0,0,0,0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,0,0,0,0], cp:3000, tm_r:0.32, the_r:0.01, ck_loc_r:0.41, ck_cty_r:0.26 },
+        2:  { dv:[1700,0,2000,1800,2100,0,1900,1700,2200,2000,0,1800,2100,1700,2300,0,2000,1800,2200,1900,0,1700,2000,2300,2100,0,1800,2000],              mp:[0,0,0,0,400,0,0,0,0,0,0,600,0,0,0,0,0,0,300,0,0,0,0,0,0,0,0,0],        cp:3200, tm_r:0.31, the_r:0.01, ck_loc_r:0.42, ck_cty_r:0.26 },
+        3:  { dv:[1900,2100,0,1800,2000,2200,0,1900,1700,2300,2100,0,2000,1800,2200,2000,0,1700,2100,2400,2000,0,1800,2000,2300,2100,0,1900,2000,2200,1900], mp:[0,0,0,0,0,600,0,0,0,0,0,0,1100,0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,0,0], cp:3800, tm_r:0.29, the_r:0.02, ck_loc_r:0.43, ck_cty_r:0.26 },
+        4:  { dv:[0,1800,2000,2200,0,1900,2100,2300,0,1800,2000,2200,0,1900,2100,2000,0,1900,2100,2300,2100,0,2000,2200,0,2000,2100,2200,0,1900,2100],     mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],    cp:3500, tm_r:0.30, the_r:0.01, ck_loc_r:0.43, ck_cty_r:0.26 },
+        5:  { dv:[0,1900,2100,2300,0,2000,2200,2400,0,1900,2100,2300,0,2000,2200,2100,0,2000,2200,2400,2200,0,2100,2300,0,2100,2200,2300,0,2000,2200],     mp:[0,0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,700,0,0,0,0,0,0,0,0,0,0,0,0,0], cp:3600, tm_r:0.29, the_r:0.02, ck_loc_r:0.43, ck_cty_r:0.26 },
+        6:  { dv:[0,2000,2200,0,2100,2300,2500,0,2000,2200,2400,0,2100,2300,2200,0,2100,2300,2500,2300,0,2200,2400,0,2200,2300,2400,0,2100,2300],          mp:[0,0,0,0,0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],    cp:3700, tm_r:0.29, the_r:0.02, ck_loc_r:0.43, ck_cty_r:0.26 },
+        7:  { dv:[0,2100,2300,0,2200,2400,2600,0,2100,2300,2500,0,2200,2400,2300,0,2200,2400,2600,2400,0,2300,2500,0,2300,2400,2500,0,2200,2400,2200],     mp:[0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,800,0,0,0,0,0,0,0,0,0,0,0,0], cp:3800, tm_r:0.29, the_r:0.02, ck_loc_r:0.43, ck_cty_r:0.26 },
+        8:  { dv:[0,2200,2400,0,2300,2500,2700,0,2200,2400,2600,0,2300,2500,2400,0,2300,2500,2700,2500,0,2400,2600,0,2400,2500,2600,0,2300,2500,2300],     mp:[0,0,0,0,0,0,0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,900,0,0,0,0,0,0,0,0], cp:3900, tm_r:0.28, the_r:0.02, ck_loc_r:0.44, ck_cty_r:0.26 },
+        9:  { dv:[0,2300,2500,0,2400,2600,2800,0,2300,2500,2700,0,2400,2600,2500,0,2400,2600,2800,2600,0,2500,2700,0,2500,2600,2700,0,2400,2600],          mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,700,0,0,0,0,0,0,0,0,0,0,0,0],    cp:4000, tm_r:0.28, the_r:0.02, ck_loc_r:0.44, ck_cty_r:0.26 },
+        10: { dv:[0,2400,2600,0,2500,2700,2900,0,2400,2600,2800,0,2500,2700,2600,0,2500,2700,2900,2700,0,2600,2800,0,2600,2700,2800,0,2500,2700,2500],     mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,500,0,0,0,0,1000,0,0,0,0,0,0,0,0,0,0,0], cp:4100, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+        11: { dv:[0,2500,2700,0,2600,2800,3000,0,2500,2700,2900,0,2600,2800,2700,0,2600,2800,3000,2800,0,2700,2900,0,2700,2800,2900,0,2600,2800],          mp:[0,0,0,0,0,0,700,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1300,0,0,0,0],  cp:4200, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+        12: { dv:[0,2600,2800,3000,0,2700,2900,3100,0,2600,2800,3000,0,2700,2900,2800,0,2700,2900,3100,2900,0,2800,3000,3200,3000,0,2900,3100,3000,2800],  mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,900,0,0,0,0,0,0,0,0,1600,0,0,0,0,0,0,0,0], cp:4600, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+    },
+    2026: {
+        1:  { dv:[0,1800,2100,1500,0,2400,1800,2200,0,1900,2100,2000,0,1700,2300,2100,0,1800,2100,1900,0,2000,2200,1800,0,1500,1800,2000,0,1600,1900], mp:[0,0,0,0,0,0,0,200,0,0,0,0,0,0,0,0,0,500,0,0,0,0,0,0,0,0,0,0,0,0,0], cp:3200, tm_r:0.29, the_r:0.01, ck_loc_r:0.44, ck_cty_r:0.26 },
+        2:  { dv:[1800,0,2100,1900,2200,0,2000,1700,2300,2100,0,1800,2200,1600,2400,0,2100,1900,2300,2000,0,1600,2100,2400,2200,0,1700,1900],           mp:[0,0,0,0,300,0,0,0,0,0,0,500,0,0,0,0,0,0,200,0,0,0,0,0,0,0,0,0],    cp:3800, tm_r:0.28, the_r:0.02, ck_loc_r:0.43, ck_cty_r:0.27 },
+        3:  { dv:[2000,2200,0,1900,2100,2300,0,2000,1700,2400,2200,0,2100,1900,2300,2000,0,1600,2200,2500,2100,0,1800,2000,2300,2100,0,1700,1900,2100,2000], mp:[0,0,0,0,0,500,0,0,0,0,0,0,1000,0,0,0,0,0,0,300,0,0,0,0,0,0,0,0,0,0,0], cp:4200, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+        4:  { dv:[0,1800,2100,2300,0,1900,2200,2400,0,1700,2000,2200,14890,20890,2100,2300,0,1900,2200,2400,0,1800,2100,2300,0,1900,2200,2300,0,2100], mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,450,0,0,0,0,0,0], cp:5000, tm_r:0.28, the_r:0.01, ck_loc_r:0.48, ck_cty_r:0.23 },
+        5:  { dv:[0,2000,2200,2400,0,2100,2300,2500,0,2000,2200,2400,0,2100,2300,2200,0,2100,2300,2500,2300,0,2200,2400,0,2200,2300,2400,0,2100,2300], mp:[0,0,0,0,0,0,0,400,0,0,0,0,0,0,0,0,0,800,0,0,0,0,0,0,0,0,0,0,0,0,0], cp:4300, tm_r:0.28, the_r:0.01, ck_loc_r:0.45, ck_cty_r:0.26 },
+        6:  { dv:[0,2100,2300,0,2200,2400,2600,0,2100,2300,2500,0,2200,2400,2300,0,2200,2400,2600,2400,0,2300,2500,0,2300,2400,2500,0,2200,2400],       mp:[0,0,0,0,0,0,0,0,0,0,700,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],    cp:4400, tm_r:0.28, the_r:0.02, ck_loc_r:0.44, ck_cty_r:0.26 },
+        7:  { dv:[0,2200,2400,0,2300,2500,2700,0,2200,2400,2600,0,2300,2500,2400,0,2300,2500,2700,2500,0,2400,2600,0,2400,2500,2600,0,2300,2500,2300], mp:[0,0,0,0,0,0,600,0,0,0,0,0,0,0,0,0,0,0,900,0,0,0,0,0,0,0,0,0,0,0,0], cp:4500, tm_r:0.28, the_r:0.02, ck_loc_r:0.44, ck_cty_r:0.26 },
+        8:  { dv:[0,2300,2500,0,2400,2600,2800,0,2300,2500,2700,0,2400,2600,2500,0,2400,2600,2800,2600,0,2500,2700,0,2500,2600,2700,0,2400,2600,2400], mp:[0,0,0,0,0,0,0,0,0,0,0,0,700,0,0,0,0,0,0,0,0,0,1000,0,0,0,0,0,0,0,0], cp:4600, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+        9:  { dv:[0,2400,2600,0,2500,2700,2900,0,2400,2600,2800,0,2500,2700,2600,0,2500,2700,2900,2700,0,2600,2800,0,2600,2700,2800,0,2500,2700],       mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,800,0,0,0,0,0,0,0,0,0,0,0,0],    cp:4700, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+        10: { dv:[0,2500,2700,0,2600,2800,3000,0,2500,2700,2900,0,2600,2800,2700,0,2600,2800,3000,2800,0,2700,2900,0,2700,2800,2900,0,2600,2800,2600], mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,600,0,0,0,0,1100,0,0,0,0,0,0,0,0,0,0,0], cp:4800, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+        11: { dv:[0,2600,2800,0,2700,2900,3100,0,2600,2800,3000,0,2700,2900,2800,0,2700,2900,3100,2900,0,2800,3000,0,2800,2900,3000,0,2700,2900],       mp:[0,0,0,0,0,0,800,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1400,0,0,0,0],  cp:4900, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+        12: { dv:[0,2700,2900,3100,0,2800,3000,3200,0,2700,2900,3100,0,2800,3000,2900,0,2800,3000,3200,3000,0,2900,3100,3300,3100,0,3000,3200,3100,2900], mp:[0,0,0,0,0,0,0,0,0,0,0,0,0,1000,0,0,0,0,0,0,0,0,1700,0,0,0,0,0,0,0,0], cp:5200, tm_r:0.27, the_r:0.02, ck_loc_r:0.45, ck_cty_r:0.26 },
+    }
+};
+
+// Expense categories (Sổ NKC)
+const EXPENSE_CATEGORIES = [
+    { code:'6422-KHĐ', name:'Khăn & Đồ Dùng',    pct:0.28 },
+    { code:'6422-VT',  name:'Vật tư tiêu hao',    pct:0.22 },
+    { code:'6422-TH',  name:'Thuê mặt bằng',       pct:0.30 },
+    { code:'6422-QC',  name:'Marketing & QC',       pct:0.10 },
+    { code:'6422-KH',  name:'Khác',                 pct:0.10 },
+];
+
+let activeMonth = 4;
+
+function setMonth(m, btn) {
+    activeMonth = m;
+    document.querySelectorAll('.month-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('chart-month-label').textContent = m;
+    render();
+}
+
+function render() {
+    const year = parseInt(document.getElementById('year-sel').value);
+    document.getElementById('year-label-chart').textContent = year;
+
+    // ── Try real data from AuraDB first, fall back to mock ──────────────────
+    const live = (typeof AuraDB !== 'undefined') ? AuraDB.getMonthlyReport(year, activeMonth) : { total: 0, dv: 0, mp: 0, byMethod: {}, byDay: {} };
+    const liveExpArr = (typeof AuraDB !== 'undefined') ? AuraDB.getMonthlyExpenses(year, activeMonth) : [];
+    const liveExp = { reduce: (fn, init) => liveExpArr.reduce(fn, init) };
+    const hasLiveData = live.total > 0 || liveExpArr.length > 0;
+
+    let dvTotal, mpTotal, grandTotal, chiPhi, totalTM, totalThe, totalLoc, totalCty, dvDays, mpDays;
+
+    if (hasLiveData) {
+        dvTotal  = live.dv;
+        mpTotal  = live.mp;
+        grandTotal = live.total;
+        chiPhi   = liveExp.reduce((s, e) => s + e.amount, 0);
+        totalTM  = live.byMethod.tm   || 0;
+        totalThe = live.byMethod.the  || 0;
+        totalLoc = live.byMethod['ck-loc'] || 0;
+        totalCty = live.byMethod['ck-cty'] || 0;
+
+        // Build dvDays / mpDays arrays (1-indexed, 31 days)
+        dvDays = Array(31).fill(0);
+        mpDays = Array(31).fill(0);
+        Object.entries(live.byDay).forEach(([day, vals]) => {
+            dvDays[day - 1] = vals.dv / 1000;
+            mpDays[day - 1] = vals.mp / 1000;
+        });
+
+        // Show "live data" indicator
+        document.getElementById('data-source-badge') && (
+            document.getElementById('data-source-badge').innerHTML =
+                '<span class="text-xs bg-green-50 text-green-700 border border-green-100 px-2 py-0.5 rounded-full">Dữ liệu thực từ hệ thống</span>'
+        );
+    } else {
+        // Fallback to mock data
+        const md = (MONTHLY_DATA[year] || {})[activeMonth];
+        if (!md) { renderEmpty(); return; }
+        dvDays   = md.dv || [];
+        mpDays   = md.mp || [];
+        dvTotal  = dvDays.reduce((s,v)=>s+v,0) * 1000;
+        mpTotal  = mpDays.reduce((s,v)=>s+v,0) * 1000;
+        grandTotal = dvTotal + mpTotal;
+        chiPhi   = md.cp * 1000;
+        totalTM  = grandTotal * md.tm_r;
+        totalThe = grandTotal * md.the_r;
+        totalLoc = grandTotal * md.ck_loc_r;
+        totalCty = grandTotal * md.ck_cty_r;
+        document.getElementById('data-source-badge') && (
+            document.getElementById('data-source-badge').innerHTML =
+                '<span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">Dữ liệu mẫu</span>'
+        );
+    }
+    if (grandTotal === 0) { renderEmpty(); return; }
+
+    const profit = grandTotal - chiPhi;
+
+    const prevMonth = activeMonth > 1 ? (MONTHLY_DATA[year] || {})[activeMonth-1] : null;
+    const prevTotal = prevMonth ? (prevMonth.dv.reduce((s,v)=>s+v,0) + prevMonth.mp.reduce((s,v)=>s+v,0)) * 1000 : null;
+    const pctChange = prevTotal ? ((grandTotal - prevTotal) / prevTotal * 100).toFixed(1) : null;
+
+    // KPIs
+    document.getElementById('kpi-total').textContent = fmtM(grandTotal);
+    document.getElementById('kpi-total-sub').innerHTML = pctChange !== null ? `<span class="badge ${pctChange>=0?'badge-up':'badge-down'}">${pctChange>=0?'▲':'▼'}${Math.abs(pctChange)}%</span> so với tháng trước` : 'Tháng này';
+    document.getElementById('kpi-dv').textContent = fmtM(dvTotal);
+    document.getElementById('kpi-dv-sub').textContent = grandTotal > 0 ? `${(dvTotal/grandTotal*100).toFixed(0)}% tổng DT` : '—';
+    document.getElementById('kpi-mp').textContent = fmtM(mpTotal);
+    document.getElementById('kpi-mp-sub').textContent = grandTotal > 0 ? `${(mpTotal/grandTotal*100).toFixed(0)}% tổng DT` : '—';
+    document.getElementById('kpi-cp').textContent = fmtM(chiPhi);
+    document.getElementById('kpi-cp-sub').textContent = `Tỉ lệ ${(chiPhi/grandTotal*100).toFixed(0)}%`;
+
+    // P&L table
+    const plData = [
+        { label:'A. DOANH THU', val:grandTotal, bold:true, color:'text-brand-gold' },
+        { label:'  I. Dịch vụ (サービス)',  val:dvTotal,  bold:false },
+        { label:'  II. Mỹ phẩm (化粧品)',   val:mpTotal,  bold:false },
+        { label:'', val:null },
+        { label:'B. CHI PHÍ',  val:chiPhi,    bold:true, color:'text-red-500', neg:true },
+        ...EXPENSE_CATEGORIES.map(e=>({ label:'  ' + e.name, val:Math.round(chiPhi*e.pct), bold:false, neg:true })),
+        { label:'', val:null },
+    ];
+    document.getElementById('pl-table').innerHTML = plData.map(r => r.val === null ? `<tr><td colspan="2" class="py-1"><hr class="border-brand-cream"></td></tr>` :
+        `<tr class="table-row ${r.bold?'border-t border-brand-cream':''}">
+            <td class="py-1.5 pr-2 ${r.bold?'font-medium':'text-brand-textmuted'} ${r.color||''}">${r.label}</td>
+            <td class="py-1.5 text-right ${r.bold?'font-medium':'text-brand-textmuted'} ${r.color||''} ${r.neg?'text-red-500':''}">${r.neg ? '-' : ''}${fmtM(r.val)}</td>
+        </tr>`).join('');
+    document.getElementById('profit-val').textContent = fmtM(profit);
+    document.getElementById('profit-val').className = `text-base font-semibold ${profit >= 0 ? 'text-green-600' : 'text-red-500'}`;
+
+    // Daily log
+    const workDays = dvDays.filter(v=>v>0).length;
+    document.getElementById('working-days').textContent = workDays + ' ngày';
+    const dailyRows = dvDays.map((dv, i) => {
+        if (dv === 0 && mpDays[i] === 0) return null;
+        const d = i + 1;
+        const t = (dv + mpDays[i]) * 1000;
+        return `<tr class="table-row border-b border-brand-cream/40 last:border-0">
+            <td class="py-1.5 text-brand-textmuted">${String(d).padStart(2,'0')}/${String(activeMonth).padStart(2,'0')}</td>
+            <td class="py-1.5 text-right">${fmtK(dv*1000)}</td>
+            <td class="py-1.5 text-right">${fmtK(mpDays[i]*1000)}</td>
+            <td class="py-1.5 text-right font-medium">${fmtK(t)}</td>
+        </tr>`;
+    }).filter(Boolean).join('');
+    document.getElementById('daily-table').innerHTML = dailyRows || '<tr><td colspan="4" class="py-4 text-center text-brand-textmuted">Chưa có dữ liệu</td></tr>';
+
+    // Payment legend
+    const paymentData = [
+        { label:'Tiền mặt', val:totalTM, color:'#C9A87C' },
+        { label:'CK TK Lộc', val:totalLoc, color:'#6366f1' },
+        { label:'CK TK Công ty', val:totalCty, color:'#8b5cf6' },
+        { label:'Thẻ', val:totalThe, color:'#D9B8B5' },
+    ];
+    document.getElementById('payment-legend').innerHTML = paymentData.map(p =>
+        `<div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:${p.color}"></span><span class="text-brand-textmuted">${p.label}</span></div>
+            <span class="font-medium">${(p.val/grandTotal*100).toFixed(0)}%</span>
+        </div>`).join('');
+
+    renderCharts(dvDays, mpDays, paymentData, grandTotal, year);
+}
+
+function renderEmpty() {
+    ['kpi-total','kpi-dv','kpi-mp','kpi-cp'].forEach(id => document.getElementById(id).textContent = '—');
+}
+
+let dailyChart, paymentChart, yearlyChart;
+
+function renderCharts(dvDays, mpDays, paymentData, grandTotal, year) {
+    const labels = dvDays.map((v,i) => i+1).filter((_, i) => dvDays[i]>0 || mpDays[i]>0);
+    const dvFiltered = dvDays.map((v,i)=>dvDays[i]>0||mpDays[i]>0?v:null).filter(v=>v!==null);
+    const mpFiltered = mpDays.map((v,i)=>dvDays[i]>0||mpDays[i]>0?v:null).filter(v=>v!==null);
+
+    if (dailyChart) dailyChart.destroy();
+    dailyChart = new Chart(document.getElementById('daily-chart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels,
+            datasets: [
+                { label: 'Dịch vụ (k)', data: dvFiltered, backgroundColor:'rgba(201,168,124,.75)', borderRadius:4, stack:'a' },
+                { label: 'Mỹ phẩm (k)', data: mpFiltered, backgroundColor:'rgba(217,184,181,.6)', borderRadius:4, stack:'a' },
+            ]
+        },
+        options: { responsive:true, plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:12}}}, scales:{y:{beginAtZero:true, ticks:{callback:v=>v+'k'}}, x:{ticks:{font:{size:10}}}} }
+    });
+
+    if (paymentChart) paymentChart.destroy();
+    paymentChart = new Chart(document.getElementById('payment-chart').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: paymentData.map(p=>p.label),
+            datasets:[{ data: paymentData.map(p=>p.val), backgroundColor: paymentData.map(p=>p.color), borderWidth:2, borderColor:'#fff' }]
+        },
+        options: { responsive:true, cutout:'65%', plugins:{legend:{display:false}} }
+    });
+
+    // Yearly overview
+    const yd = MONTHLY_DATA[year] || {};
+    const monthlyTotals = Array.from({length:12}, (_,i)=> {
+        const m = (yd[i+1] || {});
+        const dv = (m.dv||[]).reduce((s,v)=>s+v,0);
+        const mp = (m.mp||[]).reduce((s,v)=>s+v,0);
+        return (dv + mp) * 1000;
+    });
+    if (yearlyChart) yearlyChart.destroy();
+    yearlyChart = new Chart(document.getElementById('yearly-chart').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'],
+            datasets: [{ label:'Doanh thu (triệu)', data: monthlyTotals.map(v=>v/1e6), backgroundColor: monthlyTotals.map((v,i)=>i+1===activeMonth?'#C9A87C':'rgba(201,168,124,.3)'), borderRadius:5 }]
+        },
+        options: { responsive:true, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, ticks:{callback:v=>v+'M'}}, x:{ticks:{font:{size:11}}}} }
+    });
+}
+
+function fmtM(v) {
+    if (v >= 1e9) return (v/1e9).toFixed(2) + ' tỷ';
+    if (v >= 1e6) return (v/1e6).toFixed(1) + 'M ₫';
+    return (v/1000).toLocaleString('vi-VN') + 'k ₫';
+}
+function fmtK(v) { return (v/1000).toLocaleString('vi-VN',{maximumFractionDigits:0}) + 'k'; }
+
+function exportReport() {
+    document.getElementById('toast-msg').textContent = `Đã tạo báo cáo Tháng ${activeMonth} — sẵn sàng tải xuống.`;
+    document.getElementById('toast').classList.remove('hidden');
+    setTimeout(() => document.getElementById('toast').classList.add('hidden'), 3500);
+}
+
+// render() is called after data-store.js loads (see bottom script block)
+</script>
+
+<script src="../shared/data-store.js"></script>
+<script src="../shared/sidebar.js"></script>
+<script>
+    AuraSidebar.init({ basePath: '../', active: 'bc-chinhanh' });
+    render();
+</script>
+</body>
+</html>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Them / Sua Phong</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6', cream: '#F4EFEA', gold: '#C9A87C',
+                            goldhover: '#B5956A', rose: '#D9B8B5', lavender: '#DCD6DD',
+                            textmain: '#4A443E', textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Jost', 'sans-serif'] },
+                    boxShadow: { 'soft': '0 10px 40px -10px rgba(74,68,62,0.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .fi{width:100%;border:1px solid #F4EFEA;border-radius:12px;padding:10px 14px;font-size:14px;font-family:'Jost',sans-serif;background:white;color:#4A443E;outline:none;transition:border-color .2s}
+        .fi:focus{border-color:#C9A87C;box-shadow:0 0 0 3px rgba(201,168,124,.1)}
+        .fl{display:block;font-size:11px;color:#8B837C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;font-weight:500}
+        .sc{background:white;border-radius:20px;padding:24px;border:1px solid #F4EFEA;box-shadow:0 10px 40px -10px rgba(74,68,62,.05);margin-bottom:24px}
+        .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;border:1px solid #F4EFEA;font-size:13px;cursor:pointer;transition:all .15s;user-select:none}
+        .chip.on{border-color:#C9A87C;background:rgba(201,168,124,.1);color:#C9A87C}
+        .gc{border:2px solid #F4EFEA;border-radius:16px;padding:16px;cursor:pointer;transition:all .2s;text-align:center}
+        .gc.on{border-color:#C9A87C;background:rgba(201,168,124,.06)}
+        /* Bed config card */
+        .bed-conf{background:#FAF9F6;border:1.5px solid #F4EFEA;border-radius:14px;padding:14px;transition:border-color .2s}
+        .bed-conf:hover{border-color:#C9A87C}
+        .bed-preview{width:52px;height:62px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:22px;border:2px solid #F4EFEA;cursor:pointer;transition:all .15s;gap:2px}
+        .bed-preview.sel{border-color:#C9A87C;background:rgba(201,168,124,.08)}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-4">
+        <i data-lucide="plus-square" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl" id="page-title">Them Phong Moi</h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <button onclick="history.back()" class="px-5 py-2 border border-brand-cream rounded-full text-sm text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition">Huy</button>
+        <button onclick="saveRoom()" class="bg-brand-gold hover:bg-brand-goldhover text-white px-6 py-2 rounded-full text-sm font-medium transition shadow flex items-center gap-2">
+            <i data-lucide="save" class="w-4 h-4"></i> Luu Phong
+        </button>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-5xl mx-auto p-8">
+<div class="grid grid-cols-3 gap-8">
+
+<!-- ── LEFT FORM ─────────────────────────────────────────── -->
+<div class="col-span-2">
+
+    <!-- STEP 1: Basic Info -->
+    <div class="sc">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center text-sm font-semibold">1</div>
+            <div><h2 class="font-serif text-lg">Thong Tin Co Ban</h2><p class="text-xs text-brand-textmuted">Ten, tang va loai phong</p></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="fl">Ten Phong *</label>
+                <input class="fi" placeholder="VD: Phong 09" id="inp-name" oninput="syncPreview()">
+            </div>
+            <div>
+                <label class="fl">Ma Phong</label>
+                <input class="fi" id="inp-code" placeholder="Tu dong" readonly style="background:#FAF9F6;color:#8B837C">
+            </div>
+            <div>
+                <label class="fl">Tang *</label>
+                <select class="fi" id="inp-floor" onchange="syncPreview()">
+                    <option value="">Chon tang</option>
+                    <option value="1">Tang 1 (Tret)</option>
+                    <option value="2">Tang 2</option>
+                    <option value="3">Tang 3</option>
+                    <option value="4">Tang 4</option>
+                </select>
+            </div>
+            <div>
+                <label class="fl">Loai Phong *</label>
+                <select class="fi" id="inp-type" onchange="syncPreview()">
+                    <option value="">Chon loai</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Deluxe">Deluxe</option>
+                    <option value="VIP">VIP Suite</option>
+                    <option value="Couple">Couple Room</option>
+                </select>
+            </div>
+            <div class="col-span-2">
+                <label class="fl">Mo Ta</label>
+                <textarea class="fi" rows="2" id="inp-desc" placeholder="Trang thiet bi, phong cach trang tri..."></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 2: Gender -->
+    <div class="sc">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center text-sm font-semibold">2</div>
+            <div><h2 class="font-serif text-lg">Phan Loai Gioi Tinh</h2><p class="text-xs text-brand-textmuted">Phong phuc vu cho gioi tinh nao?</p></div>
+        </div>
+        <div class="grid grid-cols-3 gap-4" id="gender-grid">
+            <div class="gc" onclick="pickGender('female',this)">
+                <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center mx-auto mb-2"><i data-lucide="user" class="w-5 h-5 text-pink-500"></i></div>
+                <p class="font-medium text-sm">Chi Nu</p>
+                <p class="text-xs text-brand-textmuted mt-1">Khach nu</p>
+            </div>
+            <div class="gc" onclick="pickGender('male',this)">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mx-auto mb-2"><i data-lucide="user" class="w-5 h-5 text-blue-500"></i></div>
+                <p class="font-medium text-sm">Chi Nam</p>
+                <p class="text-xs text-brand-textmuted mt-1">Khach nam</p>
+            </div>
+            <div class="gc on" onclick="pickGender('unisex',this)">
+                <div class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center mx-auto mb-2"><i data-lucide="users" class="w-5 h-5 text-purple-500"></i></div>
+                <p class="font-medium text-sm">Nam &amp; Nu</p>
+                <p class="text-xs text-brand-textmuted mt-1">Ca hai gioi tinh</p>
+            </div>
+        </div>
+        <div class="mt-4 p-3 bg-brand-gold/5 rounded-xl border border-brand-gold/20">
+            <p class="text-xs text-brand-gold flex items-center gap-2">
+                <i data-lucide="info" class="w-4 h-4 flex-shrink-0"></i>
+                He thong se tu dong kiem tra gioi tinh khi tao booking — khach khong phu hop se khong duoc ghi vao phong nay.
+            </p>
+        </div>
+    </div>
+
+    <!-- STEP 3: Beds -->
+    <div class="sc">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center text-sm font-semibold">3</div>
+            <div><h2 class="font-serif text-lg">Cau Hinh Giuong</h2><p class="text-xs text-brand-textmuted">Them va thiet lap tung giuong trong phong</p></div>
+        </div>
+
+        <!-- Bed type legend -->
+        <div class="flex gap-4 mb-4 p-3 bg-brand-ivory rounded-xl">
+            <div class="text-center">
+                <div class="w-10 h-10 rounded-lg bg-white border border-brand-cream flex items-center justify-center text-xl mx-auto mb-1">🛏</div>
+                <p class="text-xs text-brand-textmuted">Standard</p>
+            </div>
+            <div class="text-center">
+                <div class="w-10 h-10 rounded-lg bg-white border border-brand-cream flex items-center justify-center text-xl mx-auto mb-1">🛁</div>
+                <p class="text-xs text-brand-textmuted">Deluxe</p>
+            </div>
+            <div class="text-center">
+                <div class="w-10 h-10 rounded-lg bg-white border border-brand-cream flex items-center justify-center text-xl mx-auto mb-1">✨</div>
+                <p class="text-xs text-brand-textmuted">VIP</p>
+            </div>
+            <div class="text-center">
+                <div class="w-10 h-10 rounded-lg bg-white border border-brand-cream flex items-center justify-center text-xl mx-auto mb-1">💑</div>
+                <p class="text-xs text-brand-textmuted">Couple</p>
+            </div>
+            <div class="ml-auto self-center">
+                <button onclick="addBed()" class="bg-brand-gold hover:bg-brand-goldhover text-white px-4 py-2 rounded-xl text-sm flex items-center gap-2 transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Them Giuong
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-3" id="beds-list"></div>
+
+        <!-- Add first bed prompt if empty -->
+        <div id="beds-empty" class="hidden text-center py-8 text-brand-textmuted">
+            <i data-lucide="bed" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+            <p class="text-sm">Chua co giuong nao. Nhan "Them Giuong" de bat dau.</p>
+        </div>
+    </div>
+
+    <!-- STEP 4: Services -->
+    <div class="sc">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center text-sm font-semibold">4</div>
+            <div><h2 class="font-serif text-lg">Dich Vu Cho Phep</h2><p class="text-xs text-brand-textmuted">Chon loai dich vu co the thuc hien trong phong</p></div>
+        </div>
+        <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-2">Nhom Massage</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Swedish Massage</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Deep Tissue</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Hot Stone</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Lava Shell</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Couple Massage</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Thai Massage</div>
+        </div>
+        <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-2">Cham Soc Da Mat</p>
+        <div class="flex flex-wrap gap-2 mb-4">
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>HydraFacial</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>LED Therapy</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Anti-aging</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Brightening Facial</div>
+        </div>
+        <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-2">Cham Soc Co The</p>
+        <div class="flex flex-wrap gap-2">
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Body Scrub</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Body Wrap</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Detox</div>
+            <div class="chip" onclick="toggleChip(this)"><i data-lucide="check" class="w-3 h-3 hidden"></i>Slimming</div>
+        </div>
+    </div>
+
+    <!-- STEP 5: Rules -->
+    <div class="sc">
+        <div class="flex items-center gap-3 mb-5">
+            <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center text-sm font-semibold">5</div>
+            <div><h2 class="font-serif text-lg">Quy Tac Su Dung</h2><p class="text-xs text-brand-textmuted">Gio hoat dong va kich hoat booking</p></div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="fl">Gio Mo Cua</label>
+                <input type="time" class="fi" value="08:00">
+            </div>
+            <div>
+                <label class="fl">Gio Dong Cua</label>
+                <input type="time" class="fi" value="22:00">
+            </div>
+            <div>
+                <label class="fl">Thoi Gian Don Dep (phut)</label>
+                <input type="number" class="fi" value="15" min="5" max="60" id="inp-clean">
+                <p class="text-xs text-brand-textmuted mt-1">Phong/giuong bi khoa giua cac luot khach</p>
+            </div>
+            <div>
+                <label class="fl">Dat Truoc Toi Thieu (phut)</label>
+                <input type="number" class="fi" value="30" min="0">
+            </div>
+            <div class="col-span-2 flex items-center gap-3">
+                <input type="checkbox" id="chk-online" class="w-4 h-4 rounded accent-brand-gold" checked>
+                <label for="chk-online" class="text-sm cursor-pointer">Hien thi trong booking online</label>
+            </div>
+        </div>
+    </div>
+
+</div><!-- /col-span-2 -->
+
+<!-- ── RIGHT PREVIEW ─────────────────────────────────────── -->
+<div class="sticky top-24 self-start space-y-5">
+
+    <!-- Live Preview Card -->
+    <div class="bg-white rounded-2xl border border-brand-cream shadow-soft overflow-hidden">
+        <div class="h-2 bg-gradient-to-r from-brand-gold to-brand-goldhover" id="prev-bar"></div>
+        <div class="p-5">
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-3">Xem Truoc</p>
+            <h3 class="font-serif text-xl mb-0.5" id="prev-name">Ten phong</h3>
+            <p class="text-xs text-brand-textmuted mb-3" id="prev-info">Tang chua chon</p>
+            <div id="prev-gender" class="mb-3">
+                <span class="text-xs bg-purple-50 text-purple-600 px-2.5 py-1 rounded-full">Nam / Nu</span>
+            </div>
+            <!-- Bed mini-grid -->
+            <div class="mb-3">
+                <p class="text-xs text-brand-textmuted mb-1.5">Giuong:</p>
+                <div class="flex flex-wrap gap-2" id="prev-beds">
+                    <span class="text-xs text-brand-textmuted italic">Chua co giuong</span>
+                </div>
+            </div>
+            <!-- Services -->
+            <div>
+                <p class="text-xs text-brand-textmuted mb-1.5">Dich vu:</p>
+                <div class="flex flex-wrap gap-1" id="prev-services">
+                    <span class="text-xs text-brand-textmuted italic">Chua chon</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Logic Checklist -->
+    <div class="bg-white rounded-2xl border border-brand-cream shadow-soft p-5">
+        <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-3">Logic Booking Tu Dong</p>
+        <ul class="space-y-2.5">
+            <li class="flex items-start gap-2 text-xs text-brand-textmuted">
+                <div class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-green-600"></i></div>
+                Kiem tra phong &amp; giuong trong truoc khi xac nhan
+            </li>
+            <li class="flex items-start gap-2 text-xs text-brand-textmuted">
+                <div class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-green-600"></i></div>
+                Khop gioi tinh khach voi cau hinh phong
+            </li>
+            <li class="flex items-start gap-2 text-xs text-brand-textmuted">
+                <div class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-green-600"></i></div>
+                Xac nhan dich vu duoc phong ho tro
+            </li>
+            <li class="flex items-start gap-2 text-xs text-brand-textmuted">
+                <div class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-green-600"></i></div>
+                Tu dong khoa giuong trong thoi gian don dep
+            </li>
+            <li class="flex items-start gap-2 text-xs text-brand-textmuted">
+                <div class="w-5 h-5 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0 mt-0.5"><i data-lucide="check" class="w-3 h-3 text-green-600"></i></div>
+                Goi y phong / giuong phu hop nhat khi tao booking
+            </li>
+        </ul>
+    </div>
+
+    <!-- Save Buttons -->
+    <div class="space-y-2">
+        <button onclick="saveRoom()" class="w-full bg-brand-gold hover:bg-brand-goldhover text-white py-3 rounded-2xl font-medium transition shadow flex items-center justify-center gap-2">
+            <i data-lucide="save" class="w-4 h-4"></i> Luu Phong
+        </button>
+        <button onclick="saveAndNew()" class="w-full border border-brand-gold text-brand-gold hover:bg-brand-gold/5 py-3 rounded-2xl font-medium transition flex items-center justify-center gap-2">
+            <i data-lucide="plus" class="w-4 h-4"></i> Luu &amp; Them Phong Khac
+        </button>
+        <button onclick="history.back()" class="w-full border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold py-3 rounded-2xl text-sm transition">
+            Huy
+        </button>
+    </div>
+</div>
+
+</div><!-- /grid -->
+</div><!-- /max-w -->
+
+<script>
+lucide.createIcons();
+
+/* ── STATE ──────────────────────────────────────────────── */
+let gender = 'unisex';
+let beds   = [];
+let bedIdx = 0;
+const bedTypes = {
+    standard: { emoji:'🛏', label:'Standard' },
+    deluxe:   { emoji:'🛁', label:'Deluxe'   },
+    vip:      { emoji:'✨', label:'VIP'       },
+    couple:   { emoji:'💑', label:'Couple'    }
+};
+const letters = ['A','B','C','D','E','F','G','H'];
+
+/* ── BED MANAGEMENT ─────────────────────────────────────── */
+function addBed() {
+    const idx = beds.length;
+    beds.push({ id: ++bedIdx, name: 'Giuong ' + (letters[idx] || idx+1), type: 'standard' });
+    renderBeds();
+    syncPreview();
+}
+
+function removeBed(id) {
+    beds = beds.filter(b => b.id !== id);
+    renderBeds();
+    syncPreview();
+}
+
+function renderBeds() {
+    const list  = document.getElementById('beds-list');
+    const empty = document.getElementById('beds-empty');
+    list.innerHTML = '';
+    if (beds.length === 0) { empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+
+    beds.forEach(b => {
+        const div = document.createElement('div');
+        div.className = 'bed-conf flex items-center gap-4';
+        div.innerHTML = `
+            <!-- Bed type selector -->
+            <div class="flex gap-1.5 flex-shrink-0">
+                ${Object.entries(bedTypes).map(([k,v]) => `
+                    <div class="bed-preview ${b.type===k?'sel':''}" onclick="setBedType(${b.id},'${k}',this)" title="${v.label}">
+                        <span>${v.emoji}</span>
+                        <span style="font-size:9px;color:#8B837C">${v.label.slice(0,3)}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <!-- Name input -->
+            <div class="flex-1">
+                <label class="fl">Ten Giuong</label>
+                <input type="text" value="${b.name}" class="fi text-sm" placeholder="VD: Giuong A"
+                    oninput="beds.find(x=>x.id===${b.id}).name=this.value; syncPreview()">
+            </div>
+            <!-- Status default -->
+            <div class="flex-shrink-0 min-w-[110px]">
+                <label class="fl">Trang Thai Mac Dinh</label>
+                <select class="fi text-sm" onchange="beds.find(x=>x.id===${b.id}).defaultStatus=this.value">
+                    <option value="available">Trong</option>
+                    <option value="maintenance">Bao tri</option>
+                </select>
+            </div>
+            <!-- Remove -->
+            <button onclick="removeBed(${b.id})" class="flex-shrink-0 p-2 rounded-xl hover:bg-red-50 hover:text-red-500 text-brand-textmuted transition mt-4">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+        `;
+        list.appendChild(div);
+    });
+    lucide.createIcons();
+}
+
+function setBedType(id, type, el) {
+    beds.find(b => b.id === id).type = type;
+    // Update highlight within this bed-conf
+    el.closest('.bed-conf').querySelectorAll('.bed-preview').forEach(p => p.classList.remove('sel'));
+    el.classList.add('sel');
+    syncPreview();
+}
+
+/* ── GENDER ─────────────────────────────────────────────── */
+function pickGender(g, el) {
+    gender = g;
+    document.querySelectorAll('.gc').forEach(c => c.classList.remove('on'));
+    el.classList.add('on');
+    syncPreview();
+}
+
+/* ── SERVICE CHIPS ──────────────────────────────────────── */
+function toggleChip(el) {
+    el.classList.toggle('on');
+    const ic = el.querySelector('[data-lucide="check"]');
+    if (el.classList.contains('on')) ic.classList.remove('hidden');
+    else ic.classList.add('hidden');
+    syncPreview();
+}
+
+/* ── LIVE PREVIEW ───────────────────────────────────────── */
+function syncPreview() {
+    const name  = document.getElementById('inp-name').value  || 'Ten phong';
+    const floor = document.getElementById('inp-floor').value;
+    const type  = document.getElementById('inp-type').value;
+
+    document.getElementById('prev-name').textContent = name;
+    document.getElementById('prev-info').textContent =
+        (floor ? 'Tang ' + floor : 'Tang chua chon') + ' · ' + (type || 'Chua chon loai');
+
+    // Auto-code
+    const num = name.replace(/\D/g,'').padStart(2,'0');
+    document.getElementById('inp-code').value = num ? 'R' + num : '';
+
+    // Gender badge
+    const gMap = {
+        female:  '<span class="text-xs bg-pink-50 text-pink-600 px-2.5 py-1 rounded-full">Chi Nu</span>',
+        male:    '<span class="text-xs bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full">Chi Nam</span>',
+        unisex:  '<span class="text-xs bg-purple-50 text-purple-600 px-2.5 py-1 rounded-full">Nam / Nu</span>'
+    };
+    document.getElementById('prev-gender').innerHTML = gMap[gender];
+
+    // Beds mini-preview
+    const bEl = document.getElementById('prev-beds');
+    if (beds.length === 0) {
+        bEl.innerHTML = '<span class="text-xs text-brand-textmuted italic">Chua co giuong</span>';
+    } else {
+        bEl.innerHTML = beds.map(b =>
+            `<div class="flex flex-col items-center">
+                <div class="w-9 h-11 rounded-lg bg-brand-ivory border border-brand-cream flex items-center justify-center text-lg">${bedTypes[b.type].emoji}</div>
+                <span class="text-xs text-brand-textmuted mt-0.5">${b.name.replace('Giuong ','')}</span>
+             </div>`
+        ).join('');
+    }
+
+    // Services
+    const svcs = [...document.querySelectorAll('.chip.on')].map(c => c.textContent.trim());
+    document.getElementById('prev-services').innerHTML = svcs.length
+        ? svcs.map(s => `<span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-lg">${s}</span>`).join('')
+        : '<span class="text-xs text-brand-textmuted italic">Chua chon</span>';
+}
+
+/* ── SAVE ───────────────────────────────────────────────── */
+function saveRoom() {
+    const name = document.getElementById('inp-name').value.trim();
+    if (!name) { alert('Vui long nhap ten phong!'); document.getElementById('inp-name').focus(); return; }
+    if (beds.length === 0) { alert('Vui long them it nhat 1 giuong!'); return; }
+    alert(`Phong "${name}" voi ${beds.length} giuong da duoc luu!`);
+    window.location.href = 'index.html';
+}
+
+function saveAndNew() {
+    const name = document.getElementById('inp-name').value.trim();
+    if (!name) { alert('Vui long nhap ten phong!'); return; }
+    if (beds.length === 0) { alert('Vui long them it nhat 1 giuong!'); return; }
+    alert(`Phong "${name}" da luu! Ban co the them phong moi.`);
+    document.getElementById('inp-name').value = '';
+    beds = []; bedIdx = 0;
+    document.querySelectorAll('.chip.on').forEach(c => {
+        c.classList.remove('on');
+        c.querySelector('[data-lucide="check"]').classList.add('hidden');
+    });
+    renderBeds(); syncPreview();
+    document.getElementById('inp-name').focus();
+}
+
+/* ── INIT ───────────────────────────────────────────────── */
+// Add 1 default bed
+addBed();
+syncPreview();
+</script>
+</div><!-- /scroll -->
+</div><!-- /flex-1 col -->
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'them-phong' });</script>
+</body>
+</html>

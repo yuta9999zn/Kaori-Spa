@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reschedule Booking | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Time Slot Pill styling */
+        .time-slot {
+            @apply py-2.5 border border-brand-cream rounded-xl text-sm font-medium text-brand-textmuted bg-white hover:border-brand-gold hover:text-brand-gold transition cursor-pointer text-center shadow-sm;
+        }
+        .time-slot.active {
+            @apply border-brand-gold bg-brand-gold/10 text-brand-goldhover shadow-inner-soft;
+        }
+        .time-slot.disabled {
+            @apply opacity-40 cursor-not-allowed hover:border-brand-cream hover:text-brand-textmuted bg-gray-50 shadow-none;
+        }
+        .time-slot.conflict {
+            @apply border-red-200 bg-red-50 text-red-500 hover:border-red-300 hover:text-red-600;
+        }
+
+        /* Custom Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm;
+        }
+        .radio-card-input:checked + .radio-card-body .radio-card-icon {
+            @apply text-brand-gold opacity-100 scale-100;
+        }
+        .radio-card-input:disabled + .radio-card-body {
+            @apply opacity-50 cursor-not-allowed bg-gray-50 border-brand-cream;
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.25rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1rem);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center">
+                <button class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold transition mr-4 shadow-sm">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <h1 class="font-serif text-xl md:text-2xl text-brand-textmain tracking-wide">Reschedule Booking</h1>
+                    <div class="text-xs text-brand-textmuted font-medium flex items-center mt-0.5">
+                        <span>Bookings</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span>#BK-10425</span>
+                        <i data-lucide="chevron-right" class="w-3 h-3 mx-1"></i>
+                        <span class="text-brand-gold">Reschedule</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="hidden lg:block text-right">
+                    <p class="text-sm font-medium text-brand-textmain">Booking #BK-10425</p>
+                    <p class="text-xs text-brand-textmuted">John Doe • Deep Tissue Massage</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Form Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1400px] mx-auto pb-12">
+                
+                <!-- CURRENT BOOKING CONTEXT -->
+                <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60 flex flex-col md:flex-row md:items-center justify-between mb-8 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex items-center mb-4 md:mb-0">
+                        <div class="w-12 h-12 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-gold mr-4 shadow-sm">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-0.5">Current Schedule</p>
+                            <h3 class="font-serif text-xl text-brand-textmain">Mar 10, 2026 • 10:00 AM</h3>
+                        </div>
+                    </div>
+
+                    <div class="relative z-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-brand-textmain font-medium">
+                        <span class="flex items-center text-brand-textmuted"><i data-lucide="user" class="w-4 h-4 mr-2 text-brand-gold"></i> Staff: Anna</span>
+                        <span class="flex items-center text-brand-textmuted"><i data-lucide="door-open" class="w-4 h-4 mr-2 text-brand-gold"></i> Room 2</span>
+                        <span class="flex items-center text-brand-textmuted"><i data-lucide="clock" class="w-4 h-4 mr-2 text-brand-gold"></i> 60 min</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT COLUMN: NEW SCHEDULE SELECTION -->
+                    <div class="xl:col-span-2 space-y-6">
+                        
+                        <!-- 1. Date & Time Selection -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                                <div class="w-8 h-8 rounded-full bg-brand-gold/10 text-brand-gold flex items-center justify-center mr-3 shrink-0">
+                                    <span class="font-serif font-bold text-sm">1</span>
+                                </div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Select New Date & Time</h3>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Date Picker (Simplified) -->
+                                <div>
+                                    <label class="spa-label">Date</label>
+                                    <div class="bg-white border border-brand-cream rounded-2xl p-4 shadow-sm">
+                                        <div class="flex justify-between items-center mb-4">
+                                            <button class="p-1 hover:text-brand-gold transition"><i data-lucide="chevron-left" class="w-4 h-4 text-brand-textmuted"></i></button>
+                                            <span class="font-medium text-brand-textmain font-serif">March 2026</span>
+                                            <button class="p-1 hover:text-brand-gold transition"><i data-lucide="chevron-right" class="w-4 h-4 text-brand-textmuted"></i></button>
+                                        </div>
+                                        <div class="grid grid-cols-7 gap-1 text-center text-[10px] uppercase tracking-wider font-semibold text-brand-textmuted mb-2">
+                                            <div>Su</div><div>Mo</div><div>Tu</div><div>We</div><div>Th</div><div>Fr</div><div>Sa</div>
+                                        </div>
+                                        <div class="grid grid-cols-7 gap-1 text-center text-sm font-medium">
+                                            <div class="py-1.5 text-gray-300">1</div><div class="py-1.5 text-gray-300">2</div><div class="py-1.5 text-gray-300">3</div><div class="py-1.5 text-gray-300">4</div><div class="py-1.5 text-gray-300">5</div><div class="py-1.5 text-gray-300">6</div><div class="py-1.5 text-gray-300">7</div>
+                                            <div class="py-1.5 text-gray-300">8</div><div class="py-1.5 text-gray-300">9</div>
+                                            <div class="py-1.5 hover:bg-brand-ivory rounded-full cursor-pointer transition relative">
+                                                10 <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-brand-cream rounded-full"></span>
+                                            </div>
+                                            <div class="py-1.5 bg-brand-gold text-white rounded-full shadow-sm cursor-pointer relative">11</div>
+                                            <div class="py-1.5 hover:bg-brand-ivory rounded-full cursor-pointer transition">12</div>
+                                            <div class="py-1.5 hover:bg-brand-ivory rounded-full cursor-pointer transition">13</div>
+                                            <div class="py-1.5 hover:bg-brand-ivory rounded-full cursor-pointer transition">14</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Time Slots -->
+                                <div>
+                                    <div class="flex justify-between items-end mb-2">
+                                        <label class="spa-label mb-0">Available Time Slots</label>
+                                        <span class="text-[10px] text-brand-textmuted italic">For Mar 11, 2026</span>
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-3 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
+                                        <div class="time-slot disabled" title="Unavailable">09:00 AM</div>
+                                        <div class="time-slot disabled" title="Unavailable">10:00 AM</div>
+                                        <div class="time-slot" onclick="selectSlot(this)">11:00 AM</div>
+                                        <div class="time-slot" onclick="selectSlot(this)">12:00 PM</div>
+                                        <div class="time-slot" onclick="selectSlot(this)">13:00 PM</div>
+                                        <div class="time-slot active" id="selected-slot" onclick="selectSlot(this)">14:00 PM</div>
+                                        <div class="time-slot conflict" title="Conflict Detected" onclick="showConflict()">15:00 PM</div>
+                                        <div class="time-slot" onclick="selectSlot(this)">16:00 PM</div>
+                                        <div class="time-slot" onclick="selectSlot(this)">17:00 PM</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Staff & Room Reassignment -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-4">
+                                <div class="w-8 h-8 rounded-full bg-brand-gold/10 text-brand-gold flex items-center justify-center mr-3 shrink-0">
+                                    <span class="font-serif font-bold text-sm">2</span>
+                                </div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Staff & Room Assignment</h3>
+                            </div>
+
+                            <div class="space-y-6">
+                                <!-- Staff Selection -->
+                                <div>
+                                    <div class="flex justify-between items-end mb-3">
+                                        <label class="spa-label mb-0">Assigned Staff</label>
+                                        <div class="flex items-center text-[10px] uppercase font-bold text-brand-textmuted tracking-wider">
+                                            <span class="w-2 h-2 rounded-full bg-green-400 mr-1.5"></span> Available
+                                            <span class="w-2 h-2 rounded-full bg-red-400 ml-3 mr-1.5"></span> Busy
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Current Staff (Unavailable at new time) -->
+                                        <label class="relative cursor-pointer group block">
+                                            <input type="radio" name="staff_select" class="peer sr-only radio-card-input" disabled>
+                                            <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-4 transition-all">
+                                                <div class="flex items-start justify-between">
+                                                    <div class="flex items-center">
+                                                        <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3">AN</div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-brand-textmain">Anna Nguyen</p>
+                                                            <p class="text-[10px] text-brand-textmuted">Current Assigned</p>
+                                                        </div>
+                                                    </div>
+                                                    <span class="flex items-center text-[9px] uppercase font-bold text-red-500 bg-red-50 px-1.5 py-0.5 rounded border border-red-100">
+                                                        Busy
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <!-- New Staff (Available) -->
+                                        <label class="relative cursor-pointer group block">
+                                            <input type="radio" name="staff_select" class="peer sr-only radio-card-input" checked>
+                                            <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm">
+                                                <div class="flex items-start justify-between">
+                                                    <div class="flex items-center">
+                                                        <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3">ER</div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-brand-textmain">Elena Rodriguez</p>
+                                                            <p class="text-[10px] text-brand-textmuted">Master Therapist</p>
+                                                        </div>
+                                                    </div>
+                                                    <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity transform scale-75 duration-200"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <!-- New Staff (Available) -->
+                                        <label class="relative cursor-pointer group block">
+                                            <input type="radio" name="staff_select" class="peer sr-only radio-card-input">
+                                            <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm">
+                                                <div class="flex items-start justify-between">
+                                                    <div class="flex items-center">
+                                                        <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3">JD</div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-brand-textmain">James Davies</p>
+                                                            <p class="text-[10px] text-brand-textmuted">Senior Therapist</p>
+                                                        </div>
+                                                    </div>
+                                                    <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity transform scale-75 duration-200"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+
+                                        <!-- Auto Assign -->
+                                        <label class="relative cursor-pointer group block">
+                                            <input type="radio" name="staff_select" class="peer sr-only radio-card-input">
+                                            <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold shadow-sm h-full flex items-center">
+                                                <div class="flex items-center w-full justify-between">
+                                                    <div class="flex items-center">
+                                                        <div class="w-8 h-8 rounded-xl bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-gold mr-3">
+                                                            <i data-lucide="sparkles" class="w-4 h-4"></i>
+                                                        </div>
+                                                        <p class="text-sm font-medium text-brand-textmain">Auto-Assign Staff</p>
+                                                    </div>
+                                                    <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity transform scale-75 duration-200"></i>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="h-px bg-brand-cream w-full"></div>
+
+                                <!-- Room Selection -->
+                                <div>
+                                    <label class="spa-label">Assigned Room</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="room1" selected>Massage Room 1 (Available)</option>
+                                        <option value="room2">Massage Room 2 (Available)</option>
+                                        <option value="room3" disabled>Massage Room 3 (Booked)</option>
+                                        <option value="vip">VIP Suite (Available)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: SUMMARY & ACTIONS -->
+                    <div class="xl:col-span-1">
+                        <div class="bg-white rounded-3xl p-6 shadow-premium border border-brand-gold/30 sticky top-28 flex flex-col">
+                            
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 border-b border-brand-cream/50 pb-4">Reschedule Summary</h3>
+
+                            <!-- Conflict Warning Banner (Hidden by default) -->
+                            <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 hidden items-start" id="conflictPanel">
+                                <i data-lucide="alert-triangle" class="w-5 h-5 text-red-500 mr-3 mt-0.5 shrink-0"></i>
+                                <div>
+                                    <h4 class="text-sm font-semibold text-red-700">Scheduling Conflict</h4>
+                                    <p class="text-xs text-red-600 mt-1">The selected time slot (15:00) is no longer available. Please select another time or staff member.</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-6 flex-1 mb-8">
+                                
+                                <!-- Original Booking -->
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2">Original Appointment</p>
+                                    <div class="bg-brand-ivory/50 rounded-xl p-4 border border-brand-cream opacity-70">
+                                        <div class="flex items-start mb-2">
+                                            <i data-lucide="calendar-clock" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                            <span class="text-sm text-brand-textmuted line-through decoration-brand-textmuted/50">Mar 10, 10:00 - 11:00 AM</span>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <i data-lucide="user" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                            <span class="text-sm text-brand-textmuted">Staff: Anna Nguyen</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-center text-brand-gold">
+                                    <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                                </div>
+
+                                <!-- New Booking -->
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2">New Appointment</p>
+                                    <div class="bg-brand-gold/5 rounded-xl p-4 border border-brand-gold/30 shadow-sm">
+                                        <div class="flex items-start mb-2">
+                                            <i data-lucide="calendar-clock" class="w-4 h-4 text-brand-gold mr-2 shrink-0"></i>
+                                            <span class="text-sm font-medium text-brand-textmain">Mar 11, 14:00 - 15:00 PM</span>
+                                        </div>
+                                        <div class="flex items-start mb-2">
+                                            <i data-lucide="user" class="w-4 h-4 text-brand-gold mr-2 shrink-0"></i>
+                                            <span class="text-sm font-medium text-brand-textmain">Staff: Elena Rodriguez</span>
+                                        </div>
+                                        <div class="flex items-start">
+                                            <i data-lucide="door-open" class="w-4 h-4 text-brand-gold mr-2 shrink-0"></i>
+                                            <span class="text-sm font-medium text-brand-textmain">Room: Massage Room 1</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="h-px bg-brand-cream border-dashed w-full"></div>
+
+                                <!-- Notifications -->
+                                <div>
+                                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-3">Customer Notification</p>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-brand-textmain">Send SMS Update</span>
+                                            <div class="relative inline-block w-9 align-middle select-none shrink-0">
+                                                <input type="checkbox" id="tgl-sms" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="tgl-sms" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-4"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-sm text-brand-textmain">Send Email Update</span>
+                                            <div class="relative inline-block w-9 align-middle select-none shrink-0">
+                                                <input type="checkbox" id="tgl-email" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="tgl-email" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-4"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="spa-label">Reason for change (Optional)</label>
+                                    <input type="text" class="w-full bg-brand-ivory border border-brand-cream rounded-xl px-4 py-2 text-xs outline-none focus:border-brand-gold" placeholder="e.g. Customer requested later time">
+                                </div>
+
+                            </div>
+
+                            <!-- Final Action -->
+                            <div class="pt-4 shrink-0 flex flex-col space-y-3">
+                                <button class="w-full py-4 bg-brand-gold text-white rounded-xl text-base tracking-wide font-medium hover:bg-brand-goldhover transition shadow-premium flex items-center justify-center group" id="btn-confirm">
+                                    <i data-lucide="check" class="w-5 h-5 mr-2 group-hover:scale-125 transition-transform"></i> Confirm Reschedule
+                                </button>
+                                <button class="w-full py-3 bg-white text-brand-textmain border border-brand-cream hover:bg-brand-ivory rounded-xl text-sm font-medium transition shadow-sm">
+                                    Cancel Changes
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // UI Interactions for Demo Purposes
+        function selectSlot(element) {
+            // Remove active from all slots
+            document.querySelectorAll('.time-slot').forEach(el => {
+                if(!el.classList.contains('disabled') && !el.classList.contains('conflict')) {
+                    el.classList.remove('active');
+                }
+            });
+            // Hide conflict panel if it was showing
+            document.getElementById('conflictPanel').classList.add('hidden');
+            document.getElementById('conflictPanel').classList.remove('flex');
+            
+            // Add active to selected
+            element.classList.add('active');
+        }
+
+        function showConflict() {
+            // Remove active from all slots
+            document.querySelectorAll('.time-slot').forEach(el => {
+                if(!el.classList.contains('disabled') && !el.classList.contains('conflict')) {
+                    el.classList.remove('active');
+                }
+            });
+            // Show Conflict Banner
+            document.getElementById('conflictPanel').classList.remove('hidden');
+            document.getElementById('conflictPanel').classList.add('flex');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'doi-lich' });</script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: realtime-gateway
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS:localhost:9092}
+    consumer:
+      group-id: realtime-gateway
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+server:
+  port: ${PORT:8083}
+
+kaori:
+  jwt:
+    issuer: kaori-auth
+    secret: ${JWT_SECRET:change-me-please-generate-256-bit-random-key-in-prod-only}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles & Permissions | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-brand-ivory border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:bg-white focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Custom Checkbox */
+        .spa-checkbox {
+            @apply w-5 h-5 rounded border border-brand-cream text-brand-gold focus:ring-brand-gold focus:ring-offset-0 bg-brand-ivory cursor-pointer transition-colors;
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="building" class="w-4 h-4 mr-3 opacity-70"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3"></i> Roles
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="palette" class="w-4 h-4 mr-3 opacity-70"></i> Branding
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="globe" class="w-4 h-4 mr-3 opacity-70"></i> Domains
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Marketing Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Marketing</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="megaphone" class="w-4 h-4 mr-3 opacity-70"></i> Campaigns
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-3 opacity-70"></i> Blog CMS
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div>
+                <div class="space-y-1 pt-4 border-t border-brand-cream">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search roles or permissions..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Invite User
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="shield-plus" class="w-4 h-4 mr-2"></i> Create Role
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-7xl mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Tenant</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Roles & Permissions</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Roles & Permissions</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Define user roles and precisely control access permissions across all spa modules.</p>
+                    </div>
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10">
+                        <button class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center" onclick="togglePanel('roleDetailPanel')">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Create New Role
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ROLE SUMMARY CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-brand-ivory flex items-center justify-center text-brand-gold shrink-0 border border-brand-cream">
+                            <i data-lucide="shield" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Roles</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">6</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold shrink-0 border border-brand-gold/20">
+                            <i data-lucide="lock" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">System Roles</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">4</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmain shrink-0 border border-brand-cream">
+                            <i data-lucide="sliders" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Custom Roles</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">2</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-brand-ivory flex items-center justify-center text-brand-rose shrink-0 border border-brand-cream">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Assigned Users</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">42</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROLE LIST TABLE -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col">
+                    
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex justify-between items-center">
+                        <h3 class="font-serif text-xl text-brand-textmain">Configured Roles</h3>
+                        <div class="flex items-center bg-white rounded-xl px-4 py-2 border border-brand-cream w-64 focus-within:border-brand-gold transition-colors shadow-sm">
+                            <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                            <input type="text" placeholder="Search roles..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted">
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/50 border-b border-brand-cream">
+                                    <th class="py-4 px-6 font-semibold">Role Name</th>
+                                    <th class="py-4 px-6 font-semibold w-1/3">Description</th>
+                                    <th class="py-4 px-6 font-semibold">Type</th>
+                                    <th class="py-4 px-6 font-semibold text-center">Assigned Users</th>
+                                    <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50">
+                                
+                                <!-- Role: Owner (System) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('roleDetailPanel')">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold mr-3">
+                                                <i data-lucide="crown" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Owner</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 text-brand-textmuted">Full administrative access to all branches, settings, and billing.</td>
+                                    <td class="py-5 px-6">
+                                        <span class="px-2.5 py-1 bg-brand-cream text-brand-textmuted rounded-md text-[10px] font-bold uppercase tracking-wider">System</span>
+                                    </td>
+                                    <td class="py-5 px-6 text-center font-medium">1</td>
+                                    <td class="py-5 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('roleDetailPanel')"><i data-lucide="eye" class="w-3.5 h-3.5 mr-2"></i> View Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                            <!-- No delete for system roles -->
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Role: Manager (System) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('roleDetailPanel')">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain mr-3">
+                                                <i data-lucide="briefcase" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Manager</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 text-brand-textmuted">Manage daily operations, staff schedules, and view branch reports.</td>
+                                    <td class="py-5 px-6">
+                                        <span class="px-2.5 py-1 bg-brand-cream text-brand-textmuted rounded-md text-[10px] font-bold uppercase tracking-wider">System</span>
+                                    </td>
+                                    <td class="py-5 px-6 text-center font-medium">3</td>
+                                    <td class="py-5 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('roleDetailPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Role: Receptionist (System) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('roleDetailPanel')">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain mr-3">
+                                                <i data-lucide="phone-call" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Receptionist</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 text-brand-textmuted">Handle bookings, process payments, and manage customer check-ins.</td>
+                                    <td class="py-5 px-6">
+                                        <span class="px-2.5 py-1 bg-brand-cream text-brand-textmuted rounded-md text-[10px] font-bold uppercase tracking-wider">System</span>
+                                    </td>
+                                    <td class="py-5 px-6 text-center font-medium">8</td>
+                                    <td class="py-5 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('roleDetailPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Role: Therapist (System) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('roleDetailPanel')">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain mr-3">
+                                                <i data-lucide="flower" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Therapist</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 text-brand-textmuted">View personal schedule, add customer notes, and view assigned services.</td>
+                                    <td class="py-5 px-6">
+                                        <span class="px-2.5 py-1 bg-brand-cream text-brand-textmuted rounded-md text-[10px] font-bold uppercase tracking-wider">System</span>
+                                    </td>
+                                    <td class="py-5 px-6 text-center font-medium">24</td>
+                                    <td class="py-5 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('roleDetailPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Role: Marketing (Custom) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('roleDetailPanel')">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-rose mr-3">
+                                                <i data-lucide="megaphone" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Marketing Admin</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 text-brand-textmuted">Manage campaigns, blog content, and view marketing reports.</td>
+                                    <td class="py-5 px-6">
+                                        <span class="px-2.5 py-1 bg-white border border-brand-cream text-brand-textmain rounded-md text-[10px] font-bold uppercase tracking-wider">Custom</span>
+                                    </td>
+                                    <td class="py-5 px-6 text-center font-medium">4</td>
+                                    <td class="py-5 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('roleDetailPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5 mr-2"></i> Delete Role</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Role: Junior Therapist (Custom) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('roleDetailPanel')">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain mr-3">
+                                                <i data-lucide="flower-2" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Junior Therapist</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-6 text-brand-textmuted">Limited view of schedule, restricted from viewing customer history.</td>
+                                    <td class="py-5 px-6">
+                                        <span class="px-2.5 py-1 bg-white border border-brand-cream text-brand-textmain rounded-md text-[10px] font-bold uppercase tracking-wider">Custom</span>
+                                    </td>
+                                    <td class="py-5 px-6 text-center font-medium">2</td>
+                                    <td class="py-5 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('roleDetailPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5 mr-2"></i> Delete Role</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT ROLE DETAIL/EDIT PANEL -->
+    <div id="roleDetailPanel" class="fixed inset-y-0 right-0 w-full max-w-2xl bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <div>
+                <h3 class="font-serif text-2xl text-brand-textmain">Manager Role</h3>
+                <p class="text-xs text-brand-textmuted mt-1">Configure permissions for this role.</p>
+            </div>
+            <button onclick="togglePanel('roleDetailPanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+            
+            <!-- Basic Info -->
+            <div class="space-y-4">
+                <div>
+                    <label class="spa-label">Role Name</label>
+                    <input type="text" class="spa-input font-medium" value="Manager">
+                </div>
+                <div>
+                    <label class="spa-label">Description</label>
+                    <textarea class="spa-input h-20 resize-none text-sm">Manage daily operations, staff schedules, and view branch reports.</textarea>
+                </div>
+            </div>
+
+            <div class="h-px bg-brand-cream/80 w-full"></div>
+
+            <!-- Permission Matrix -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-serif text-xl text-brand-textmain">Module Permissions</h4>
+                    <span class="text-[10px] text-brand-textmuted uppercase tracking-wider">Matrix View</span>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-brand-cream overflow-hidden shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-brand-ivory/50 border-b border-brand-cream">
+                                <th class="py-3 px-4 text-xs font-semibold text-brand-textmain w-1/3">Module</th>
+                                <th class="py-3 px-2 text-center text-[10px] uppercase tracking-wider text-brand-textmuted">View</th>
+                                <th class="py-3 px-2 text-center text-[10px] uppercase tracking-wider text-brand-textmuted">Create</th>
+                                <th class="py-3 px-2 text-center text-[10px] uppercase tracking-wider text-brand-textmuted">Edit</th>
+                                <th class="py-3 px-2 text-center text-[10px] uppercase tracking-wider text-brand-textmuted">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-brand-cream/50 text-sm">
+                            
+                            <!-- Bookings -->
+                            <tr class="hover:bg-brand-ivory/30 transition">
+                                <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                    <i data-lucide="calendar" class="w-4 h-4 mr-2 text-brand-gold opacity-70"></i> Bookings
+                                </td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                            </tr>
+
+                            <!-- Customers -->
+                            <tr class="hover:bg-brand-ivory/30 transition">
+                                <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                    <i data-lucide="heart" class="w-4 h-4 mr-2 text-brand-gold opacity-70"></i> Customers
+                                </td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                            </tr>
+
+                            <!-- Staff -->
+                            <tr class="hover:bg-brand-ivory/30 transition">
+                                <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                    <i data-lucide="users" class="w-4 h-4 mr-2 text-brand-gold opacity-70"></i> Staff
+                                </td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                            </tr>
+
+                            <!-- Services -->
+                            <tr class="hover:bg-brand-ivory/30 transition">
+                                <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                    <i data-lucide="sparkles" class="w-4 h-4 mr-2 text-brand-gold opacity-70"></i> Services
+                                </td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                            </tr>
+
+                             <!-- Reports -->
+                             <tr class="hover:bg-brand-ivory/30 transition">
+                                <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                    <i data-lucide="pie-chart" class="w-4 h-4 mr-2 text-brand-gold opacity-70"></i> Reports
+                                </td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" checked></td>
+                                <td class="py-3 px-2 text-center"><span class="text-brand-cream">-</span></td>
+                                <td class="py-3 px-2 text-center"><span class="text-brand-cream">-</span></td>
+                                <td class="py-3 px-2 text-center"><span class="text-brand-cream">-</span></td>
+                            </tr>
+
+                            <!-- Settings -->
+                            <tr class="hover:bg-brand-ivory/30 transition bg-brand-ivory/20">
+                                <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                    <i data-lucide="settings" class="w-4 h-4 mr-2 text-brand-textmuted opacity-70"></i> Settings
+                                </td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox"></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                                <td class="py-3 px-2 text-center"><input type="checkbox" class="spa-checkbox" disabled></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Role Assignment Preview -->
+            <div>
+                <h4 class="font-serif text-xl text-brand-textmain mb-4">Assigned Users</h4>
+                <div class="bg-white rounded-2xl border border-brand-cream p-4 shadow-sm flex flex-col space-y-3">
+                    
+                    <div class="flex items-center justify-between pb-3 border-b border-brand-cream/50">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3">AN</div>
+                            <div>
+                                <p class="text-sm font-medium text-brand-textmain">Anna Nguyen</p>
+                                <p class="text-[10px] text-brand-textmuted">District 1 Luxury Spa</p>
+                            </div>
+                        </div>
+                        <button class="text-brand-textmuted hover:text-brand-rose transition text-xs font-medium">Remove</button>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3">DC</div>
+                            <div>
+                                <p class="text-sm font-medium text-brand-textmain">David Chen</p>
+                                <p class="text-[10px] text-brand-textmuted">Westside Retreat</p>
+                            </div>
+                        </div>
+                        <button class="text-brand-textmuted hover:text-brand-rose transition text-xs font-medium">Remove</button>
+                    </div>
+                    
+                    <div class="pt-2 text-center">
+                        <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center justify-center w-full">
+                            <i data-lucide="plus" class="w-3 h-3 mr-1"></i> Assign another user
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+             <button onclick="togglePanel('roleDetailPanel')" class="px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                Cancel
+            </button>
+            <button onclick="togglePanel('roleDetailPanel')" class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                Save Permissions
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // UI Interaction Script
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+</body>
+</html>

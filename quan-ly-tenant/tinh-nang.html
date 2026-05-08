@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Modules | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-brand-ivory border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:bg-white focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Module Card Logo Container */
+        .module-logo {
+            @apply w-12 h-12 rounded-xl flex items-center justify-center border border-brand-cream bg-white shadow-sm shrink-0;
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.25rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1rem);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="building" class="w-4 h-4 mr-3 opacity-70"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3 opacity-70"></i> Roles
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="palette" class="w-4 h-4 mr-3 opacity-70"></i> Branding
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="globe" class="w-4 h-4 mr-3 opacity-70"></i> Domains
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="toggle-right" class="w-4 h-4 mr-3"></i> Features
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Marketing Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Marketing</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="megaphone" class="w-4 h-4 mr-3 opacity-70"></i> Campaigns
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-3 opacity-70"></i> Blog CMS
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div>
+                <div class="space-y-1 pt-4 border-t border-brand-cream">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search modules or settings..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="store" class="w-4 h-4 mr-2"></i> Create Branch
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Invite Staff
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> Add Service
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-[1400px] mx-auto space-y-10 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Tenant</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Features</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Feature Modules</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Enable or disable platform modules to perfectly customize your spa's operational capabilities.</p>
+                    </div>
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10">
+                        <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-textmuted hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Reset Defaults
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FEATURE SUMMARY CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex items-center space-x-4 hover:border-brand-gold/50 transition-colors">
+                        <div class="w-12 h-12 rounded-full bg-brand-ivory flex items-center justify-center text-brand-gold shrink-0 border border-brand-cream">
+                            <i data-lucide="layout-grid" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Modules</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">9</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex items-center space-x-4 hover:border-brand-gold/50 transition-colors">
+                        <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600 shrink-0 border border-green-100">
+                            <i data-lucide="toggle-right" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Enabled Modules</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">6</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex items-center space-x-4 hover:border-brand-gold/50 transition-colors">
+                        <div class="w-12 h-12 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted shrink-0 border border-brand-cream">
+                            <i data-lucide="toggle-left" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Disabled Modules</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">3</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-gold/20 flex items-center space-x-4 hover:border-brand-gold transition-colors bg-gradient-to-br from-white to-brand-gold/5">
+                        <div class="w-12 h-12 rounded-full bg-brand-gold text-white flex items-center justify-center shrink-0 shadow-md">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-gold mb-1">Available Add-ons</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">3</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    <!-- LEFT COLUMN: MODULE GRID -->
+                    <div class="xl:col-span-2 space-y-10">
+                        
+                        <!-- Core Platform Modules -->
+                        <section>
+                            <h3 class="font-serif text-2xl text-brand-textmain mb-6 flex items-center">
+                                <i data-lucide="layers" class="w-5 h-5 mr-3 text-brand-gold"></i> Core Platform Modules
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                <!-- Booking System -->
+                                <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-gold/30 flex flex-col cursor-pointer transition-shadow hover:shadow-premium" onclick="updatePreview('booking')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-brand-gold">
+                                            <i data-lucide="calendar-check" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                            Enabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Booking System</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">Allow customers to schedule appointments online and manage your internal calendar.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center">
+                                            Configure <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation(); toggleCriticalModal('Booking System')">
+                                            <input type="checkbox" id="tgl-booking" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-booking" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-[1rem]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Services -->
+                                <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-gold/30 flex flex-col cursor-pointer transition-shadow hover:shadow-premium" onclick="updatePreview('services')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-brand-rose">
+                                            <i data-lucide="sparkles" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                            Enabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Services & Treatments</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">Manage spa treatments, service categories, durations, and pricing rules.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center">
+                                            Configure <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation(); toggleCriticalModal('Services')">
+                                            <input type="checkbox" id="tgl-services" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-services" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-[1rem]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Customer CRM -->
+                                <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-gold/30 flex flex-col cursor-pointer transition-shadow hover:shadow-premium" onclick="updatePreview('crm')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-blue-500">
+                                            <i data-lucide="heart" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                            Enabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Customer CRM</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">Manage client profiles, visit histories, preferences, and loyalty points.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center">
+                                            Configure <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation();">
+                                            <input type="checkbox" id="tgl-crm" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-crm" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-[1rem]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Staff Management -->
+                                <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-gold/30 flex flex-col cursor-pointer transition-shadow hover:shadow-premium" onclick="updatePreview('staff')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-emerald-600">
+                                            <i data-lucide="users" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                            Enabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Staff Management</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">Manage employees, track working hours, and assign specialties.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center">
+                                            Configure <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation();">
+                                            <input type="checkbox" id="tgl-staff" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-staff" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-[1rem]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Reports & Analytics -->
+                                <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-gold/30 flex flex-col cursor-pointer transition-shadow hover:shadow-premium" onclick="updatePreview('reports')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-indigo-500">
+                                            <i data-lucide="pie-chart" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                            Enabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Reports & Analytics</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">View business performance insights, revenue, and staff utilization.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center">
+                                            Configure <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation();">
+                                            <input type="checkbox" id="tgl-reports" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-reports" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-[1rem]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Blog CMS -->
+                                <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-gold/30 flex flex-col cursor-pointer transition-shadow hover:shadow-premium" onclick="updatePreview('blog')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-brand-textmain">
+                                            <i data-lucide="file-text" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                            Enabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Blog CMS</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">Create SEO articles and marketing content for your booking portal.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center">
+                                            Configure <i data-lucide="chevron-right" class="w-4 h-4 ml-1"></i>
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation();">
+                                            <input type="checkbox" id="tgl-blog" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-blog" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-[1rem]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Marketing Automation -->
+                                <div class="bg-white p-6 rounded-3xl shadow-sm border border-brand-cream/60 flex flex-col cursor-pointer transition-shadow hover:shadow-soft" onclick="updatePreview('marketing')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-purple-500">
+                                            <i data-lucide="megaphone" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-textmuted bg-brand-ivory border border-brand-cream">
+                                            Disabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Marketing Automation</h4>
+                                    <p class="text-sm text-brand-textmuted mb-4 flex-1">Run targeted campaigns, promotions, and automated emails.</p>
+                                    <div class="bg-brand-gold/10 text-brand-goldhover text-[10px] px-3 py-2 rounded-lg font-medium flex items-center mb-6 border border-brand-gold/20">
+                                        <i data-lucide="alert-circle" class="w-3 h-3 mr-1.5 shrink-0"></i> Requires Customer CRM module
+                                    </div>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-textmuted hover:text-brand-textmain transition flex items-center">
+                                            View Details
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation();">
+                                            <input type="checkbox" id="tgl-marketing" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                            <label for="tgl-marketing" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Inventory -->
+                                <div class="bg-white p-6 rounded-3xl shadow-sm border border-brand-cream/60 flex flex-col cursor-pointer transition-shadow hover:shadow-soft" onclick="updatePreview('inventory')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-amber-600">
+                                            <i data-lucide="package" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-gold bg-brand-gold/10 border border-brand-gold/20">
+                                            Premium Feature
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Inventory Management</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">Track retail products, professional supplies, and stock levels across branches.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-textmuted hover:text-brand-textmain transition flex items-center">
+                                            View Details
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation();">
+                                            <input type="checkbox" id="tgl-inventory" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                            <label for="tgl-inventory" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Recruitment -->
+                                <div class="bg-white p-6 rounded-3xl shadow-sm border border-brand-cream/60 flex flex-col cursor-pointer transition-shadow hover:shadow-soft" onclick="updatePreview('recruitment')">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div class="module-logo text-gray-500">
+                                            <i data-lucide="user-plus" class="w-6 h-6"></i>
+                                        </div>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-textmuted bg-brand-ivory border border-brand-cream">
+                                            Disabled
+                                        </span>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Recruitment Pipeline</h4>
+                                    <p class="text-sm text-brand-textmuted mb-6 flex-1">Manage job postings, applicant tracking, and hiring workflows.</p>
+                                    <div class="flex items-center justify-between mt-auto pt-4 border-t border-brand-cream/60">
+                                        <button class="text-sm font-medium text-brand-textmuted hover:text-brand-textmain transition flex items-center">
+                                            View Details
+                                        </button>
+                                        <div class="relative inline-block w-9 align-middle select-none" onclick="event.stopPropagation();">
+                                            <input type="checkbox" id="tgl-recruitment" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                            <label for="tgl-recruitment" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </section>
+
+                        <!-- Premium Add-ons -->
+                        <section class="pt-6">
+                            <h3 class="font-serif text-2xl text-brand-textmain mb-6 flex items-center">
+                                <i data-lucide="zap" class="w-5 h-5 mr-3 text-brand-gold"></i> Premium Add-ons
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                
+                                <!-- AI Marketing -->
+                                <div class="bg-gradient-to-br from-white to-brand-gold/5 p-6 rounded-3xl shadow-sm border border-brand-gold/20 flex flex-col relative overflow-hidden group">
+                                    <div class="absolute -right-6 -top-6 text-brand-gold/10 w-32 h-32 transform group-hover:scale-110 transition-transform duration-500 pointer-events-none">
+                                        <i data-lucide="bot" class="w-full h-full"></i>
+                                    </div>
+                                    <div class="relative z-10">
+                                        <h4 class="font-serif text-xl text-brand-textmain mb-2">AI Marketing Assistant</h4>
+                                        <p class="text-sm text-brand-textmuted mb-6">Automatically generate email copy, social media posts, and blog articles using advanced AI tailored to your spa brand.</p>
+                                        <div class="flex items-center space-x-3">
+                                            <button class="px-5 py-2 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-goldhover transition shadow-sm">
+                                                Activate Add-on
+                                            </button>
+                                            <button class="px-5 py-2 text-brand-gold hover:text-brand-goldhover text-sm font-medium transition">
+                                                Learn More
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Advanced Analytics -->
+                                <div class="bg-gradient-to-br from-white to-brand-gold/5 p-6 rounded-3xl shadow-sm border border-brand-gold/20 flex flex-col relative overflow-hidden group">
+                                    <div class="absolute -right-6 -top-6 text-brand-gold/10 w-32 h-32 transform group-hover:scale-110 transition-transform duration-500 pointer-events-none">
+                                        <i data-lucide="trending-up" class="w-full h-full"></i>
+                                    </div>
+                                    <div class="relative z-10">
+                                        <h4 class="font-serif text-xl text-brand-textmain mb-2">Advanced Analytics Pro</h4>
+                                        <p class="text-sm text-brand-textmuted mb-6">Unlock deep insights with custom report builders, predictive forecasting, and real-time dashboard exports.</p>
+                                        <div class="flex items-center space-x-3">
+                                            <button class="px-5 py-2 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-goldhover transition shadow-sm">
+                                                Activate Add-on
+                                            </button>
+                                            <button class="px-5 py-2 text-brand-gold hover:text-brand-goldhover text-sm font-medium transition">
+                                                Learn More
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Multi-Location Intel -->
+                                <div class="bg-gradient-to-br from-white to-brand-gold/5 p-6 rounded-3xl shadow-sm border border-brand-gold/20 flex flex-col relative overflow-hidden group md:col-span-2">
+                                    <div class="absolute right-0 top-0 text-brand-gold/5 w-48 h-48 transform group-hover:scale-110 transition-transform duration-500 pointer-events-none">
+                                        <i data-lucide="map" class="w-full h-full"></i>
+                                    </div>
+                                    <div class="relative z-10 w-full md:w-2/3">
+                                        <h4 class="font-serif text-xl text-brand-textmain mb-2">Multi-Location Intelligence</h4>
+                                        <p class="text-sm text-brand-textmuted mb-6">Designed for franchises. Compare branch performance, balance staff workloads across locations, and unify global inventory.</p>
+                                        <div class="flex items-center space-x-3">
+                                            <button class="px-5 py-2 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-goldhover transition shadow-sm">
+                                                Activate Add-on
+                                            </button>
+                                            <button class="px-5 py-2 text-brand-gold hover:text-brand-goldhover text-sm font-medium transition">
+                                                Contact Sales
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: FEATURE PREVIEW -->
+                    <div class="xl:col-span-1">
+                        <div class="sticky top-8 bg-brand-cream/20 rounded-3xl p-6 border border-brand-cream/60 shadow-inner-soft" id="previewPanel">
+                            <div class="flex items-center justify-between mb-6">
+                                <h3 class="font-serif text-xl text-brand-textmain">Module Preview</h3>
+                                <span class="px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-[10px] font-bold uppercase tracking-wider" id="previewStatus">Active</span>
+                            </div>
+                            
+                            <!-- Dynamic Content Area -->
+                            <div id="previewContent">
+                                <!-- Default Preview: Booking System -->
+                                <div class="bg-white rounded-2xl p-6 shadow-sm border border-brand-cream text-center mb-6">
+                                    <div class="w-16 h-16 rounded-full bg-brand-gold/10 text-brand-gold flex items-center justify-center mx-auto mb-4">
+                                        <i data-lucide="calendar-check" class="w-8 h-8"></i>
+                                    </div>
+                                    <h4 class="font-serif text-lg text-brand-textmain mb-2">Booking System</h4>
+                                    <p class="text-sm text-brand-textmuted">The core engine for scheduling. Allows clients to book online and staff to manage calendars.</p>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <h5 class="text-xs font-bold uppercase tracking-wider text-brand-textmain">Key Capabilities</h5>
+                                    
+                                    <div class="bg-white p-4 rounded-xl border border-brand-cream shadow-sm flex items-start">
+                                        <i data-lucide="globe" class="w-4 h-4 text-brand-gold mt-0.5 mr-3 shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Online Portal</p>
+                                            <p class="text-xs text-brand-textmuted mt-1">White-labeled customer booking page available 24/7.</p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-brand-cream shadow-sm flex items-start">
+                                        <i data-lucide="clock" class="w-4 h-4 text-brand-gold mt-0.5 mr-3 shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Smart Scheduling</p>
+                                            <p class="text-xs text-brand-textmuted mt-1">Prevents double bookings and manages staff availability gaps automatically.</p>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-4 rounded-xl border border-brand-cream shadow-sm flex items-start">
+                                        <i data-lucide="bell-ring" class="w-4 h-4 text-brand-gold mt-0.5 mr-3 shrink-0"></i>
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Reminders</p>
+                                            <p class="text-xs text-brand-textmuted mt-1">Automated email and SMS reminders to reduce no-shows.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- CONFIRMATION MODAL (Disable Critical Module) -->
+    <div id="disableModal" class="fixed inset-0 bg-brand-textmain/40 backdrop-blur-sm z-50 items-center justify-center opacity-0 hidden transition-opacity duration-300">
+        <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl border border-brand-cream overflow-hidden m-4 transform scale-95 transition-transform duration-300" id="disableModalContent">
+            
+            <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-brand-rose/10">
+                <div class="flex items-center space-x-3 text-brand-rose">
+                    <div class="w-8 h-8 rounded-full bg-white border border-brand-rose/20 flex items-center justify-center">
+                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                    </div>
+                    <h3 class="font-serif text-xl font-medium" id="disableModalTitle">Disable Module?</h3>
+                </div>
+            </div>
+            
+            <div class="p-8">
+                <p class="text-brand-textmain font-medium mb-2">You are about to disable a critical system module.</p>
+                <p class="text-sm text-brand-textmuted leading-relaxed mb-6">
+                    Disabling this feature will hide related menu items, suspend active workflows, and may prevent customers from accessing certain parts of the platform. Data will be preserved but inaccessible until re-enabled.
+                </p>
+                <div class="bg-brand-ivory p-4 rounded-xl border border-brand-cream">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-brand-textmuted mb-2">Affected Areas:</p>
+                    <ul class="text-sm text-brand-textmain space-y-1 list-disc pl-4 marker:text-brand-gold">
+                        <li>Customer booking portal</li>
+                        <li>Staff calendar views</li>
+                        <li>Automated reminders</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="px-8 py-5 border-t border-brand-cream flex justify-end space-x-3 bg-brand-ivory/30">
+                <button onclick="closeModal('disableModal')" class="px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                    Cancel
+                </button>
+                <button onclick="closeModal('disableModal')" class="px-6 py-2.5 bg-brand-rose text-white rounded-full hover:bg-red-600 transition shadow-sm text-sm font-medium flex items-center">
+                    Confirm Disable
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Modal Logic
+        function toggleCriticalModal(moduleName) {
+            const modal = document.getElementById('disableModal');
+            const content = document.getElementById('disableModalContent');
+            const title = document.getElementById('disableModalTitle');
+            
+            if (title) {
+                title.innerText = `Disable ${moduleName}?`;
+            }
+
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('opacity-100');
+                if(content) content.classList.replace('scale-95', 'scale-100');
+            }, 10);
+        }
+
+        function closeModal(modalID) {
+            const modal = document.getElementById(modalID);
+            const content = document.getElementById(modalID + 'Content');
+            
+            modal.classList.remove('opacity-100');
+            if(content) content.classList.replace('scale-100', 'scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('disableModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal('disableModal');
+        });
+
+        // Simple preview updater for interactivity demonstration
+        const previewData = {
+            'booking': {
+                icon: 'calendar-check',
+                color: 'text-brand-gold',
+                bg: 'bg-brand-gold/10',
+                title: 'Booking System',
+                desc: 'The core engine for scheduling. Allows clients to book online and staff to manage calendars.',
+                status: 'Active',
+                statusClass: 'bg-green-50 text-green-700 border-green-200',
+                features: [
+                    { icon: 'globe', title: 'Online Portal', desc: 'White-labeled customer booking page available 24/7.' },
+                    { icon: 'clock', title: 'Smart Scheduling', desc: 'Prevents double bookings and manages staff availability gaps automatically.' },
+                    { icon: 'bell-ring', title: 'Reminders', desc: 'Automated email and SMS reminders to reduce no-shows.' }
+                ]
+            },
+            'crm': {
+                icon: 'heart',
+                color: 'text-blue-500',
+                bg: 'bg-blue-50',
+                title: 'Customer CRM',
+                desc: 'Build lasting relationships with complete client histories and preferences.',
+                status: 'Active',
+                statusClass: 'bg-green-50 text-green-700 border-green-200',
+                features: [
+                    { icon: 'user', title: 'Rich Profiles', desc: 'Store intake forms, allergies, and treatment preferences.' },
+                    { icon: 'history', title: 'Visit History', desc: 'Track every past appointment, purchase, and assigned therapist.' },
+                    { icon: 'award', title: 'Loyalty Points', desc: 'Manage reward points to encourage repeat visits.' }
+                ]
+            },
+            'inventory': {
+                icon: 'package',
+                color: 'text-amber-600',
+                bg: 'bg-amber-50',
+                title: 'Inventory Management',
+                desc: 'Complete control over retail products and professional back-bar supplies.',
+                status: 'Premium',
+                statusClass: 'bg-brand-gold/10 text-brand-gold border-brand-gold/20',
+                features: [
+                    { icon: 'bar-chart-3', title: 'Stock Tracking', desc: 'Real-time tracking of product levels across multiple branches.' },
+                    { icon: 'shopping-cart', title: 'Purchase Orders', desc: 'Automate reordering when supplies run low.' },
+                    { icon: 'tag', title: 'Retail Sales', desc: 'Seamlessly add products to checkout invoices at the POS.' }
+                ]
+            }
+        };
+
+        function updatePreview(key) {
+            const data = previewData[key];
+            if(!data) return;
+
+            document.getElementById('previewStatus').className = `px-2.5 py-1 border rounded-full text-[10px] font-bold uppercase tracking-wider ${data.statusClass}`;
+            document.getElementById('previewStatus').innerText = data.status;
+
+            let html = `
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-brand-cream text-center mb-6">
+                    <div class="w-16 h-16 rounded-full ${data.bg} ${data.color} flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="${data.icon}" class="w-8 h-8"></i>
+                    </div>
+                    <h4 class="font-serif text-lg text-brand-textmain mb-2">${data.title}</h4>
+                    <p class="text-sm text-brand-textmuted">${data.desc}</p>
+                </div>
+                <div class="space-y-4">
+                    <h5 class="text-xs font-bold uppercase tracking-wider text-brand-textmain">Key Capabilities</h5>
+            `;
+
+            data.features.forEach(f => {
+                html += `
+                    <div class="bg-white p-4 rounded-xl border border-brand-cream shadow-sm flex items-start">
+                        <i data-lucide="${f.icon}" class="w-4 h-4 text-brand-gold mt-0.5 mr-3 shrink-0"></i>
+                        <div>
+                            <p class="text-sm font-medium text-brand-textmain">${f.title}</p>
+                            <p class="text-xs text-brand-textmuted mt-1">${f.desc}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            document.getElementById('previewContent').innerHTML = html;
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

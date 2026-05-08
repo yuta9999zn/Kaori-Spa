@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Import & Export | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Tabs styling */
+        .tab-btn {
+            @apply py-4 px-6 text-sm font-medium border-b-2 transition-colors duration-200 outline-none whitespace-nowrap;
+        }
+        .tab-btn.active {
+            @apply border-brand-gold text-brand-gold;
+        }
+        .tab-btn.inactive {
+            @apply border-transparent text-brand-textmuted hover:text-brand-textmain hover:bg-brand-cream/20;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm text-brand-gold;
+        }
+        .radio-card-input:checked + .radio-card-body .radio-card-icon {
+            @apply text-brand-gold opacity-100 scale-100;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Global search across platform..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Create Customer
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Database Admin</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1400px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Customers</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Import & Export</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6 mb-6 md:mb-0">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Customer Import / Export</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Bulk manage customer records. Import data from external CRMs or export segments for marketing and reporting.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                            <i data-lucide="file-down" class="w-4 h-4 mr-2"></i> Download Template
+                        </button>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-brand-ivory rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center" onclick="document.querySelectorAll('.tab-btn')[1].click()">
+                            <i data-lucide="upload" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Export Data
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="download" class="w-4 h-4 mr-2"></i> Start Import
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN TABS CONTAINER -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col min-h-[600px]">
+                    
+                    <!-- Tabs Navigation -->
+                    <div class="flex overflow-x-auto border-b border-brand-cream bg-brand-ivory/30 px-2 hide-scroll">
+                        <button class="tab-btn active" onclick="switchTab(this, 'tab-import')"><i data-lucide="download" class="w-4 h-4 inline mr-2 mb-0.5"></i> Import Customers</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-export')"><i data-lucide="upload" class="w-4 h-4 inline mr-2 mb-0.5"></i> Export Data</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-history')"><i data-lucide="history" class="w-4 h-4 inline mr-2 mb-0.5"></i> Import History</button>
+                    </div>
+
+                    <!-- TAB CONTENT: IMPORT -->
+                    <div id="tab-import" class="tab-content active p-6 md:p-8">
+                        
+                        <!-- Import Wizard Stepper -->
+                        <div class="flex items-center justify-between max-w-3xl mx-auto mb-12 relative">
+                            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-0.5 bg-brand-cream -z-10"></div>
+                            <div class="absolute left-0 top-1/2 -translate-y-1/2 w-1/3 h-0.5 bg-brand-gold -z-10 transition-all"></div>
+
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center font-bold text-sm shadow-sm border-2 border-white"><i data-lucide="check" class="w-4 h-4"></i></div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-brand-textmain mt-2">Upload</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center font-bold text-sm shadow-sm border-2 border-white">2</div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-brand-gold mt-2">Map Fields</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-brand-ivory border-2 border-brand-cream text-brand-textmuted flex items-center justify-center font-bold text-sm">3</div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-brand-textmuted mt-2">Validate</span>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-brand-ivory border-2 border-brand-cream text-brand-textmuted flex items-center justify-center font-bold text-sm">4</div>
+                                <span class="text-[10px] font-bold uppercase tracking-wider text-brand-textmuted mt-2">Preview</span>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Upload (Mocked as completed) -->
+                        <div class="mb-8 p-4 bg-brand-ivory/50 rounded-2xl border border-brand-cream flex justify-between items-center opacity-70">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 rounded-lg bg-white border border-brand-cream flex items-center justify-center text-green-500 mr-4 shadow-sm">
+                                    <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">vip_customers_2026.csv</p>
+                                    <p class="text-[10px] text-brand-textmuted">Uploaded on Mar 09, 2026 • 24.5 KB • 320 Rows Detected</p>
+                                </div>
+                            </div>
+                            <button class="text-xs font-medium text-brand-textmuted hover:text-brand-gold transition underline underline-offset-2">Replace File</button>
+                        </div>
+
+                        <!-- Step 2 & 3: Mapping & Validation (Active State) -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            
+                            <!-- Column Mapping -->
+                            <div class="bg-white border border-brand-cream rounded-2xl p-6 shadow-sm">
+                                <div class="flex justify-between items-end mb-4 border-b border-brand-cream/50 pb-3">
+                                    <div>
+                                        <h4 class="font-serif text-lg text-brand-textmain">Field Mapping</h4>
+                                        <p class="text-[10px] text-brand-textmuted mt-0.5">Map your CSV columns to Lotus Spa fields.</p>
+                                    </div>
+                                    <button class="text-xs text-brand-gold font-medium hover:text-brand-goldhover">Auto-Map Fields</button>
+                                </div>
+
+                                <div class="space-y-3">
+                                    <div class="grid grid-cols-12 gap-3 items-center text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted px-2">
+                                        <div class="col-span-5">CSV Column</div>
+                                        <div class="col-span-2 text-center"></div>
+                                        <div class="col-span-5">System Field</div>
+                                    </div>
+
+                                    <!-- Mapping Row 1 -->
+                                    <div class="grid grid-cols-12 gap-3 items-center bg-brand-ivory/50 p-2 rounded-lg border border-brand-cream">
+                                        <div class="col-span-5 text-sm font-mono text-brand-textmain truncate" title="first_name">first_name</div>
+                                        <div class="col-span-2 flex justify-center text-brand-gold"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                                        <div class="col-span-5">
+                                            <select class="spa-input py-1.5 text-xs px-2 shadow-none border-brand-gold bg-brand-gold/5">
+                                                <option selected>First Name (Req)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mapping Row 2 -->
+                                    <div class="grid grid-cols-12 gap-3 items-center bg-brand-ivory/50 p-2 rounded-lg border border-brand-cream">
+                                        <div class="col-span-5 text-sm font-mono text-brand-textmain truncate" title="last_name">last_name</div>
+                                        <div class="col-span-2 flex justify-center text-brand-gold"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                                        <div class="col-span-5">
+                                            <select class="spa-input py-1.5 text-xs px-2 shadow-none border-brand-gold bg-brand-gold/5">
+                                                <option selected>Last Name (Req)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mapping Row 3 -->
+                                    <div class="grid grid-cols-12 gap-3 items-center bg-brand-ivory/50 p-2 rounded-lg border border-brand-cream">
+                                        <div class="col-span-5 text-sm font-mono text-brand-textmain truncate" title="cell_phone">cell_phone</div>
+                                        <div class="col-span-2 flex justify-center text-brand-gold"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                                        <div class="col-span-5">
+                                            <select class="spa-input py-1.5 text-xs px-2 shadow-none border-brand-gold bg-brand-gold/5">
+                                                <option selected>Phone Number (Req)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Mapping Row 4 (Unmapped/Optional) -->
+                                    <div class="grid grid-cols-12 gap-3 items-center p-2 rounded-lg border border-transparent hover:border-brand-cream transition">
+                                        <div class="col-span-5 text-sm font-mono text-brand-textmain truncate" title="email_address">email_address</div>
+                                        <div class="col-span-2 flex justify-center text-brand-textmuted"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                                        <div class="col-span-5">
+                                            <select class="spa-input py-1.5 text-xs px-2 shadow-none">
+                                                <option value="" disabled selected>Select field...</option>
+                                                <option value="email">Email</option>
+                                                <option value="address">Address</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Mapping Row 5 (Unmapped/Optional) -->
+                                    <div class="grid grid-cols-12 gap-3 items-center p-2 rounded-lg border border-transparent hover:border-brand-cream transition">
+                                        <div class="col-span-5 text-sm font-mono text-brand-textmain truncate" title="tier">tier</div>
+                                        <div class="col-span-2 flex justify-center text-brand-textmuted"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                                        <div class="col-span-5">
+                                            <select class="spa-input py-1.5 text-xs px-2 shadow-none">
+                                                <option value="" disabled selected>Select field...</option>
+                                                <option value="membership">Membership Level</option>
+                                                <option value="tag">Tags</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Validation Results -->
+                            <div class="bg-white border border-brand-cream rounded-2xl p-6 shadow-sm flex flex-col">
+                                <div class="flex justify-between items-end mb-4 border-b border-brand-cream/50 pb-3">
+                                    <div>
+                                        <h4 class="font-serif text-lg text-brand-textmain">Validation Preview</h4>
+                                        <p class="text-[10px] text-brand-textmuted mt-0.5">Checking mapped fields for formatting and duplicates.</p>
+                                    </div>
+                                    <span class="inline-flex items-center px-2 py-0.5 bg-amber-50 text-amber-700 text-[10px] font-bold uppercase tracking-wider rounded border border-amber-200">
+                                        3 Issues Found
+                                    </span>
+                                </div>
+
+                                <div class="flex-1 overflow-y-auto custom-scrollbar pr-2 space-y-3">
+                                    <!-- Validation Error 1 -->
+                                    <div class="bg-red-50/50 border border-red-100 rounded-xl p-3 flex items-start">
+                                        <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mr-2 mt-0.5 shrink-0"></i>
+                                        <div>
+                                            <p class="text-xs font-bold text-red-700">Row 14: Missing Required Field</p>
+                                            <p class="text-[10px] text-red-600 mt-0.5">Column 'first_name' is empty. Record will be skipped.</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Validation Error 2 -->
+                                    <div class="bg-amber-50/50 border border-amber-100 rounded-xl p-3 flex items-start">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500 mr-2 mt-0.5 shrink-0"></i>
+                                        <div>
+                                            <p class="text-xs font-bold text-amber-700">Row 82: Duplicate Phone Number</p>
+                                            <p class="text-[10px] text-amber-600 mt-0.5">+84 912 345 678 matches existing profile 'John Doe'. Record will update existing.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Validation Error 3 -->
+                                    <div class="bg-red-50/50 border border-red-100 rounded-xl p-3 flex items-start">
+                                        <i data-lucide="alert-circle" class="w-4 h-4 text-red-500 mr-2 mt-0.5 shrink-0"></i>
+                                        <div>
+                                            <p class="text-xs font-bold text-red-700">Row 310: Invalid Phone Format</p>
+                                            <p class="text-[10px] text-red-600 mt-0.5">Value 'unknown' cannot be mapped to Phone Number. Record will be skipped.</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 bg-brand-ivory rounded-xl border border-brand-cream text-center mt-auto">
+                                        <p class="text-xs text-brand-textmain font-medium">317 records ready for import.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Import Actions -->
+                        <div class="mt-8 pt-6 border-t border-brand-cream flex justify-end space-x-4">
+                            <button class="px-6 py-3 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-xl text-sm font-medium transition shadow-sm">Cancel Import</button>
+                            <button class="px-8 py-3 bg-brand-gold text-white rounded-xl hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                                Proceed to Final Preview <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- TAB CONTENT: EXPORT -->
+                    <div id="tab-export" class="tab-content">
+                        <div class="p-6 md:p-8 flex flex-col lg:flex-row gap-8">
+                            
+                            <!-- Export Configuration -->
+                            <div class="w-full lg:w-1/3 space-y-6 border-r border-brand-cream/50 pr-0 lg:pr-8">
+                                <div>
+                                    <h3 class="font-serif text-xl text-brand-textmain mb-1">Export Setup</h3>
+                                    <p class="text-xs text-brand-textmuted mb-6">Filter the dataset you wish to download.</p>
+                                </div>
+                                
+                                <div>
+                                    <label class="spa-label">Date Range (Registration)</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                        <option value="all">All Time</option>
+                                        <option value="30d">Last 30 Days</option>
+                                        <option value="12m" selected>Last 12 Months</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="spa-label">Customer Segment</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                        <option value="all">All Customers</option>
+                                        <option value="vip" selected>VIP Customers Only</option>
+                                        <option value="inactive">Inactive (>90 days)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="spa-label">File Format</label>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <label class="relative cursor-pointer group block">
+                                            <input type="radio" name="export_format" class="peer sr-only radio-card-input" checked>
+                                            <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold">
+                                                <span class="text-xs font-bold text-brand-textmain">CSV File</span>
+                                            </div>
+                                        </label>
+                                        <label class="relative cursor-pointer group block">
+                                            <input type="radio" name="export_format" class="peer sr-only radio-card-input">
+                                            <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold">
+                                                <span class="text-xs font-bold text-brand-textmain">Excel (XLSX)</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="pt-4">
+                                    <button class="w-full py-3 bg-brand-gold text-white rounded-xl hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                                        <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Data
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Export Preview -->
+                            <div class="w-full lg:w-2/3 flex flex-col">
+                                <div class="flex justify-between items-end mb-4">
+                                    <div>
+                                        <h4 class="font-serif text-lg text-brand-textmain">Data Preview</h4>
+                                        <p class="text-[10px] text-brand-textmuted mt-0.5">Sample of the 120 records matching your filters.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="overflow-x-auto border border-brand-cream rounded-2xl flex-1 max-h-[400px]">
+                                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                                        <thead>
+                                            <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/50 border-b border-brand-cream sticky top-0 z-10">
+                                                <th class="py-3 px-4 font-semibold">Customer Name</th>
+                                                <th class="py-3 px-4 font-semibold">Phone</th>
+                                                <th class="py-3 px-4 font-semibold">Email</th>
+                                                <th class="py-3 px-4 font-semibold text-center">Total Visits</th>
+                                                <th class="py-3 px-4 font-semibold text-right">Total Spending</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                            <tr class="hover:bg-brand-ivory/30 transition">
+                                                <td class="py-3 px-4 font-medium">John Doe</td>
+                                                <td class="py-3 px-4 font-mono text-xs">+84 912 345 678</td>
+                                                <td class="py-3 px-4 text-xs text-brand-textmuted">john@example.com</td>
+                                                <td class="py-3 px-4 text-center font-mono">24</td>
+                                                <td class="py-3 px-4 text-right font-serif">$3,450</td>
+                                            </tr>
+                                            <tr class="hover:bg-brand-ivory/30 transition">
+                                                <td class="py-3 px-4 font-medium">Emma Smith</td>
+                                                <td class="py-3 px-4 font-mono text-xs">+84 922 456 789</td>
+                                                <td class="py-3 px-4 text-xs text-brand-textmuted">emma@example.com</td>
+                                                <td class="py-3 px-4 text-center font-mono">18</td>
+                                                <td class="py-3 px-4 text-right font-serif">$2,820</td>
+                                            </tr>
+                                            <tr class="hover:bg-brand-ivory/30 transition">
+                                                <td class="py-3 px-4 font-medium">Alice Vance</td>
+                                                <td class="py-3 px-4 font-mono text-xs">+84 911 222 333</td>
+                                                <td class="py-3 px-4 text-xs text-brand-textmuted">alice@example.com</td>
+                                                <td class="py-3 px-4 text-center font-mono">12</td>
+                                                <td class="py-3 px-4 text-right font-serif">$1,840</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB CONTENT: HISTORY -->
+                    <div id="tab-history" class="tab-content">
+                        <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center bg-white">
+                            <h3 class="font-serif text-xl text-brand-textmain">Previous Import Jobs</h3>
+                            <button class="p-2 text-brand-textmuted hover:text-brand-gold bg-brand-ivory rounded-xl border border-brand-cream shadow-sm transition" title="Refresh">
+                                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+
+                        <div class="overflow-x-auto min-h-[400px]">
+                            <table class="w-full text-left border-collapse min-w-[1200px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/20 border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold">Import ID</th>
+                                        <th class="py-4 px-4 font-semibold">Date & Time</th>
+                                        <th class="py-4 px-4 font-semibold">File Name</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Processed</th>
+                                        <th class="py-4 px-4 font-semibold text-center text-green-600">Created</th>
+                                        <th class="py-4 px-4 font-semibold text-center text-blue-600">Updated</th>
+                                        <th class="py-4 px-4 font-semibold text-center text-red-600">Errors</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Status</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                    
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6 font-mono text-xs text-brand-textmuted">IMP-1043</td>
+                                        <td class="py-4 px-4 font-mono text-xs">Mar 01, 2026 14:20</td>
+                                        <td class="py-4 px-4 font-medium flex items-center"><i data-lucide="file-spreadsheet" class="w-3 h-3 mr-1.5 text-green-500"></i> q1_customers.csv</td>
+                                        <td class="py-4 px-4 text-center font-bold text-brand-textmain">320</td>
+                                        <td class="py-4 px-4 text-center text-green-600 font-medium">300</td>
+                                        <td class="py-4 px-4 text-center text-blue-600 font-medium">10</td>
+                                        <td class="py-4 px-4 text-center text-red-600 font-medium">10</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right">
+                                            <button class="text-xs text-red-500 hover:text-red-700 hover:underline transition mr-3">Error Log</button>
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-gold transition">Details</button>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6 font-mono text-xs text-brand-textmuted">IMP-1042</td>
+                                        <td class="py-4 px-4 font-mono text-xs">Feb 15, 2026 09:00</td>
+                                        <td class="py-4 px-4 font-medium flex items-center"><i data-lucide="file-spreadsheet" class="w-3 h-3 mr-1.5 text-green-500"></i> legacy_crm_dump.xlsx</td>
+                                        <td class="py-4 px-4 text-center font-bold text-brand-textmain">1,250</td>
+                                        <td class="py-4 px-4 text-center text-green-600 font-medium">1,250</td>
+                                        <td class="py-4 px-4 text-center text-blue-600 font-medium">0</td>
+                                        <td class="py-4 px-4 text-center text-gray-400 font-medium">0</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                                Completed
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right">
+                                            <button class="text-xs text-brand-textmuted hover:text-brand-gold transition">Details</button>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Simple Tab Switching Logic
+        function switchTab(btn, tabId) {
+            // Remove active classes from all buttons
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('inactive');
+            });
+            // Add active class to clicked button
+            btn.classList.remove('inactive');
+            btn.classList.add('active');
+
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+            });
+            // Show targeted tab content
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kh-danhsach' });</script>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Slot Management | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.5rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1.25rem);
+        }
+
+        /* Preview Slot Pills */
+        .preview-slot {
+            @apply py-2 px-1 border border-brand-cream rounded-lg text-xs font-medium text-center transition-colors;
+        }
+        .preview-slot.available {
+            @apply bg-white text-brand-textmain hover:border-brand-gold cursor-pointer;
+        }
+        .preview-slot.unavailable {
+            @apply bg-gray-50 text-brand-textmuted/50 border-dashed border-brand-cream/50 cursor-not-allowed;
+        }
+        .preview-slot.break {
+            @apply bg-brand-rose/5 text-brand-rose border-brand-rose/20 cursor-not-allowed;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search configuration settings..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Time Slot Management</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Time Slot Management</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Configure how booking time slots are generated based on operating hours, service durations, and staff schedules.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-4 mt-6 md:mt-0 relative z-10">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm flex items-center justify-between">
+                                <span class="flex items-center"><i data-lucide="store" class="w-4 h-4 mr-2 text-brand-gold"></i> District 1 Spa</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 ml-3 text-brand-textmuted"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-full min-w-[200px] bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="block px-4 py-2.5 text-sm font-medium bg-brand-gold/5 text-brand-gold transition">District 1 Spa</a>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">Westside Retreat</a>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">Ocean View Clinic</a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                            Reset to Default
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN CONFIGURATION GRID -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT COLUMN: CONFIGURATION PANELS (Col Span 2) -->
+                    <div class="lg:col-span-2 space-y-8">
+                        
+                        <!-- 1. Base Slot Configuration -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-4 flex items-center border-b border-brand-cream/50 pb-3">
+                                <i data-lucide="settings" class="w-5 h-5 mr-3 text-brand-gold"></i> Base Configuration
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="spa-label">Slot Duration</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="15">15 Minutes</option>
+                                        <option value="30">30 Minutes</option>
+                                        <option value="60" selected>60 Minutes</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Slot Interval (Start Times)</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="15" selected>Every 15 Minutes</option>
+                                        <option value="30">Every 30 Minutes</option>
+                                        <option value="60">Every 60 Minutes</option>
+                                    </select>
+                                    <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1">E.g. 09:00, 09:15, 09:30</p>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Max Concurrent Bookings</label>
+                                    <input type="number" class="spa-input font-medium" placeholder="Unlimited" value="5">
+                                    <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1">Limit total active appointments per slot.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Operating Hours -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center justify-between mb-4 border-b border-brand-cream/50 pb-3">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="clock" class="w-5 h-5 mr-3 text-brand-gold"></i> Branch Operating Hours
+                                </h3>
+                                <span class="text-xs text-brand-gold font-medium bg-brand-gold/10 px-2 py-1 rounded">District 1 Spa</span>
+                            </div>
+                            
+                            <div class="space-y-3">
+                                <!-- Headers -->
+                                <div class="grid grid-cols-12 gap-4 text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2 px-4">
+                                    <div class="col-span-3">Day</div>
+                                    <div class="col-span-3 text-center">Status</div>
+                                    <div class="col-span-3">Open Time</div>
+                                    <div class="col-span-3">Close Time</div>
+                                </div>
+
+                                <!-- Monday -->
+                                <div class="grid grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3">
+                                    <div class="col-span-3 font-medium text-brand-textmain text-sm">Monday</div>
+                                    <div class="col-span-3 flex justify-center">
+                                        <div class="relative inline-block w-10 align-middle select-none">
+                                            <input type="checkbox" id="tgl-mon" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-mon" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs" value="09:00"></div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs" value="20:00"></div>
+                                </div>
+
+                                <!-- Tuesday -->
+                                <div class="grid grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3">
+                                    <div class="col-span-3 font-medium text-brand-textmain text-sm">Tuesday</div>
+                                    <div class="col-span-3 flex justify-center">
+                                        <div class="relative inline-block w-10 align-middle select-none">
+                                            <input type="checkbox" id="tgl-tue" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-tue" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs" value="09:00"></div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs" value="20:00"></div>
+                                </div>
+
+                                <!-- Wednesday -->
+                                <div class="grid grid-cols-12 gap-4 items-center bg-brand-ivory/50 border border-brand-cream rounded-xl p-3">
+                                    <div class="col-span-3 font-medium text-brand-textmain text-sm">Wednesday</div>
+                                    <div class="col-span-3 flex justify-center">
+                                        <div class="relative inline-block w-10 align-middle select-none">
+                                            <input type="checkbox" id="tgl-wed" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                            <label for="tgl-wed" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs" value="09:00"></div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs" value="20:00"></div>
+                                </div>
+
+                                <!-- Sunday (Closed Example) -->
+                                <div class="grid grid-cols-12 gap-4 items-center bg-white border border-brand-cream/50 rounded-xl p-3 opacity-60">
+                                    <div class="col-span-3 font-medium text-brand-textmain text-sm">Sunday</div>
+                                    <div class="col-span-3 flex justify-center">
+                                        <div class="relative inline-block w-10 align-middle select-none">
+                                            <input type="checkbox" id="tgl-sun" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                                            <label for="tgl-sun" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                            <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs opacity-50" disabled></div>
+                                    <div class="col-span-3"><input type="time" class="spa-input py-2 px-3 text-xs opacity-50" disabled></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Break Times & Exceptions -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <!-- Breaks -->
+                            <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60">
+                                <div class="flex items-center justify-between mb-4 border-b border-brand-cream/50 pb-3">
+                                    <h3 class="font-serif text-lg text-brand-textmain flex items-center">
+                                        <i data-lucide="coffee" class="w-4 h-4 mr-2 text-brand-gold"></i> Daily Breaks
+                                    </h3>
+                                    <button class="p-1 text-brand-gold hover:bg-brand-ivory rounded transition"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Staff Lunch Rotation</p>
+                                            <p class="text-xs font-mono text-brand-textmuted mt-0.5">12:00 - 13:00</p>
+                                        </div>
+                                        <button class="text-brand-textmuted hover:text-brand-rose transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    </div>
+                                    <div class="bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">System Maintenance</p>
+                                            <p class="text-xs font-mono text-brand-textmuted mt-0.5">16:00 - 16:15</p>
+                                        </div>
+                                        <button class="text-brand-textmuted hover:text-brand-rose transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Exceptions -->
+                            <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60">
+                                <div class="flex items-center justify-between mb-4 border-b border-brand-cream/50 pb-3">
+                                    <h3 class="font-serif text-lg text-brand-textmain flex items-center">
+                                        <i data-lucide="calendar-off" class="w-4 h-4 mr-2 text-brand-gold"></i> Exceptions
+                                    </h3>
+                                    <button class="p-1 text-brand-gold hover:bg-brand-ivory rounded transition"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                                </div>
+                                <div class="space-y-3">
+                                    <div class="bg-brand-ivory/50 border border-brand-cream rounded-xl p-3 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm font-medium text-brand-textmain">Public Holiday</p>
+                                            <p class="text-xs font-mono text-brand-textmuted mt-0.5">Mar 15 (All Day)</p>
+                                        </div>
+                                        <button class="text-brand-textmuted hover:text-brand-rose transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Staff Shifts & Room Availability -->
+                        <div class="bg-white rounded-3xl p-6 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center justify-between mb-6 border-b border-brand-cream/50 pb-4">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="users" class="w-5 h-5 mr-3 text-brand-gold"></i> Staff Shift Allocation
+                                </h3>
+                                <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center border border-brand-gold/30 px-3 py-1.5 rounded-lg bg-brand-gold/5">
+                                    Manage Shifts <i data-lucide="external-link" class="w-3 h-3 ml-1.5"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="overflow-x-auto border border-brand-cream rounded-2xl">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/50 border-b border-brand-cream">
+                                            <th class="py-3 px-5 font-semibold">Staff Name</th>
+                                            <th class="py-3 px-5 font-semibold text-center">Shift Start</th>
+                                            <th class="py-3 px-5 font-semibold text-center">Shift End</th>
+                                            <th class="py-3 px-5 font-semibold text-center">Break Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm text-brand-textmain divide-y divide-brand-cream/50">
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-3 px-5 font-medium flex items-center">
+                                                <div class="w-6 h-6 rounded-full bg-brand-cream flex items-center justify-center text-[10px] font-serif mr-2">AN</div>
+                                                Anna Nguyen
+                                            </td>
+                                            <td class="py-3 px-5 text-center font-mono">09:00</td>
+                                            <td class="py-3 px-5 text-center font-mono">17:00</td>
+                                            <td class="py-3 px-5 text-center font-mono text-brand-textmuted">12:00 - 13:00</td>
+                                        </tr>
+                                        <tr class="hover:bg-brand-ivory/30 transition">
+                                            <td class="py-3 px-5 font-medium flex items-center">
+                                                <div class="w-6 h-6 rounded-full bg-brand-cream flex items-center justify-center text-[10px] font-serif mr-2">ER</div>
+                                                Elena Rodriguez
+                                            </td>
+                                            <td class="py-3 px-5 text-center font-mono">10:00</td>
+                                            <td class="py-3 px-5 text-center font-mono">18:00</td>
+                                            <td class="py-3 px-5 text-center font-mono text-brand-textmuted">13:00 - 14:00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: SLOT PREVIEW (Sticky) -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white rounded-3xl p-6 shadow-premium border border-brand-gold/30 sticky top-28 flex flex-col h-[calc(100vh-140px)]">
+                            
+                            <div class="flex items-center justify-between mb-4 border-b border-brand-cream/50 pb-3">
+                                <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                    <i data-lucide="eye" class="w-5 h-5 mr-2 text-brand-gold"></i> Slot Preview
+                                </h3>
+                            </div>
+
+                            <p class="text-xs text-brand-textmuted mb-4 leading-relaxed">This is a live preview of how booking slots will be generated based on the current configuration.</p>
+
+                            <!-- Mini Date Picker for Preview -->
+                            <div class="bg-brand-ivory/50 rounded-xl border border-brand-cream p-3 mb-6 flex justify-between items-center shadow-inner-soft">
+                                <button class="p-1 hover:text-brand-gold transition"><i data-lucide="chevron-left" class="w-4 h-4 text-brand-textmuted"></i></button>
+                                <span class="text-sm font-medium text-brand-textmain">Monday, Mar 9</span>
+                                <button class="p-1 hover:text-brand-gold transition"><i data-lucide="chevron-right" class="w-4 h-4 text-brand-textmuted"></i></button>
+                            </div>
+
+                            <!-- Legend -->
+                            <div class="flex space-x-4 mb-4 text-[10px] uppercase tracking-wider font-semibold text-brand-textmuted justify-center">
+                                <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-white border border-brand-cream mr-1.5"></span> Available</span>
+                                <span class="flex items-center"><span class="w-2.5 h-2.5 rounded bg-brand-rose/10 border border-brand-rose/20 mr-1.5"></span> Break</span>
+                            </div>
+
+                            <!-- Generated Slots Grid -->
+                            <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+                                <div class="grid grid-cols-3 gap-2">
+                                    <!-- 09:00 Block -->
+                                    <div class="preview-slot available">09:00</div>
+                                    <div class="preview-slot available">09:15</div>
+                                    <div class="preview-slot available">09:30</div>
+                                    <div class="preview-slot available">09:45</div>
+                                    
+                                    <!-- 10:00 Block -->
+                                    <div class="preview-slot available">10:00</div>
+                                    <div class="preview-slot available">10:15</div>
+                                    <div class="preview-slot available">10:30</div>
+                                    <div class="preview-slot available">10:45</div>
+
+                                    <!-- 11:00 Block -->
+                                    <div class="preview-slot available">11:00</div>
+                                    <div class="preview-slot available">11:15</div>
+                                    <div class="preview-slot available">11:30</div>
+                                    <div class="preview-slot available">11:45</div>
+
+                                    <!-- 12:00 Block (Lunch Break for most) -->
+                                    <div class="preview-slot break" title="Staff Lunch Rotation">12:00</div>
+                                    <div class="preview-slot break" title="Staff Lunch Rotation">12:15</div>
+                                    <div class="preview-slot break" title="Staff Lunch Rotation">12:30</div>
+                                    <div class="preview-slot break" title="Staff Lunch Rotation">12:45</div>
+
+                                    <!-- 13:00 Block -->
+                                    <div class="preview-slot available">13:00</div>
+                                    <div class="preview-slot available">13:15</div>
+                                    <div class="preview-slot available">13:30</div>
+                                    <div class="preview-slot available">13:45</div>
+                                    
+                                    <!-- 14:00 Block -->
+                                    <div class="preview-slot available">14:00</div>
+                                    <div class="preview-slot available">14:15</div>
+                                    <div class="preview-slot available">14:30</div>
+                                    <div class="preview-slot available">14:45</div>
+
+                                    <!-- 15:00 Block -->
+                                    <div class="preview-slot available">15:00</div>
+                                    <div class="preview-slot available">15:15</div>
+                                    <div class="preview-slot available">15:30</div>
+                                    <div class="preview-slot available">15:45</div>
+
+                                    <!-- 16:00 Block (Maintenance Break) -->
+                                    <div class="preview-slot break" title="System Maintenance">16:00</div>
+                                    <div class="preview-slot available">16:15</div>
+                                    <div class="preview-slot available">16:30</div>
+                                    <div class="preview-slot available">16:45</div>
+
+                                    <!-- 17:00 Block -->
+                                    <div class="preview-slot available">17:00</div>
+                                    <div class="preview-slot available">17:15</div>
+                                    <div class="preview-slot available">17:30</div>
+                                    <div class="preview-slot available">17:45</div>
+                                    
+                                    <!-- 18:00+ (Outside branch hours) -->
+                                    <div class="preview-slot unavailable">18:00</div>
+                                    <div class="preview-slot unavailable">18:15</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'khung-gio' });</script>
+</body>
+</html>

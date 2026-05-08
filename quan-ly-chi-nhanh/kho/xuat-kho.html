@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Xuat Kho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .form-label{font-size:12px;color:#8B837C;margin-bottom:5px;display:block}
+        .form-input{width:100%;border:1px solid #F4EFEA;border-radius:12px;padding:10px 14px;font-size:13px;background:#FAF9F6;outline:none;transition:border .15s}
+        .form-input:focus{border-color:#C9A87C}
+        .row-item{background:#FAF9F6;border-radius:14px;padding:14px 16px;border:1px solid #F4EFEA;transition:all .15s}
+        .row-item:hover{border-color:#D9B8B5}
+        .stock-ok{color:#16a34a}
+        .stock-low{color:#ea580c}
+        .stock-out{color:#dc2626}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <a href="index.html" class="text-brand-textmuted hover:text-brand-gold transition">
+            <i data-lucide="arrow-left" class="w-4 h-4" stroke-width="1.5"></i>
+        </a>
+        <i data-lucide="package-minus" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Xuat Kho / Su Dung Vat Tu</h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <button onclick="saveDraft()" class="border border-brand-cream text-brand-textmuted px-4 py-2 rounded-full text-sm hover:border-brand-gold hover:text-brand-gold transition">
+            Luu nhap
+        </button>
+        <button onclick="submitForm()"
+            class="bg-brand-gold hover:bg-brand-goldhover text-white px-5 py-2 rounded-full text-sm font-medium transition flex items-center gap-2">
+            <i data-lucide="check" class="w-4 h-4"></i> Xac nhan xuat kho
+        </button>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-5xl mx-auto p-8 grid grid-cols-3 gap-6">
+
+    <!-- Main form -->
+    <div class="col-span-2 flex flex-col gap-5">
+
+        <!-- Context info -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <p class="font-medium text-sm mb-4 flex items-center gap-2">
+                <i data-lucide="link" class="w-4 h-4 text-brand-gold"></i> Lien ket lieu trinh / Phieu xuat
+            </p>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="form-label">Loai phieu xuat *</label>
+                    <select class="form-input" id="reason-type" onchange="onReasonChange(this.value)">
+                        <option value="service">Phuc vu dich vu / Booking</option>
+                        <option value="training">Dao tao nhan vien</option>
+                        <option value="waste">Xu ly hang hong / het han</option>
+                        <option value="transfer">Chuyen chi nhanh</option>
+                        <option value="other">Khac</option>
+                    </select>
+                </div>
+                <div id="booking-field">
+                    <label class="form-label">Ma booking (neu co)</label>
+                    <select class="form-input" id="booking-ref" onchange="onBookingSelect(this.value)">
+                        <option value="">-- Khong gan booking --</option>
+                        <option value="BK-2401-0883">BK-2401-0883 • Pham Thu Huong • Lava Shell</option>
+                        <option value="BK-2401-0882">BK-2401-0882 • Tran Minh Tuan • Deep Tissue</option>
+                        <option value="BK-2401-0880">BK-2401-0880 • Nguyen Thi Hoa • Swedish Massage</option>
+                        <option value="BK-2401-0881">BK-2401-0881 • Le Thu Ha • HydraFacial</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Nhan vien su dung *</label>
+                    <select class="form-input" id="staff-ref">
+                        <option>Minh Phuong (Therapist)</option>
+                        <option>Thu Hien (Esthetician)</option>
+                        <option>Duc Anh (Therapist)</option>
+                        <option>Lan Huong (Therapist)</option>
+                        <option>Nam Quan (Therapist)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Ngay xuat kho *</label>
+                    <input type="date" class="form-input" id="issue-date" value="2026-04-14">
+                </div>
+                <div class="col-span-2">
+                    <label class="form-label">Ghi chu</label>
+                    <input type="text" class="form-input" id="issue-note" placeholder="Mo ta them ve ly do xuat kho...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Items -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <p class="font-medium text-sm flex items-center gap-2">
+                    <i data-lucide="list" class="w-4 h-4 text-brand-gold"></i> Vat tu xuat kho
+                </p>
+                <button onclick="addRow()" class="text-sm text-brand-gold hover:underline flex items-center gap-1">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Them vat tu
+                </button>
+            </div>
+
+            <!-- Table header -->
+            <div class="grid grid-cols-12 gap-2 text-xs text-brand-textmuted font-medium px-1 mb-2">
+                <div class="col-span-5">San pham</div>
+                <div class="col-span-2 text-center">Ton kho</div>
+                <div class="col-span-2 text-center">So luong xuat</div>
+                <div class="col-span-2 text-center">DVT</div>
+                <div class="col-span-1"></div>
+            </div>
+
+            <div id="rows-container" class="flex flex-col gap-2"></div>
+
+            <div class="mt-4 pt-4 border-t border-brand-cream">
+                <p class="text-xs text-brand-textmuted">* He thong se tu dong tru so luong khoi ton kho sau khi xac nhan.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Stock status + Quick services -->
+    <div class="col-span-1 flex flex-col gap-5">
+
+        <!-- Linked booking detail -->
+        <div id="booking-detail" class="hidden bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="font-medium text-sm mb-3 flex items-center gap-2">
+                <i data-lucide="calendar-check" class="w-4 h-4 text-brand-gold"></i> Chi tiet booking
+            </p>
+            <div class="flex flex-col gap-2 text-xs" id="booking-detail-body"></div>
+        </div>
+
+        <!-- Stock summary -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="font-medium text-sm mb-3">Tom tat xuat</p>
+            <div class="flex flex-col gap-2.5">
+                <div class="flex justify-between text-sm">
+                    <span class="text-brand-textmuted">So loai vat tu</span>
+                    <span class="font-medium" id="sum-types">0</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-brand-textmuted">Tong so luong</span>
+                    <span class="font-medium" id="sum-qty">0</span>
+                </div>
+                <div class="border-t border-brand-cream pt-2.5 flex justify-between text-sm">
+                    <span class="text-brand-textmuted">Gia tri xuat</span>
+                    <span class="font-medium text-brand-gold" id="sum-value">0 ₫</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service templates -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="font-medium text-sm mb-3 flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4 text-brand-gold"></i> Mau vat tu theo dich vu
+            </p>
+            <div class="flex flex-col gap-2" id="service-templates">
+                <button onclick="applyTemplate('swedish')" class="text-left rounded-xl bg-brand-ivory hover:border-brand-gold border border-transparent px-3 py-2 text-xs transition">
+                    <p class="font-medium">Swedish Massage</p>
+                    <p class="text-brand-textmuted">Dau Rose 30ml, Khan Nho 2pc, Tinh Dau 5ml</p>
+                </button>
+                <button onclick="applyTemplate('hot-stone')" class="text-left rounded-xl bg-brand-ivory hover:border-brand-gold border border-transparent px-3 py-2 text-xs transition">
+                    <p class="font-medium">Hot Stone Massage</p>
+                    <p class="text-brand-textmuted">Da Nong 1 bo, Dau Massage Hot 50ml, Khan Nho 3pc</p>
+                </button>
+                <button onclick="applyTemplate('facial')" class="text-left rounded-xl bg-brand-ivory hover:border-brand-gold border border-transparent px-3 py-2 text-xs transition">
+                    <p class="font-medium">HydraFacial / Lava Shell</p>
+                    <p class="text-brand-textmuted">Kem Duong Collagen 20ml, Ong Hut 3pc, Muoi Tam 50g</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent issues -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="font-medium text-sm mb-3">Phieu xuat gan nhat</p>
+            <div class="flex flex-col gap-2">
+                <div class="rounded-xl bg-brand-ivory p-3">
+                    <p class="text-xs font-medium">XK-2401-0128</p>
+                    <p class="text-xs text-brand-textmuted">14/04 • Minh Phuong • Swedish Massage</p>
+                </div>
+                <div class="rounded-xl bg-brand-ivory p-3">
+                    <p class="text-xs font-medium">XK-2401-0127</p>
+                    <p class="text-xs text-brand-textmuted">14/04 • Thu Hien • HydraFacial</p>
+                </div>
+                <div class="rounded-xl bg-brand-ivory p-3">
+                    <p class="text-xs font-medium">XK-2401-0126</p>
+                    <p class="text-xs text-brand-textmuted">13/04 • Lan Huong • Hot Stone</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+
+<!-- Success toast -->
+<div id="toast" class="hidden fixed bottom-8 right-8 bg-white border border-green-200 shadow-lg rounded-2xl px-5 py-4 flex items-center gap-3 z-50">
+    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
+        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-green-700">Xuat kho thanh cong!</p>
+        <p class="text-xs text-brand-textmuted" id="toast-msg">—</p>
+    </div>
+</div>
+
+<script>
+const PRODUCTS = [
+    { id:'SP001', name:'Dau Massage Rose',      unit:'Chai', stock:6,   price:85000,  warn:10 },
+    { id:'SP002', name:'Ong Hut Sinh Hoc',      unit:'Hop',  stock:0,   price:12000,  warn:20 },
+    { id:'SP003', name:'Dau Massage Hot Stone',  unit:'Chai', stock:0,   price:95000,  warn:5  },
+    { id:'SP004', name:'Khan Nho',              unit:'Chiec',stock:0,   price:8000,   warn:50 },
+    { id:'SP005', name:'Tinh Dau Lavender',      unit:'Chai', stock:14,  price:120000, warn:8  },
+    { id:'SP006', name:'Muoi Tam Himalaya',      unit:'Tui',  stock:3,   price:45000,  warn:10 },
+    { id:'SP007', name:'Kem Duong Da Collagen',  unit:'Lop',  stock:2,   price:210000, warn:6  },
+    { id:'SP008', name:'Da Nong (Hot Stone)',    unit:'Bo',   stock:5,   price:350000, warn:3  },
+];
+
+const BOOKINGS = {
+    'BK-2401-0883': { customer:'Pham Thu Huong', service:'Lava Shell Facial', staff:'Lan Huong', time:'11:00', room:'Phong 04' },
+    'BK-2401-0882': { customer:'Tran Minh Tuan', service:'Deep Tissue Massage', staff:'Duc Anh', time:'10:00', room:'Phong 01' },
+    'BK-2401-0880': { customer:'Nguyen Thi Hoa', service:'Swedish Massage', staff:'Minh Phuong', time:'09:00', room:'Phong 03' },
+    'BK-2401-0881': { customer:'Le Thu Ha',       service:'HydraFacial', staff:'Thu Hien', time:'09:30', room:'Phong 05' },
+};
+
+const TEMPLATES = {
+    'swedish':   [{ productId:'SP001', qty:1 }, { productId:'SP004', qty:2 }, { productId:'SP005', qty:1 }],
+    'hot-stone': [{ productId:'SP008', qty:1 }, { productId:'SP003', qty:1 }, { productId:'SP004', qty:3 }],
+    'facial':    [{ productId:'SP007', qty:1 }, { productId:'SP002', qty:3 }, { productId:'SP006', qty:1 }],
+};
+
+let rows = [];
+let rowId = 0;
+
+function onReasonChange(val) {
+    document.getElementById('booking-field').style.display = val === 'service' ? '' : 'none';
+    if (val !== 'service') {
+        document.getElementById('booking-detail').classList.add('hidden');
+    }
+}
+
+function onBookingSelect(val) {
+    const panel = document.getElementById('booking-detail');
+    if (!val) { panel.classList.add('hidden'); return; }
+    const b = BOOKINGS[val];
+    if (!b) return;
+    panel.classList.remove('hidden');
+    document.getElementById('booking-detail-body').innerHTML = `
+        <div class="flex justify-between"><span class="text-brand-textmuted">Khach hang</span><span class="font-medium">${b.customer}</span></div>
+        <div class="flex justify-between"><span class="text-brand-textmuted">Dich vu</span><span class="font-medium">${b.service}</span></div>
+        <div class="flex justify-between"><span class="text-brand-textmuted">Nhan vien</span><span class="font-medium">${b.staff}</span></div>
+        <div class="flex justify-between"><span class="text-brand-textmuted">Gio hen</span><span class="font-medium">${b.time}</span></div>
+        <div class="flex justify-between"><span class="text-brand-textmuted">Phong</span><span class="font-medium">${b.room}</span></div>
+    `;
+    // Auto-fill staff
+    const staffSel = document.getElementById('staff-ref');
+    for (let i = 0; i < staffSel.options.length; i++) {
+        if (staffSel.options[i].text.startsWith(b.staff)) {
+            staffSel.selectedIndex = i; break;
+        }
+    }
+}
+
+function applyTemplate(key) {
+    const tmpl = TEMPLATES[key];
+    if (!tmpl) return;
+    rows = [];
+    rowId = 0;
+    tmpl.forEach(t => {
+        rowId++;
+        rows.push({ id: rowId, productId: t.productId, qty: t.qty });
+    });
+    renderRows();
+}
+
+function addRow() {
+    rowId++;
+    rows.push({ id: rowId, productId: '', qty: 1 });
+    renderRows();
+}
+
+function renderRows() {
+    const container = document.getElementById('rows-container');
+    if (rows.length === 0) {
+        container.innerHTML = `<div class="text-center py-8 text-brand-textmuted text-sm">
+            <i data-lucide="package" class="w-8 h-8 mx-auto mb-2 opacity-30"></i>
+            <p>Chua co vat tu nao. Chon mau theo dich vu hoac them thu cong.</p>
+        </div>`;
+        lucide.createIcons();
+        updateSummary();
+        return;
+    }
+    container.innerHTML = rows.map(row => {
+        const p = PRODUCTS.find(p => p.id === row.productId);
+        const stockClass = p ? (p.stock === 0 ? 'stock-out' : p.stock <= p.warn ? 'stock-low' : 'stock-ok') : '';
+        const stockLabel = p ? (p.stock === 0 ? 'Het kho' : p.stock + ' ' + p.unit) : '—';
+        const overStock = p && row.qty > p.stock;
+        return `<div class="row-item grid grid-cols-12 gap-2 items-center ${overStock?'border-red-200 bg-red-50/30':''}">
+            <div class="col-span-5">
+                <select class="form-input" onchange="updateRow(${row.id},'productId',this.value)">
+                    <option value="">-- Chon vat tu --</option>
+                    ${PRODUCTS.map(p2 => `<option value="${p2.id}" ${p2.id===row.productId?'selected':''}>${p2.name}</option>`).join('')}
+                </select>
+                ${overStock ? `<p class="text-xs text-red-500 mt-0.5 pl-1">Vuot qua ton kho (${p.stock} ${p.unit})</p>` : ''}
+            </div>
+            <div class="col-span-2 text-center text-xs font-medium ${stockClass}">${stockLabel}</div>
+            <div class="col-span-2">
+                <input type="number" min="1" class="form-input text-center ${overStock?'border-red-400':''}" value="${row.qty}" onchange="updateRow(${row.id},'qty',+this.value)">
+            </div>
+            <div class="col-span-2 text-center text-xs text-brand-textmuted">${p?p.unit:'—'}</div>
+            <div class="col-span-1 flex justify-end">
+                <button onclick="removeRow(${row.id})" class="p-1.5 rounded-lg hover:bg-red-50 text-brand-textmuted hover:text-red-500 transition">
+                    <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+            </div>
+        </div>`;
+    }).join('');
+    lucide.createIcons();
+    updateSummary();
+}
+
+function updateRow(id, field, value) {
+    const row = rows.find(r => r.id === id);
+    if (row) { row[field] = value; renderRows(); }
+}
+
+function removeRow(id) {
+    rows = rows.filter(r => r.id !== id);
+    renderRows();
+}
+
+function updateSummary() {
+    let totalQty = 0, totalVal = 0;
+    rows.forEach(r => {
+        const p = PRODUCTS.find(p2 => p2.id === r.productId);
+        totalQty += r.qty;
+        if (p) totalVal += r.qty * p.price;
+    });
+    document.getElementById('sum-types').textContent = rows.filter(r => r.productId).length;
+    document.getElementById('sum-qty').textContent = totalQty;
+    document.getElementById('sum-value').textContent = totalVal.toLocaleString('vi-VN') + ' ₫';
+}
+
+function saveDraft() {
+    showToast('Da luu nhap. Ban co the tiep tuc sau.');
+}
+
+function submitForm() {
+    const staffRef = document.getElementById('staff-ref').value;
+    const bookingRef = document.getElementById('booking-ref') ? document.getElementById('booking-ref').value : '';
+    const note = document.getElementById('issue-note').value || '';
+    const validRows = rows.filter(r => r.productId && r.qty > 0);
+    if (validRows.length === 0) { alert('Vui long them it nhat mot vat tu.'); return; }
+    const overAny = validRows.some(r => {
+        const p = PRODUCTS.find(p2 => p2.id === r.productId);
+        return p && r.qty > p.stock;
+    });
+    if (overAny) {
+        if (!confirm('Co vat tu vuot qua ton kho. Ban co chac chan muon xuat?')) return;
+    }
+    const totalVal = validRows.reduce((s, r) => {
+        const p = PRODUCTS.find(p2 => p2.id === r.productId);
+        return s + r.qty * (p ? p.price : 0);
+    }, 0);
+
+    // Persist inventory movements to AuraDB (localStorage)
+    validRows.forEach(r => {
+        const p = PRODUCTS.find(p2 => p2.id === r.productId);
+        AuraDB.addInventoryMove({
+            productId: p ? p.nbId : r.productId,
+            delta:     -r.qty,
+            type:      'xuat',
+            note:      staffRef + (bookingRef ? ' / ' + bookingRef : '') + (note ? ' / ' + note : ''),
+        });
+    });
+
+    showToast(`${validRows.length} vat tu • ${totalVal.toLocaleString('vi-VN')} ₫ da duoc ghi nhan.`);
+    setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.remove('hidden');
+    setTimeout(() => t.classList.add('hidden'), 4000);
+}
+
+renderRows();
+</script>
+
+<script src="../shared/data-store.js"></script>
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'xuat-kho' });</script>
+</body>
+</html>

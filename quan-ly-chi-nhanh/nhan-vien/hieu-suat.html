@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Performance Dashboard | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        
+        .progress-bar-striped {
+            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+            background-size: 1rem 1rem;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white relative">
+
+    <!-- Sticky Header -->
+    <header class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-brand-cream shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-6 md:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                <button class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold transition mr-4 shadow-sm">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <div class="hidden sm:block flex-1 bg-brand-ivory rounded-full px-4 py-2 border border-brand-cream/50 w-72 transition focus-within:border-brand-gold focus-within:bg-white ml-2">
+                    <div class="flex items-center">
+                        <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                        <input type="text" placeholder="Search analytics, staff, or KPIs..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="target" class="w-4 h-4 mr-2"></i> Set New KPI
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Report
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Branch Manager</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex-1 w-full flex pt-20 h-screen overflow-hidden max-w-[1600px] mx-auto">
+        
+<div id="sidebar-root"></div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 scroll-smooth">
+            <div class="max-w-7xl mx-auto pb-24 space-y-6">
+                
+                <!-- BREADCRUMBS & PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden shrink-0 mb-6">
+                    <div class="absolute right-0 top-0 w-80 h-full bg-gradient-to-l from-brand-gold/5 to-transparent pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6 mb-6 md:mb-0">
+                        <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2 mb-2">
+                            <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                            <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            <a href="#" class="hover:text-brand-gold transition">Staff</a>
+                            <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            <span class="text-brand-gold">Performance Dashboard</span>
+                        </div>
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Staff Performance</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Evaluate productivity, monitor revenue contributions, and track service quality across your team.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh
+                        </button>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Analytics
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GLOBAL FILTERS BAR -->
+                <div class="bg-white rounded-2xl shadow-sm border border-brand-cream/60 p-4 flex flex-wrap items-center gap-4 sticky top-0 z-30">
+                    <div class="flex items-center bg-brand-ivory border border-brand-cream rounded-lg p-1 shadow-inner-soft">
+                        <button class="px-4 py-1.5 rounded-md text-xs font-medium text-brand-textmuted hover:text-brand-textmain transition">Today</button>
+                        <button class="px-4 py-1.5 rounded-md text-xs font-medium text-brand-textmuted hover:text-brand-textmain transition">This Week</button>
+                        <button class="px-4 py-1.5 rounded-md text-xs font-medium bg-white shadow-sm text-brand-textmain">This Month</button>
+                    </div>
+                    
+                    <div class="h-6 w-px bg-brand-cream hidden md:block"></div>
+
+                    <select class="spa-input w-auto py-2 text-xs h-[36px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]">
+                        <option value="all">All Branches</option>
+                        <option value="d1" selected>District 1 Spa</option>
+                        <option value="d7">District 7 Spa</option>
+                    </select>
+
+                    <select class="spa-input w-auto py-2 text-xs h-[36px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]">
+                        <option value="all">All Roles</option>
+                        <option value="therapist" selected>Therapists</option>
+                        <option value="receptionist">Receptionists</option>
+                    </select>
+                    
+                    <div class="flex-1 min-w-[200px] relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-brand-textmuted"></i>
+                        <input type="text" placeholder="Search specific staff..." class="w-full bg-white border border-brand-cream rounded-lg pl-8 pr-4 py-2 text-xs outline-none focus:border-brand-gold transition-all shadow-sm">
+                    </div>
+                </div>
+
+                <!-- KPI SUMMARY CARDS -->
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center relative overflow-hidden group">
+                        <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-brand-gold/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Revenue</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">$45,000</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Bookings</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">420</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Avg Customer Rating</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain flex items-center">
+                            4.8 <i data-lucide="star" class="w-4 h-4 ml-1.5 fill-brand-gold text-brand-gold"></i>
+                        </h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Upsell Conversion</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain flex items-center">
+                            18% <span class="text-[10px] font-sans text-green-500 ml-2 bg-green-50 px-1.5 py-0.5 rounded border border-green-100"><i data-lucide="arrow-up" class="w-3 h-3 inline"></i> 2%</span>
+                        </h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-gold mb-1">Total Commission</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">$9,200</h3>
+                    </div>
+                </div>
+
+                <!-- CHARTS ROW -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Revenue Trend Chart -->
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-serif text-lg text-brand-textmain">Performance Trends</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Revenue and Booking volume over this month.</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-h-[250px] relative">
+                            <canvas id="revenueTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Distribution by Staff -->
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-serif text-lg text-brand-textmain">Revenue Distribution</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Top contributors to branch revenue.</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-h-[250px] relative">
+                            <canvas id="staffRevenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STAFF LEADERBOARD -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden">
+                    <div class="p-6 border-b border-brand-cream/50 bg-gradient-to-r from-brand-gold/10 to-transparent flex justify-between items-center">
+                        <div>
+                            <h3 class="font-serif text-xl text-brand-textmain flex items-center">
+                                <i data-lucide="award" class="w-5 h-5 mr-2 text-brand-gold"></i> Staff Leaderboard
+                            </h3>
+                            <p class="text-xs text-brand-textmuted mt-0.5">Ranked by total revenue generated this period.</p>
+                        </div>
+                        <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition bg-white border border-brand-cream px-3 py-1.5 rounded-lg shadow-sm">Full Report</button>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[1000px]">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/30 border-b border-brand-cream">
+                                    <th class="py-4 px-6 font-semibold w-16 text-center">Rank</th>
+                                    <th class="py-4 px-4 font-semibold">Staff Name</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Bookings</th>
+                                    <th class="py-4 px-4 font-semibold text-right text-brand-textmain">Revenue</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Avg Rating</th>
+                                    <th class="py-4 px-4 font-semibold text-right">Upsell Rev</th>
+                                    <th class="py-4 px-6 font-semibold text-right">Commission</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                
+                                <!-- Rank 1 -->
+                                <tr class="hover:bg-brand-ivory/30 transition bg-brand-gold/5">
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-yellow-300 to-yellow-500 text-white flex items-center justify-center font-bold text-sm mx-auto shadow-sm border border-yellow-200">
+                                            1
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-white border border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-sm mr-3 shadow-sm">AN</div>
+                                            <div>
+                                                <p class="font-serif text-base font-medium text-brand-textmain">Anna Nguyen</p>
+                                                <p class="text-[10px] text-brand-textmuted">Senior Therapist</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono">98</td>
+                                    <td class="py-4 px-4 text-right font-serif text-lg font-semibold text-brand-textmain">$12,400</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="inline-flex items-center text-sm font-semibold">
+                                            4.9 <i data-lucide="star" class="w-3.5 h-3.5 ml-1 text-brand-gold fill-brand-gold"></i>
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-right font-mono text-brand-textmuted">$1,200</td>
+                                    <td class="py-4 px-6 text-right font-serif font-medium text-brand-gold">$2,480</td>
+                                </tr>
+
+                                <!-- Rank 2 -->
+                                <tr class="hover:bg-brand-ivory/30 transition">
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-gray-200 to-gray-400 text-white flex items-center justify-center font-bold text-sm mx-auto shadow-sm border border-gray-300">
+                                            2
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-sm mr-3 shadow-sm">ER</div>
+                                            <div>
+                                                <p class="font-serif text-base font-medium text-brand-textmain">Elena Rodriguez</p>
+                                                <p class="text-[10px] text-brand-textmuted">Master Therapist</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono">85</td>
+                                    <td class="py-4 px-4 text-right font-serif text-lg font-medium text-brand-textmain">$10,500</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="inline-flex items-center text-sm font-semibold">
+                                            4.8 <i data-lucide="star" class="w-3.5 h-3.5 ml-1 text-brand-gold fill-brand-gold"></i>
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-right font-mono text-brand-textmuted">$900</td>
+                                    <td class="py-4 px-6 text-right font-serif font-medium text-brand-gold">$2,100</td>
+                                </tr>
+
+                                <!-- Rank 3 -->
+                                <tr class="hover:bg-brand-ivory/30 transition">
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 text-white flex items-center justify-center font-bold text-sm mx-auto shadow-sm border border-orange-200">
+                                            3
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-sm mr-3 shadow-sm">MC</div>
+                                            <div>
+                                                <p class="font-serif text-base font-medium text-brand-textmain">Mia Chang</p>
+                                                <p class="text-[10px] text-brand-textmuted">Junior Therapist</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono">72</td>
+                                    <td class="py-4 px-4 text-right font-serif text-lg font-medium text-brand-textmain">$8,200</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="inline-flex items-center text-sm font-semibold">
+                                            4.7 <i data-lucide="star" class="w-3.5 h-3.5 ml-1 text-brand-gold fill-brand-gold"></i>
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-right font-mono text-brand-textmuted">$600</td>
+                                    <td class="py-4 px-6 text-right font-serif font-medium text-brand-gold">$1,640</td>
+                                </tr>
+
+                                <!-- Rank 4 -->
+                                <tr class="hover:bg-brand-ivory/30 transition opacity-80">
+                                    <td class="py-4 px-6 text-center">
+                                        <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream text-brand-textmuted flex items-center justify-center font-bold text-sm mx-auto shadow-sm">
+                                            4
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-sm mr-3 shadow-sm">JD</div>
+                                            <div>
+                                                <p class="font-serif text-base font-medium text-brand-textmain">James Davies</p>
+                                                <p class="text-[10px] text-brand-textmuted">Therapist</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono">60</td>
+                                    <td class="py-4 px-4 text-right font-serif text-base font-medium text-brand-textmain">$6,800</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="inline-flex items-center text-sm font-semibold">
+                                            4.5 <i data-lucide="star" class="w-3.5 h-3.5 ml-1 text-brand-gold fill-brand-gold"></i>
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-right font-mono text-brand-textmuted">$350</td>
+                                    <td class="py-4 px-6 text-right font-serif font-medium text-brand-gold">$1,360</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BOTTOM ROW: BREAKDOWN & KPIS -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- Service Performance Breakdown -->
+                    <div class="xl:col-span-2 bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden">
+                        <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center">
+                            <div>
+                                <h3 class="font-serif text-lg text-brand-textmain">Service Breakdown</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Identify staff specialization and service quality.</p>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto flex-1">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/20 border-b border-brand-cream">
+                                        <th class="py-3 px-6 font-semibold">Staff</th>
+                                        <th class="py-3 px-4 font-semibold">Service</th>
+                                        <th class="py-3 px-4 font-semibold text-center">Bookings</th>
+                                        <th class="py-3 px-4 font-semibold text-right">Revenue</th>
+                                        <th class="py-3 px-6 font-semibold text-center">Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-6 font-medium">Anna Nguyen</td>
+                                        <td class="py-3 px-4 text-brand-textmuted">Deep Tissue Massage</td>
+                                        <td class="py-3 px-4 text-center font-mono">45</td>
+                                        <td class="py-3 px-4 text-right font-serif">$4,500</td>
+                                        <td class="py-3 px-6 text-center font-semibold text-brand-gold">4.9</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-6 font-medium">Elena Rodriguez</td>
+                                        <td class="py-3 px-4 text-brand-textmuted">Hydrating Facial</td>
+                                        <td class="py-3 px-4 text-center font-mono">38</td>
+                                        <td class="py-3 px-4 text-right font-serif">$3,800</td>
+                                        <td class="py-3 px-6 text-center font-semibold text-brand-gold">4.8</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-6 font-medium">Mia Chang</td>
+                                        <td class="py-3 px-4 text-brand-textmuted">Hot Stone Therapy</td>
+                                        <td class="py-3 px-4 text-center font-mono">30</td>
+                                        <td class="py-3 px-4 text-right font-serif">$3,600</td>
+                                        <td class="py-3 px-6 text-center font-semibold text-brand-gold">4.7</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- KPI Tracking -->
+                    <div class="xl:col-span-1 bg-white rounded-3xl shadow-soft border border-brand-cream/60 p-6 flex flex-col">
+                        <h3 class="font-serif text-lg text-brand-textmain mb-6 border-b border-brand-cream/50 pb-4 flex items-center">
+                            <i data-lucide="target" class="w-5 h-5 mr-2 text-brand-gold"></i> Branch KPI Targets
+                        </h3>
+                        
+                        <div class="space-y-6 flex-1">
+                            <!-- Revenue KPI -->
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-brand-textmain">Monthly Revenue</p>
+                                    <span class="font-serif text-sm font-medium text-brand-textmain">$45k / $50k</span>
+                                </div>
+                                <div class="w-full h-2.5 bg-brand-cream rounded-full overflow-hidden relative">
+                                    <div class="absolute top-0 left-0 h-full bg-brand-gold progress-bar-striped" style="width: 90%;"></div>
+                                </div>
+                                <p class="text-[10px] text-brand-textmuted mt-1 text-right">90% of Target</p>
+                            </div>
+
+                            <!-- Rating KPI -->
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-brand-textmain">Avg Customer Rating</p>
+                                    <span class="font-serif text-sm font-medium text-green-600">4.8 / 4.5</span>
+                                </div>
+                                <div class="w-full h-2.5 bg-brand-cream rounded-full overflow-hidden relative">
+                                    <div class="absolute top-0 left-0 h-full bg-green-500" style="width: 100%;"></div>
+                                </div>
+                                <p class="text-[10px] text-brand-textmuted mt-1 text-right">Target Exceeded</p>
+                            </div>
+
+                            <!-- Upsell KPI -->
+                            <div>
+                                <div class="flex justify-between items-end mb-2">
+                                    <p class="text-xs font-semibold uppercase tracking-wider text-brand-textmain">Upsell Rate</p>
+                                    <span class="font-serif text-sm font-medium text-brand-textmain">18% / 20%</span>
+                                </div>
+                                <div class="w-full h-2.5 bg-brand-cream rounded-full overflow-hidden relative">
+                                    <div class="absolute top-0 left-0 h-full bg-blue-500" style="width: 90%;"></div>
+                                </div>
+                                <p class="text-[10px] text-brand-textmuted mt-1 text-right">90% of Target</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <!-- Recent Customer Reviews -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden">
+                    <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center bg-brand-ivory/30">
+                        <div>
+                            <h3 class="font-serif text-xl text-brand-textmain">Recent Customer Feedback</h3>
+                            <p class="text-xs text-brand-textmuted mt-0.5">Latest service reviews across all staff.</p>
+                        </div>
+                        <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">View All Reviews</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-brand-cream/50">
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Sarah J.</p>
+                                    <p class="text-[10px] text-brand-textmuted">with <span class="font-medium">Anna Nguyen</span></p>
+                                </div>
+                                <div class="flex text-brand-gold">
+                                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-brand-textmain italic leading-relaxed">"Anna was amazing! The deep tissue massage completely relieved my shoulder tension. Highly recommend!"</p>
+                            <p class="text-[10px] font-mono text-brand-textmuted mt-3">Mar 09, 2026</p>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Michael T.</p>
+                                    <p class="text-[10px] text-brand-textmuted">with <span class="font-medium">Elena Rodriguez</span></p>
+                                </div>
+                                <div class="flex text-brand-gold">
+                                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 text-brand-cream fill-brand-cream"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-brand-textmain italic leading-relaxed">"Elena gave a great facial. Very relaxing environment. Took away one star because the room was a bit cold initially."</p>
+                            <p class="text-[10px] font-mono text-brand-textmuted mt-3">Mar 08, 2026</p>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain">Emily W.</p>
+                                    <p class="text-[10px] text-brand-textmuted">with <span class="font-medium">Mia Chang</span></p>
+                                </div>
+                                <div class="flex text-brand-gold">
+                                    <i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i><i data-lucide="star" class="w-3.5 h-3.5 fill-current"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-brand-textmain italic leading-relaxed">"First time trying hot stone therapy and Mia made me feel completely comfortable. Wonderful experience."</p>
+                            <p class="text-[10px] font-mono text-brand-textmuted mt-3">Mar 06, 2026</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Chart Defaults
+        Chart.defaults.font.family = "'Jost', sans-serif";
+        Chart.defaults.color = '#8B837C';
+        Chart.defaults.plugins.tooltip.backgroundColor = '#FAF9F6';
+        Chart.defaults.plugins.tooltip.titleColor = '#4A443E';
+        Chart.defaults.plugins.tooltip.bodyColor = '#4A443E';
+        Chart.defaults.plugins.tooltip.borderColor = '#F4EFEA';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        Chart.defaults.plugins.tooltip.padding = 12;
+
+        // 1. Revenue & Bookings Trend (Line Chart)
+        const trendCtx = document.getElementById('revenueTrendChart').getContext('2d');
+        const revGradient = trendCtx.createLinearGradient(0, 0, 0, 300);
+        revGradient.addColorStop(0, 'rgba(201, 168, 124, 0.2)');
+        revGradient.addColorStop(1, 'rgba(201, 168, 124, 0)');
+
+        new Chart(trendCtx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [
+                    {
+                        label: 'Revenue ($)',
+                        data: [9500, 11200, 10800, 13500],
+                        borderColor: '#C9A87C',
+                        backgroundColor: revGradient,
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#FFFFFF',
+                        pointBorderColor: '#C9A87C',
+                        pointRadius: 4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Bookings',
+                        data: [95, 110, 105, 110],
+                        borderColor: '#10b981', // Green for bookings
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        pointRadius: 0,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'top', align: 'end', labels: { boxWidth: 12, usePointStyle: true } } },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        border: { display: false }, 
+                        grid: { color: '#F4EFEA', drawBorder: false },
+                        position: 'left',
+                        ticks: { callback: function(value) { return '$' + value/1000 + 'k'; } }
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        border: { display: false },
+                        grid: { display: false }
+                    },
+                    x: { border: { display: false }, grid: { display: false } }
+                }
+            }
+        });
+
+        // 2. Staff Revenue Distribution (Horizontal Bar Chart)
+        const staffRevCtx = document.getElementById('staffRevenueChart').getContext('2d');
+        new Chart(staffRevCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Anna N.', 'Elena R.', 'Mia C.', 'James D.'],
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: [12400, 10500, 8200, 6800],
+                    backgroundColor: ['#C9A87C', '#D9B8B5', '#4A443E', '#F4EFEA'],
+                    borderRadius: 4,
+                    barThickness: 24
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Makes it horizontal
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { 
+                        beginAtZero: true, 
+                        border: { display: false }, 
+                        grid: { color: '#F4EFEA', drawBorder: false },
+                        ticks: { callback: function(value) { return '$' + value/1000 + 'k'; } }
+                    },
+                    y: { border: { display: false }, grid: { display: false } }
+                }
+            }
+        });
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'nv-hieusuat' });</script>
+</body>
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers List | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Custom Checkbox */
+        .spa-checkbox {
+            appearance: none;
+            width: 1.125rem;
+            height: 1.125rem;
+            border: 2px solid #D9B8B5;
+            border-radius: 0.25rem;
+            background-color: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .spa-checkbox:checked {
+            background-color: #C9A87C;
+            border-color: #C9A87C;
+        }
+        .spa-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+        
+        /* Filter Panel (Dropdown style) */
+        .filter-panel {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .filter-panel.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Global search across platform..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Create Customer
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Customers</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6 mb-6 md:mb-0">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Customers Directory</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Search, filter, and manage all client profiles, booking histories, and membership statuses.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <div class="relative dropdown-container w-full sm:w-auto">
+                            <button class="w-full px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                                <i data-lucide="more-horizontal" class="w-4 h-4 mr-2"></i> Options
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="upload" class="w-4 h-4 mr-2"></i> Import CSV
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Data
+                                </a>
+                            </div>
+                        </div>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Create Customer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI METRICS CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center relative overflow-hidden group hover:shadow-premium transition-shadow">
+                        <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-brand-gold/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Customers</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">3,250</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-green-600 mb-1">Active (Booked within 90d)</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain flex items-center">
+                            1,840 <span class="text-xs font-sans text-brand-textmuted font-normal ml-2">(56%)</span>
+                        </h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">New This Month</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain flex items-center">
+                            120 <span class="text-xs font-sans text-green-500 ml-2 font-medium flex items-center"><i data-lucide="trending-up" class="w-3 h-3 mr-0.5"></i> 14%</span>
+                        </h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-gold mb-1">VIP Members</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">350</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Returning Rate</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">68%</h3>
+                    </div>
+                </div>
+
+                <!-- MAIN TABLE AREA -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden relative">
+                    
+                    <!-- BULK ACTIONS BAR -->
+                    <div id="bulk-action-bar" class="absolute top-0 left-0 w-full h-[76px] bg-brand-gold/10 border-b border-brand-gold/30 z-20 hidden items-center justify-between px-8 backdrop-blur-md">
+                        <div class="flex items-center">
+                            <span class="w-6 h-6 rounded bg-brand-gold text-white flex items-center justify-center text-xs font-bold mr-3" id="bulk-count">0</span>
+                            <span class="text-sm font-medium text-brand-textmain">customers selected</span>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button class="px-4 py-2 bg-white border border-brand-cream hover:border-brand-gold rounded-lg text-xs font-medium text-brand-textmain transition shadow-sm flex items-center"><i data-lucide="tag" class="w-3.5 h-3.5 mr-1.5"></i> Assign Tag</button>
+                            <button class="px-4 py-2 bg-white border border-brand-cream hover:border-brand-gold rounded-lg text-xs font-medium text-brand-textmain transition shadow-sm flex items-center"><i data-lucide="mail" class="w-3.5 h-3.5 mr-1.5"></i> Send Promotion</button>
+                            <button class="px-4 py-2 bg-white border border-brand-cream hover:border-brand-gold rounded-lg text-xs font-medium text-brand-textmain transition shadow-sm flex items-center"><i data-lucide="download" class="w-3.5 h-3.5 mr-1.5"></i> Export</button>
+                            <div class="w-px h-8 bg-brand-cream/80 mx-2 hidden sm:block"></div>
+                            <button class="px-4 py-2 bg-red-50 border border-red-100 hover:bg-red-100 rounded-lg text-xs font-medium text-red-600 transition shadow-sm">Deactivate</button>
+                            <button class="ml-4 text-brand-textmuted hover:text-brand-textmain" onclick="clearSelection()"><i data-lucide="x" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- FILTER BAR -->
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 relative">
+                        <div class="flex flex-col xl:flex-row gap-4 justify-between items-center">
+                            
+                            <!-- Search -->
+                            <div class="flex items-center bg-white rounded-xl px-4 py-2.5 border border-brand-cream w-full xl:w-[350px] focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                <input type="text" placeholder="Search by name, phone, or email..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted/60 text-brand-textmain">
+                            </div>
+
+                            <!-- Basic Filters -->
+                            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+                                
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">Status: All</option>
+                                    <option>Active</option>
+                                    <option>Inactive</option>
+                                    <option>Blocked</option>
+                                </select>
+
+                                <select class="spa-input w-auto min-w-[140px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium">
+                                    <option value="">Level: All</option>
+                                    <option>Regular</option>
+                                    <option>Silver Member</option>
+                                    <option>Gold Member</option>
+                                    <option>VIP</option>
+                                </select>
+                                
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs font-medium bg-brand-cream/20">
+                                    <option value="">Sort: Last Visit</option>
+                                    <option>Sort: Name (A-Z)</option>
+                                    <option>Sort: Total Spending</option>
+                                    <option>Sort: Registration Date</option>
+                                </select>
+
+                                <!-- Advanced Filters Toggle -->
+                                <button class="p-2.5 text-brand-textmain hover:text-brand-gold border border-brand-cream hover:border-brand-gold bg-white rounded-xl transition shadow-sm flex items-center text-xs font-medium" onclick="document.getElementById('advancedFilters').classList.toggle('active')">
+                                    <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 mr-1.5"></i> Advanced
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- ADVANCED FILTERS DROPDOWN -->
+                        <div id="advancedFilters" class="filter-panel absolute top-full left-0 right-0 bg-white border-b border-brand-cream shadow-soft z-30 p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div>
+                                    <label class="spa-label">Total Visits Range</label>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="number" class="spa-input py-2 text-xs" placeholder="Min" value="0">
+                                        <span class="text-brand-textmuted">-</span>
+                                        <input type="number" class="spa-input py-2 text-xs" placeholder="Max">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Total Spending Range ($)</label>
+                                    <div class="flex items-center space-x-2">
+                                        <input type="number" class="spa-input py-2 text-xs" placeholder="Min" value="0">
+                                        <span class="text-brand-textmuted">-</span>
+                                        <input type="number" class="spa-input py-2 text-xs" placeholder="Max">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Registration Date</label>
+                                    <input type="date" class="spa-input py-2 text-xs text-brand-textmuted">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Preferred Branch</label>
+                                    <select class="spa-input py-2 text-xs">
+                                        <option value="">Any Branch</option>
+                                        <option>Downtown Spa</option>
+                                        <option>Westside Retreat</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-brand-cream/50 flex justify-end space-x-3">
+                                <button class="px-4 py-2 bg-brand-ivory border border-brand-cream hover:border-brand-gold rounded-lg text-xs font-medium transition text-brand-textmain">Clear Filters</button>
+                                <button class="px-4 py-2 bg-brand-gold text-white hover:bg-brand-goldhover rounded-lg text-xs font-medium transition shadow-sm" onclick="document.getElementById('advancedFilters').classList.remove('active')">Apply Filters</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TABLE -->
+                    <div class="overflow-x-auto min-h-[450px]">
+                        <table class="w-full text-left border-collapse min-w-[1300px]">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-white border-b border-brand-cream">
+                                    <th class="py-4 px-6 font-semibold w-12 text-center">
+                                        <input type="checkbox" class="spa-checkbox" id="selectAll" onclick="toggleSelectAll()">
+                                    </th>
+                                    <th class="py-4 px-4 font-semibold w-1/4">Customer Info</th>
+                                    <th class="py-4 px-4 font-semibold">Contact</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Membership</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Total Visits</th>
+                                    <th class="py-4 px-4 font-semibold text-right">Total Spending</th>
+                                    <th class="py-4 px-4 font-semibold">Last Visit</th>
+                                    <th class="py-4 px-4 font-semibold">Status</th>
+                                    <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50 bg-white font-medium text-brand-textmain">
+                                
+                                <!-- Row 1: VIP -->
+                                <tr class="hover:bg-brand-ivory/30 transition cursor-pointer group" onclick="togglePanel('customerPreviewPanel')">
+                                    <td class="py-4 px-6 text-center" onclick="event.stopPropagation()">
+                                        <input type="checkbox" class="spa-checkbox row-checkbox" onclick="checkSelection()">
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain font-serif mr-3 shadow-sm group-hover:border-brand-gold transition-colors">JD</div>
+                                            <div>
+                                                <p class="font-serif text-base text-brand-textmain group-hover:text-brand-gold transition-colors">John Doe</p>
+                                                <div class="flex gap-1 mt-0.5">
+                                                    <span class="inline-block px-1.5 py-0.5 bg-brand-gold/10 text-brand-gold text-[9px] font-bold uppercase tracking-wider rounded border border-brand-gold/20">VIP</span>
+                                                    <span class="inline-block px-1.5 py-0.5 bg-blue-50 text-blue-600 text-[9px] font-bold uppercase tracking-wider rounded border border-blue-100">Frequent</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">+84 912 345 678</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">john@example.com</p>
+                                    </td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="text-brand-gold font-semibold flex items-center justify-center">
+                                            <i data-lucide="crown" class="w-3.5 h-3.5 mr-1.5"></i> Gold
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono">12</td>
+                                    <td class="py-4 px-4 text-right font-serif">$1,540.00</td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">Mar 08, 2026</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Deep Tissue Massage</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation()">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('customerPreviewPanel')">
+                                            View
+                                        </button>
+                                        <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="calendar-plus" class="w-3 h-3 mr-2"></i> Book Appointment</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> Edit Profile</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="mail" class="w-3 h-3 mr-2"></i> Send Message</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2: Regular -->
+                                <tr class="hover:bg-brand-ivory/30 transition cursor-pointer group" onclick="togglePanel('customerPreviewPanel')">
+                                    <td class="py-4 px-6 text-center" onclick="event.stopPropagation()">
+                                        <input type="checkbox" class="spa-checkbox row-checkbox" onclick="checkSelection()">
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmain font-serif mr-3 shadow-sm group-hover:border-brand-gold transition-colors">ES</div>
+                                            <div>
+                                                <p class="font-serif text-base text-brand-textmain group-hover:text-brand-gold transition-colors">Emma Smith</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">+84 922 456 789</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">emma@example.com</p>
+                                    </td>
+                                    <td class="py-4 px-4 text-center text-brand-textmuted font-normal">
+                                        Regular
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono">3</td>
+                                    <td class="py-4 px-4 text-right font-serif">$320.00</td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">Feb 15, 2026</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Hydrating Facial</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                            Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation()">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('customerPreviewPanel')">
+                                            View
+                                        </button>
+                                        <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="calendar-plus" class="w-3 h-3 mr-2"></i> Book Appointment</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> Edit Profile</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3: Inactive -->
+                                <tr class="hover:bg-brand-ivory/30 transition cursor-pointer group opacity-80" onclick="togglePanel('customerPreviewPanel')">
+                                    <td class="py-4 px-6 text-center" onclick="event.stopPropagation()">
+                                        <input type="checkbox" class="spa-checkbox row-checkbox" onclick="checkSelection()">
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-gray-100 border border-brand-cream flex items-center justify-center text-gray-500 font-serif mr-3 shadow-sm group-hover:border-brand-gold transition-colors">MC</div>
+                                            <div>
+                                                <p class="font-serif text-base text-brand-textmain group-hover:text-brand-gold transition-colors">Michael Chen</p>
+                                                <div class="flex gap-1 mt-0.5">
+                                                    <span class="inline-block px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[9px] font-bold uppercase tracking-wider rounded border border-gray-200">Lost</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">+84 933 567 890</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">michael@example.com</p>
+                                    </td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="text-gray-500 font-semibold flex items-center justify-center">
+                                            <i data-lucide="award" class="w-3.5 h-3.5 mr-1.5"></i> Silver
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono">6</td>
+                                    <td class="py-4 px-4 text-right font-serif">$680.00</td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">Aug 10, 2025</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5 text-brand-rose">Over 6 months ago</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                            Inactive
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation()">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('customerPreviewPanel')">
+                                            View
+                                        </button>
+                                        <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="mail" class="w-3 h-3 mr-2"></i> Send Re-engagement</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination Footer -->
+                    <div class="p-4 border-t border-brand-cream/50 flex justify-between items-center text-sm text-brand-textmuted bg-brand-ivory/20 mt-auto">
+                        <p>Showing <span class="font-medium text-brand-textmain">1</span> to <span class="font-medium text-brand-textmain">3</span> of <span class="font-medium text-brand-textmain">3,250</span> customers</p>
+                        <div class="flex space-x-1 sm:space-x-2">
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm opacity-50 cursor-not-allowed">Previous</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-gold bg-brand-gold text-white rounded-lg shadow-sm font-medium">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg transition shadow-sm font-medium">2</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg transition shadow-sm font-medium hidden sm:flex">3</button>
+                            <span class="px-1 flex items-end">...</span>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg transition shadow-sm font-medium">325</button>
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT CUSTOMER PREVIEW PANEL -->
+    <div id="customerPreviewPanel" class="fixed inset-y-0 right-0 w-full max-w-md bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-start bg-white shrink-0 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-gradient-to-bl from-brand-gold/10 to-transparent rounded-bl-full pointer-events-none"></div>
+            
+            <div class="flex items-start w-full relative z-10">
+                <div class="w-16 h-16 rounded-full bg-brand-ivory border-2 border-brand-cream flex items-center justify-center text-brand-textmain font-serif text-2xl mr-4 shadow-sm">JD</div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="font-serif text-2xl text-brand-textmain">John Doe</h3>
+                        <button onclick="togglePanel('customerPreviewPanel')" class="text-brand-textmuted hover:text-brand-gold rounded-full transition">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <div class="flex gap-2 mt-1 mb-2">
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-gold/10 text-brand-gold border border-brand-gold/20">
+                            <i data-lucide="crown" class="w-3 h-3 mr-1"></i> Gold
+                        </span>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                            Active
+                        </span>
+                    </div>
+                    <p class="text-xs text-brand-textmuted flex items-center mt-1"><i data-lucide="phone" class="w-3 h-3 mr-1.5"></i> +84 912 345 678</p>
+                    <p class="text-xs text-brand-textmuted flex items-center mt-1"><i data-lucide="mail" class="w-3 h-3 mr-1.5"></i> john@example.com</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+            
+            <!-- Quick Actions Row -->
+            <div class="grid grid-cols-3 gap-3">
+                <button class="py-2.5 bg-brand-gold text-white rounded-xl text-xs font-medium hover:bg-brand-goldhover transition shadow-sm flex flex-col items-center justify-center">
+                    <i data-lucide="calendar-plus" class="w-4 h-4 mb-1"></i> Book
+                </button>
+                <button class="py-2.5 bg-white border border-brand-cream text-brand-textmain rounded-xl text-xs font-medium hover:border-brand-gold transition shadow-sm flex flex-col items-center justify-center">
+                    <i data-lucide="message-square" class="w-4 h-4 mb-1 text-brand-textmuted"></i> Message
+                </button>
+                <button class="py-2.5 bg-white border border-brand-cream text-brand-textmain rounded-xl text-xs font-medium hover:border-brand-gold transition shadow-sm flex flex-col items-center justify-center">
+                    <i data-lucide="edit-2" class="w-4 h-4 mb-1 text-brand-textmuted"></i> Edit
+                </button>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="bg-white rounded-2xl border border-brand-cream p-5 shadow-sm">
+                <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-4 border-b border-brand-cream pb-2">Client Overview</h4>
+                <div class="grid grid-cols-2 gap-y-4 gap-x-2">
+                    <div>
+                        <p class="text-[10px] text-brand-textmuted mb-0.5">Total Visits</p>
+                        <p class="text-lg font-serif text-brand-textmain">12</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-brand-textmuted mb-0.5">Total Spending</p>
+                        <p class="text-lg font-serif text-brand-gold font-medium">$1,540.00</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-brand-textmuted mb-0.5">Loyalty Points</p>
+                        <p class="text-sm font-medium text-brand-textmain">320 pts</p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-brand-textmuted mb-0.5">Customer Since</p>
+                        <p class="text-sm font-medium text-brand-textmain font-mono">Jan 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Client Notes -->
+            <div>
+                <div class="flex justify-between items-center mb-2">
+                    <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted ml-1">Important Notes</h4>
+                    <button class="text-[10px] uppercase tracking-wider font-bold text-brand-gold hover:text-brand-goldhover transition">+ Add</button>
+                </div>
+                <div class="bg-brand-gold/5 rounded-xl border border-brand-gold/20 p-4">
+                    <p class="text-sm text-brand-textmain italic">"Allergic to lavender oil. Prefers firm pressure during massages. Usually books on weekends."</p>
+                </div>
+            </div>
+
+            <!-- Active Packages -->
+            <div>
+                <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-3 ml-1">Active Packages</h4>
+                <div class="bg-white rounded-2xl border border-brand-cream p-4 shadow-sm flex items-center justify-between hover:border-brand-gold transition cursor-pointer group">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 rounded-lg bg-brand-ivory flex items-center justify-center text-brand-gold mr-3">
+                            <i data-lucide="layers" class="w-4 h-4"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Relaxation Bundle</p>
+                            <p class="text-[10px] text-brand-textmuted">Purchased Feb 20, 2026</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-sm font-bold text-brand-textmain">2 / 3</span>
+                        <span class="text-[9px] uppercase tracking-wider text-brand-textmuted">Remaining</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Bookings -->
+            <div>
+                <div class="flex justify-between items-center mb-3">
+                    <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted ml-1">Recent Activity</h4>
+                    <button class="text-[10px] uppercase tracking-wider font-bold text-brand-gold hover:text-brand-goldhover transition">View All</button>
+                </div>
+                <div class="space-y-3">
+                    
+                    <!-- Booking 1 -->
+                    <div class="bg-white rounded-xl border border-brand-cream p-4 shadow-sm flex justify-between items-center">
+                        <div>
+                            <p class="text-sm font-medium text-brand-textmain mb-0.5">Deep Tissue Massage</p>
+                            <p class="text-xs text-brand-textmuted font-mono">Mar 08, 2026 • 10:00 AM</p>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">
+                            Completed
+                        </span>
+                    </div>
+
+                    <!-- Booking 2 -->
+                    <div class="bg-white rounded-xl border border-brand-cream p-4 shadow-sm flex justify-between items-center">
+                        <div>
+                            <p class="text-sm font-medium text-brand-textmain mb-0.5">Hydrating Facial</p>
+                            <p class="text-xs text-brand-textmuted font-mono">Feb 15, 2026 • 14:00 PM</p>
+                        </div>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600">
+                            Completed
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0">
+            <button class="w-full py-3 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex items-center justify-center">
+                Open Full Profile <i data-lucide="arrow-right" class="w-4 h-4 ml-2 text-brand-textmuted"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+
+        // Bulk Selection Logic
+        function toggleSelectAll() {
+            const masterCheckbox = document.getElementById('selectAll');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            const bulkBar = document.getElementById('bulk-action-bar');
+            const bulkCount = document.getElementById('bulk-count');
+            
+            let count = 0;
+            rowCheckboxes.forEach(cb => {
+                cb.checked = masterCheckbox.checked;
+                if(cb.checked) count++;
+            });
+
+            if (count > 0) {
+                bulkBar.classList.remove('hidden');
+                bulkBar.classList.add('flex');
+                bulkCount.innerText = count;
+            } else {
+                bulkBar.classList.add('hidden');
+                bulkBar.classList.remove('flex');
+            }
+        }
+
+        function checkSelection() {
+            const masterCheckbox = document.getElementById('selectAll');
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            const bulkBar = document.getElementById('bulk-action-bar');
+            const bulkCount = document.getElementById('bulk-count');
+            
+            let count = 0;
+            let allChecked = true;
+
+            rowCheckboxes.forEach(cb => {
+                if(cb.checked) count++;
+                else allChecked = false;
+            });
+
+            masterCheckbox.checked = (count > 0 && allChecked);
+
+            if (count > 0) {
+                bulkBar.classList.remove('hidden');
+                bulkBar.classList.add('flex');
+                bulkCount.innerText = count;
+            } else {
+                bulkBar.classList.add('hidden');
+                bulkBar.classList.remove('flex');
+            }
+        }
+
+        function clearSelection() {
+            document.getElementById('selectAll').checked = false;
+            toggleSelectAll();
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kh-danhsach' });</script>
+</body>
+</html>

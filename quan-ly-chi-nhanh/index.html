@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Quản Lý Chi Nhánh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6', cream: '#F4EFEA', gold: '#C9A87C',
+                            goldhover: '#B5956A', rose: '#D9B8B5', lavender: '#DCD6DD',
+                            textmain: '#4A443E', textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Jost', 'sans-serif'] },
+                    boxShadow: { 'soft': '0 10px 40px -10px rgba(74,68,62,0.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FAF9F6; }
+        ::-webkit-scrollbar-thumb { background: #D9B8B5; border-radius: 10px; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; font-size: 14px; color: #8B837C; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .nav-item:hover { background: rgba(201,168,124,0.1); color: #C9A87C; }
+        .nav-item.active { background: rgba(201,168,124,0.15); color: #C9A87C; font-weight: 500; }
+        .nav-group-label { font-size: 11px; color: #8B837C; text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 12px 4px; margin-top: 12px; }
+        /* Staff status indicators */
+        .status-dot-green { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; }
+        .status-dot-yellow { width: 8px; height: 8px; border-radius: 50%; background: #eab308; display: inline-block; }
+        .status-dot-red { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header class="h-20 bg-brand-ivory/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 flex-shrink-0">
+            <div>
+                <h2 class="font-serif text-2xl">Dashboard Chi Nhánh</h2>
+                <p class="text-xs text-brand-textmuted mt-0.5" id="current-date">Thứ Hai, 14 tháng 4, 2024</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center bg-white rounded-full px-4 py-2 border border-brand-cream shadow-sm w-72">
+                    <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                    <input type="text" placeholder="Tìm booking, khách hàng, NV..." class="bg-transparent outline-none text-sm w-full placeholder-brand-textmuted">
+                </div>
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full"></span>
+                </button>
+                <a href="booking/tao-booking.html" class="bg-brand-gold hover:bg-brand-goldhover text-white px-5 py-2.5 rounded-full text-sm font-medium transition shadow flex items-center gap-2">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Tạo Booking
+                </a>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8" id="main-view">
+
+            <!-- DASHBOARD VIEW -->
+            <div id="view-dashboard">
+
+                <!-- KPI Row -->
+                <div class="grid grid-cols-5 gap-5 mb-8">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-brand-gold/10 rounded-lg flex items-center justify-center">
+                                <i data-lucide="calendar-check" class="w-4 h-4 text-brand-gold"></i>
+                            </div>
+                            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Booking Hôm Nay</p>
+                        </div>
+                        <h3 class="font-serif text-3xl">42</h3>
+                        <p class="text-xs text-green-600 mt-1 flex items-center gap-1"><i data-lucide="trending-up" class="w-3 h-3"></i> +8% so với hôm qua</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-green-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="users" class="w-4 h-4 text-green-600"></i>
+                            </div>
+                            <p class="text-xs text-brand-textmuted uppercase tracking-wide">NV Đang Làm</p>
+                        </div>
+                        <h3 class="font-serif text-3xl">14</h3>
+                        <p class="text-xs text-brand-textmuted mt-1">2 đang nghỉ giải lao</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-brand-rose/20 rounded-lg flex items-center justify-center">
+                                <i data-lucide="layout-grid" class="w-4 h-4 text-brand-rose"></i>
+                            </div>
+                            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Phòng Trống</p>
+                        </div>
+                        <h3 class="font-serif text-3xl">3</h3>
+                        <p class="text-xs text-brand-textmuted mt-1">5 phòng đang sử dụng</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-brand-lavender/40 rounded-lg flex items-center justify-center">
+                                <i data-lucide="dollar-sign" class="w-4 h-4 text-brand-textmuted"></i>
+                            </div>
+                            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Doanh Thu Hôm Nay</p>
+                        </div>
+                        <h3 class="font-serif text-3xl">6.4M</h3>
+                        <p class="text-xs text-brand-textmuted mt-1">VNĐ</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-yellow-50 rounded-lg flex items-center justify-center">
+                                <i data-lucide="list-ordered" class="w-4 h-4 text-yellow-600"></i>
+                            </div>
+                            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Chờ Xác Nhận</p>
+                        </div>
+                        <h3 class="font-serif text-3xl">5</h3>
+                        <p class="text-xs text-yellow-600 mt-1 flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Cần xử lý</p>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="grid grid-cols-3 gap-8">
+
+                    <!-- Schedule Column (2/3) -->
+                    <div class="col-span-2 space-y-6">
+
+                        <!-- Today's Timeline -->
+                        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 overflow-hidden">
+                            <div class="flex items-center justify-between p-5 border-b border-brand-cream">
+                                <h3 class="font-serif text-xl">Lịch Hôm Nay</h3>
+                                <a href="booking/lich-booking.html" class="text-sm text-brand-gold hover:underline flex items-center gap-1">
+                                    Xem đầy đủ <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                            <div class="p-5 space-y-3">
+                                <!-- Booking items -->
+                                <div class="flex gap-4 p-3 bg-brand-gold/5 rounded-xl border border-brand-gold/20">
+                                    <div class="text-center min-w-[60px]">
+                                        <p class="text-xs text-brand-textmuted">10:00</p>
+                                        <p class="text-xs text-brand-textmuted">– 11:30</p>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium">Nguyễn Thị Hoa</p>
+                                                <p class="text-xs text-brand-textmuted mt-0.5">Deep Tissue Massage (90 phút)</p>
+                                            </div>
+                                            <span class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">Đã xác nhận</span>
+                                        </div>
+                                        <div class="flex items-center gap-4 mt-2">
+                                            <div class="flex items-center gap-1.5 text-xs text-brand-textmuted">
+                                                <i data-lucide="user" class="w-3 h-3"></i> Minh Phương (Chuyên gia senior)
+                                            </div>
+                                            <div class="flex items-center gap-1.5 text-xs text-brand-textmuted">
+                                                <i data-lucide="layout-grid" class="w-3 h-3"></i> Phòng 03 (Nữ)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 p-3 bg-brand-rose/5 rounded-xl border border-brand-rose/20">
+                                    <div class="text-center min-w-[60px]">
+                                        <p class="text-xs text-brand-textmuted">11:00</p>
+                                        <p class="text-xs text-brand-textmuted">– 12:00</p>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium">Trần Văn Nam</p>
+                                                <p class="text-xs text-brand-textmuted mt-0.5">HydraFacial Treatment (60 phút)</p>
+                                            </div>
+                                            <span class="text-xs bg-green-50 text-green-700 px-2 py-0.5 rounded-full">Đã check-in</span>
+                                        </div>
+                                        <div class="flex items-center gap-4 mt-2">
+                                            <div class="flex items-center gap-1.5 text-xs text-brand-textmuted">
+                                                <i data-lucide="user" class="w-3 h-3"></i> Thanh Hằng (Chuyên gia da liễu)
+                                            </div>
+                                            <div class="flex items-center gap-1.5 text-xs text-brand-textmuted">
+                                                <i data-lucide="layout-grid" class="w-3 h-3"></i> Phòng 07 (Nam)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 p-3 bg-yellow-50/50 rounded-xl border border-yellow-100">
+                                    <div class="text-center min-w-[60px]">
+                                        <p class="text-xs text-brand-textmuted">14:00</p>
+                                        <p class="text-xs text-brand-textmuted">– 15:30</p>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium">Lê Thu Hà</p>
+                                                <p class="text-xs text-brand-textmuted mt-0.5">Lava Shell Massage (90 phút)</p>
+                                            </div>
+                                            <span class="text-xs bg-yellow-50 text-yellow-700 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                                <i data-lucide="clock" class="w-3 h-3"></i> Chờ xác nhận
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center gap-4 mt-2">
+                                            <div class="flex items-center gap-1.5 text-xs text-yellow-600">
+                                                <i data-lucide="alert-circle" class="w-3 h-3"></i> Chưa gán nhân viên
+                                            </div>
+                                            <div class="flex items-center gap-1.5 text-xs text-brand-textmuted">
+                                                <i data-lucide="layout-grid" class="w-3 h-3"></i> Phòng 02 (Nữ)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Staff Status -->
+                        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50">
+                            <div class="flex items-center justify-between p-5 border-b border-brand-cream">
+                                <h3 class="font-serif text-xl">Trạng Thái Nhân Viên</h3>
+                                <a href="nhan-vien/danh-sach.html" class="text-sm text-brand-gold hover:underline flex items-center gap-1">
+                                    Xem tất cả <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                            <div class="p-5 grid grid-cols-2 gap-3">
+                                <div class="flex items-center gap-3 p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                    <div class="w-10 h-10 rounded-full bg-brand-rose flex items-center justify-center text-white text-xs font-serif">MP</div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium truncate">Minh Phương</p>
+                                        <p class="text-xs text-green-600">Đang làm dịch vụ</p>
+                                    </div>
+                                    <span class="status-dot-green"></span>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                    <div class="w-10 h-10 rounded-full bg-brand-gold flex items-center justify-center text-white text-xs font-serif">TH</div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium truncate">Thanh Hằng</p>
+                                        <p class="text-xs text-green-600">Đang làm dịch vụ</p>
+                                    </div>
+                                    <span class="status-dot-green"></span>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-yellow-50/50 rounded-xl border border-yellow-100">
+                                    <div class="w-10 h-10 rounded-full bg-brand-lavender flex items-center justify-center text-white text-xs font-serif">LH</div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium truncate">Lan Hương</p>
+                                        <p class="text-xs text-yellow-600 flex items-center gap-1"><i data-lucide="coffee" class="w-3 h-3"></i> Nghỉ giải lao</p>
+                                    </div>
+                                    <span class="status-dot-yellow"></span>
+                                </div>
+                                <div class="flex items-center gap-3 p-3 bg-brand-ivory rounded-xl border border-brand-cream">
+                                    <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmuted text-xs font-serif">NQ</div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium truncate">Nam Quân</p>
+                                        <p class="text-xs text-brand-textmuted">Sẵn sàng</p>
+                                    </div>
+                                    <span class="status-dot-green"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column (1/3) -->
+                    <div class="space-y-6">
+                        <!-- Room Status -->
+                        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50">
+                            <div class="flex items-center justify-between p-5 border-b border-brand-cream">
+                                <h3 class="font-serif text-xl">Trạng Thái Phòng</h3>
+                                <a href="phong/index.html" class="text-sm text-brand-gold hover:underline flex items-center gap-1">
+                                    Chi tiết <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                                </a>
+                            </div>
+                            <div class="p-4 space-y-2">
+                                <div class="flex items-center justify-between p-3 bg-red-50/50 rounded-xl border border-red-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-red-400"></div>
+                                        <div>
+                                            <p class="text-sm font-medium">Phòng 01</p>
+                                            <p class="text-xs text-brand-textmuted">Nữ · Massage</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full">Đang dùng</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-green-400"></div>
+                                        <div>
+                                            <p class="text-sm font-medium">Phòng 02</p>
+                                            <p class="text-xs text-brand-textmuted">Nữ · Facial, Massage</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded-full">Trống</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-red-50/50 rounded-xl border border-red-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-red-400"></div>
+                                        <div>
+                                            <p class="text-sm font-medium">Phòng 03</p>
+                                            <p class="text-xs text-brand-textmuted">Nữ · Massage</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full">Đang dùng</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-red-50/50 rounded-xl border border-red-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-red-400"></div>
+                                        <div>
+                                            <p class="text-sm font-medium">Phòng 04</p>
+                                            <p class="text-xs text-brand-textmuted">Nam · Massage</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full">Đang dùng</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 bg-green-50/50 rounded-xl border border-green-100">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-3 h-3 rounded bg-green-400"></div>
+                                        <div>
+                                            <p class="text-sm font-medium">Phòng 05</p>
+                                            <p class="text-xs text-brand-textmuted">Nam/Nữ · VIP Facial</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs bg-green-50 text-green-600 px-2 py-0.5 rounded-full">Trống</span>
+                                </div>
+                            </div>
+                            <div class="px-4 pb-4">
+                                <a href="phong/index.html" class="block text-center text-xs text-brand-gold border border-brand-gold/30 py-2 rounded-xl hover:bg-brand-gold/5 transition">
+                                    Quản lý phòng →
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+                            <h3 class="font-serif text-xl mb-4">Thao Tác Nhanh</h3>
+                            <div class="space-y-2">
+                                <a href="booking/tao-booking.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-gold/5 border border-transparent hover:border-brand-gold/20 transition">
+                                    <div class="w-9 h-9 bg-brand-gold/10 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="calendar-plus" class="w-4 h-4 text-brand-gold"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Tạo Booking Mới</p>
+                                        <p class="text-xs text-brand-textmuted">Kiểm tra lịch & phân công</p>
+                                    </div>
+                                </a>
+                                <a href="nhan-vien/tao-sua.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-gold/5 border border-transparent hover:border-brand-gold/20 transition">
+                                    <div class="w-9 h-9 bg-brand-rose/10 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="user-plus" class="w-4 h-4 text-brand-rose"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Thêm Nhân Viên</p>
+                                        <p class="text-xs text-brand-textmuted">Khai báo kỹ năng & ca làm</p>
+                                    </div>
+                                </a>
+                                <a href="phong/them-phong.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-gold/5 border border-transparent hover:border-brand-gold/20 transition">
+                                    <div class="w-9 h-9 bg-brand-lavender/40 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="plus-square" class="w-4 h-4 text-brand-textmuted"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Thêm Phòng</p>
+                                        <p class="text-xs text-brand-textmuted">Cấu hình loại DV & giới tính</p>
+                                    </div>
+                                </a>
+                                <a href="khach-hang/tao-sua.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-gold/5 border border-transparent hover:border-brand-gold/20 transition">
+                                    <div class="w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="user-plus" class="w-4 h-4 text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium">Thêm Khách Hàng</p>
+                                        <p class="text-xs text-brand-textmuted">Hồ sơ & lịch sử sức khỏe</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function showView(id) {
+            document.querySelectorAll('[id^="view-"]').forEach(v => v.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const el = document.getElementById('view-' + id);
+            if (el) el.style.display = 'block';
+            const nav = document.getElementById('nav-' + id);
+            if (nav) nav.classList.add('active');
+        }
+
+        // Set current date
+        const now = new Date();
+        const days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+        document.getElementById('current-date').textContent =
+            `${days[now.getDay()]}, ${now.getDate()} tháng ${now.getMonth()+1}, ${now.getFullYear()}`;
+    </script>
+
+<script src="./shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: './', active: 'dashboard' });</script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "組織管理", "subtitle": "Organization Owner" },
+  "nav": {
+    "dashboard": "ダッシュボード",
+    "branch": "店舗",
+    "member": "メンバー",
+    "role": "役割と権限",
+    "service": "サービス設定",
+    "voucher": "クーポン",
+    "content": "コンテンツ",
+    "report": "マルチ店舗レポート",
+    "settings": "設定",
+    "logout": "ログアウト"
+  },
+  "dashboard": {
+    "title": "組織概要",
+    "kpi": { "branches": "店舗", "staff": "スタッフ", "customers": "顧客", "revenue": "月間売上" },
+    "branchSummary": "店舗パフォーマンス"
+  },
+  "branch": {
+    "title": "店舗",
+    "create": "店舗追加",
+    "columns": { "code": "コード", "name": "名称", "address": "住所", "manager": "店長", "status": "状態" }
+  },
+  "member": {
+    "title": "メンバー",
+    "invite": "メンバー招待",
+    "columns": { "name": "氏名", "email": "メール", "role": "役割", "scope": "範囲", "status": "状態" }
+  },
+  "role": { "title": "権限マトリクス", "subtitle": "役割 × 権限の設定" }
+}

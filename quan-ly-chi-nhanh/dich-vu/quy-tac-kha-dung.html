@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Availability Rules | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Custom Checkbox */
+        .spa-checkbox {
+            appearance: none;
+            width: 1.125rem;
+            height: 1.125rem;
+            border: 2px solid #D9B8B5;
+            border-radius: 0.25rem;
+            background-color: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .spa-checkbox:checked {
+            background-color: #C9A87C;
+            border-color: #C9A87C;
+        }
+        .spa-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.25rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1rem);
+        }
+
+        /* Day Selector Pills */
+        .day-checkbox:checked + .day-label {
+            @apply bg-brand-gold text-white border-brand-gold shadow-sm;
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search rules, services, or branches..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('ruleBuilderPanel')">
+                            <i data-lucide="clock" class="w-4 h-4 mr-2"></i> Create Rule
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> New Service
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar relative">
+            <div class="max-w-[1600px] mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Services</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Availability Rules</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Service Availability Rules</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Configure precise booking windows, constraints, and operational limitations for services across all branches.</p>
+                    </div>
+                    
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10">
+                        <div class="relative dropdown-container">
+                            <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center">
+                                <i data-lucide="more-horizontal" class="w-4 h-4 mr-2"></i> Options
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="upload" class="w-4 h-4 mr-2"></i> Import Rules
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Rules
+                                </a>
+                            </div>
+                        </div>
+                        <button class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center" onclick="togglePanel('ruleBuilderPanel')">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Create Rule
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RULES METRICS CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Rules</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">45</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-green-600 mb-1">Active Rules</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">38</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Inactive Rules</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">7</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-gold mb-1">Custom Services</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">12</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Branches Using Rules</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">3</h3>
+                    </div>
+                </div>
+
+                <!-- MAIN TABLE AREA -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden relative">
+                    
+                    <!-- FILTER BAR -->
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30">
+                        <div class="flex flex-col xl:flex-row gap-4 justify-between items-center">
+                            
+                            <!-- Search -->
+                            <div class="flex items-center bg-white rounded-xl px-4 py-2.5 border border-brand-cream w-full xl:w-[350px] focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                                <input type="text" placeholder="Search rule, service, or branch..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted/60 text-brand-textmain">
+                            </div>
+
+                            <!-- Filters & Sort -->
+                            <div class="flex flex-wrap items-center gap-3 w-full xl:w-auto">
+                                
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2">
+                                    <option value="">Status: All</option>
+                                    <option>Active</option>
+                                    <option>Inactive</option>
+                                </select>
+
+                                <select class="spa-input w-auto min-w-[140px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2">
+                                    <option value="">All Branches</option>
+                                    <option>Global</option>
+                                    <option>District 1 Spa</option>
+                                    <option>Westside Retreat</option>
+                                </select>
+
+                                <select class="spa-input w-auto min-w-[140px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2">
+                                    <option value="">Priority: All</option>
+                                    <option>High Priority</option>
+                                    <option>Medium Priority</option>
+                                    <option>Low Priority</option>
+                                </select>
+                                
+                                <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2 bg-brand-cream/20 font-medium">
+                                    <option value="">Sort: Name (A-Z)</option>
+                                    <option>Sort: Priority</option>
+                                    <option>Sort: Recently Created</option>
+                                </select>
+
+                                <button class="p-2.5 text-brand-textmuted hover:text-brand-gold border border-brand-cream bg-white rounded-xl transition shadow-sm" title="Advanced Filters">
+                                    <i data-lucide="filter" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TABLE VIEW -->
+                        <div class="overflow-x-auto min-h-[400px]">
+                            <table class="w-full text-left border-collapse min-w-[1200px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/50 border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold w-1/5">Rule Name</th>
+                                        <th class="py-4 px-4 font-semibold">Service</th>
+                                        <th class="py-4 px-4 font-semibold">Branch</th>
+                                        <th class="py-4 px-4 font-semibold">Days Active</th>
+                                        <th class="py-4 px-4 font-semibold">Time Range</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Priority</th>
+                                        <th class="py-4 px-4 font-semibold">Status</th>
+                                        <th class="py-4 px-4 font-semibold">Last Updated</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 font-medium text-brand-textmain">
+                                    
+                                    <!-- Row 1 -->
+                                    <tr class="hover:bg-brand-ivory/40 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="font-serif text-base text-brand-textmain">Morning Massage Rule</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-brand-textmuted">
+                                            Deep Tissue Massage
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center text-xs">
+                                                Downtown Spa
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-brand-textmain">
+                                            Mon-Fri
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            09:00 - 12:00
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded bg-brand-rose/10 text-[10px] font-bold uppercase tracking-wider text-brand-rose border border-brand-rose/20">
+                                                High
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">Active</span>
+                                        </td>
+                                        <td class="py-4 px-4 text-xs text-brand-textmuted">Today, 08:30</td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('ruleBuilderPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Rule</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                                <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-amber-600 hover:bg-amber-50 transition"><i data-lucide="power-off" class="w-3.5 h-3.5 mr-2"></i> Disable</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 2 -->
+                                    <tr class="hover:bg-brand-ivory/40 transition">
+                                        <td class="py-4 px-6">
+                                            <p class="font-serif text-base text-brand-textmain">Weekend Premium</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-brand-textmuted">
+                                            Facials (All)
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center text-xs">
+                                                All Branches
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-brand-textmain">
+                                            Sat-Sun
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            10:00 - 18:00
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded bg-brand-gold/10 text-[10px] font-bold uppercase tracking-wider text-brand-goldhover border border-brand-gold/20">
+                                                Medium
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">Active</span>
+                                        </td>
+                                        <td class="py-4 px-4 text-xs text-brand-textmuted">Mar 05, 2026</td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('ruleBuilderPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Rule</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="copy" class="w-3.5 h-3.5 mr-2"></i> Duplicate</a>
+                                                <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-amber-600 hover:bg-amber-50 transition"><i data-lucide="power-off" class="w-3.5 h-3.5 mr-2"></i> Disable</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 3 (Inactive) -->
+                                    <tr class="hover:bg-brand-ivory/40 transition opacity-70 bg-brand-ivory/20">
+                                        <td class="py-4 px-6">
+                                            <p class="font-serif text-base text-brand-textmain">Winter Maintenance</p>
+                                        </td>
+                                        <td class="py-4 px-4 text-brand-textmuted">
+                                            All Services
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center text-xs">
+                                                Ocean View Clinic
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4 text-brand-textmain">
+                                            Mon
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            08:00 - 12:00
+                                        </td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded bg-brand-rose/10 text-[10px] font-bold uppercase tracking-wider text-brand-rose border border-brand-rose/20">
+                                                High
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">Inactive</span>
+                                        </td>
+                                        <td class="py-4 px-4 text-xs text-brand-textmuted">Jan 12, 2026</td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('ruleBuilderPanel')"><i data-lucide="edit-2" class="w-3.5 h-3.5 mr-2"></i> Edit Rule</a>
+                                                <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-green-600 hover:bg-green-50 transition"><i data-lucide="power" class="w-3.5 h-3.5 mr-2"></i> Enable</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5 mr-2"></i> Delete</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    
+                    <!-- Pagination Footer -->
+                    <div class="p-4 border-t border-brand-cream/50 flex justify-between items-center text-sm text-brand-textmuted bg-brand-ivory/20 mt-auto">
+                        <p>Showing <span class="font-medium text-brand-textmain">1</span> to <span class="font-medium text-brand-textmain">3</span> of <span class="font-medium text-brand-textmain">45</span> rules</p>
+                        <div class="flex space-x-1 sm:space-x-2">
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm opacity-50 cursor-not-allowed">Previous</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-gold bg-brand-gold text-white rounded-lg shadow-sm font-medium">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg transition shadow-sm font-medium">2</button>
+                            <button class="w-8 h-8 flex items-center justify-center border border-brand-cream bg-white text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg transition shadow-sm font-medium hidden sm:flex">3</button>
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT RULE BUILDER PANEL -->
+    <div id="ruleBuilderPanel" class="fixed inset-y-0 right-0 w-full max-w-2xl bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <div>
+                <h3 class="font-serif text-2xl text-brand-textmain">Rule Builder</h3>
+                <p class="text-xs text-brand-textmuted mt-1">Configure service availability and booking constraints.</p>
+            </div>
+            <button onclick="togglePanel('ruleBuilderPanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+            
+            <!-- Basic Info -->
+            <div class="space-y-5">
+                <h4 class="font-serif text-lg text-brand-textmain border-b border-brand-cream pb-2">Rule Information</h4>
+                <div>
+                    <label class="spa-label">Rule Name <span class="text-brand-rose">*</span></label>
+                    <input type="text" class="spa-input font-medium" placeholder="e.g. Morning Massage Rule" value="Morning Massage Rule">
+                </div>
+                <div>
+                    <label class="spa-label">Description</label>
+                    <textarea class="spa-input h-20 resize-none text-sm" placeholder="Internal notes about this rule...">Limits deep tissue massages to morning slots to ensure staff aren't overworked late in the day.</textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="spa-label">Applied Service(s) <span class="text-brand-rose">*</span></label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="deep_tissue" selected>Deep Tissue Massage</option>
+                            <option value="all">All Services</option>
+                            <option value="facials">All Facials</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="spa-label">Applied Branch(es) <span class="text-brand-rose">*</span></label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="downtown" selected>Downtown Spa</option>
+                            <option value="all">All Branches</option>
+                            <option value="westside">Westside Retreat</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schedule Configuration -->
+            <div class="space-y-5 bg-brand-ivory/50 rounded-2xl p-6 border border-brand-cream">
+                <h4 class="font-serif text-lg text-brand-textmain border-b border-brand-cream pb-2">Day & Time Configuration</h4>
+                
+                <div>
+                    <label class="spa-label mb-3">Days of Week</label>
+                    <div class="flex space-x-2">
+                        <label class="relative cursor-pointer flex-1">
+                            <input type="checkbox" class="peer sr-only day-checkbox" checked>
+                            <div class="day-label h-10 rounded-lg border border-brand-cream bg-white flex items-center justify-center text-sm font-medium text-brand-textmain transition-colors">M</div>
+                        </label>
+                        <label class="relative cursor-pointer flex-1">
+                            <input type="checkbox" class="peer sr-only day-checkbox" checked>
+                            <div class="day-label h-10 rounded-lg border border-brand-cream bg-white flex items-center justify-center text-sm font-medium text-brand-textmain transition-colors">T</div>
+                        </label>
+                        <label class="relative cursor-pointer flex-1">
+                            <input type="checkbox" class="peer sr-only day-checkbox" checked>
+                            <div class="day-label h-10 rounded-lg border border-brand-cream bg-white flex items-center justify-center text-sm font-medium text-brand-textmain transition-colors">W</div>
+                        </label>
+                        <label class="relative cursor-pointer flex-1">
+                            <input type="checkbox" class="peer sr-only day-checkbox" checked>
+                            <div class="day-label h-10 rounded-lg border border-brand-cream bg-white flex items-center justify-center text-sm font-medium text-brand-textmain transition-colors">T</div>
+                        </label>
+                        <label class="relative cursor-pointer flex-1">
+                            <input type="checkbox" class="peer sr-only day-checkbox" checked>
+                            <div class="day-label h-10 rounded-lg border border-brand-cream bg-white flex items-center justify-center text-sm font-medium text-brand-textmain transition-colors">F</div>
+                        </label>
+                        <label class="relative cursor-pointer flex-1">
+                            <input type="checkbox" class="peer sr-only day-checkbox">
+                            <div class="day-label h-10 rounded-lg border border-brand-cream bg-white flex items-center justify-center text-sm font-medium text-brand-textmain transition-colors">S</div>
+                        </label>
+                        <label class="relative cursor-pointer flex-1">
+                            <input type="checkbox" class="peer sr-only day-checkbox">
+                            <div class="day-label h-10 rounded-lg border border-brand-cream bg-white flex items-center justify-center text-sm font-medium text-brand-textmain transition-colors">S</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 items-end">
+                    <div>
+                        <label class="spa-label">Start Time</label>
+                        <input type="time" class="spa-input" value="09:00">
+                    </div>
+                    <div>
+                        <label class="spa-label">End Time</label>
+                        <input type="time" class="spa-input" value="12:00">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Capacity & Constraints -->
+            <div class="space-y-5">
+                <div class="flex justify-between items-center border-b border-brand-cream pb-2">
+                    <h4 class="font-serif text-lg text-brand-textmain">Capacity & Constraints</h4>
+                    <select class="text-xs border border-brand-cream bg-white rounded-md px-2 py-1 outline-none text-brand-textmain font-medium">
+                        <option value="high" selected>High Priority</option>
+                        <option value="med">Medium Priority</option>
+                        <option value="low">Low Priority</option>
+                    </select>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="spa-label">Min Booking Notice</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="0">No notice required</option>
+                            <option value="2" selected>At least 2 hours</option>
+                            <option value="24">At least 24 hours</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="spa-label">Max Booking Window</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="30" selected>Up to 30 days</option>
+                            <option value="60">Up to 60 days</option>
+                            <option value="90">Up to 90 days</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-2">
+                    <div>
+                        <label class="spa-label">Max Bookings / Slot</label>
+                        <input type="number" class="spa-input" placeholder="e.g. 2" value="2">
+                    </div>
+                    <div>
+                        <label class="spa-label">Max Bookings / Day</label>
+                        <input type="number" class="spa-input" placeholder="e.g. 10" value="10">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 pt-2">
+                    <div>
+                        <label class="spa-label">Required Staff Level</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="any">Any Level</option>
+                            <option value="senior" selected>Senior Therapist</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="spa-label">Required Room Type</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="any">Any Room</option>
+                            <option value="massage" selected>Massage Room</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exception Rules -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-end border-b border-brand-cream pb-2">
+                    <h4 class="font-serif text-lg text-brand-textmain">Exception Rules</h4>
+                </div>
+
+                <!-- Exception List -->
+                <div class="space-y-3">
+                    <!-- Item 1 -->
+                    <div class="bg-white border border-brand-cream rounded-xl p-3 flex items-center justify-between shadow-sm">
+                        <div>
+                            <p class="text-sm font-medium text-brand-textmain">Staff Training Day</p>
+                            <p class="text-[10px] text-brand-textmuted">Apr 15, 2026 • 09:00 - 18:00</p>
+                        </div>
+                        <button class="p-1.5 text-brand-textmuted hover:text-brand-rose bg-brand-ivory rounded transition"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+
+                <!-- Add Exception Control -->
+                <div class="mt-4 pt-2">
+                    <button class="w-full border-2 border-dashed border-brand-cream bg-white hover:border-brand-gold hover:text-brand-gold transition-colors rounded-xl py-3 text-sm font-medium text-brand-textmuted flex items-center justify-center">
+                        <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add Exception Rule
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+            <button onclick="togglePanel('ruleBuilderPanel')" class="px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                Cancel
+            </button>
+            <button onclick="togglePanel('ruleBuilderPanel')" class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Rule
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'dv-quy-tac' });</script>
+</body>
+</html>

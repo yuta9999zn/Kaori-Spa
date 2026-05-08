@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA Spa | Đặt Lịch Trực Tuyến</title>
+    <meta name="description" content="AURA Spa – Triệt lông công nghệ cao, chăm sóc da chuyên sâu. Đặt lịch online ngay hôm nay.">
+    <meta name="keywords" content="triệt lông, spa, chăm sóc da, đặt lịch, AURA spa">
+    <link rel="alternate" hreflang="vi" href="https://auraspa.vn/vi" />
+    <link rel="alternate" hreflang="en" href="https://auraspa.vn/en" />
+    <link rel="alternate" hreflang="ja" href="https://auraspa.vn/ja" />
+    <link rel="alternate" hreflang="ko" href="https://auraspa.vn/ko" />
+    <link rel="alternate" hreflang="zh" href="https://auraspa.vn/zh" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',
+                            cream: '#F4EFEA',
+                            gold: '#C9A87C',
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',
+                            lavender: '#DCD6DD',
+                            textmain: '#4A443E',
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Jost', 'sans-serif'] },
+                    boxShadow: {
+                        soft: '0 10px 40px -10px rgba(74,68,62,0.08)',
+                        premium: '0 4px 20px rgba(201,168,124,0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FAF9F6; }
+        ::-webkit-scrollbar-thumb { background: #D9B8B5; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C9A87C; }
+
+        .fade-in { animation: fadeIn 0.45s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Step indicator */
+        .step-circle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; border: 2px solid #F4EFEA; background: white; color: #8B837C; transition: all .3s; }
+        .step-circle.active { border-color: #C9A87C; background: #C9A87C; color: white; box-shadow: 0 0 0 4px rgba(201,168,124,.18); }
+        .step-circle.done { border-color: #C9A87C; background: #d1fae5; color: #059669; }
+        .step-bar { flex: 1; height: 2px; background: #F4EFEA; margin: 0 6px; transition: background .3s; }
+        .step-bar.done { background: #C9A87C; }
+
+        /* Service cards */
+        .svc-card { border: 2px solid #F4EFEA; border-radius: 16px; padding: 16px; cursor: pointer; transition: all .2s; }
+        .svc-card:hover { border-color: #C9A87C; background: rgba(201,168,124,.04); }
+        .svc-card.selected { border-color: #C9A87C; background: rgba(201,168,124,.08); }
+
+        /* Time slots */
+        .tslot { padding: 8px 14px; border-radius: 10px; border: 1.5px solid #F4EFEA; font-size: 13px; cursor: pointer; transition: all .15s; text-align: center; }
+        .tslot:hover { border-color: #C9A87C; color: #C9A87C; }
+        .tslot.selected { background: #C9A87C; color: white; border-color: #C9A87C; }
+        .tslot.blocked { background: #f9fafb; color: #d1d5db; cursor: not-allowed; font-size: 12px; }
+
+        /* Branch cards */
+        .branch-card { border: 2px solid #F4EFEA; border-radius: 16px; padding: 20px; cursor: pointer; transition: all .2s; }
+        .branch-card:hover { border-color: #C9A87C; }
+        .branch-card.selected { border-color: #C9A87C; background: rgba(201,168,124,.06); }
+
+        /* Form inputs */
+        .fi { width: 100%; border: 1px solid #F4EFEA; border-radius: 12px; padding: 10px 14px; font-size: 14px; font-family: 'Jost', sans-serif; background: #FAF9F6; color: #4A443E; outline: none; transition: border .2s; }
+        .fi:focus { border-color: #C9A87C; box-shadow: 0 0 0 3px rgba(201,168,124,.1); }
+        .fl { display: block; font-size: 11px; color: #8B837C; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; font-weight: 500; }
+
+        /* Package type toggle */
+        .pkg-toggle { border: 1.5px solid #F4EFEA; border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: all .2s; }
+        .pkg-toggle:hover { border-color: #C9A87C; }
+        .pkg-toggle.selected { border-color: #C9A87C; background: rgba(201,168,124,.08); }
+
+        /* Nav active */
+        .nav-active { color: #C9A87C; }
+
+        /* Mobile menu */
+        #mobile-menu { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+        #mobile-menu.open { max-height: 400px; }
+
+        /* Group hover for desktop nav dropdown */
+        .group:hover .group-dropdown { display: block; }
+        .group-dropdown { display: none; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans selection:bg-brand-gold selection:text-white">
+
+<!-- ================================================ -->
+<!-- GLOBAL NAVBAR                                     -->
+<!-- ================================================ -->
+<header class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md border-b border-brand-cream shadow-soft" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-20">
+
+            <!-- Logo -->
+            <div class="flex items-center gap-2 cursor-pointer" onclick="showView('home')">
+                <i data-lucide="flower-2" class="text-brand-gold w-7 h-7" stroke-width="1.5"></i>
+                <span class="font-serif text-2xl tracking-widest uppercase font-semibold">AURA</span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a onclick="showView('home')" class="text-sm font-medium tracking-wide uppercase text-brand-textmain hover:text-brand-gold transition cursor-pointer" id="nav-home">Trang Chủ</a>
+
+                <!-- Services Dropdown -->
+                <div class="relative group">
+                    <button class="text-sm font-medium tracking-wide uppercase text-brand-textmain hover:text-brand-gold transition flex items-center gap-1" id="nav-services">
+                        Dịch Vụ <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <div class="group-dropdown absolute top-full left-0 pt-3 w-52 z-50">
+                        <div class="bg-white rounded-2xl shadow-premium border border-brand-cream py-2">
+                            <a onclick="showView('services')" class="block px-4 py-2.5 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer">Tất Cả Dịch Vụ</a>
+                            <a onclick="showView('services'); filterArea('nach')" class="block px-4 py-2.5 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer">Triệt Lông Nách</a>
+                            <a onclick="showView('services'); filterArea('mat')" class="block px-4 py-2.5 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer">Triệt Lông Mặt</a>
+                            <a onclick="showView('services'); filterArea('toan-than')" class="block px-4 py-2.5 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer">Triệt Lông Toàn Thân</a>
+                            <div class="h-px bg-brand-cream mx-3 my-1"></div>
+                            <a onclick="showView('packages')" class="block px-4 py-2.5 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer">Gói Liệu Trình</a>
+                        </div>
+                    </div>
+                </div>
+
+                <a onclick="showView('packages')" class="text-sm font-medium tracking-wide uppercase text-brand-textmain hover:text-brand-gold transition cursor-pointer" id="nav-packages">Gói Dịch Vụ</a>
+                <a href="#" class="text-sm font-medium tracking-wide uppercase text-brand-textmain hover:text-brand-gold transition">Giới Thiệu</a>
+                <a href="#" class="text-sm font-medium tracking-wide uppercase text-brand-textmain hover:text-brand-gold transition">Liên Hệ</a>
+            </nav>
+
+            <!-- Right Actions -->
+            <div class="hidden md:flex items-center gap-5">
+                <!-- Language -->
+                <div class="relative group cursor-pointer">
+                    <div class="flex items-center gap-1.5 text-sm text-brand-textmuted hover:text-brand-gold transition">
+                        <i data-lucide="globe" class="w-4 h-4"></i>
+                        <span id="lang-label">VI</span>
+                        <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                    </div>
+                    <div class="group-dropdown absolute top-full right-0 pt-3 w-36 z-50">
+                        <div class="bg-white rounded-2xl shadow-premium border border-brand-cream py-2">
+                            <a onclick="setLang('vi')" class="block px-4 py-2 text-sm text-brand-gold bg-brand-ivory font-medium cursor-pointer" id="lang-vi">VI – Tiếng Việt</a>
+                            <a onclick="setLang('en')" class="block px-4 py-2 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer" id="lang-en">EN – English</a>
+                            <a onclick="setLang('ja')" class="block px-4 py-2 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer" id="lang-ja">JP – 日本語</a>
+                            <a onclick="setLang('ko')" class="block px-4 py-2 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer" id="lang-ko">KR – 한국어</a>
+                            <a onclick="setLang('zh')" class="block px-4 py-2 text-sm text-brand-textmuted hover:text-brand-gold hover:bg-brand-ivory transition cursor-pointer" id="lang-zh">CN – 中文</a>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="showView('booking')" class="bg-brand-gold text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-brand-goldhover transition shadow-sm uppercase tracking-wide">
+                    Đặt Lịch Ngay
+                </button>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <button class="md:hidden text-brand-textmain hover:text-brand-gold" onclick="toggleMobile()">
+                <i data-lucide="menu" class="w-6 h-6" id="mobile-icon"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden bg-white border-t border-brand-cream">
+        <div class="px-6 py-4 flex flex-col gap-3">
+            <a onclick="showView('home'); closeMobile()" class="py-2 text-sm font-medium uppercase tracking-wide text-brand-textmain cursor-pointer">Trang Chủ</a>
+            <a onclick="showView('services'); closeMobile()" class="py-2 text-sm font-medium uppercase tracking-wide text-brand-textmain cursor-pointer">Dịch Vụ</a>
+            <a onclick="showView('packages'); closeMobile()" class="py-2 text-sm font-medium uppercase tracking-wide text-brand-textmain cursor-pointer">Gói Dịch Vụ</a>
+            <a href="#" class="py-2 text-sm font-medium uppercase tracking-wide text-brand-textmain">Giới Thiệu</a>
+            <a href="#" class="py-2 text-sm font-medium uppercase tracking-wide text-brand-textmain">Liên Hệ</a>
+            <button onclick="showView('booking'); closeMobile()" class="mt-2 w-full bg-brand-gold text-white py-3 rounded-full text-sm font-medium uppercase tracking-wide">Đặt Lịch Ngay</button>
+        </div>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="pt-20 min-h-screen flex flex-col" id="main-content">
+
+<!-- ================================================ -->
+<!-- HOME VIEW                                         -->
+<!-- ================================================ -->
+<div id="view-home" class="fade-in">
+
+    <!-- Hero -->
+    <section class="relative h-[88vh] flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-[#E8DDD4] via-[#EDE5DC] to-[#D9CEC5]"></div>
+        <!-- Decorative circles -->
+        <div class="absolute top-20 right-1/4 w-80 h-80 bg-brand-gold/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 left-1/4 w-64 h-64 bg-brand-rose/20 rounded-full blur-3xl"></div>
+
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <p class="text-brand-gold uppercase tracking-[0.4em] text-xs font-semibold mb-5">Chào Mừng Đến AURA</p>
+            <h1 class="font-serif text-5xl md:text-7xl text-brand-textmain mb-6 leading-tight">Vẻ Đẹp Tự Tin<br>Từ Trong Ra Ngoài</h1>
+            <p class="text-base md:text-lg text-brand-textmuted mb-10 font-light max-w-2xl mx-auto leading-relaxed">
+                Công nghệ triệt lông hiện đại, an toàn và lâu dài. Đội ngũ kỹ thuật viên chuyên nghiệp phục vụ tận tâm.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="showView('booking')" class="bg-brand-gold text-white px-10 py-4 rounded-full font-medium hover:bg-brand-goldhover transition shadow-premium uppercase tracking-widest text-sm hover:-translate-y-0.5 transform duration-200">
+                    Đặt Lịch Ngay
+                </button>
+                <button onclick="showView('services')" class="bg-white text-brand-textmain border border-brand-cream px-10 py-4 rounded-full font-medium hover:border-brand-gold hover:text-brand-gold transition text-sm uppercase tracking-widest">
+                    Xem Dịch Vụ
+                </button>
+            </div>
+        </div>
+
+        <!-- Scroll hint -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-brand-textmuted">
+            <i data-lucide="chevrons-down" class="w-5 h-5 animate-bounce"></i>
+        </div>
+    </section>
+
+    <!-- Why AURA -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14">
+                <p class="text-brand-gold uppercase tracking-widest text-xs font-semibold mb-3">Tại Sao Chọn Chúng Tôi</p>
+                <h2 class="font-serif text-4xl text-brand-textmain">Cam Kết Của AURA</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-brand-gold/10 flex items-center justify-center">
+                        <i data-lucide="shield-check" class="w-7 h-7 text-brand-gold" stroke-width="1.5"></i>
+                    </div>
+                    <h3 class="font-serif text-lg text-brand-textmain mb-2">An Toàn Tuyệt Đối</h3>
+                    <p class="text-sm text-brand-textmuted leading-relaxed">Công nghệ được kiểm định, phù hợp mọi loại da và màu lông</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-brand-gold/10 flex items-center justify-center">
+                        <i data-lucide="zap" class="w-7 h-7 text-brand-gold" stroke-width="1.5"></i>
+                    </div>
+                    <h3 class="font-serif text-lg text-brand-textmain mb-2">Hiệu Quả Lâu Dài</h3>
+                    <p class="text-sm text-brand-textmuted leading-relaxed">Giảm 80–95% lông sau liệu trình hoàn chỉnh, duy trì bền vững</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-brand-gold/10 flex items-center justify-center">
+                        <i data-lucide="users" class="w-7 h-7 text-brand-gold" stroke-width="1.5"></i>
+                    </div>
+                    <h3 class="font-serif text-lg text-brand-textmain mb-2">Kỹ Thuật Viên Chuyên Nghiệp</h3>
+                    <p class="text-sm text-brand-textmuted leading-relaxed">Được đào tạo bài bản, tận tâm và hiểu tâm lý khách hàng</p>
+                </div>
+                <div class="text-center p-6">
+                    <div class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-brand-gold/10 flex items-center justify-center">
+                        <i data-lucide="map-pin" class="w-7 h-7 text-brand-gold" stroke-width="1.5"></i>
+                    </div>
+                    <h3 class="font-serif text-lg text-brand-textmain mb-2">2 Chi Nhánh Trung Tâm</h3>
+                    <p class="text-sm text-brand-textmuted leading-relaxed">Quận 1 & Quận 3 – Thuận tiện di chuyển, không gian riêng tư</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Services -->
+    <section class="py-20 bg-brand-ivory">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-end justify-between mb-12">
+                <div>
+                    <p class="text-brand-gold uppercase tracking-widest text-xs font-semibold mb-3">Dịch Vụ Nổi Bật</p>
+                    <h2 class="font-serif text-4xl text-brand-textmain">Triệt Lông Chuyên Sâu</h2>
+                </div>
+                <button onclick="showView('services')" class="hidden md:flex items-center gap-2 text-sm text-brand-gold hover:text-brand-goldhover font-medium uppercase tracking-wide">
+                    Xem Tất Cả <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-soft group cursor-pointer hover:-translate-y-1 transition-all duration-300" onclick="showView('booking')">
+                    <div class="h-48 bg-gradient-to-br from-brand-rose/30 to-brand-cream flex items-center justify-center relative">
+                        <i data-lucide="sparkles" class="w-16 h-16 text-brand-gold/30" stroke-width="1"></i>
+                        <div class="absolute top-4 right-4 bg-white rounded-full px-3 py-1 text-xs font-medium text-brand-gold shadow-sm">Phổ biến</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-xl text-brand-textmain mb-2 group-hover:text-brand-gold transition">Triệt Lông Nách</h3>
+                        <p class="text-sm text-brand-textmuted mb-4 leading-relaxed">Vùng da nhạy cảm, công nghệ nhẹ nhàng, không đau. Hiệu quả ngay từ buổi đầu.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-brand-gold font-medium">Từ 200.000₫ / buổi</span>
+                            <span class="text-xs text-brand-textmuted bg-brand-cream px-2 py-1 rounded-full">Nữ · Nam</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl overflow-hidden shadow-soft group cursor-pointer hover:-translate-y-1 transition-all duration-300" onclick="showView('booking')">
+                    <div class="h-48 bg-gradient-to-br from-brand-lavender/40 to-brand-cream flex items-center justify-center">
+                        <i data-lucide="star" class="w-16 h-16 text-brand-gold/30" stroke-width="1"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-xl text-brand-textmain mb-2 group-hover:text-brand-gold transition">Triệt Lông Toàn Thân</h3>
+                        <p class="text-sm text-brand-textmuted mb-4 leading-relaxed">Gói trọn gói tiết kiệm nhất, bao gồm tất cả các vùng cơ thể theo nhu cầu.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-brand-gold font-medium">Từ 1.500.000₫ / buổi</span>
+                            <span class="text-xs text-brand-textmuted bg-brand-cream px-2 py-1 rounded-full">Nữ · Nam</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl overflow-hidden shadow-soft group cursor-pointer hover:-translate-y-1 transition-all duration-300" onclick="showView('packages')">
+                    <div class="h-48 bg-gradient-to-br from-brand-gold/15 to-brand-cream flex items-center justify-center relative">
+                        <i data-lucide="package" class="w-16 h-16 text-brand-gold/30" stroke-width="1"></i>
+                        <div class="absolute top-4 right-4 bg-brand-gold rounded-full px-3 py-1 text-xs font-medium text-white shadow-sm">Tiết kiệm</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-serif text-xl text-brand-textmain mb-2 group-hover:text-brand-gold transition">Gói Liệu Trình</h3>
+                        <p class="text-sm text-brand-textmuted mb-4 leading-relaxed">Mua trọn gói 6–10 buổi, giảm đến 30% so với mua lẻ. Quản lý buổi dùng dễ dàng.</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-brand-gold font-medium">Xem gói ưu đãi</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 text-brand-gold"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking CTA Banner -->
+    <section class="py-16 bg-brand-textmain relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-brand-gold rounded-full translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-brand-rose rounded-full -translate-x-1/2 translate-y-1/2"></div>
+        </div>
+        <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+            <p class="text-brand-gold uppercase tracking-widest text-xs font-semibold mb-4">Ưu Đãi Hôm Nay</p>
+            <h2 class="font-serif text-3xl md:text-4xl text-white mb-6">Đặt Lịch Ngay – Nhận Tư Vấn Miễn Phí</h2>
+            <p class="text-white/70 mb-8 leading-relaxed">Kỹ thuật viên sẽ phân tích loại da và tư vấn phác đồ phù hợp nhất trước khi bắt đầu liệu trình.</p>
+            <button onclick="showView('booking')" class="bg-brand-gold text-white px-12 py-4 rounded-full font-medium hover:bg-brand-goldhover transition shadow-premium uppercase tracking-widest text-sm">
+                Đặt Lịch Tư Vấn
+            </button>
+        </div>
+    </section>
+</div>
+
+<!-- ================================================ -->
+<!-- SERVICES VIEW                                     -->
+<!-- ================================================ -->
+<div id="view-services" class="hidden fade-in">
+    <div class="bg-brand-cream/60 border-b border-brand-cream py-12 text-center">
+        <p class="text-brand-gold uppercase tracking-widest text-xs font-semibold mb-3">Danh Mục Dịch Vụ</p>
+        <h1 class="font-serif text-4xl text-brand-textmain mb-3">Tất Cả Dịch Vụ</h1>
+        <p class="text-brand-textmuted max-w-xl mx-auto text-sm">Triệt lông bằng công nghệ Laser Diode / IPL thế hệ mới, an toàn cho mọi loại da.</p>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        <!-- Gender Filter -->
+        <div class="flex items-center gap-3 mb-8">
+            <span class="text-sm text-brand-textmuted font-medium">Lọc theo:</span>
+            <button onclick="filterGender('all')" class="gender-btn px-5 py-2 rounded-full text-sm border border-brand-gold bg-brand-gold text-white transition" data-g="all">Tất Cả</button>
+            <button onclick="filterGender('nu')" class="gender-btn px-5 py-2 rounded-full text-sm border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition" data-g="nu">Nữ</button>
+            <button onclick="filterGender('nam')" class="gender-btn px-5 py-2 rounded-full text-sm border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition" data-g="nam">Nam</button>
+        </div>
+
+        <!-- Service Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="services-grid">
+            <!-- Rendered by JS -->
+        </div>
+
+        <div class="text-center mt-10">
+            <button onclick="showView('booking')" class="bg-brand-gold text-white px-10 py-3.5 rounded-full font-medium hover:bg-brand-goldhover transition shadow-sm uppercase tracking-wide text-sm">
+                Đặt Lịch Dịch Vụ
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================ -->
+<!-- PACKAGES VIEW                                     -->
+<!-- ================================================ -->
+<div id="view-packages" class="hidden fade-in">
+    <div class="bg-brand-cream/60 border-b border-brand-cream py-12 text-center">
+        <p class="text-brand-gold uppercase tracking-widest text-xs font-semibold mb-3">Ưu Đãi Đặc Biệt</p>
+        <h1 class="font-serif text-4xl text-brand-textmain mb-3">Gói Liệu Trình</h1>
+        <p class="text-brand-textmuted max-w-xl mx-auto text-sm">Mua trọn gói – tiết kiệm hơn, chủ động theo dõi tiến độ liệu trình.</p>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Gói Cơ Bản -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream overflow-hidden">
+                <div class="bg-brand-cream/60 px-6 pt-8 pb-6 text-center">
+                    <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2">Gói Cơ Bản</p>
+                    <h3 class="font-serif text-2xl text-brand-textmain mb-1">6 Buổi</h3>
+                    <p class="text-xs text-brand-textmuted">Giảm 15% so với mua lẻ</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-3 mb-6 text-sm text-brand-textmuted">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>1 vùng điều trị tùy chọn</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>Kỹ thuật viên chuyên biệt</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>Theo dõi tiến trình</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>Không giới hạn thời gian sử dụng</li>
+                    </ul>
+                    <button onclick="showView('booking')" class="w-full py-3 border-2 border-brand-gold text-brand-gold rounded-full text-sm font-medium hover:bg-brand-gold hover:text-white transition">
+                        Đăng Ký Gói
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gói Nâng Cao (Featured) -->
+            <div class="bg-brand-textmain rounded-2xl shadow-premium overflow-hidden relative">
+                <div class="absolute top-4 right-4 bg-brand-gold text-white text-xs px-3 py-1 rounded-full font-medium">Phổ biến nhất</div>
+                <div class="px-6 pt-8 pb-6 text-center">
+                    <p class="text-xs uppercase tracking-widest text-white/60 mb-2">Gói Nâng Cao</p>
+                    <h3 class="font-serif text-2xl text-white mb-1">8 Buổi</h3>
+                    <p class="text-xs text-white/60">Giảm 20% so với mua lẻ</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-3 mb-6 text-sm text-white/75">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>1–2 vùng điều trị tùy chọn</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>Ưu tiên đặt lịch</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>Kỹ thuật viên cố định</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-brand-gold flex-shrink-0"></i>Báo cáo tiến trình sau mỗi buổi</li>
+                    </ul>
+                    <button onclick="showView('booking')" class="w-full py-3 bg-brand-gold text-white rounded-full text-sm font-medium hover:bg-brand-goldhover transition">
+                        Đăng Ký Gói
+                    </button>
+                </div>
+            </div>
+
+            <!-- Gói VIP -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream overflow-hidden">
+                <div class="bg-gradient-to-br from-brand-gold/10 to-brand-rose/10 px-6 pt-8 pb-6 text-center">
+                    <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2">Gói VIP</p>
+                    <h3 class="font-serif text-2xl text-brand-textmain mb-1">10 Buổi</h3>
+                    <p class="text-xs text-brand-textmuted">Giảm 30% so với mua lẻ</p>
+                </div>
+                <div class="p-6">
+                    <ul class="space-y-3 mb-6 text-sm text-brand-textmuted">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>Không giới hạn vùng điều trị</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>Ưu tiên lịch cao nhất</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>Kỹ thuật viên senior</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-green-500 flex-shrink-0"></i>Tặng 1 buổi chăm sóc da</li>
+                    </ul>
+                    <button onclick="showView('booking')" class="w-full py-3 border-2 border-brand-gold text-brand-gold rounded-full text-sm font-medium hover:bg-brand-gold hover:text-white transition">
+                        Đăng Ký Gói
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-10 bg-white rounded-2xl border border-brand-cream p-6 text-center">
+            <i data-lucide="info" class="w-5 h-5 text-brand-gold mx-auto mb-3"></i>
+            <p class="text-sm text-brand-textmuted leading-relaxed">Các gói trên áp dụng cho <strong>1 vùng cơ thể cụ thể</strong>. Khi đặt nhiều vùng cùng lúc, giá được tính riêng từng vùng và cộng lại với chiết khấu gói. Liên hệ để được tư vấn gói phù hợp nhất.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================ -->
+<!-- BOOKING VIEW                                      -->
+<!-- ================================================ -->
+<div id="view-booking" class="hidden fade-in bg-brand-ivory">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-10">
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="font-serif text-3xl text-brand-textmain mb-2">Đặt Lịch Hẹn</h1>
+            <p class="text-sm text-brand-textmuted">Hoàn tất trong 4 bước đơn giản. Thanh toán trực tiếp tại spa.</p>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="flex items-center justify-center mb-10 max-w-sm mx-auto">
+            <div class="flex flex-col items-center">
+                <div class="step-circle active" id="sc-1">1</div>
+                <p class="text-xs mt-1.5 text-brand-gold font-medium whitespace-nowrap">Chi Nhánh</p>
+            </div>
+            <div class="step-bar" id="sb-1"></div>
+            <div class="flex flex-col items-center">
+                <div class="step-circle" id="sc-2">2</div>
+                <p class="text-xs mt-1.5 text-brand-textmuted whitespace-nowrap">Dịch Vụ</p>
+            </div>
+            <div class="step-bar" id="sb-2"></div>
+            <div class="flex flex-col items-center">
+                <div class="step-circle" id="sc-3">3</div>
+                <p class="text-xs mt-1.5 text-brand-textmuted whitespace-nowrap">Ngày & Giờ</p>
+            </div>
+            <div class="step-bar" id="sb-3"></div>
+            <div class="flex flex-col items-center">
+                <div class="step-circle" id="sc-4">4</div>
+                <p class="text-xs mt-1.5 text-brand-textmuted whitespace-nowrap">Xác Nhận</p>
+            </div>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 overflow-hidden">
+
+            <!-- STEP 1: Branch -->
+            <div id="bk-step-1" class="p-8 fade-in">
+                <h2 class="font-serif text-xl text-brand-textmain mb-2">Chọn Chi Nhánh</h2>
+                <p class="text-sm text-brand-textmuted mb-6">Chọn địa điểm phù hợp với bạn</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="branch-card" onclick="selectBranch('q1', this)">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-gold/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-brand-gold"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-brand-textmain mb-1">AURA Quận 1</h3>
+                                <p class="text-xs text-brand-textmuted mb-2">123 Nguyễn Huệ, Phường Bến Nghé, Q.1, TP.HCM</p>
+                                <p class="text-xs text-brand-textmuted flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Thứ 2 – Chủ nhật: 09:00 – 21:00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="branch-card" onclick="selectBranch('q3', this)">
+                        <div class="flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-brand-gold/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <i data-lucide="map-pin" class="w-5 h-5 text-brand-gold"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium text-brand-textmain mb-1">AURA Quận 3</h3>
+                                <p class="text-xs text-brand-textmuted mb-2">456 Võ Văn Tần, Phường 5, Q.3, TP.HCM</p>
+                                <p class="text-xs text-brand-textmuted flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i> Thứ 2 – Chủ nhật: 09:00 – 21:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-end">
+                    <button onclick="goStep(2)" id="btn-step-1" class="px-8 py-3 bg-brand-gold text-white rounded-full text-sm font-medium hover:bg-brand-goldhover transition disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        Tiếp Theo <i data-lucide="arrow-right" class="w-4 h-4 inline ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2: Service -->
+            <div id="bk-step-2" class="hidden p-8 fade-in">
+                <h2 class="font-serif text-xl text-brand-textmain mb-2">Chọn Dịch Vụ</h2>
+                <p class="text-sm text-brand-textmuted mb-5">Chọn vùng cần triệt lông và loại hình</p>
+
+                <!-- Loại hình: Buổi lẻ / Liệu trình -->
+                <div class="flex gap-3 mb-6">
+                    <button onclick="setPkgType('le')" id="pkg-le" class="flex-1 pkg-toggle selected text-left">
+                        <p class="font-medium text-sm text-brand-textmain mb-0.5">Buổi Lẻ</p>
+                        <p class="text-xs text-brand-textmuted">Đặt từng buổi, linh hoạt</p>
+                    </button>
+                    <button onclick="setPkgType('lietrinh')" id="pkg-lietrinh" class="flex-1 pkg-toggle text-left">
+                        <p class="font-medium text-sm text-brand-textmain mb-0.5">Gói Liệu Trình</p>
+                        <p class="text-xs text-brand-textmuted">Mua trọn gói 6/8/10 buổi – giảm đến 30%</p>
+                    </button>
+                </div>
+
+                <!-- Service Selection -->
+                <div class="space-y-2" id="svc-list-bk">
+                    <!-- Rendered by JS -->
+                </div>
+
+                <!-- Selected service info -->
+                <div id="svc-selected-bk" class="hidden mt-4 p-4 bg-brand-gold/5 border border-brand-gold/20 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-medium text-sm text-brand-textmain" id="svc-bk-name">—</p>
+                            <p class="text-xs text-brand-textmuted mt-0.5" id="svc-bk-detail">—</p>
+                        </div>
+                        <span class="font-serif text-lg text-brand-gold" id="svc-bk-price">—</span>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="goStep(1)" class="text-sm text-brand-textmuted hover:text-brand-textmain transition flex items-center gap-1">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Quay lại
+                    </button>
+                    <button onclick="goStep(3)" id="btn-step-2" class="px-8 py-3 bg-brand-gold text-white rounded-full text-sm font-medium hover:bg-brand-goldhover transition disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        Tiếp Theo <i data-lucide="arrow-right" class="w-4 h-4 inline ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Date & Time -->
+            <div id="bk-step-3" class="hidden p-8 fade-in">
+                <h2 class="font-serif text-xl text-brand-textmain mb-2">Chọn Ngày & Giờ</h2>
+                <p class="text-sm text-brand-textmuted mb-6">Chọn khung giờ phù hợp với lịch của bạn</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="fl">Ngày hẹn *</label>
+                        <input type="date" class="fi" id="bk-date" onchange="renderTimeSlots()" min="">
+                    </div>
+                    <div>
+                        <label class="fl">Giới tính (để phân phòng phù hợp)</label>
+                        <select class="fi" id="bk-gender" onchange="updateGenderLabel()">
+                            <option value="nu">Nữ</option>
+                            <option value="nam">Nam</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label class="fl mb-3">Chọn Khung Giờ</label>
+                <div class="grid grid-cols-4 sm:grid-cols-6 gap-2" id="time-slots-bk">
+                    <div class="col-span-4 sm:col-span-6 text-center py-6 text-sm text-brand-textmuted">
+                        <i data-lucide="calendar" class="w-8 h-8 mx-auto mb-2 text-brand-cream"></i>
+                        Chọn ngày để xem khung giờ
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between">
+                    <button onclick="goStep(2)" class="text-sm text-brand-textmuted hover:text-brand-textmain transition flex items-center gap-1">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Quay lại
+                    </button>
+                    <button onclick="goStep(4)" id="btn-step-3" class="px-8 py-3 bg-brand-gold text-white rounded-full text-sm font-medium hover:bg-brand-goldhover transition disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        Tiếp Theo <i data-lucide="arrow-right" class="w-4 h-4 inline ml-1"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 4: Confirm -->
+            <div id="bk-step-4" class="hidden p-8 fade-in">
+                <h2 class="font-serif text-xl text-brand-textmain mb-2">Thông Tin & Xác Nhận</h2>
+                <p class="text-sm text-brand-textmuted mb-6">Điền thông tin để hoàn tất đặt lịch</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Form -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="fl">Họ và tên *</label>
+                            <input type="text" class="fi" id="bk-name" placeholder="Nguyễn Thị Hoa" oninput="validateConfirm()">
+                        </div>
+                        <div>
+                            <label class="fl">Số điện thoại *</label>
+                            <input type="tel" class="fi" id="bk-phone" placeholder="0901 234 567" oninput="validateConfirm()">
+                        </div>
+                        <div>
+                            <label class="fl">Email (tùy chọn)</label>
+                            <input type="email" class="fi" id="bk-email" placeholder="email@example.com">
+                        </div>
+                        <div>
+                            <label class="fl">Ghi chú thêm</label>
+                            <textarea class="fi resize-none" id="bk-note" rows="3" placeholder="Da nhạy cảm, lần đầu triệt lông..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="bg-brand-ivory rounded-2xl border border-brand-cream p-6">
+                        <h4 class="font-serif text-lg text-brand-textmain mb-5">Tóm Tắt Đặt Lịch</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-brand-textmuted">Chi nhánh</span>
+                                <span class="font-medium text-right" id="sum-branch">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-brand-textmuted">Dịch vụ</span>
+                                <span class="font-medium text-right" id="sum-service">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-brand-textmuted">Loại hình</span>
+                                <span class="font-medium text-right" id="sum-pkgtype">Buổi Lẻ</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-brand-textmuted">Ngày hẹn</span>
+                                <span class="font-medium text-right" id="sum-date">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-brand-textmuted">Giờ hẹn</span>
+                                <span class="font-medium text-right" id="sum-time">—</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-brand-textmuted">Giới tính</span>
+                                <span class="font-medium text-right" id="sum-gender">Nữ</span>
+                            </div>
+                        </div>
+                        <div class="h-px bg-brand-cream my-4"></div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-sm text-brand-textmuted">Dự kiến</span>
+                            <span class="font-serif text-2xl text-brand-gold" id="sum-price-final">—</span>
+                        </div>
+                        <p class="text-[11px] text-brand-textmuted mt-2 flex items-center gap-1">
+                            <i data-lucide="info" class="w-3 h-3"></i>
+                            Thanh toán trực tiếp tại spa. Không thu phí đặt lịch.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-8 flex justify-between items-center border-t border-brand-cream pt-6">
+                    <button onclick="goStep(3)" class="text-sm text-brand-textmuted hover:text-brand-textmain transition flex items-center gap-1">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> Quay lại
+                    </button>
+                    <button onclick="submitBooking()" id="btn-submit" class="px-10 py-4 bg-brand-gold text-white rounded-full font-medium hover:bg-brand-goldhover transition shadow-premium flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+                        Xác Nhận Đặt Lịch <i data-lucide="check-circle" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- ================================================ -->
+<!-- BOOKING SUCCESS VIEW                              -->
+<!-- ================================================ -->
+<div id="view-booking-success" class="hidden fade-in flex-1 flex items-center justify-center bg-brand-ivory p-4 py-20">
+    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream p-10 max-w-md w-full text-center relative overflow-hidden">
+        <div class="absolute -top-10 -right-10 w-40 h-40 bg-green-50 rounded-full blur-3xl"></div>
+        <div class="w-20 h-20 mx-auto bg-green-100 rounded-full flex items-center justify-center text-green-600 mb-6 relative z-10">
+            <i data-lucide="check" class="w-10 h-10"></i>
+        </div>
+        <h2 class="font-serif text-3xl text-brand-textmain mb-2 relative z-10">Đặt Lịch Thành Công!</h2>
+        <p class="text-sm text-brand-textmuted mb-8 relative z-10" id="success-msg">
+            Chúng tôi sẽ liên hệ xác nhận lịch hẹn trong vòng 30 phút.
+        </p>
+        <div class="bg-brand-ivory rounded-2xl p-5 border border-brand-cream text-left space-y-2 mb-8 relative z-10" id="success-details">
+            <!-- Filled by JS -->
+        </div>
+        <div class="space-y-3 relative z-10">
+            <button class="w-full py-3 bg-brand-gold text-white rounded-full font-medium hover:bg-brand-goldhover transition text-sm">
+                <i data-lucide="calendar-plus" class="w-4 h-4 inline mr-2"></i>Thêm Vào Lịch
+            </button>
+            <button onclick="showView('home')" class="w-full py-3 bg-white text-brand-textmain border border-brand-cream hover:bg-brand-ivory rounded-full font-medium transition text-sm">
+                Về Trang Chủ
+            </button>
+        </div>
+    </div>
+</div>
+
+</main>
+
+<!-- ================================================ -->
+<!-- FOOTER                                           -->
+<!-- ================================================ -->
+<footer class="bg-white border-t border-brand-cream pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            <div class="col-span-1">
+                <div class="flex items-center gap-2 mb-5">
+                    <i data-lucide="flower-2" class="text-brand-gold w-6 h-6" stroke-width="1.5"></i>
+                    <span class="font-serif text-xl tracking-widest uppercase font-semibold">AURA</span>
+                </div>
+                <p class="text-sm text-brand-textmuted leading-relaxed mb-5">Trung tâm triệt lông & chăm sóc da công nghệ cao. Vẻ đẹp bền vững từ bên trong.</p>
+                <div class="flex gap-3">
+                    <a href="#" class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmuted hover:text-brand-gold hover:border-brand-gold transition"><i data-lucide="facebook" class="w-4 h-4"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmuted hover:text-brand-gold hover:border-brand-gold transition"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center text-brand-textmuted hover:text-brand-gold hover:border-brand-gold transition"><i data-lucide="youtube" class="w-4 h-4"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-serif text-base text-brand-textmain mb-4">Dịch Vụ</h4>
+                <ul class="space-y-2.5 text-sm text-brand-textmuted">
+                    <li><a onclick="showView('services')" class="hover:text-brand-gold transition cursor-pointer">Triệt Lông Nách</a></li>
+                    <li><a onclick="showView('services')" class="hover:text-brand-gold transition cursor-pointer">Triệt Lông Mặt</a></li>
+                    <li><a onclick="showView('services')" class="hover:text-brand-gold transition cursor-pointer">Triệt Lông Tay & Chân</a></li>
+                    <li><a onclick="showView('services')" class="hover:text-brand-gold transition cursor-pointer">Triệt Lông Vùng Bikini</a></li>
+                    <li><a onclick="showView('services')" class="hover:text-brand-gold transition cursor-pointer">Triệt Lông Toàn Thân</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif text-base text-brand-textmain mb-4">Chi Nhánh</h4>
+                <ul class="space-y-2.5 text-sm text-brand-textmuted">
+                    <li class="flex items-start gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-brand-gold"></i>AURA Q.1 – 123 Nguyễn Huệ</li>
+                    <li class="flex items-start gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-brand-gold"></i>AURA Q.3 – 456 Võ Văn Tần</li>
+                    <li class="flex items-center gap-1.5"><i data-lucide="phone" class="w-3.5 h-3.5 flex-shrink-0 text-brand-gold"></i>1900 xxxx</li>
+                    <li class="flex items-center gap-1.5"><i data-lucide="clock" class="w-3.5 h-3.5 flex-shrink-0 text-brand-gold"></i>09:00 – 21:00 hàng ngày</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif text-base text-brand-textmain mb-4">Hỗ Trợ</h4>
+                <ul class="space-y-2.5 text-sm text-brand-textmuted">
+                    <li><a href="#" class="hover:text-brand-gold transition">Chính sách bảo mật</a></li>
+                    <li><a href="#" class="hover:text-brand-gold transition">Điều khoản dịch vụ</a></li>
+                    <li><a href="#" class="hover:text-brand-gold transition">Chính sách đặt lịch</a></li>
+                    <li><a href="#" class="hover:text-brand-gold transition">Câu hỏi thường gặp</a></li>
+                    <li><a href="#" class="hover:text-brand-gold transition">Tuyển dụng</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-brand-cream pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-brand-textmuted gap-3">
+            <p>&copy; 2026 AURA Spa. Tất cả quyền được bảo lưu.</p>
+            <p>Hệ thống quản lý đa chi nhánh bởi <span class="text-brand-gold font-medium">AURA SaaS Platform</span></p>
+        </div>
+    </div>
+</footer>
+
+<!-- Floating Booking Widget -->
+<button onclick="showView('booking')" class="fixed bottom-6 right-6 w-14 h-14 bg-brand-gold text-white rounded-full shadow-premium flex items-center justify-center hover:scale-110 transition-transform z-50 group">
+    <i data-lucide="calendar-plus" class="w-6 h-6"></i>
+    <span class="absolute right-full mr-4 bg-white text-brand-textmain text-xs font-medium py-1.5 px-3 rounded-lg shadow-soft border border-brand-cream opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">Đặt Lịch</span>
+</button>
+
+<script>
+    lucide.createIcons();
+
+    // ─── Data ───────────────────────────────────────────────────────────────
+    const SERVICES = [
+        { id: 'nach-nu',    name: 'Triệt Lông Nách',         sub: 'Nữ',  area: 'nach',     dur: 30,  price: 200000,  priceStr: '200.000₫' },
+        { id: 'nach-nam',   name: 'Triệt Lông Nách',         sub: 'Nam', area: 'nach',     dur: 30,  price: 300000,  priceStr: '300.000₫' },
+        { id: 'mat-nu',     name: 'Triệt Lông Mặt',          sub: 'Nữ',  area: 'mat',      dur: 45,  price: 250000,  priceStr: '250.000₫' },
+        { id: 'mat-nam',    name: 'Triệt Lông Mặt',          sub: 'Nam', area: 'mat',      dur: 45,  price: 350000,  priceStr: '350.000₫' },
+        { id: 'tay-nu',     name: 'Triệt Lông Tay (cánh tay)',sub: 'Nữ', area: 'tay',      dur: 60,  price: 350000,  priceStr: '350.000₫' },
+        { id: 'tay-nam',    name: 'Triệt Lông Tay (cánh tay)',sub: 'Nam',area: 'tay',      dur: 60,  price: 450000,  priceStr: '450.000₫' },
+        { id: 'chan-dui-nu', name: 'Triệt Lông Chân (đùi)',   sub: 'Nữ', area: 'chan',      dur: 60,  price: 450000,  priceStr: '450.000₫' },
+        { id: 'chan-bap-nu', name: 'Triệt Lông Chân (bắp chân)', sub: 'Nữ', area: 'chan',  dur: 60,  price: 350000,  priceStr: '350.000₫' },
+        { id: 'lung-nu',    name: 'Triệt Lông Lưng',         sub: 'Nữ',  area: 'lung',     dur: 60,  price: 400000,  priceStr: '400.000₫' },
+        { id: 'lung-nam',   name: 'Triệt Lông Lưng',         sub: 'Nam', area: 'lung',     dur: 60,  price: 500000,  priceStr: '500.000₫' },
+        { id: 'vio-nu',     name: 'Triệt Lông Vùng Bikini (V/I/O)', sub: 'Nữ', area: 'vio', dur: 60, price: 500000, priceStr: '500.000₫' },
+        { id: 'than-nu',    name: 'Triệt Lông Toàn Thân',   sub: 'Nữ',  area: 'toan-than',dur: 180, price: 1500000, priceStr: '1.500.000₫' },
+        { id: 'than-nam',   name: 'Triệt Lông Toàn Thân',   sub: 'Nam', area: 'toan-than',dur: 180, price: 2000000, priceStr: '2.000.000₫' },
+    ];
+
+    const BRANCHES = { q1: 'AURA Quận 1', q3: 'AURA Quận 3' };
+    const TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30','18:00','18:30','19:00','19:30','20:00','20:30'];
+    const BLOCKED = ['10:00','10:30','14:00','16:30','18:00']; // demo
+
+    // ─── State ──────────────────────────────────────────────────────────────
+    const BK = { branch: null, service: null, pkgType: 'le', date: null, time: null, gender: 'nu' };
+
+    // ─── Views ──────────────────────────────────────────────────────────────
+    const ALL_VIEWS = ['home','services','packages','booking','booking-success'];
+
+    function showView(id) {
+        ALL_VIEWS.forEach(v => {
+            const el = document.getElementById('view-' + v);
+            if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+        });
+        const target = document.getElementById('view-' + id);
+        if (target) {
+            target.classList.remove('hidden');
+            if (id === 'booking-success') target.classList.add('flex');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        // update nav highlights
+        ['home','services','packages'].forEach(v => {
+            const n = document.getElementById('nav-' + v);
+            if (n) n.classList.toggle('text-brand-gold', v === id);
+        });
+        if (id === 'booking') {
+            setMinDate();
+            goStep(1);
+        }
+        if (id === 'services') renderServicesGrid('all', 'all');
+        lucide.createIcons();
+    }
+
+    // ─── Mobile nav ─────────────────────────────────────────────────────────
+    function toggleMobile() {
+        const m = document.getElementById('mobile-menu');
+        m.classList.toggle('open');
+    }
+    function closeMobile() {
+        document.getElementById('mobile-menu').classList.remove('open');
+    }
+
+    // ─── Language ───────────────────────────────────────────────────────────
+    function setLang(code) {
+        document.getElementById('lang-label').textContent = code.toUpperCase();
+        ['vi','en','ja','ko','zh'].forEach(l => {
+            const el = document.getElementById('lang-' + l);
+            if (el) {
+                el.classList.toggle('text-brand-gold', l === code);
+                el.classList.toggle('bg-brand-ivory', l === code);
+                el.classList.toggle('font-medium', l === code);
+                el.classList.toggle('text-brand-textmuted', l !== code);
+            }
+        });
+    }
+
+    // ─── Services Grid ───────────────────────────────────────────────────────
+    let _gFilter = 'all';
+    let _aFilter = 'all';
+
+    function filterGender(g) {
+        _gFilter = g;
+        document.querySelectorAll('.gender-btn').forEach(b => {
+            const isActive = b.dataset.g === g;
+            b.className = 'gender-btn px-5 py-2 rounded-full text-sm border transition ' +
+                (isActive ? 'border-brand-gold bg-brand-gold text-white' : 'border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold');
+        });
+        renderServicesGrid(_gFilter, _aFilter);
+    }
+
+    function filterArea(a) { _aFilter = a; renderServicesGrid(_gFilter, _aFilter); }
+
+    function renderServicesGrid(gFilter, aFilter) {
+        const grid = document.getElementById('services-grid');
+        if (!grid) return;
+        let list = SERVICES;
+        if (gFilter !== 'all') list = list.filter(s => (gFilter === 'nu' ? s.sub === 'Nữ' : s.sub === 'Nam'));
+        if (aFilter !== 'all') list = list.filter(s => s.area === aFilter);
+        grid.innerHTML = list.map(s => `
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream overflow-hidden group hover:-translate-y-0.5 transition-all duration-200 cursor-pointer" onclick="showView('booking')">
+                <div class="h-32 bg-gradient-to-br from-brand-cream to-brand-gold/10 flex items-center justify-center">
+                    <i data-lucide="sparkles" class="w-12 h-12 text-brand-gold/40" stroke-width="1"></i>
+                </div>
+                <div class="p-5">
+                    <div class="flex items-start justify-between mb-2">
+                        <h3 class="font-medium text-brand-textmain group-hover:text-brand-gold transition text-sm leading-snug">${s.name}</h3>
+                        <span class="text-xs ml-2 flex-shrink-0 ${s.sub === 'Nữ' ? 'bg-pink-50 text-pink-600' : 'bg-blue-50 text-blue-600'} px-2 py-0.5 rounded-full">${s.sub}</span>
+                    </div>
+                    <p class="text-xs text-brand-textmuted mb-3">${s.dur} phút • Công nghệ Laser Diode</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-brand-gold font-medium text-sm">${s.priceStr} / buổi</span>
+                        <span class="text-xs text-brand-textmuted hover:text-brand-gold transition flex items-center gap-1">Đặt ngay <i data-lucide="arrow-right" class="w-3 h-3"></i></span>
+                    </div>
+                </div>
+            </div>`).join('');
+        lucide.createIcons();
+    }
+
+    // ─── Booking Steps ───────────────────────────────────────────────────────
+    function goStep(n) {
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById('bk-step-' + i).classList.toggle('hidden', i !== n);
+        }
+        updateStepUI(n);
+        updateSummaryPanel();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        lucide.createIcons();
+    }
+
+    function updateStepUI(active) {
+        for (let i = 1; i <= 4; i++) {
+            const c = document.getElementById('sc-' + i);
+            if (!c) continue;
+            c.className = 'step-circle ' + (i < active ? 'done' : i === active ? 'active' : '');
+            c.innerHTML = i < active ? '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' : i;
+        }
+        for (let i = 1; i <= 3; i++) {
+            const b = document.getElementById('sb-' + i);
+            if (b) b.classList.toggle('done', i < active);
+        }
+    }
+
+    // ─── Step 1: Branch ──────────────────────────────────────────────────────
+    function selectBranch(id, el) {
+        document.querySelectorAll('.branch-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        BK.branch = id;
+        document.getElementById('btn-step-1').disabled = false;
+    }
+
+    // ─── Step 2: Service ─────────────────────────────────────────────────────
+    function setPkgType(type) {
+        BK.pkgType = type;
+        document.getElementById('pkg-le').classList.toggle('selected', type === 'le');
+        document.getElementById('pkg-lietrinh').classList.toggle('selected', type === 'lietrinh');
+        renderServiceList();
+    }
+
+    function renderServiceList() {
+        const container = document.getElementById('svc-list-bk');
+        container.innerHTML = SERVICES.map(s => `
+            <div class="svc-card${BK.service?.id === s.id ? ' selected' : ''}" onclick="selectService('${s.id}', this)">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-lg bg-brand-gold/10 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="sparkles" class="w-4 h-4 text-brand-gold"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-sm text-brand-textmain">${s.name} <span class="text-xs font-normal text-brand-textmuted">(${s.sub})</span></p>
+                            <p class="text-xs text-brand-textmuted mt-0.5">${s.dur} phút</p>
+                        </div>
+                    </div>
+                    <div class="text-right flex-shrink-0 ml-4">
+                        <p class="font-medium text-sm text-brand-textmain">${s.priceStr}</p>
+                        ${BK.pkgType === 'lietrinh' ? `<p class="text-xs text-green-600">Gói 6B: ${formatVND(Math.round(s.price * 6 * 0.85))}</p>` : '<p class="text-xs text-brand-textmuted">/ buổi</p>'}
+                    </div>
+                </div>
+            </div>`).join('');
+        lucide.createIcons();
+    }
+
+    function selectService(id, el) {
+        BK.service = SERVICES.find(s => s.id === id);
+        document.querySelectorAll('.svc-card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('svc-selected-bk').classList.remove('hidden');
+        document.getElementById('svc-bk-name').textContent = BK.service.name + ' (' + BK.service.sub + ')';
+        document.getElementById('svc-bk-detail').textContent = BK.service.dur + ' phút • Laser Diode';
+        document.getElementById('svc-bk-price').textContent = BK.service.priceStr + ' / buổi';
+        document.getElementById('btn-step-2').disabled = false;
+    }
+
+    // ─── Step 3: Date & Time ─────────────────────────────────────────────────
+    function setMinDate() {
+        const today = new Date();
+        const y = today.getFullYear(), m = String(today.getMonth()+1).padStart(2,'0'), d = String(today.getDate()).padStart(2,'0');
+        document.getElementById('bk-date').min = `${y}-${m}-${d}`;
+    }
+
+    function renderTimeSlots() {
+        BK.date = document.getElementById('bk-date').value;
+        BK.time = null;
+        document.getElementById('btn-step-3').disabled = true;
+        const container = document.getElementById('time-slots-bk');
+        if (!BK.date) { container.innerHTML = ''; return; }
+        container.innerHTML = TIMES.map(t => {
+            const isBlocked = BLOCKED.includes(t);
+            return `<div class="tslot${isBlocked ? ' blocked' : ''}" onclick="${isBlocked ? '' : `selectTime('${t}', this)`}">${t}${isBlocked ? '<br><span style="font-size:10px">Kín</span>' : ''}</div>`;
+        }).join('');
+    }
+
+    function selectTime(t, el) {
+        document.querySelectorAll('.tslot:not(.blocked)').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        BK.time = t;
+        document.getElementById('btn-step-3').disabled = false;
+    }
+
+    function updateGenderLabel() {
+        BK.gender = document.getElementById('bk-gender').value;
+    }
+
+    // ─── Step 4: Confirm ─────────────────────────────────────────────────────
+    function updateSummaryPanel() {
+        const dayNames = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+        const formatDate = d => { if (!d) return '—'; const dt = new Date(d+'T00:00'); return dayNames[dt.getDay()] + ', ' + d.split('-').reverse().join('/'); };
+        document.getElementById('sum-branch').textContent   = BK.branch  ? BRANCHES[BK.branch] : '—';
+        document.getElementById('sum-service').textContent  = BK.service ? BK.service.name + ' (' + BK.service.sub + ')' : '—';
+        document.getElementById('sum-pkgtype').textContent  = BK.pkgType === 'le' ? 'Buổi Lẻ' : 'Gói Liệu Trình';
+        document.getElementById('sum-date').textContent     = formatDate(BK.date);
+        document.getElementById('sum-time').textContent     = BK.time || '—';
+        document.getElementById('sum-gender').textContent   = BK.gender === 'nu' ? 'Nữ' : 'Nam';
+        document.getElementById('sum-price-final').textContent = BK.service ? BK.service.priceStr : '—';
+    }
+
+    function validateConfirm() {
+        const name  = document.getElementById('bk-name').value.trim();
+        const phone = document.getElementById('bk-phone').value.trim();
+        const ok = name.length >= 2 && phone.length >= 9;
+        document.getElementById('btn-submit').disabled = !ok;
+    }
+
+    // ─── Submit ──────────────────────────────────────────────────────────────
+    function submitBooking() {
+        const name  = document.getElementById('bk-name').value.trim();
+        const phone = document.getElementById('bk-phone').value.trim();
+        const note  = document.getElementById('bk-note').value.trim();
+        const dayNames = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+        const dt = BK.date ? new Date(BK.date+'T00:00') : null;
+        const dateStr = dt ? dayNames[dt.getDay()] + ', ' + BK.date.split('-').reverse().join('/') : '—';
+
+        document.getElementById('success-details').innerHTML = `
+            <p class="text-xs"><span class="text-brand-textmuted inline-block w-24">Khách hàng:</span><strong>${name}</strong></p>
+            <p class="text-xs"><span class="text-brand-textmuted inline-block w-24">Điện thoại:</span>${phone}</p>
+            <p class="text-xs"><span class="text-brand-textmuted inline-block w-24">Chi nhánh:</span>${BRANCHES[BK.branch]}</p>
+            <p class="text-xs"><span class="text-brand-textmuted inline-block w-24">Dịch vụ:</span>${BK.service?.name} (${BK.service?.sub})</p>
+            <p class="text-xs"><span class="text-brand-textmuted inline-block w-24">Ngày hẹn:</span>${dateStr}</p>
+            <p class="text-xs"><span class="text-brand-textmuted inline-block w-24">Giờ hẹn:</span>${BK.time}</p>
+            <p class="text-xs"><span class="text-brand-textmuted inline-block w-24">Tổng tiền:</span><strong class="text-brand-gold">${BK.service?.priceStr}</strong></p>
+        `;
+        showView('booking-success');
+    }
+
+    // ─── Utility ─────────────────────────────────────────────────────────────
+    function formatVND(n) { return n.toLocaleString('vi-VN') + '₫'; }
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('navbar');
+        nav.classList.toggle('shadow-md', window.scrollY > 20);
+    });
+
+    // Init
+    showView('home');
+    renderServicesGrid('all', 'all');
+</script>
+</body>
+</html>

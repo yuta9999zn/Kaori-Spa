@@ -1,0 +1,32 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "조직 관리", "subtitle": "Organization Owner" },
+  "nav": {
+    "dashboard": "대시보드",
+    "branch": "지점",
+    "member": "멤버",
+    "role": "역할·권한",
+    "service": "서비스 설정",
+    "voucher": "쿠폰",
+    "content": "콘텐츠",
+    "report": "멀티 지점 리포트",
+    "settings": "설정",
+    "logout": "로그아웃"
+  },
+  "dashboard": {
+    "title": "조직 개요",
+    "kpi": { "branches": "지점", "staff": "직원", "customers": "고객", "revenue": "월 매출" },
+    "branchSummary": "지점 성과"
+  },
+  "branch": {
+    "title": "지점",
+    "create": "지점 추가",
+    "columns": { "code": "코드", "name": "이름", "address": "주소", "manager": "매니저", "status": "상태" }
+  },
+  "member": {
+    "title": "멤버",
+    "invite": "멤버 초대",
+    "columns": { "name": "이름", "email": "이메일", "role": "역할", "scope": "범위", "status": "상태" }
+  },
+  "role": { "title": "권한 매트릭스", "subtitle": "역할 × 권한 설정" }
+}

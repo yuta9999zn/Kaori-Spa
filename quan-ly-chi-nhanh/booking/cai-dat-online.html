@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Booking Settings | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.5rem;
+            height: 1.25rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1rem;
+            height: 1rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1.25rem);
+        }
+
+        /* Custom Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm text-brand-gold;
+        }
+        .radio-card-input:checked + .radio-card-body .radio-card-icon {
+            @apply text-brand-gold opacity-100 scale-100;
+        }
+        
+        /* Mobile Preview Scroll */
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search settings or configurations..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-8">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Bookings</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Online Booking Settings</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col xl:flex-row xl:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6 mb-6 xl:mb-0">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Online Booking Settings</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Configure the behavior, rules, and appearance of your public-facing customer booking portal.</p>
+                        
+                        <!-- Branch Selector Context -->
+                        <div class="mt-6 flex items-center space-x-3">
+                            <span class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted">Configuring For:</span>
+                            <select class="spa-input w-auto min-w-[200px] py-2 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer text-sm font-medium border-brand-gold shadow-inner-soft">
+                                <option value="all">All Branches (Global)</option>
+                                <option value="d1" selected>District 1 Spa</option>
+                                <option value="ws">Westside Retreat</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                            Reset to Default
+                        </button>
+                        <button class="w-full sm:w-auto px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                            <i data-lucide="external-link" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Open Portal
+                        </button>
+                        <button class="w-full sm:w-auto px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT COLUMN: CONFIGURATION CARDS (Col Span 2) -->
+                    <div class="lg:col-span-2 space-y-8">
+                        
+                        <!-- 1. General Preferences -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="sliders-horizontal" class="w-5 h-5 mr-3 text-brand-gold"></i> Service & Staff Preferences
+                            </h3>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="spa-label">Service Visibility</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium mb-2">
+                                        <option value="all">Show All Active Services</option>
+                                        <option value="selected" selected>Show Selected Services Only</option>
+                                    </select>
+                                    <div class="flex flex-wrap gap-2 mt-3 p-4 bg-brand-ivory/50 rounded-xl border border-brand-cream">
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-brand-cream shadow-sm">Massage Therapy <button class="ml-2 text-brand-textmuted hover:text-brand-rose"><i data-lucide="x" class="w-3 h-3"></i></button></span>
+                                        <span class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-white border border-brand-cream shadow-sm">Facials <button class="ml-2 text-brand-textmuted hover:text-brand-rose"><i data-lucide="x" class="w-3 h-3"></i></button></span>
+                                        <button class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-brand-gold/5 text-brand-gold border border-brand-gold/30 border-dashed hover:bg-brand-gold/10 transition"><i data-lucide="plus" class="w-3 h-3 mr-1"></i> Add</button>
+                                    </div>
+                                </div>
+
+                                <div class="h-px w-full bg-brand-cream/50"></div>
+
+                                <div>
+                                    <label class="spa-label mb-3">Staff Selection Mode</label>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <label class="relative cursor-pointer group">
+                                            <input type="radio" name="staff_mode" class="peer sr-only radio-card-input">
+                                            <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <i data-lucide="users" class="w-5 h-5 text-brand-textmuted group-hover:text-brand-gold transition"></i>
+                                                    <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity transform scale-75 duration-200"></i>
+                                                </div>
+                                                <p class="font-medium text-brand-textmain text-sm">Cannot Choose</p>
+                                                <p class="text-[10px] text-brand-textmuted mt-1 leading-relaxed">System auto-assigns staff. Hides staff list from customers.</p>
+                                            </div>
+                                        </label>
+                                        <label class="relative cursor-pointer group">
+                                            <input type="radio" name="staff_mode" class="peer sr-only radio-card-input" checked>
+                                            <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <i data-lucide="user-check" class="w-5 h-5 text-brand-textmuted group-hover:text-brand-gold transition"></i>
+                                                    <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity transform scale-75 duration-200"></i>
+                                                </div>
+                                                <p class="font-medium text-brand-textmain text-sm">Can Choose (Optional)</p>
+                                                <p class="text-[10px] text-brand-textmuted mt-1 leading-relaxed">Customers may request specific staff or select 'Anyone'.</p>
+                                            </div>
+                                        </label>
+                                        <label class="relative cursor-pointer group">
+                                            <input type="radio" name="staff_mode" class="peer sr-only radio-card-input">
+                                            <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-4 transition-all hover:border-brand-gold">
+                                                <div class="flex justify-between items-start mb-2">
+                                                    <i data-lucide="user-search" class="w-5 h-5 text-brand-textmuted group-hover:text-brand-gold transition"></i>
+                                                    <i data-lucide="check-circle" class="w-4 h-4 radio-card-icon opacity-0 transition-opacity transform scale-75 duration-200"></i>
+                                                </div>
+                                                <p class="font-medium text-brand-textmain text-sm">Must Choose</p>
+                                                <p class="text-[10px] text-brand-textmuted mt-1 leading-relaxed">Forces customer to select a specific staff member.</p>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Scheduling & Time Slots -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="calendar-days" class="w-5 h-5 mr-3 text-brand-gold"></i> Scheduling Rules
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                                <div>
+                                    <label class="spa-label">Slot Interval</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="15">Every 15 Minutes</option>
+                                        <option value="30" selected>Every 30 Minutes</option>
+                                        <option value="60">Every 60 Minutes</option>
+                                    </select>
+                                    <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1">How frequently slots appear online (e.g. 10:00, 10:30).</p>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Minimum Gap Between Bookings</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="0">No Gap</option>
+                                        <option value="10">10 Minutes</option>
+                                        <option value="15" selected>15 Minutes</option>
+                                        <option value="30">30 Minutes</option>
+                                    </select>
+                                    <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1">Turnaround time forced between online appointments.</p>
+                                </div>
+                            </div>
+
+                            <div class="h-px w-full bg-brand-cream/50 mb-6"></div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div>
+                                    <label class="spa-label">Min. Booking Notice</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="1">1 Hour</option>
+                                        <option value="2" selected>2 Hours</option>
+                                        <option value="24">24 Hours</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Max. Booking Window</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                        <option value="30" selected>30 Days</option>
+                                        <option value="60">60 Days</option>
+                                        <option value="90">90 Days</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Customer Limits & Cancellations -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="shield" class="w-5 h-5 mr-3 text-brand-gold"></i> Limits & Cancellations
+                            </h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                                <div>
+                                    <label class="spa-label">Max Bookings Per Day</label>
+                                    <input type="number" class="spa-input" value="2">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Max Active Future Bookings</label>
+                                    <input type="number" class="spa-input" value="3">
+                                </div>
+                            </div>
+
+                            <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-6">
+                                <h4 class="text-sm font-semibold text-brand-textmain mb-4 uppercase tracking-widest">Cancellation Policy</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="spa-label">Min. Notice to Cancel Online</label>
+                                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer bg-white">
+                                            <option value="6">6 Hours</option>
+                                            <option value="12">12 Hours</option>
+                                            <option value="24" selected>24 Hours</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="spa-label">Late Cancellation Penalty</label>
+                                        <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold bg-white">
+                                            <span class="flex items-center px-4 bg-brand-ivory border-r border-brand-cream text-brand-textmuted text-sm font-medium">$</span>
+                                            <input type="number" class="w-full bg-transparent px-4 py-2.5 text-sm font-serif font-medium outline-none text-brand-textmain" placeholder="0.00" value="25.00">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Intake, Deposits & Confirmation -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="credit-card" class="w-5 h-5 mr-3 text-brand-gold"></i> Intake & Payments
+                            </h3>
+
+                            <div class="space-y-6">
+                                <!-- Field Requirements -->
+                                <div>
+                                    <label class="spa-label mb-3">Customer Information Required</label>
+                                    <div class="flex flex-wrap gap-4">
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="checkbox" class="spa-checkbox" checked disabled>
+                                            <span class="ml-2 text-sm text-brand-textmain font-medium">Name</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer">
+                                            <input type="checkbox" class="spa-checkbox" checked disabled>
+                                            <span class="ml-2 text-sm text-brand-textmain font-medium">Phone</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer group">
+                                            <input type="checkbox" class="spa-checkbox" checked>
+                                            <span class="ml-2 text-sm text-brand-textmain group-hover:text-brand-gold transition">Email</span>
+                                        </label>
+                                        <label class="flex items-center cursor-pointer group">
+                                            <input type="checkbox" class="spa-checkbox" checked>
+                                            <span class="ml-2 text-sm text-brand-textmain group-hover:text-brand-gold transition">Special Notes</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="h-px bg-brand-cream/50 w-full"></div>
+
+                                <!-- Deposit & Conf -->
+                                <div class="flex flex-col md:flex-row justify-between gap-6">
+                                    
+                                    <!-- Deposit Toggle -->
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div>
+                                                <p class="text-sm font-medium text-brand-textmain">Require Deposit</p>
+                                                <p class="text-[10px] text-brand-textmuted mt-0.5">Charge upfront to secure slot.</p>
+                                            </div>
+                                            <div class="relative inline-block w-10 align-middle select-none shrink-0 pt-0.5">
+                                                <input type="checkbox" id="tgl-deposit" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="tgl-deposit" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                            </div>
+                                        </div>
+                                        <div class="flex rounded-xl overflow-hidden border border-brand-cream focus-within:border-brand-gold bg-white w-full shadow-sm">
+                                            <input type="number" class="w-full bg-transparent px-4 py-2 text-sm outline-none text-brand-textmain" value="20" max="100">
+                                            <span class="flex items-center px-4 bg-brand-ivory border-l border-brand-cream text-brand-textmuted text-xs font-medium">%</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-px bg-brand-cream hidden md:block"></div>
+
+                                    <!-- Auto Confirm -->
+                                    <div class="flex-1">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div>
+                                                <p class="text-sm font-medium text-brand-textmain">Auto-Confirm Booking</p>
+                                                <p class="text-[10px] text-brand-textmuted mt-0.5">Skip manual reception approval.</p>
+                                            </div>
+                                            <div class="relative inline-block w-10 align-middle select-none shrink-0 pt-0.5">
+                                                <input type="checkbox" id="tgl-confirm" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="tgl-confirm" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                                            </div>
+                                        </div>
+                                        <p class="text-[10px] text-brand-textmuted bg-brand-ivory p-3 rounded-xl border border-brand-cream">When enabled, customers instantly receive a "Confirmed" status upon successful payment.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Notifications -->
+                        <div class="bg-white rounded-3xl p-6 md:p-8 shadow-soft border border-brand-cream/60">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-6 flex items-center border-b border-brand-cream/50 pb-4">
+                                <i data-lucide="bell" class="w-5 h-5 mr-3 text-brand-gold"></i> Automated Notifications
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <!-- Conf -->
+                                <div class="flex items-center justify-between p-4 bg-brand-ivory/50 rounded-xl border border-brand-cream">
+                                    <div>
+                                        <p class="text-sm font-medium text-brand-textmain">Booking Confirmation</p>
+                                        <p class="text-xs text-brand-textmuted mt-0.5">Sent immediately when booked.</p>
+                                    </div>
+                                    <div class="flex space-x-3">
+                                        <span class="inline-flex items-center px-2 py-1 rounded bg-brand-gold/10 text-brand-gold text-[10px] font-bold uppercase tracking-wider">SMS</span>
+                                        <span class="inline-flex items-center px-2 py-1 rounded bg-brand-gold/10 text-brand-gold text-[10px] font-bold uppercase tracking-wider">Email</span>
+                                    </div>
+                                </div>
+
+                                <!-- Reminder -->
+                                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-brand-ivory/50 rounded-xl border border-brand-cream gap-4">
+                                    <div>
+                                        <p class="text-sm font-medium text-brand-textmain">Appointment Reminder</p>
+                                        <p class="text-xs text-brand-textmuted mt-0.5">Automated prompt before visit.</p>
+                                    </div>
+                                    <div class="flex items-center space-x-4">
+                                        <select class="spa-input w-auto min-w-[120px] py-1.5 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] bg-[length:1em] cursor-pointer text-xs bg-white">
+                                            <option value="24h" selected>24 Hrs Before</option>
+                                            <option value="48h">48 Hrs Before</option>
+                                        </select>
+                                        <div class="flex space-x-1">
+                                            <span class="inline-flex items-center px-2 py-1 rounded bg-brand-gold/10 text-brand-gold text-[10px] font-bold uppercase tracking-wider">SMS</span>
+                                            <span class="inline-flex items-center px-2 py-1 rounded bg-gray-100 text-gray-400 text-[10px] font-bold uppercase tracking-wider line-through">Email</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-brand-cream flex justify-end">
+                                <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition flex items-center">
+                                    Edit Message Templates <i data-lucide="arrow-right" class="w-3 h-3 ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN: LIVE PREVIEW (Sticky) -->
+                    <div class="lg:col-span-1 hidden md:block">
+                        <div class="sticky top-28 flex flex-col items-center">
+                            
+                            <div class="w-full flex items-center justify-between mb-4 px-2">
+                                <h3 class="font-serif text-lg text-brand-textmain flex items-center">
+                                    <i data-lucide="smartphone" class="w-4 h-4 mr-2 text-brand-gold"></i> Live Preview
+                                </h3>
+                                <span class="px-2 py-1 bg-green-50 text-green-600 text-[9px] font-bold uppercase tracking-wider rounded border border-green-200">Updating</span>
+                            </div>
+
+                            <!-- Mobile Phone Mockup -->
+                            <div class="w-[320px] h-[650px] bg-white rounded-[2.5rem] shadow-2xl border-8 border-brand-cream/80 relative overflow-hidden flex flex-col">
+                                <!-- Phone Notch -->
+                                <div class="absolute top-0 inset-x-0 h-6 bg-brand-cream/80 rounded-b-xl w-32 mx-auto z-50"></div>
+                                
+                                <!-- Mockup Header -->
+                                <div class="bg-brand-ivory pt-8 pb-4 px-5 text-center border-b border-brand-cream shrink-0">
+                                    <h4 class="font-serif text-lg text-brand-textmain tracking-widest uppercase">Lotus Spa</h4>
+                                    <p class="text-[10px] text-brand-textmuted mt-1">District 1 Branch</p>
+                                </div>
+
+                                <!-- Mockup Body (Scrollable) -->
+                                <div class="flex-1 overflow-y-auto bg-brand-ivory/30 p-5 hide-scroll space-y-5">
+                                    
+                                    <!-- Step 1 Simulation -->
+                                    <div>
+                                        <h5 class="text-xs font-bold uppercase tracking-widest text-brand-textmain mb-3">1. Select Service</h5>
+                                        <div class="bg-white border border-brand-gold rounded-xl p-3 shadow-sm flex justify-between items-center relative overflow-hidden">
+                                            <div class="absolute left-0 top-0 bottom-0 w-1 bg-brand-gold"></div>
+                                            <div class="pl-2">
+                                                <p class="text-sm font-medium text-brand-textmain">Deep Tissue Massage</p>
+                                                <p class="text-[10px] text-brand-textmuted">60 min</p>
+                                            </div>
+                                            <span class="font-serif text-brand-gold">$160</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step 2 Simulation (Staff visible based on settings) -->
+                                    <div>
+                                        <h5 class="text-xs font-bold uppercase tracking-widest text-brand-textmain mb-3">2. Choose Staff</h5>
+                                        <div class="bg-white border border-brand-cream rounded-xl p-3 shadow-sm flex items-center justify-between text-brand-textmuted">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full bg-brand-ivory flex items-center justify-center mr-3"><i data-lucide="user" class="w-4 h-4"></i></div>
+                                                <span class="text-sm">Anyone Available</span>
+                                            </div>
+                                            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step 3 Simulation (Slots based on interval settings) -->
+                                    <div>
+                                        <h5 class="text-xs font-bold uppercase tracking-widest text-brand-textmain mb-3">3. Date & Time</h5>
+                                        <div class="bg-white border border-brand-cream rounded-xl p-3 shadow-sm mb-3 flex items-center justify-between text-brand-textmain">
+                                            <span class="text-sm font-medium">Tomorrow, Mar 10</span>
+                                            <i data-lucide="calendar" class="w-4 h-4 text-brand-gold"></i>
+                                        </div>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div class="py-2 border border-brand-cream rounded-lg text-center text-xs text-brand-textmuted bg-white shadow-sm">10:00 AM</div>
+                                            <div class="py-2 border border-brand-cream rounded-lg text-center text-xs text-brand-textmuted bg-white shadow-sm">10:30 AM</div>
+                                            <div class="py-2 border border-brand-gold bg-brand-gold/10 rounded-lg text-center text-xs font-medium text-brand-goldhover shadow-inner-soft">11:00 AM</div>
+                                            <div class="py-2 border border-brand-cream rounded-lg text-center text-xs text-brand-textmuted bg-white shadow-sm">11:30 AM</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- Mockup Footer (Deposit simulation) -->
+                                <div class="bg-white border-t border-brand-cream p-5 shrink-0 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
+                                    <div class="flex justify-between items-end mb-4">
+                                        <div>
+                                            <p class="text-[10px] text-brand-textmuted uppercase tracking-wider font-semibold">Total: $160</p>
+                                            <p class="text-sm font-medium text-brand-textmain">Due Now (20%)</p>
+                                        </div>
+                                        <span class="font-serif text-xl text-brand-gold font-medium">$32.00</span>
+                                    </div>
+                                    <button class="w-full py-3 bg-brand-textmain text-white rounded-lg text-sm font-medium">
+                                        Next: Your Details
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <p class="text-[10px] text-brand-textmuted mt-4 text-center px-4">Changes to intervals, deposits, and staff selection update this preview automatically.</p>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'lich-booking' });</script>
+</body>
+</html>

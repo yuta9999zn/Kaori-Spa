@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commission & Payroll | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+        
+        /* Tabs styling */
+        .tab-btn {
+            @apply py-4 px-6 text-sm font-medium border-b-2 transition-colors duration-200 outline-none whitespace-nowrap;
+        }
+        .tab-btn.active {
+            @apply border-brand-gold text-brand-gold;
+        }
+        .tab-btn.inactive {
+            @apply border-transparent text-brand-textmuted hover:text-brand-textmain hover:bg-brand-cream/20;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Radio Cards */
+        .radio-card-input:checked + .radio-card-body {
+            @apply border-brand-gold bg-brand-gold/5 shadow-sm text-brand-gold;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white relative">
+
+    <!-- Sticky Header -->
+    <header class="fixed w-full top-0 z-50 bg-white/90 backdrop-blur-md border-b border-brand-cream shadow-sm">
+        <div class="max-w-[1600px] mx-auto px-6 md:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center">
+                <button class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-textmuted hover:text-brand-gold border border-brand-cream hover:border-brand-gold transition mr-4 shadow-sm">
+                    <i data-lucide="menu" class="w-5 h-5"></i>
+                </button>
+                <div class="hidden sm:block flex-1 bg-brand-ivory rounded-full px-4 py-2 border border-brand-cream/50 w-72 transition focus-within:border-brand-gold focus-within:bg-white ml-2">
+                    <div class="flex items-center">
+                        <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                        <input type="text" placeholder="Search staff, payments, or records..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('adjustmentPanel')">
+                            <i data-lucide="coins" class="w-4 h-4 mr-2"></i> Add Bonus / Deduction
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Payroll
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Branch Manager</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="flex-1 w-full flex pt-20 h-screen overflow-hidden max-w-[1600px] mx-auto">
+        
+<div id="sidebar-root"></div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 lg:p-8 scroll-smooth">
+            <div class="max-w-7xl mx-auto pb-24 space-y-6">
+                
+                <!-- BREADCRUMBS & PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden shrink-0 mb-6">
+                    <div class="absolute right-0 top-0 w-80 h-full bg-gradient-to-l from-brand-gold/5 to-transparent pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1 pr-6 mb-6 md:mb-0">
+                        <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2 mb-2">
+                            <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                            <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            <a href="#" class="hover:text-brand-gold transition">Staff</a>
+                            <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                            <span class="text-brand-gold">Commission & Payroll</span>
+                        </div>
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Payroll Management</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-xl">Calculate staff commissions, manage bonuses and deductions, and process period payments.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-3 relative z-10 shrink-0">
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-brand-ivory rounded-full text-sm font-medium transition shadow-sm flex items-center justify-center">
+                            <i data-lucide="download" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Export Report
+                        </button>
+                        <button class="w-full sm:w-auto px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                            <i data-lucide="credit-card" class="w-4 h-4 mr-2"></i> Process All Pending
+                        </button>
+                    </div>
+                </div>
+
+                <!-- GLOBAL FILTERS BAR -->
+                <div class="bg-white rounded-2xl shadow-sm border border-brand-cream/60 p-4 flex flex-wrap items-center gap-4 sticky top-0 z-30">
+                    
+                    <div class="flex items-center space-x-2">
+                        <span class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mr-2">Period</span>
+                        <select class="spa-input w-auto py-2 text-xs h-[36px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] bg-brand-ivory font-medium border-brand-gold/30">
+                            <option value="current" selected>Mar 01 - Mar 15, 2026 (Current)</option>
+                            <option value="prev">Feb 15 - Feb 28, 2026</option>
+                            <option value="custom">Custom Range...</option>
+                        </select>
+                    </div>
+
+                    <div class="h-6 w-px bg-brand-cream hidden md:block"></div>
+
+                    <select class="spa-input w-auto py-2 text-xs h-[36px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]">
+                        <option value="all">All Branches</option>
+                        <option value="d1" selected>District 1 Spa</option>
+                        <option value="d7">District 7 Spa</option>
+                    </select>
+
+                    <select class="spa-input w-auto py-2 text-xs h-[36px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center]">
+                        <option value="all">All Roles</option>
+                        <option value="therapist">Therapists</option>
+                        <option value="receptionist">Receptionists</option>
+                    </select>
+                    
+                    <div class="flex-1 min-w-[200px] relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-brand-textmuted"></i>
+                        <input type="text" placeholder="Search staff member..." class="w-full bg-white border border-brand-cream rounded-lg pl-8 pr-4 py-2 text-xs outline-none focus:border-brand-gold transition-all shadow-sm">
+                    </div>
+                </div>
+
+                <!-- PAYROLL SUMMARY CARDS -->
+                <div class="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center relative overflow-hidden group">
+                        <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-brand-gold/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-gold mb-1">Net Payroll Due</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">$61,300</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Base Salaries</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">$26,000</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-green-600 mb-1">Total Commissions</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">$32,000</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-blue-600 mb-1">Total Bonuses</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">$6,500</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-rose mb-1">Total Deductions</p>
+                        <h3 class="font-serif text-2xl text-brand-textmain">-$3,200</h3>
+                    </div>
+                </div>
+
+                <!-- MAIN TABS & DATA TABLE -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col min-h-[600px]">
+                    
+                    <div class="flex overflow-x-auto border-b border-brand-cream bg-brand-ivory/30 px-2 hide-scroll">
+                        <button class="tab-btn active" onclick="switchTab(this, 'tab-current')">Current Period</button>
+                        <button class="tab-btn inactive" onclick="switchTab(this, 'tab-history')">Payment History</button>
+                    </div>
+
+                    <!-- TAB: CURRENT PERIOD -->
+                    <div id="tab-current" class="tab-content active flex-1 flex flex-col">
+                        
+                        <div class="p-5 border-b border-brand-cream/50 flex justify-between items-center bg-white">
+                            <h3 class="font-serif text-lg text-brand-textmain">Staff Earnings Calculation</h3>
+                            <p class="text-[10px] text-brand-textmuted italic">Net Total = Base + Commission + Bonus - Deductions</p>
+                        </div>
+
+                        <div class="overflow-x-auto flex-1">
+                            <table class="w-full text-left border-collapse min-w-[1100px]">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/20 border-b border-brand-cream">
+                                        <th class="py-4 px-6 font-semibold w-64">Staff Name & Branch</th>
+                                        <th class="py-4 px-4 font-semibold text-right">Service Rev</th>
+                                        <th class="py-4 px-4 font-semibold text-right text-green-600">Commission</th>
+                                        <th class="py-4 px-4 font-semibold text-right text-blue-600">Bonus</th>
+                                        <th class="py-4 px-4 font-semibold text-right text-brand-rose">Deduction</th>
+                                        <th class="py-4 px-6 font-semibold text-right text-brand-gold">Net Payout</th>
+                                        <th class="py-4 px-4 font-semibold text-center">Status</th>
+                                        <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/50 text-brand-textmain">
+                                    
+                                    <!-- Row 1: Pending -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center font-serif text-[10px] mr-3">AN</div>
+                                                <div>
+                                                    <p class="font-medium text-brand-textmain">Anna Nguyen</p>
+                                                    <p class="text-[10px] text-brand-textmuted mt-0.5">District 1 Spa</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4 text-right font-mono text-brand-textmuted">$8,000</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-green-600">+$2,000</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-blue-600">+$300</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-brand-rose">-$50</td>
+                                        <td class="py-4 px-6 text-right font-serif text-lg font-bold text-brand-gold">$2,250</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200">
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('payrollDetailPanel')">
+                                                Review
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div class="dropdown-menu absolute right-6 top-8 w-48 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('adjustmentPanel')"><i data-lucide="plus-circle" class="w-3 h-3 mr-2"></i> Add Bonus</a>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('adjustmentPanel')"><i data-lucide="minus-circle" class="w-3 h-3 mr-2"></i> Add Deduction</a>
+                                                <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                                <a href="#" class="flex items-center px-4 py-2 text-xs text-green-600 hover:bg-green-50 transition" onclick="togglePanel('paymentPanel')"><i data-lucide="check-circle" class="w-3 h-3 mr-2"></i> Mark as Paid</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 2: Pending -->
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center font-serif text-[10px] mr-3">MC</div>
+                                                <div>
+                                                    <p class="font-medium text-brand-textmain">Mia Chang</p>
+                                                    <p class="text-[10px] text-brand-textmuted mt-0.5">District 7 Spa</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4 text-right font-mono text-brand-textmuted">$4,200</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-green-600">+$840</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-blue-600">$0</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-brand-rose">$0</td>
+                                        <td class="py-4 px-6 text-right font-serif text-lg font-bold text-brand-gold">$840</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200">
+                                                Pending
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('payrollDetailPanel')">
+                                                Review
+                                            </button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Row 3: Paid -->
+                                    <tr class="hover:bg-brand-ivory/30 transition opacity-80">
+                                        <td class="py-4 px-6">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 rounded-full bg-gray-100 border border-brand-cream flex items-center justify-center font-serif text-[10px] mr-3">ER</div>
+                                                <div>
+                                                    <p class="font-medium text-brand-textmain">Elena Rodriguez</p>
+                                                    <p class="text-[10px] text-brand-textmuted mt-0.5">District 1 Spa</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="py-4 px-4 text-right font-mono text-brand-textmuted">$6,500</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-green-600">+$1,300</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-blue-600">+$100</td>
+                                        <td class="py-4 px-4 text-right font-mono font-medium text-brand-rose">-$0</td>
+                                        <td class="py-4 px-6 text-right font-serif text-lg font-bold text-gray-500">$1,400</td>
+                                        <td class="py-4 px-4 text-center">
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">
+                                                Paid
+                                            </span>
+                                        </td>
+                                        <td class="py-4 px-6 text-right relative dropdown-container">
+                                            <button class="px-4 py-1.5 bg-white border border-brand-cream text-brand-textmain hover:border-brand-gold hover:text-brand-gold rounded-lg text-xs font-medium transition shadow-sm mr-2" onclick="togglePanel('payrollDetailPanel')">
+                                                View
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- TAB: PAYMENT HISTORY -->
+                    <div id="tab-history" class="tab-content p-6">
+                        <h3 class="font-serif text-lg text-brand-textmain mb-4">Past Payroll Records</h3>
+                        <p class="text-sm text-brand-textmuted">History functionality to be integrated...</p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE-OUT: PAYROLL DETAIL & COMMISSION BREAKDOWN -->
+    <div id="payrollDetailPanel" class="fixed inset-y-0 right-0 w-full max-w-lg bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[60] flex flex-col border-l border-brand-cream">
+        
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-white shrink-0 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-32 h-32 bg-gradient-to-bl from-brand-gold/10 to-transparent rounded-bl-full pointer-events-none"></div>
+            <div class="relative z-10">
+                <h3 class="font-serif text-xl text-brand-textmain">Anna Nguyen</h3>
+                <p class="text-xs text-brand-textmuted mt-0.5">Mar 01 - Mar 15, 2026</p>
+            </div>
+            <button onclick="togglePanel('payrollDetailPanel')" class="relative z-10 p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+            
+            <!-- Summary Math -->
+            <div class="bg-white rounded-2xl border border-brand-cream p-5 shadow-sm space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-brand-textmuted">Total Service Revenue</span>
+                    <span class="font-mono">$8,000.00</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-brand-textmain font-medium">Earned Commission</span>
+                    <span class="font-mono text-green-600 font-medium">+$2,000.00</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-brand-textmain font-medium">Bonuses</span>
+                    <span class="font-mono text-blue-600 font-medium">+$300.00</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-brand-textmain font-medium">Deductions</span>
+                    <span class="font-mono text-brand-rose font-medium">-$50.00</span>
+                </div>
+                <div class="pt-3 border-t border-brand-cream flex justify-between items-end">
+                    <span class="text-[10px] uppercase tracking-widest font-bold text-brand-textmain">Net Payout</span>
+                    <span class="font-serif text-3xl font-bold text-brand-gold">$2,250.00</span>
+                </div>
+            </div>
+
+            <!-- Commission Breakdown Table -->
+            <div>
+                <div class="flex justify-between items-end mb-3">
+                    <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted">Commission Breakdown</h4>
+                    <span class="text-[10px] text-brand-textmuted bg-white border border-brand-cream px-2 py-0.5 rounded">64 Services</span>
+                </div>
+                <div class="bg-white border border-brand-cream rounded-xl overflow-hidden shadow-sm">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-brand-ivory/50 border-b border-brand-cream text-brand-textmuted">
+                            <tr>
+                                <th class="py-2 px-3 font-medium">Service</th>
+                                <th class="py-2 px-3 font-medium text-right">Price</th>
+                                <th class="py-2 px-3 font-medium text-right">Rate</th>
+                                <th class="py-2 px-3 font-medium text-right">Earned</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-brand-cream/50 text-brand-textmain font-mono">
+                            <tr>
+                                <td class="py-2 px-3 font-sans truncate max-w-[120px]">Deep Tissue (Mar 01)</td>
+                                <td class="py-2 px-3 text-right">$100</td>
+                                <td class="py-2 px-3 text-right text-brand-textmuted">25%</td>
+                                <td class="py-2 px-3 text-right text-green-600 font-medium">$25</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-3 font-sans truncate max-w-[120px]">Hydrating Facial (Mar 01)</td>
+                                <td class="py-2 px-3 text-right">$120</td>
+                                <td class="py-2 px-3 text-right text-brand-textmuted">20%</td>
+                                <td class="py-2 px-3 text-right text-green-600 font-medium">$24</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-3 font-sans truncate max-w-[120px]">Hot Stone (Mar 02)</td>
+                                <td class="py-2 px-3 text-right">$150</td>
+                                <td class="py-2 px-3 text-right text-brand-textmuted">25%</td>
+                                <td class="py-2 px-3 text-right text-green-600 font-medium">$37.5</td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="py-2 px-3 text-center text-brand-textmuted font-sans italic bg-brand-ivory/20">... 61 more rows</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Adjustments Log -->
+            <div>
+                <h4 class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-3">Adjustments Applied</h4>
+                <div class="space-y-2">
+                    <div class="bg-white border border-brand-cream rounded-xl p-3 flex justify-between items-center shadow-sm">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mr-3"><i data-lucide="trending-up" class="w-3 h-3"></i></div>
+                            <div>
+                                <p class="text-xs font-medium text-brand-textmain">Top Performer Bonus</p>
+                                <p class="text-[10px] text-brand-textmuted mt-0.5">Added Mar 14</p>
+                            </div>
+                        </div>
+                        <span class="font-mono text-xs font-medium text-blue-600">+$300.00</span>
+                    </div>
+                    
+                    <div class="bg-white border border-brand-cream rounded-xl p-3 flex justify-between items-center shadow-sm">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 rounded-full bg-red-50 text-red-600 flex items-center justify-center mr-3"><i data-lucide="trending-down" class="w-3 h-3"></i></div>
+                            <div>
+                                <p class="text-xs font-medium text-brand-textmain">Late Penalty</p>
+                                <p class="text-[10px] text-brand-textmuted mt-0.5">Mar 05 shift</p>
+                            </div>
+                        </div>
+                        <span class="font-mono text-xs font-medium text-brand-rose">-$50.00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 grid grid-cols-2 gap-3">
+            <button class="py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex items-center justify-center" onclick="togglePanel('adjustmentPanel')">
+                <i data-lucide="sliders-horizontal" class="w-4 h-4 mr-2"></i> Adjust
+            </button>
+            <button class="py-2.5 bg-brand-gold text-white rounded-xl text-sm font-medium hover:bg-brand-goldhover transition shadow-premium flex items-center justify-center" onclick="togglePanel('paymentPanel')">
+                <i data-lucide="check-circle" class="w-4 h-4 mr-2"></i> Mark Paid
+            </button>
+        </div>
+    </div>
+
+    <!-- SLIDE-OUT: ADD ADJUSTMENT (Bonus/Deduction) -->
+    <div id="adjustmentPanel" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[70] flex flex-col border-l border-brand-cream">
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-brand-ivory/50 shrink-0">
+            <h3 class="font-serif text-xl text-brand-textmain flex items-center"><i data-lucide="coins" class="w-5 h-5 mr-2 text-brand-gold"></i> Manual Adjustment</h3>
+            <button onclick="togglePanel('adjustmentPanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-cream transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        
+        <div class="flex-1 p-6 space-y-6 custom-scrollbar overflow-y-auto">
+            
+            <div>
+                <label class="spa-label">Select Staff <span class="text-brand-rose">*</span></label>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                    <option value="an" selected>Anna Nguyen</option>
+                    <option value="mc">Mia Chang</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="spa-label mb-3">Adjustment Type</label>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="relative cursor-pointer group block">
+                        <input type="radio" name="adj_type" value="bonus" class="peer sr-only radio-card-input" checked>
+                        <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold">
+                            <i data-lucide="plus-circle" class="w-5 h-5 mx-auto mb-1 text-blue-500 radio-card-icon transition-colors"></i>
+                            <span class="text-xs font-medium text-brand-textmain">Add Bonus</span>
+                        </div>
+                    </label>
+                    <label class="relative cursor-pointer group block">
+                        <input type="radio" name="adj_type" value="deduct" class="peer sr-only radio-card-input">
+                        <div class="radio-card-body rounded-xl border border-brand-cream bg-white p-3 text-center transition-all hover:border-brand-gold">
+                            <i data-lucide="minus-circle" class="w-5 h-5 mx-auto mb-1 text-brand-rose radio-card-icon transition-colors"></i>
+                            <span class="text-xs font-medium text-brand-textmain">Deduction</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div>
+                <label class="spa-label">Amount <span class="text-brand-rose">*</span></label>
+                <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all bg-white">
+                    <span class="flex items-center px-4 bg-brand-ivory border-r border-brand-cream text-brand-textmuted text-sm font-medium">$</span>
+                    <input type="number" class="w-full bg-transparent px-4 py-2.5 text-lg font-serif font-medium outline-none text-brand-textmain" placeholder="0.00">
+                </div>
+            </div>
+
+            <div>
+                <label class="spa-label">Reason / Notes <span class="text-brand-rose">*</span></label>
+                <textarea class="spa-input h-24 resize-none text-sm" placeholder="Explain the bonus or deduction..."></textarea>
+            </div>
+
+        </div>
+        
+        <div class="p-6 border-t border-brand-cream bg-white flex justify-end space-x-3 shrink-0">
+            <button class="px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-xl text-sm font-medium transition shadow-sm" onclick="togglePanel('adjustmentPanel')">Cancel</button>
+            <button class="px-6 py-2.5 bg-brand-gold text-white rounded-xl hover:bg-brand-goldhover transition shadow-premium font-medium flex items-center" onclick="togglePanel('adjustmentPanel')">Save Adjustment</button>
+        </div>
+    </div>
+
+    <!-- SLIDE-OUT: PROCESS PAYMENT -->
+    <div id="paymentPanel" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[70] flex flex-col border-l border-brand-cream">
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-green-50 shrink-0">
+            <h3 class="font-serif text-xl text-green-800 flex items-center"><i data-lucide="check-circle" class="w-5 h-5 mr-2"></i> Process Payment</h3>
+            <button onclick="togglePanel('paymentPanel')" class="p-2 text-green-600 hover:bg-green-100 rounded-full transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+        
+        <div class="flex-1 p-6 space-y-6 custom-scrollbar overflow-y-auto">
+            
+            <div class="bg-gray-50 border border-brand-cream rounded-xl p-4 text-center">
+                <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Final Payout Amount</p>
+                <p class="font-serif text-3xl font-bold text-brand-textmain">$2,250.00</p>
+                <p class="text-xs text-brand-textmuted mt-1">Anna Nguyen</p>
+            </div>
+
+            <div>
+                <label class="spa-label">Payment Method <span class="text-brand-rose">*</span></label>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                    <option value="bank" selected>Bank Transfer</option>
+                    <option value="cash">Cash</option>
+                    <option value="wallet">Digital Wallet</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="spa-label">Transaction Reference</label>
+                <input type="text" class="spa-input font-mono" placeholder="e.g. TXN-990011">
+            </div>
+
+            <div>
+                <label class="spa-label">Payment Date</label>
+                <input type="date" class="spa-input" value="2026-03-15">
+            </div>
+
+        </div>
+        
+        <div class="p-6 border-t border-brand-cream bg-white flex justify-end space-x-3 shrink-0">
+            <button class="px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-xl text-sm font-medium transition shadow-sm" onclick="togglePanel('paymentPanel')">Cancel</button>
+            <button class="px-6 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition shadow-sm font-medium flex items-center" onclick="togglePanel('paymentPanel'); togglePanel('payrollDetailPanel')">Confirm Payment</button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Simple Tab Switching Logic
+        function switchTab(btn, tabId) {
+            // Remove active classes from all buttons
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active');
+                b.classList.add('inactive');
+            });
+            // Add active class to clicked button
+            btn.classList.remove('inactive');
+            btn.classList.add('active');
+
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(c => {
+                c.classList.remove('active');
+            });
+            // Show targeted tab content
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'nv-luong' });</script>
+</body>
+</html>

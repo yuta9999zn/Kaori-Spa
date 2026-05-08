@@ -1,0 +1,23 @@
+{
+  "brand": { "platform": "Kaori" },
+  "portal": { "name": "Kaori 플랫폼", "subtitle": "Tenant Administrator" },
+  "nav": {
+    "dashboard": "대시보드", "tenant": "테넌트", "plan": "플랜",
+    "billing": "결제", "domain": "도메인", "audit": "감사 로그",
+    "integration": "연동", "feature": "기능", "settings": "설정", "logout": "로그아웃"
+  },
+  "dashboard": {
+    "title": "플랫폼 개요",
+    "kpi": { "tenants": "활성 테넌트", "branches": "총 지점", "users": "사용자", "mrr": "월간 정기 매출" },
+    "recentTenants": "신규 테넌트"
+  },
+  "tenant": {
+    "title": "테넌트 목록", "create": "테넌트 추가",
+    "columns": { "code": "코드", "name": "이름", "plan": "플랜", "branches": "지점", "status": "상태", "createdAt": "생성일" }
+  },
+  "plan": { "title": "플랜", "starter": "스타터", "professional": "프로", "enterprise": "엔터프라이즈" },
+  "audit": {
+    "title": "감사 로그", "subtitle": "불변 활동 이력",
+    "columns": { "ts": "시간", "actor": "실행자", "action": "동작", "entity": "객체", "ip": "IP" }
+  }
+}

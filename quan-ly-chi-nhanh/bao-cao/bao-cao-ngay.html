@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Báo Cáo Ngày</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .section-hdr{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:#8B837C;display:flex;align-items:center;gap:6px;margin-bottom:12px}
+        .auto-val{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums;color:#4A443E}
+        .auto-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid #F4EFEA}
+        .auto-row:last-child{border-bottom:none}
+        .method-badge{display:inline-flex;align-items:center;gap:3px;font-size:10px;padding:1px 7px;border-radius:12px;font-weight:500}
+        .badge-tm{background:#dcfce7;color:#15803d}
+        .badge-the{background:#ede9fe;color:#6d28d9}
+        .badge-loc{background:#dbeafe;color:#1d4ed8}
+        .badge-cty{background:#f3e8ff;color:#7e22ce}
+        .expense-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:#FAF9F6;border-radius:10px;border:1px solid #F4EFEA}
+        .preview-box{font-family:'Courier New',monospace;font-size:12.5px;line-height:1.9;white-space:pre-wrap;background:#1a1a2e;color:#e2e8f0;border-radius:14px;padding:18px 20px}
+        .tab-btn{padding:4px 12px;border-radius:14px;font-size:11px;border:1px solid;cursor:pointer;transition:all .15s}
+        .tab-on{background:rgba(201,168,124,.1);border-color:#C9A87C;color:#C9A87C;font-weight:500}
+        .tab-off{border-color:#F4EFEA;color:#8B837C}
+        .manual-input{width:100%;border:1px solid #F4EFEA;border-radius:10px;padding:8px 12px;font-size:13px;background:#FAF9F6;outline:none;text-align:right;font-variant-numeric:tabular-nums;transition:border .15s}
+        .manual-input:focus{border-color:#C9A87C;background:#fff}
+        .tx-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F4EFEA;cursor:pointer}
+        .tx-row:hover{background:#FAF9F6;margin:0 -8px;padding:8px 8px;border-radius:8px}
+        .tx-row:last-child{border-bottom:none}
+        .saved-item{border-left:3px solid #C9A87C;background:rgba(201,168,124,.04);border-radius:0 10px 10px 0;padding:8px 12px;cursor:pointer;transition:background .15s}
+        .saved-item:hover{background:rgba(201,168,124,.1)}
+        .override-input{display:none}
+        .override-mode .override-input{display:block}
+        .override-mode .auto-display{display:none}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <i data-lucide="clipboard-list" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Báo Cáo Ngày</h1>
+        <span class="text-xs bg-green-50 text-green-700 border border-green-100 px-2.5 py-1 rounded-full flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span> Tự động từ hệ thống
+        </span>
+    </div>
+    <div class="flex items-center gap-3">
+        <input type="date" id="report-date" class="border border-brand-cream rounded-xl px-3 py-2 text-sm bg-brand-ivory focus:outline-none focus:border-brand-gold" onchange="loadDay(this.value)">
+        <button onclick="submitReport()" class="bg-brand-gold hover:bg-brand-goldhover text-white px-5 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition">
+            <i data-lucide="send" class="w-3.5 h-3.5"></i> Gửi Lên Tenant
+        </button>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-6xl mx-auto p-8 grid grid-cols-5 gap-6">
+
+<!-- ===== LEFT ===== -->
+<div class="col-span-3 flex flex-col gap-5">
+
+    <!-- A. Doanh thu — AUTO -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6" id="section-doanhthu">
+        <div class="flex items-center justify-between mb-4">
+            <div class="section-hdr mb-0">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-gold"></i>
+                A. Doanh Thu (Tự động từ thanh toán)
+            </div>
+            <button onclick="toggleOverride()" id="override-btn"
+                class="text-xs border border-brand-cream text-brand-textmuted px-3 py-1.5 rounded-lg hover:border-brand-gold hover:text-brand-gold transition flex items-center gap-1.5">
+                <i data-lucide="edit-3" class="w-3 h-3"></i> Chỉnh sửa thủ công
+            </button>
+        </div>
+
+        <!-- AUTO display -->
+        <div id="auto-display">
+            <!-- DV -->
+            <p class="text-xs font-medium text-blue-600 mb-2 flex items-center gap-1.5">
+                <i data-lucide="scissors" class="w-3 h-3"></i> Dịch vụ (サービス)
+            </p>
+            <div class="grid grid-cols-4 gap-2 mb-3" id="dv-cells"></div>
+            <div class="flex justify-between items-center px-3 py-2 bg-blue-50 rounded-xl mb-4">
+                <span class="text-xs text-blue-700 font-medium">Tổng Dịch Vụ</span>
+                <span class="text-sm font-semibold text-blue-700" id="dv-total-auto">0 ₫</span>
+            </div>
+            <!-- MP -->
+            <p class="text-xs font-medium text-brand-rose mb-2 flex items-center gap-1.5">
+                <i data-lucide="shopping-bag" class="w-3 h-3"></i> Mỹ phẩm (化粧品)
+            </p>
+            <div class="grid grid-cols-4 gap-2 mb-3" id="mp-cells"></div>
+            <div class="flex justify-between items-center px-3 py-2 bg-pink-50 rounded-xl">
+                <span class="text-xs text-brand-rose font-medium">Tổng Mỹ Phẩm</span>
+                <span class="text-sm font-semibold text-brand-rose" id="mp-total-auto">0 ₫</span>
+            </div>
+        </div>
+
+        <!-- MANUAL override (hidden by default) -->
+        <div id="manual-section" class="hidden">
+            <p class="text-xs text-orange-600 bg-orange-50 border border-orange-100 rounded-xl px-3 py-2 mb-4">
+                Chế độ chỉnh sửa thủ công — Các số dưới đây sẽ ghi đè dữ liệu từ hệ thống.
+            </p>
+            <div class="grid grid-cols-2 gap-x-6 gap-y-3">
+                <div>
+                    <p class="text-xs text-brand-textmuted mb-1">DV — Tiền mặt</p>
+                    <input type="number" class="manual-input" id="m-dv-tm" placeholder="0" oninput="recalcManual()">
+                </div>
+                <div>
+                    <p class="text-xs text-brand-textmuted mb-1">DV — Thẻ</p>
+                    <input type="number" class="manual-input" id="m-dv-the" placeholder="0" oninput="recalcManual()">
+                </div>
+                <div>
+                    <p class="text-xs text-blue-500 mb-1">DV — CK TK Lộc</p>
+                    <input type="number" class="manual-input" id="m-dv-loc" placeholder="0" oninput="recalcManual()">
+                </div>
+                <div>
+                    <p class="text-xs text-purple-500 mb-1">DV — CK Công Ty</p>
+                    <input type="number" class="manual-input" id="m-dv-cty" placeholder="0" oninput="recalcManual()">
+                </div>
+                <div>
+                    <p class="text-xs text-brand-textmuted mb-1">MP — Tiền mặt</p>
+                    <input type="number" class="manual-input" id="m-mp-tm" placeholder="0" oninput="recalcManual()">
+                </div>
+                <div>
+                    <p class="text-xs text-brand-textmuted mb-1">MP — Thẻ</p>
+                    <input type="number" class="manual-input" id="m-mp-the" placeholder="0" oninput="recalcManual()">
+                </div>
+                <div>
+                    <p class="text-xs text-blue-500 mb-1">MP — CK TK Lộc</p>
+                    <input type="number" class="manual-input" id="m-mp-loc" placeholder="0" oninput="recalcManual()">
+                </div>
+                <div>
+                    <p class="text-xs text-purple-500 mb-1">MP — CK Công Ty</p>
+                    <input type="number" class="manual-input" id="m-mp-cty" placeholder="0" oninput="recalcManual()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- B. Chi phí — MANUAL -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+        <div class="section-hdr">
+            <i data-lucide="receipt" class="w-3.5 h-3.5 text-red-400"></i>
+            B. Chi Phí Trong Ngày (Nhập tay)
+        </div>
+        <!-- Add expense form -->
+        <div class="grid grid-cols-12 gap-2 mb-3">
+            <div class="col-span-4">
+                <select id="exp-code" class="w-full border border-brand-cream rounded-xl px-3 py-2 text-xs bg-brand-ivory focus:outline-none focus:border-brand-gold">
+                    <option value="6422-VT">Vật tư tiêu hao</option>
+                    <option value="6422-KHĐ">Khăn & đồ dùng</option>
+                    <option value="6422-TH">Thuê mặt bằng</option>
+                    <option value="6422-QC">Marketing / QC</option>
+                    <option value="6422-NL">Nhân lực / Lương</option>
+                    <option value="6422-KH">Khác</option>
+                </select>
+            </div>
+            <div class="col-span-4">
+                <input type="text" id="exp-name" placeholder="Nội dung chi..." class="w-full border border-brand-cream rounded-xl px-3 py-2 text-xs bg-brand-ivory focus:outline-none focus:border-brand-gold">
+            </div>
+            <div class="col-span-3">
+                <input type="number" id="exp-amount" placeholder="Số tiền ₫" class="manual-input text-xs py-2 px-3">
+            </div>
+            <div class="col-span-1">
+                <button onclick="addExpenseRow()" class="w-full h-full bg-brand-gold hover:bg-brand-goldhover text-white rounded-xl flex items-center justify-center transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Expense list -->
+        <div id="expense-list" class="flex flex-col gap-2 mb-3"></div>
+        <!-- Total -->
+        <div class="flex justify-between items-center px-3 py-2 bg-red-50 rounded-xl">
+            <span class="text-xs text-red-600 font-medium">Tổng Chi Phí</span>
+            <span class="text-sm font-semibold text-red-600" id="exp-total">0 ₫</span>
+        </div>
+    </div>
+
+    <!-- C. Quỹ tiền mặt -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+        <div class="section-hdr">
+            <i data-lucide="wallet" class="w-3.5 h-3.5 text-green-500"></i>
+            C. Quỹ Tiền Mặt
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <p class="text-xs text-brand-textmuted mb-1">Tồn đầu ngày</p>
+                <input type="number" id="opening-cash" placeholder="0" class="manual-input" oninput="recalcCash()" onblur="saveOpeningCash()">
+            </div>
+            <div>
+                <p class="text-xs text-brand-textmuted mb-1">Thu tiền mặt</p>
+                <div class="manual-input text-right opacity-60 cursor-not-allowed" id="cash-in-display">0 ₫</div>
+            </div>
+            <div>
+                <p class="text-xs text-brand-textmuted mb-1">Tồn cuối ngày</p>
+                <div class="px-3 py-2 bg-green-50 border border-green-100 rounded-xl text-right text-sm font-semibold text-green-700" id="closing-cash">0 ₫</div>
+            </div>
+        </div>
+        <p class="text-xs text-brand-textmuted mt-2">Công thức: Tồn đầu + Thu TM − Chi phí TM = Tồn cuối</p>
+    </div>
+
+</div>
+
+<!-- ===== RIGHT ===== -->
+<div class="col-span-2 flex flex-col gap-5">
+
+    <!-- Summary card -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+        <div class="section-hdr mb-3">Tổng Kết Ngày</div>
+        <div class="space-y-2" id="summary-rows"></div>
+        <div class="mt-3 pt-3 border-t border-brand-cream flex justify-between items-center">
+            <span class="text-sm font-medium">Tổng Doanh Thu</span>
+            <span class="text-base font-bold text-brand-gold" id="grand-total-display">0 ₫</span>
+        </div>
+    </div>
+
+    <!-- Transaction list -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+        <div class="flex items-center justify-between mb-3">
+            <div class="section-hdr mb-0">Giao Dịch Hôm Nay</div>
+            <span class="text-xs text-brand-textmuted" id="tx-count">0 giao dịch</span>
+        </div>
+        <div id="tx-list" class="overflow-y-auto" style="max-height:200px"></div>
+        <a href="../booking/thanh-toan.html" class="text-xs text-brand-gold hover:underline mt-2 block text-center">
+            + Thêm giao dịch mới →
+        </a>
+    </div>
+
+    <!-- Preview -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+        <div class="flex items-center justify-between mb-3">
+            <div class="section-hdr mb-0">Preview Telegram</div>
+            <div class="flex gap-1.5">
+                <button class="tab-btn tab-on" id="tab-vi" onclick="setLang('vi',this)">🇻🇳</button>
+                <button class="tab-btn tab-off" id="tab-jp" onclick="setLang('jp',this)">🇯🇵</button>
+            </div>
+        </div>
+        <div class="preview-box" id="preview-box">—</div>
+        <button onclick="copyPreview()" class="mt-3 w-full border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold rounded-xl py-2 text-xs flex items-center justify-center gap-2 transition">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span id="copy-label">Sao chép nội dung</span>
+        </button>
+    </div>
+
+    <!-- Recent days -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+        <div class="section-hdr mb-3">Lịch Sử Gần Nhất</div>
+        <div id="history-list" class="flex flex-col gap-2"></div>
+    </div>
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-8 right-8 bg-white border border-green-200 shadow-lg rounded-2xl px-5 py-4 flex items-center gap-3 z-50">
+    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-green-700" id="toast-title">Thành công</p>
+        <p class="text-xs text-brand-textmuted" id="toast-msg">—</p>
+    </div>
+</div>
+
+<script>
+// ─── State ──────────────────────────────────────────────────────────────────
+let previewLang = 'vi';
+let isOverride  = false;
+let currentReport = null; // result of AuraDB.getDailyReport()
+
+const METHOD_CFG = {
+    tm:      { label:'Tiền mặt', badgeCls:'badge-tm',  icon:'💵' },
+    the:     { label:'Thẻ (LPB)', badgeCls:'badge-the', icon:'💳' },
+    'ck-loc':{ label:'CK TK Lộc', badgeCls:'badge-loc', icon:'🏦' },
+    'ck-cty':{ label:'CK Cty',   badgeCls:'badge-cty',  icon:'🏢' },
+};
+
+// ─── Init ───────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    AuraDB.seedFakeData();
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('report-date').value = today;
+    loadDay(today);
+});
+
+// ─── Load a day's data ───────────────────────────────────────────────────────
+function loadDay(dateStr) {
+    currentReport = AuraDB.getDailyReport(dateStr);
+    renderAutoDisplay(currentReport);
+    renderSummary(currentReport);
+    renderTransactions(currentReport.transactions || []);
+    renderPreview();
+    renderHistory(dateStr);
+
+    // Opening cash
+    const oc = AuraDB.getOpeningCash(dateStr);
+    document.getElementById('opening-cash').value = oc || '';
+    recalcCash();
+
+    // Expenses for this day
+    renderExpenses(dateStr);
+}
+
+// ─── Auto display (DV/MP cells) ──────────────────────────────────────────────
+function renderAutoDisplay(rpt) {
+    ['dv', 'mp'].forEach(type => {
+        const grid = document.getElementById(type + '-cells');
+        grid.innerHTML = Object.entries(METHOD_CFG).map(([m, cfg]) => {
+            const v = rpt[type][m] || 0;
+            return `<div class="bg-brand-ivory rounded-xl p-3 text-center">
+                <p class="text-[10px] text-brand-textmuted mb-0.5">${cfg.label}</p>
+                <p class="text-sm font-semibold ${v > 0 ? 'text-brand-textmain' : 'text-brand-textmuted'}">${fmt(v)}</p>
+            </div>`;
+        }).join('');
+    });
+    document.getElementById('dv-total-auto').textContent = fmt(currentReport.dv.total);
+    document.getElementById('mp-total-auto').textContent = fmt(currentReport.mp.total);
+}
+
+// ─── Summary panel ───────────────────────────────────────────────────────────
+function renderSummary(rpt) {
+    const grandTotal = rpt.total;
+    const rows = [
+        { label:'Dịch vụ', val: rpt.dv.total, cls:'text-blue-600' },
+        { label:'Mỹ phẩm', val: rpt.mp.total, cls:'text-brand-rose' },
+        null,
+        ...Object.entries(METHOD_CFG).map(([m, cfg]) => ({
+            label: '→ ' + cfg.label, val: rpt.byMethod[m] || 0, cls:'text-brand-textmuted text-xs', small:true
+        })),
+    ];
+    document.getElementById('summary-rows').innerHTML = rows.map(r => r === null
+        ? '<hr class="border-brand-cream">'
+        : `<div class="flex justify-between items-center">
+            <span class="text-sm ${r.cls || ''}">${r.label}</span>
+            <span class="text-sm font-medium ${r.cls || ''}">${fmt(r.val)}</span>
+           </div>`
+    ).join('');
+    document.getElementById('grand-total-display').textContent = fmt(grandTotal);
+}
+
+// ─── Transaction list ─────────────────────────────────────────────────────────
+function renderTransactions(txns) {
+    const el = document.getElementById('tx-list');
+    document.getElementById('tx-count').textContent = txns.length + ' giao dịch';
+    if (!txns.length) {
+        el.innerHTML = '<p class="text-xs text-brand-textmuted text-center py-4">Chưa có giao dịch nào</p>';
+        return;
+    }
+    el.innerHTML = txns.map(t => {
+        const cfg = METHOD_CFG[t.method] || METHOD_CFG.tm;
+        const typeLabel = t.type === 'dv' ? 'DV' : 'MP';
+        const typeCls   = t.type === 'dv' ? 'bg-blue-50 text-blue-600' : 'bg-pink-50 text-brand-rose';
+        return `<div class="tx-row" title="${t.bookingId}">
+            <div class="flex items-center gap-2 min-w-0">
+                <span class="text-xs px-1.5 py-0.5 rounded ${typeCls} flex-shrink-0">${typeLabel}</span>
+                <span class="text-xs truncate">${t.customer || t.bookingId || 'Không rõ'}</span>
+            </div>
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="method-badge ${cfg.badgeCls}">${cfg.label}</span>
+                <span class="text-xs font-medium">${fmt(t.amount)}</span>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ─── Expenses ─────────────────────────────────────────────────────────────────
+function renderExpenses(dateStr) {
+    const exps = AuraDB.getExpenses(dateStr || document.getElementById('report-date').value);
+    const el = document.getElementById('expense-list');
+    if (!exps.length) {
+        el.innerHTML = '<p class="text-xs text-brand-textmuted text-center py-2">Chưa có chi phí nào</p>';
+    } else {
+        el.innerHTML = exps.map(e => `
+            <div class="expense-row">
+                <div class="flex items-center gap-2 min-w-0">
+                    <span class="text-xs text-brand-textmuted flex-shrink-0">${e.code}</span>
+                    <span class="text-xs truncate">${e.name}</span>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <span class="text-xs font-medium">${fmt(e.amount)}</span>
+                    <button onclick="removeExpense('${e.id}')" class="p-0.5 rounded hover:bg-red-50 hover:text-red-500 text-brand-textmuted transition">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            </div>`).join('');
+    }
+    const total = exps.reduce((s, e) => s + e.amount, 0);
+    document.getElementById('exp-total').textContent = fmt(total);
+    lucide.createIcons();
+    recalcCash();
+    renderPreview();
+}
+
+function addExpenseRow() {
+    const code   = document.getElementById('exp-code').value;
+    const name   = document.getElementById('exp-name').value.trim();
+    const amount = parseFloat(document.getElementById('exp-amount').value) || 0;
+    if (!name || amount <= 0) { alert('Vui lòng nhập nội dung và số tiền.'); return; }
+    AuraDB.addExpense({ date: document.getElementById('report-date').value, code, name, amount });
+    document.getElementById('exp-name').value = '';
+    document.getElementById('exp-amount').value = '';
+    renderExpenses();
+}
+
+function removeExpense(id) {
+    AuraDB.deleteExpense(id);
+    renderExpenses();
+}
+
+// ─── Cash calc ───────────────────────────────────────────────────────────────
+function recalcCash() {
+    const oc  = parseFloat(document.getElementById('opening-cash').value) || 0;
+    const cashIn = currentReport ? (currentReport.byMethod.tm || 0) : 0;
+    const exps   = AuraDB.getExpenses(document.getElementById('report-date').value);
+    const expTotal = exps.reduce((s, e) => s + e.amount, 0);
+    const closing = oc + cashIn - expTotal;
+    document.getElementById('cash-in-display').textContent = fmt(cashIn);
+    document.getElementById('closing-cash').textContent = fmt(closing);
+}
+
+function saveOpeningCash() {
+    const v = parseFloat(document.getElementById('opening-cash').value) || 0;
+    AuraDB.setOpeningCash(document.getElementById('report-date').value, v);
+}
+
+// ─── Manual override mode ─────────────────────────────────────────────────────
+function toggleOverride() {
+    isOverride = !isOverride;
+    document.getElementById('auto-display').classList.toggle('hidden', isOverride);
+    document.getElementById('manual-section').classList.toggle('hidden', !isOverride);
+    const btn = document.getElementById('override-btn');
+    btn.innerHTML = isOverride
+        ? '<i data-lucide="refresh-cw" class="w-3 h-3"></i> Dùng dữ liệu tự động'
+        : '<i data-lucide="edit-3" class="w-3 h-3"></i> Chỉnh sửa thủ công';
+    if (isOverride && currentReport) {
+        // Pre-fill manual inputs from auto data
+        const fill = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+        fill('m-dv-tm', currentReport.dv.tm);
+        fill('m-dv-the', currentReport.dv.the);
+        fill('m-dv-loc', currentReport.dv['ck-loc']);
+        fill('m-dv-cty', currentReport.dv['ck-cty']);
+        fill('m-mp-tm', currentReport.mp.tm);
+        fill('m-mp-the', currentReport.mp.the);
+        fill('m-mp-loc', currentReport.mp['ck-loc']);
+        fill('m-mp-cty', currentReport.mp['ck-cty']);
+    }
+    lucide.createIcons();
+    recalcManual();
+}
+
+function recalcManual() {
+    if (!isOverride) return;
+    const g = (id) => parseFloat(document.getElementById(id)?.value) || 0;
+    const fakeRpt = {
+        dv: { tm: g('m-dv-tm'), the: g('m-dv-the'), 'ck-loc': g('m-dv-loc'), 'ck-cty': g('m-dv-cty'), total: 0 },
+        mp: { tm: g('m-mp-tm'), the: g('m-mp-the'), 'ck-loc': g('m-mp-loc'), 'ck-cty': g('m-mp-cty'), total: 0 },
+        total: 0,
+        byMethod: {},
+        transactions: [],
+    };
+    fakeRpt.dv.total = Object.values(fakeRpt.dv).filter(v=>typeof v==='number').reduce((a,b)=>a+b,0) - fakeRpt.dv.total;
+    fakeRpt.mp.total = Object.values(fakeRpt.mp).filter(v=>typeof v==='number').reduce((a,b)=>a+b,0) - fakeRpt.mp.total;
+    fakeRpt.dv.total = fakeRpt.dv.tm + fakeRpt.dv.the + fakeRpt.dv['ck-loc'] + fakeRpt.dv['ck-cty'];
+    fakeRpt.mp.total = fakeRpt.mp.tm + fakeRpt.mp.the + fakeRpt.mp['ck-loc'] + fakeRpt.mp['ck-cty'];
+    fakeRpt.total    = fakeRpt.dv.total + fakeRpt.mp.total;
+    ['tm','the','ck-loc','ck-cty'].forEach(m => {
+        fakeRpt.byMethod[m] = (fakeRpt.dv[m]||0) + (fakeRpt.mp[m]||0);
+    });
+    currentReport = fakeRpt;
+    renderSummary(fakeRpt);
+    renderPreview();
+    recalcCash();
+}
+
+// ─── Preview ──────────────────────────────────────────────────────────────────
+function renderPreview() {
+    if (!currentReport) return;
+    const rpt = currentReport;
+    const dateVal = document.getElementById('report-date').value;
+    const d = new Date(dateVal);
+    const ds = `${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+    const f = v => (v/1000).toLocaleString('vi-VN', {maximumFractionDigits:0}) + 'k';
+    const ckTotal = (rpt.byMethod['ck-loc']||0) + (rpt.byMethod['ck-cty']||0);
+
+    let text = '';
+    if (previewLang === 'vi') {
+        text = `📊 Báo cáo ${ds}
+━━━━━━━━━━━━━━━━━━
+💰 Doanh số: ${f(rpt.total)}
+   ↳ Dịch vụ: ${f(rpt.dv.total)}
+   ↳ Mỹ phẩm: ${f(rpt.mp.total)}
+━━━━━━━━━━━━━━━━━━
+💵 Tiền mặt: ${f(rpt.byMethod.tm||0)}
+💳 Thẻ: ${f(rpt.byMethod.the||0)}
+🏦 Chuyển khoản: ${f(ckTotal)}
+   ↳ CK TK Lộc: ${f(rpt.byMethod['ck-loc']||0)}
+   ↳ CK TK Cty: ${f(rpt.byMethod['ck-cty']||0)}
+━━━━━━━━━━━━━━━━━━
+👥 Giao dịch: ${rpt.count} lượt`;
+    } else {
+        text = `売り上げ報告(Báo cáo) : ${f(rpt.total)}
+化粧品 (Mỹ phẩm) : ${f(rpt.mp.total)}
+サービス (Dịch vụ) : ${f(rpt.dv.total)}
+現金 (Tiền mặt): ${f(rpt.byMethod.tm||0)}
+カード(Thẻ): ${f(rpt.byMethod.the||0)}
+振り込み (Chuyển khoản) : ${f(ckTotal)}
+CK TK Lộc: ${f(rpt.byMethod['ck-loc']||0)}
+CK TK Công ty: ${f(rpt.byMethod['ck-cty']||0)}`;
+    }
+    document.getElementById('preview-box').textContent = text;
+}
+
+// ─── History list ─────────────────────────────────────────────────────────────
+function renderHistory(excludeDate) {
+    const el = document.getElementById('history-list');
+    // Get last 5 unique dates with transactions
+    const allDates = [...new Set(AuraDB.getTransactions().map(t => t.date))]
+        .sort((a, b) => b.localeCompare(a))
+        .slice(0, 5);
+
+    if (!allDates.length) {
+        el.innerHTML = '<p class="text-xs text-brand-textmuted text-center">Chưa có dữ liệu</p>';
+        return;
+    }
+    el.innerHTML = allDates.map(date => {
+        const rpt = AuraDB.getDailyReport(date);
+        const d = new Date(date);
+        const label = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;
+        const isActive = date === excludeDate;
+        return `<div class="saved-item ${isActive ? 'opacity-60 cursor-default' : ''}" onclick="${isActive ? '' : `document.getElementById('report-date').value='${date}';loadDay('${date}')`}">
+            <div class="flex justify-between items-center">
+                <span class="text-sm font-medium">${label}</span>
+                <span class="text-xs text-brand-gold font-medium">${fmt(rpt.total)}</span>
+            </div>
+            <p class="text-xs text-brand-textmuted mt-0.5">DV: ${fmt(rpt.dv.total)} · MP: ${fmt(rpt.mp.total)} · ${rpt.count} GD</p>
+        </div>`;
+    }).join('');
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function fmt(v) { return v.toLocaleString('vi-VN') + ' ₫'; }
+
+function setLang(lang, btn) {
+    previewLang = lang;
+    document.querySelectorAll('.tab-btn').forEach(b => { b.className = b === btn ? 'tab-btn tab-on' : 'tab-btn tab-off'; });
+    renderPreview();
+}
+
+function copyPreview() {
+    const text = document.getElementById('preview-box').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const lbl = document.getElementById('copy-label');
+        lbl.textContent = 'Đã sao chép!';
+        setTimeout(() => lbl.textContent = 'Sao chép nội dung', 2000);
+    });
+}
+
+function submitReport() {
+    if (!currentReport || currentReport.total === 0) {
+        alert('Chưa có doanh thu nào trong ngày này.');
+        return;
+    }
+    showToast('Đã gửi', `Báo cáo ${document.getElementById('report-date').value} → Tenant nhận được.`);
+}
+
+function showToast(title, msg) {
+    document.getElementById('toast-title').textContent = title;
+    document.getElementById('toast-msg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.remove('hidden');
+    setTimeout(() => t.classList.add('hidden'), 4000);
+}
+</script>
+
+<script src="../shared/data-store.js"></script>
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'bc-ngay' });</script>
+</body>
+</html>

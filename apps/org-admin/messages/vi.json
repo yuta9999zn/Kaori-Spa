@@ -1,0 +1,40 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "Quản lý Tổ chức", "subtitle": "Organization Owner" },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "branch": "Chi nhánh",
+    "member": "Thành viên",
+    "role": "Vai trò & Quyền",
+    "service": "Cấu hình dịch vụ",
+    "voucher": "Mã giảm giá",
+    "content": "Nội dung",
+    "report": "Báo cáo đa chi nhánh",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
+  },
+  "dashboard": {
+    "title": "Tổ chức của bạn",
+    "kpi": {
+      "branches": "Chi nhánh",
+      "staff": "Nhân viên",
+      "customers": "Khách hàng",
+      "revenue": "Doanh thu tháng"
+    },
+    "branchSummary": "Hiệu suất chi nhánh"
+  },
+  "branch": {
+    "title": "Chi nhánh",
+    "create": "Thêm chi nhánh",
+    "columns": { "code": "Mã", "name": "Tên", "address": "Địa chỉ", "manager": "Quản lý", "status": "Trạng thái" }
+  },
+  "member": {
+    "title": "Thành viên",
+    "invite": "Mời thành viên",
+    "columns": { "name": "Họ tên", "email": "Email", "role": "Vai trò", "scope": "Phạm vi", "status": "Trạng thái" }
+  },
+  "role": {
+    "title": "Ma trận quyền",
+    "subtitle": "Cấu hình role × permission"
+  }
+}

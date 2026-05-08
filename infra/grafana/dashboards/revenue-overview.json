@@ -1,0 +1,74 @@
+{
+  "title": "Kaori — Revenue Overview",
+  "uid": "kaori-revenue",
+  "tags": ["kaori", "revenue"],
+  "timezone": "Asia/Ho_Chi_Minh",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": { "from": "now-30d", "to": "now" },
+  "templating": {
+    "list": [
+      {
+        "name": "tenant_id",
+        "label": "Tenant",
+        "type": "query",
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "query": "SELECT DISTINCT tenant_id FROM kaori.fact_bookings",
+        "refresh": 1,
+        "includeAll": false,
+        "multi": false
+      },
+      {
+        "name": "branch_id",
+        "label": "Branch",
+        "type": "query",
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "query": "SELECT DISTINCT branch_id FROM kaori.fact_bookings WHERE tenant_id = '$tenant_id'",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Doanh thu 30 ngày",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "fieldConfig": { "defaults": { "unit": "currencyVND" } },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT sum(revenue) AS total FROM kaori.mv_revenue_by_day WHERE tenant_id = '$tenant_id' AND branch_id IN ($branch_id) AND day >= today() - 30"
+      }]
+    },
+    {
+      "type": "stat",
+      "title": "Số booking 30 ngày",
+      "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT sum(bookings) FROM kaori.mv_revenue_by_day WHERE tenant_id = '$tenant_id' AND branch_id IN ($branch_id) AND day >= today() - 30"
+      }]
+    },
+    {
+      "type": "timeseries",
+      "title": "Doanh thu theo ngày",
+      "gridPos": { "x": 0, "y": 4, "w": 24, "h": 8 },
+      "fieldConfig": { "defaults": { "unit": "currencyVND" } },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT day AS time, branch_id, sum(revenue) AS revenue FROM kaori.mv_revenue_by_day WHERE tenant_id = '$tenant_id' AND branch_id IN ($branch_id) AND $__timeFilter(day) GROUP BY day, branch_id ORDER BY day"
+      }]
+    },
+    {
+      "type": "table",
+      "title": "Top 10 dịch vụ (số lượt × doanh thu)",
+      "gridPos": { "x": 0, "y": 12, "w": 24, "h": 8 },
+      "targets": [{
+        "datasource": { "type": "grafana-clickhouse-datasource", "uid": "clickhouse" },
+        "rawSql": "SELECT service_code, sum(times) AS times, sum(revenue) AS revenue FROM kaori.mv_top_services WHERE tenant_id = '$tenant_id' AND branch_id IN ($branch_id) AND day >= today() - 30 GROUP BY service_code ORDER BY revenue DESC LIMIT 10"
+      }]
+    }
+  ]
+}

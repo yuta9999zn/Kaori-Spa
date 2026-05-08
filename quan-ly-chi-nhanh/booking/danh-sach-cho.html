@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Queue | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+        
+        /* Queue Pulse Animation */
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        
+        <!-- Top Header (Sticky) -->
+        <header class="h-20 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-40 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search waitlist by name or service..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Branch Selector -->
+                <div class="hidden md:flex items-center bg-brand-ivory border border-brand-cream rounded-full px-4 py-2 cursor-pointer hover:border-brand-gold transition shadow-sm group">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-brand-gold mr-2"></i>
+                    <span class="text-sm font-medium text-brand-textmain">District 1 Spa</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 text-brand-textmuted ml-3"></i>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream hidden lg:block"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white animate-pulse-soft"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Live Slot Notification Banner (Appears when a slot frees up) -->
+        <div class="bg-green-50 border-b border-green-100 px-8 py-3 flex items-center justify-between" id="slot-notification">
+            <div class="flex items-center text-green-800 text-sm font-medium">
+                <div class="w-2 h-2 rounded-full bg-green-500 mr-3 animate-ping"></div>
+                Slot available! Anna Nguyen (Therapist) is free for the next 60 minutes due to a cancellation.
+            </div>
+            <div class="flex space-x-3">
+                <button class="px-4 py-1.5 bg-white border border-green-200 text-green-700 hover:bg-green-100 rounded-lg text-xs font-medium transition shadow-sm" onclick="document.getElementById('slot-notification').style.display='none'">Dismiss</button>
+                <button class="px-4 py-1.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-sm text-xs font-medium">Auto-Assign Next Client</button>
+            </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto pb-12 space-y-6">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Operations</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Booking Queue</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Waiting List</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Manage walk-in customers and overflow demand waiting for available service slots.</p>
+                    </div>
+                    
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10">
+                        <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center">
+                            <i data-lucide="refresh-cw" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Refresh Queue
+                        </button>
+                        <button class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center" onclick="togglePanel('addToQueuePanel')">
+                            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add to Queue
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QUEUE METRICS CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center group relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 w-16 h-16 bg-brand-gold/10 rounded-full group-hover:scale-150 transition-transform duration-500"></div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Customers Waiting</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">5</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Average Wait Time</p>
+                        <h3 class="font-serif text-3xl text-brand-textmain">18 <span class="text-sm font-sans text-brand-textmuted">min</span></h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Available Staff</p>
+                        <h3 class="font-serif text-3xl text-brand-textmain flex items-center">
+                            1 <span class="text-[10px] font-sans uppercase font-bold tracking-wider bg-green-50 text-green-600 px-2 py-0.5 rounded border border-green-200 ml-3">Ready</span>
+                        </h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/60 flex flex-col justify-center">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Next Expected Slot</p>
+                        <h3 class="font-serif text-lg text-brand-textmain font-medium truncate">18:45 (in 37 min)</h3>
+                    </div>
+                </div>
+
+                <!-- QUEUE TABLE AREA -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden relative">
+                    
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex justify-between items-center">
+                        <h3 class="font-serif text-xl text-brand-textmain">Current Queue</h3>
+                        
+                        <div class="flex items-center space-x-3">
+                            <select class="spa-input w-auto min-w-[130px] appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer py-2 text-xs">
+                                <option value="">Sort: Position</option>
+                                <option>Sort: Wait Time</option>
+                                <option>Sort: Priority</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto min-h-[400px]">
+                        <table class="w-full text-left border-collapse min-w-[1200px]">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-white border-b border-brand-cream">
+                                    <th class="py-4 px-6 font-semibold w-16 text-center">Pos</th>
+                                    <th class="py-4 px-4 font-semibold">Customer</th>
+                                    <th class="py-4 px-4 font-semibold">Requested Service</th>
+                                    <th class="py-4 px-4 font-semibold">Preferred Staff</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Arrival</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Wait Time</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Priority</th>
+                                    <th class="py-4 px-4 font-semibold">Status</th>
+                                    <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50 bg-white font-medium text-brand-textmain">
+                                
+                                <!-- VIP / High Priority Row -->
+                                <tr class="hover:bg-brand-ivory/30 transition bg-brand-gold/5 relative group">
+                                    <!-- Indicator bar for top position -->
+                                    <td class="absolute left-0 top-0 bottom-0 w-1 bg-brand-gold"></td>
+                                    <td class="py-5 px-6 text-center">
+                                        <div class="w-8 h-8 rounded-full bg-brand-gold text-white flex items-center justify-center font-bold shadow-sm mx-auto">1</div>
+                                    </td>
+                                    <td class="py-5 px-4">
+                                        <p class="text-brand-textmain">Eleanor Vance</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Phone: +84 901 234 567</p>
+                                    </td>
+                                    <td class="py-5 px-4">
+                                        <p>Signature Deep Tissue</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">60 min</p>
+                                    </td>
+                                    <td class="py-5 px-4 text-brand-textmuted font-normal">Any Available</td>
+                                    <td class="py-5 px-4 text-center font-mono text-xs">17:45</td>
+                                    <td class="py-5 px-4 text-center text-brand-rose">23 min</td>
+                                    <td class="py-5 px-4 text-center">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-gold/20 text-brand-goldhover border border-brand-gold/30">
+                                            VIP
+                                        </span>
+                                    </td>
+                                    <td class="py-5 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200">
+                                            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5 animate-pulse"></span> Waiting
+                                        </span>
+                                    </td>
+                                    <td class="py-5 px-6 text-right relative dropdown-container">
+                                        <button class="px-4 py-1.5 bg-brand-gold text-white hover:bg-brand-goldhover rounded-lg text-xs font-medium transition shadow-sm mr-2">
+                                            Assign Slot
+                                        </button>
+                                        <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="bell" class="w-3 h-3 mr-2"></i> Notify Client</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> Edit Request</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-red-600 hover:bg-red-50 transition"><i data-lucide="x-circle" class="w-3 h-3 mr-2"></i> Cancel/Remove</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Normal Row 2 -->
+                                <tr class="hover:bg-brand-ivory/30 transition">
+                                    <td class="py-4 px-6 text-center text-brand-textmuted font-bold text-lg">2</td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">John Doe</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Walk-in</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p>Lotus Hydrating Facial</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">60 min</p>
+                                    </td>
+                                    <td class="py-4 px-4 text-brand-textmain">
+                                        <span class="flex items-center"><div class="w-4 h-4 rounded-full bg-brand-cream flex items-center justify-center text-[8px] mr-1.5">AN</div> Anna N.</span>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono text-xs">17:50</td>
+                                    <td class="py-4 px-4 text-center text-brand-textmuted">18 min</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                            Normal
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200">
+                                            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5"></span> Waiting
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container">
+                                        <button class="px-4 py-1.5 bg-white border border-brand-cream hover:border-brand-gold text-brand-textmain rounded-lg text-xs font-medium transition shadow-sm mr-2 opacity-50 cursor-not-allowed" title="Staff currently busy">
+                                            Assign Slot
+                                        </button>
+                                        <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="bell" class="w-3 h-3 mr-2"></i> Notify Client</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> Edit Request</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-red-600 hover:bg-red-50 transition"><i data-lucide="x-circle" class="w-3 h-3 mr-2"></i> Cancel/Remove</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Normal Row 3 -->
+                                <tr class="hover:bg-brand-ivory/30 transition">
+                                    <td class="py-4 px-6 text-center text-brand-textmuted font-bold text-lg">3</td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain">Marcus Chen</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">Phone: +84 911 888 777</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p>Hot Stone Therapy</p>
+                                        <p class="text-[10px] text-brand-textmuted font-normal mt-0.5">75 min</p>
+                                    </td>
+                                    <td class="py-4 px-4 text-brand-textmuted font-normal">Any Available</td>
+                                    <td class="py-4 px-4 text-center font-mono text-xs">18:00</td>
+                                    <td class="py-4 px-4 text-center text-brand-textmuted">8 min</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                            Normal
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 border border-amber-200">
+                                            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5"></span> Waiting
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container">
+                                        <button class="px-4 py-1.5 bg-white border border-brand-cream hover:border-brand-gold text-brand-textmain rounded-lg text-xs font-medium transition shadow-sm mr-2">
+                                            Assign Slot
+                                        </button>
+                                        <button class="p-1.5 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-lg transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-8 w-40 bg-white border border-brand-cream rounded-xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="bell" class="w-3 h-3 mr-2"></i> Notify Client</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="edit-2" class="w-3 h-3 mr-2"></i> Edit Request</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-xs text-red-600 hover:bg-red-50 transition"><i data-lucide="x-circle" class="w-3 h-3 mr-2"></i> Cancel/Remove</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- In Service Row 4 -->
+                                <tr class="hover:bg-brand-ivory/30 transition opacity-60">
+                                    <td class="py-4 px-6 text-center text-brand-textmuted font-bold text-lg">-</td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-brand-textmain line-through">Sarah Williams</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p>Swedish Massage</p>
+                                    </td>
+                                    <td class="py-4 px-4 text-brand-textmain">
+                                        <span class="flex items-center"><div class="w-4 h-4 rounded-full bg-brand-cream flex items-center justify-center text-[8px] mr-1.5">ER</div> Elena R.</span>
+                                    </td>
+                                    <td class="py-4 px-4 text-center font-mono text-xs">17:15</td>
+                                    <td class="py-4 px-4 text-center text-brand-textmuted">-</td>
+                                    <td class="py-4 px-4 text-center">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">
+                                            Normal
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200">
+                                            Assigned
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">View Booking</button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SLIDE-OUT ADD TO QUEUE PANEL -->
+    <div id="addToQueuePanel" class="fixed inset-y-0 right-0 w-full max-w-lg bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <div>
+                <h3 class="font-serif text-2xl text-brand-textmain">Add to Queue</h3>
+                <p class="text-xs text-brand-textmuted mt-1">Register a walk-in or waiting customer.</p>
+            </div>
+            <button onclick="togglePanel('addToQueuePanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+            
+            <div class="space-y-6">
+                <!-- Customer Details -->
+                <div>
+                    <h4 class="font-serif text-lg text-brand-textmain border-b border-brand-cream pb-2 mb-4">Customer Details</h4>
+                    
+                    <div class="space-y-4">
+                        <div class="relative dropdown-container">
+                            <label class="spa-label">Search / Name</label>
+                            <div class="flex items-center bg-white border border-brand-cream rounded-xl px-4 py-2.5 focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all shadow-sm">
+                                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-3"></i>
+                                <input type="text" placeholder="Enter name or phone..." class="bg-transparent border-none outline-none w-full text-sm text-brand-textmain">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="spa-label">Phone Number (Optional)</label>
+                            <input type="tel" class="spa-input" placeholder="+84 XXX XXX XXX">
+                            <p class="text-[10px] text-brand-textmuted mt-1 ml-1">Required if sending SMS notification when slot opens.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service Request -->
+                <div>
+                    <h4 class="font-serif text-lg text-brand-textmain border-b border-brand-cream pb-2 mb-4">Service Request</h4>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="spa-label">Requested Service <span class="text-brand-rose">*</span></label>
+                            <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                                <option value="" disabled selected>Select a service...</option>
+                                <option value="massage1">Deep Tissue Massage (60m)</option>
+                                <option value="massage2">Swedish Massage (60m)</option>
+                                <option value="facial1">Hydrating Facial (60m)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="spa-label">Preferred Staff</label>
+                            <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                <option value="any" selected>Any Available Staff</option>
+                                <option value="anna">Anna Nguyen (Busy ~15m)</option>
+                                <option value="elena">Elena Rodriguez (Available)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Queue Options -->
+                <div>
+                    <h4 class="font-serif text-lg text-brand-textmain border-b border-brand-cream pb-2 mb-4">Queue Options</h4>
+                    
+                    <div class="space-y-5">
+                        <div>
+                            <label class="spa-label">Priority Level</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <label class="relative cursor-pointer group">
+                                    <input type="radio" name="priority" value="normal" class="peer sr-only radio-card-input" checked>
+                                    <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-2.5 text-center transition-all hover:border-brand-gold">
+                                        <span class="text-xs font-medium text-brand-textmain">Normal</span>
+                                    </div>
+                                </label>
+                                <label class="relative cursor-pointer group">
+                                    <input type="radio" name="priority" value="member" class="peer sr-only radio-card-input">
+                                    <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-2.5 text-center transition-all hover:border-brand-gold">
+                                        <span class="text-xs font-medium text-brand-textmain">Member</span>
+                                    </div>
+                                </label>
+                                <label class="relative cursor-pointer group">
+                                    <input type="radio" name="priority" value="vip" class="peer sr-only radio-card-input">
+                                    <div class="radio-card-body h-full rounded-xl border border-brand-cream bg-white p-2.5 text-center transition-all hover:border-brand-gold">
+                                        <span class="text-xs font-medium text-brand-textmain">VIP</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Auto Assign Toggle -->
+                        <div class="bg-brand-ivory/50 rounded-xl p-4 border border-brand-cream flex justify-between items-center">
+                            <div>
+                                <p class="text-sm font-medium text-brand-textmain">Auto-Assign Slot</p>
+                                <p class="text-[10px] text-brand-textmuted mt-0.5">System will assign customer immediately when a matching slot opens.</p>
+                            </div>
+                            <div class="relative inline-block w-9 align-middle select-none shrink-0">
+                                <input type="checkbox" id="tgl-auto" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                <label for="tgl-auto" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-300 cursor-pointer"></label>
+                                <div class="toggle-dot absolute block w-3 h-3 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transform translate-x-4"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="spa-label">Notes for Reception</label>
+                            <textarea class="spa-input h-20 resize-none text-sm" placeholder="Any specific requests while they wait..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+            <button onclick="togglePanel('addToQueuePanel')" class="px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                Cancel
+            </button>
+            <button onclick="togglePanel('addToQueuePanel')" class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add to Queue
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'danh-sach-cho' });</script>
+</body>
+</html>

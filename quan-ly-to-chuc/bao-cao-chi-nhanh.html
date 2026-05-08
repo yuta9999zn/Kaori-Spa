@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Reports | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Heatmap Gradient Cells */
+        .heat-low { @apply bg-brand-cream/50 border border-brand-cream; }
+        .heat-med { @apply bg-brand-gold/30 border border-brand-gold/40 text-brand-textmain; }
+        .heat-high { @apply bg-brand-gold/70 border border-brand-gold text-white shadow-sm; }
+        .heat-peak { @apply bg-brand-gold border border-brand-goldhover text-white shadow-md font-medium; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Branch Management Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Branch Management</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branch Overview
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Analytics</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3"></i> Branch Reports
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="pt-4 border-t border-brand-cream">
+                <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                </a>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search branch reports, staff, or clients..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Add Client
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Anna Nguyen</p>
+                        <p class="text-xs text-brand-textmuted">Branch Manager</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif shadow-sm border border-white">
+                        AN
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Analytics</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Branch Reports</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col lg:flex-row lg:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 mb-6 lg:mb-0">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-brand-gold/10 text-brand-gold font-sans font-medium text-[11px] uppercase tracking-widest border border-brand-gold/20 mb-4">
+                            <i data-lucide="map-pin" class="w-3.5 h-3.5 mr-1.5"></i> District 1 Spa
+                        </div>
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Branch Reports</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Monitor the daily and weekly performance of your specific spa location.</p>
+                    </div>
+                    
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 relative z-10">
+                        <!-- Date Range Selector -->
+                        <div class="relative dropdown-container">
+                            <button class="w-full sm:w-auto px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center justify-between">
+                                <span class="flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Today</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4 ml-3 text-brand-textmuted"></i>
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="block px-4 py-2.5 text-sm font-medium bg-brand-gold/5 text-brand-gold transition">Today</a>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">Last 7 Days</a>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">Last 30 Days</a>
+                                <div class="h-px bg-brand-cream my-1"></div>
+                                <a href="#" class="block px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">Custom Range...</a>
+                            </div>
+                        </div>
+
+                        <!-- Export Options -->
+                        <div class="relative dropdown-container">
+                            <button class="w-full sm:w-auto px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center justify-center">
+                                <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export
+                            </button>
+                            <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="file-spreadsheet" class="w-4 h-4 mr-2"></i> Export CSV
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="file-text" class="w-4 h-4 mr-2"></i> Export Excel
+                                </a>
+                                <div class="h-px bg-brand-cream my-1"></div>
+                                <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                                    <i data-lucide="file-check" class="w-4 h-4 mr-2"></i> Download PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI SUMMARY CARDS (Branch Specific) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col hover:shadow-premium transition-shadow group relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-gold/5 rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-gold border border-brand-cream shadow-sm">
+                                <i data-lucide="dollar-sign" class="w-5 h-5"></i>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> 5.2%
+                            </span>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Today's Revenue</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">$4,250</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col hover:shadow-premium transition-shadow group relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-gold/5 rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-gold border border-brand-cream shadow-sm">
+                                <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-green-700 bg-green-50 border border-green-200">
+                                <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> 2.1%
+                            </span>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Today's Bookings</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">48</h3>
+                            <p class="text-xs text-brand-textmuted mt-1 font-medium"><span class="text-brand-gold">12</span> slots remaining</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col hover:shadow-premium transition-shadow group relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-gold/5 rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-gold border border-brand-cream shadow-sm">
+                                <i data-lucide="users" class="w-5 h-5"></i>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-textmuted bg-brand-ivory border border-brand-cream">
+                                Stable
+                            </span>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Customers Today</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">45</h3>
+                            <p class="text-xs text-brand-textmuted mt-1"><span class="text-green-600 font-medium">12 New</span> / 33 Returning</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col hover:shadow-premium transition-shadow group relative overflow-hidden">
+                        <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-gold/5 rounded-full pointer-events-none group-hover:scale-150 transition-transform duration-700"></div>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-10 h-10 rounded-full bg-brand-ivory flex items-center justify-center text-brand-gold border border-brand-cream shadow-sm">
+                                <i data-lucide="briefcase" class="w-5 h-5"></i>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-brand-textmuted bg-brand-ivory border border-brand-cream">
+                                90% Utilization
+                            </span>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Active Staff</p>
+                            <h3 class="font-serif text-3xl text-brand-textmain">12</h3>
+                            <p class="text-xs text-brand-textmuted mt-1 font-medium"><span class="text-brand-gold">10</span> Therapists / <span class="text-brand-gold">2</span> Reception</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 1: REVENUE TREND & ROOM UTILIZATION -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Branch Revenue Trend -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 p-6 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Branch Revenue Trend</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Daily performance over the selected period.</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 w-full min-h-[300px] relative">
+                            <canvas id="branchRevenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Room Utilization -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 p-6 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Room Utilization</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Occupancy rate of treatment rooms today.</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 w-full min-h-[300px] relative">
+                            <canvas id="roomUtilizationChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 2: HOURLY BOOKINGS & POPULAR TIME SLOTS -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Hourly Bookings Bar Chart -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 p-6 lg:col-span-2 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Bookings per Hour</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Distribution of appointments throughout the day.</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 w-full min-h-[250px] relative">
+                            <canvas id="hourlyBookingsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Popular Time Slots (Heatmap styling) -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 p-6 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Popular Times</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Busiest booking periods.</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 flex flex-col justify-center">
+                            <div class="grid grid-cols-2 gap-3 mb-6 text-center text-sm">
+                                <div class="heat-low rounded-xl py-3 flex flex-col items-center justify-center">
+                                    <span class="font-medium text-brand-textmuted">09:00 - 11:00</span>
+                                    <span class="text-[10px] uppercase mt-1">Quiet</span>
+                                </div>
+                                <div class="heat-high rounded-xl py-3 flex flex-col items-center justify-center">
+                                    <span class="font-medium">11:00 - 13:00</span>
+                                    <span class="text-[10px] uppercase mt-1 opacity-80">Busy</span>
+                                </div>
+                                <div class="heat-med rounded-xl py-3 flex flex-col items-center justify-center">
+                                    <span class="font-medium">13:00 - 15:00</span>
+                                    <span class="text-[10px] uppercase mt-1 opacity-80">Moderate</span>
+                                </div>
+                                <div class="heat-med rounded-xl py-3 flex flex-col items-center justify-center">
+                                    <span class="font-medium">15:00 - 17:00</span>
+                                    <span class="text-[10px] uppercase mt-1 opacity-80">Moderate</span>
+                                </div>
+                                <div class="heat-peak rounded-xl py-3 flex flex-col items-center justify-center col-span-2 relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-white/10 w-full h-full"></div>
+                                    <span class="font-medium relative z-10">17:00 - 20:00</span>
+                                    <span class="text-[10px] uppercase mt-1 opacity-90 relative z-10 flex items-center"><i data-lucide="flame" class="w-3 h-3 mr-1"></i> Peak Hours</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Booking by Category summary -->
+                            <div class="border-t border-brand-cream pt-4 flex justify-between items-center text-sm">
+                                <div class="flex items-center text-brand-textmain font-medium"><span class="w-2.5 h-2.5 rounded-full bg-[#C9A87C] mr-2"></span>Massage (60%)</div>
+                                <div class="flex items-center text-brand-textmain font-medium"><span class="w-2.5 h-2.5 rounded-full bg-[#D9B8B5] mr-2"></span>Facial (40%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 3: TABLES (SERVICE & STAFF PERFORMANCE) -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Top Services Table -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col">
+                        <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center bg-brand-ivory/30">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Service Performance</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Top booked services today.</p>
+                            </div>
+                            <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">View All</button>
+                        </div>
+                        <div class="overflow-x-auto p-2">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted border-b border-brand-cream/50">
+                                        <th class="py-3 px-4 font-semibold font-sans">Service Name</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-center">Bookings</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-right">Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/30">
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-gold/10 text-brand-gold flex items-center justify-center mr-3"><i data-lucide="waves" class="w-4 h-4"></i></div>
+                                            Signature Deep Tissue
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">18</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$2,880</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-rose/10 text-brand-rose flex items-center justify-center mr-3"><i data-lucide="sparkles" class="w-4 h-4"></i></div>
+                                            Lotus Hydrating Facial
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">14</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$1,680</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-gold/10 text-brand-gold flex items-center justify-center mr-3"><i data-lucide="flower" class="w-4 h-4"></i></div>
+                                            Aromatherapy Relax
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">9</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$810</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 font-medium text-brand-textmain flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 flex items-center justify-center mr-3"><i data-lucide="droplet" class="w-4 h-4"></i></div>
+                                            Hot Stone Therapy
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">7</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$805</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Top Staff Table -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col relative">
+                        <div class="p-6 border-b border-brand-cream/50 flex justify-between items-center bg-brand-ivory/30">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Staff Performance</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">Therapist productivity for this branch.</p>
+                            </div>
+                            <button class="text-xs font-medium text-brand-gold hover:text-brand-goldhover transition">View All</button>
+                        </div>
+                        <div class="overflow-x-auto p-2">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted border-b border-brand-cream/50">
+                                        <th class="py-3 px-4 font-semibold font-sans">Staff Name</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-center">Services</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-right">Revenue</th>
+                                        <th class="py-3 px-4 font-semibold font-sans text-right">Rating</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-brand-cream/30">
+                                    <tr class="hover:bg-brand-ivory/50 transition bg-brand-gold/5">
+                                        <td class="py-3 px-4 flex items-center">
+                                            <div class="relative">
+                                                <div class="absolute -top-2 -right-2 text-brand-gold drop-shadow-sm"><i data-lucide="crown" class="w-4 h-4 fill-current"></i></div>
+                                                <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3 shadow-sm border border-brand-gold/30">ER</div>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain">Elena Rodriguez</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">7</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$990</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <span class="inline-flex items-center text-brand-gold font-medium"><i data-lucide="star" class="w-3 h-3 mr-1 fill-current"></i> 5.0</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3 shadow-sm border border-white">JD</div>
+                                            <span class="font-medium text-brand-textmain">James Davies</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">6</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$820</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <span class="inline-flex items-center text-brand-gold font-medium"><i data-lucide="star" class="w-3 h-3 mr-1 fill-current"></i> 4.9</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3 shadow-sm border border-white">MC</div>
+                                            <span class="font-medium text-brand-textmain">Mia Chang</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">5</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$600</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <span class="inline-flex items-center text-brand-gold font-medium"><i data-lucide="star" class="w-3 h-3 mr-1 fill-current"></i> 4.8</span>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/50 transition">
+                                        <td class="py-3 px-4 flex items-center">
+                                            <div class="w-8 h-8 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-xs mr-3 shadow-sm border border-white">LW</div>
+                                            <span class="font-medium text-brand-textmain">Liam Wilson</span>
+                                        </td>
+                                        <td class="py-3 px-4 text-center text-brand-textmuted">4</td>
+                                        <td class="py-3 px-4 text-right font-medium text-brand-textmain">$580</td>
+                                        <td class="py-3 px-4 text-right">
+                                            <span class="inline-flex items-center text-brand-gold font-medium"><i data-lucide="star" class="w-3 h-3 mr-1 fill-current"></i> 4.9</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                
+                <!-- ROW 4: CUSTOMER ANALYTICS -->
+                <div class="grid grid-cols-1 gap-8">
+                    <!-- Customer Analytics Chart -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 p-6 flex flex-col">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-serif text-xl text-brand-textmain">Customer Analytics</h3>
+                                <p class="text-xs text-brand-textmuted mt-0.5">New vs Returning customers growth over the selected period.</p>
+                            </div>
+                        </div>
+                        <div class="flex-1 w-full min-h-[300px] relative">
+                            <canvas id="branchCustomerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Chart.js Global Settings for Luxury Feel
+        Chart.defaults.font.family = "'Jost', sans-serif";
+        Chart.defaults.color = '#8B837C';
+        Chart.defaults.plugins.tooltip.backgroundColor = '#FAF9F6';
+        Chart.defaults.plugins.tooltip.titleColor = '#4A443E';
+        Chart.defaults.plugins.tooltip.bodyColor = '#4A443E';
+        Chart.defaults.plugins.tooltip.borderColor = '#F4EFEA';
+        Chart.defaults.plugins.tooltip.borderWidth = 1;
+        Chart.defaults.plugins.tooltip.padding = 12;
+        Chart.defaults.plugins.tooltip.cornerRadius = 8;
+        Chart.defaults.scale.grid.color = '#F4EFEA';
+
+        // 1. BRANCH REVENUE LINE CHART
+        const ctxRev = document.getElementById('branchRevenueChart').getContext('2d');
+        const gradientRev = ctxRev.createLinearGradient(0, 0, 0, 300);
+        gradientRev.addColorStop(0, 'rgba(201, 168, 124, 0.2)');
+        gradientRev.addColorStop(1, 'rgba(201, 168, 124, 0)');
+
+        new Chart(ctxRev, {
+            type: 'line',
+            data: {
+                labels: ['9:00', '11:00', '13:00', '15:00', '17:00', '19:00', '21:00'],
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: [250, 680, 520, 850, 1100, 1500, 4250], // Cumulative or specific points
+                    borderColor: '#C9A87C',
+                    backgroundColor: gradientRev,
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#FFFFFF',
+                    pointBorderColor: '#C9A87C',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        border: { display: false },
+                        grid: { drawBorder: false },
+                        ticks: { callback: function(value) { return '$' + value; } }
+                    },
+                    x: {
+                        border: { display: false },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 2. ROOM UTILIZATION BAR CHART
+        const ctxRoom = document.getElementById('roomUtilizationChart').getContext('2d');
+        new Chart(ctxRoom, {
+            type: 'bar',
+            data: {
+                labels: ['Room 1 (Lotus)', 'Room 2 (Bamboo)', 'Room 3 (Orchid)', 'VIP Suite'],
+                datasets: [{
+                    label: 'Occupancy Rate (%)',
+                    data: [85, 70, 92, 60],
+                    backgroundColor: ['#C9A87C', '#D9B8B5', '#4A443E', '#DCD6DD'],
+                    borderRadius: 6,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        border: { display: false },
+                        grid: { drawBorder: false },
+                        ticks: { callback: function(value) { return value + '%'; } }
+                    },
+                    x: {
+                        border: { display: false },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 3. HOURLY BOOKINGS BAR CHART
+        const ctxHourly = document.getElementById('hourlyBookingsChart').getContext('2d');
+        new Chart(ctxHourly, {
+            type: 'bar',
+            data: {
+                labels: ['9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm'],
+                datasets: [{
+                    label: 'Bookings',
+                    data: [2, 3, 5, 6, 4, 3, 4, 5, 8, 9, 6, 2],
+                    backgroundColor: '#C9A87C',
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        border: { display: false },
+                        grid: { drawBorder: false }
+                    },
+                    x: {
+                        border: { display: false },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // 4. CUSTOMER GROWTH LINE CHART
+        const ctxCust = document.getElementById('branchCustomerChart').getContext('2d');
+        new Chart(ctxCust, {
+            type: 'line',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [
+                    {
+                        label: 'New Customers',
+                        data: [5, 8, 4, 6, 9, 15, 12],
+                        borderColor: '#D9B8B5', // Rose
+                        backgroundColor: 'rgba(217, 184, 181, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Returning',
+                        data: [15, 18, 22, 20, 25, 38, 33],
+                        borderColor: '#C9A87C', // Gold
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { 
+                        position: 'top',
+                        align: 'end',
+                        labels: { boxWidth: 12, usePointStyle: true, pointStyle: 'circle' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        border: { display: false },
+                        grid: { drawBorder: false }
+                    },
+                    x: {
+                        border: { display: false },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

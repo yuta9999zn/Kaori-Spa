@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Developer Guide v2.1</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        code, pre { font-family: 'Courier New', monospace; }
+        .code-block { background:#1e1e2e; color:#cdd6f4; border-radius:14px; padding:16px 20px; font-size:12px; line-height:1.7; overflow-x:auto; }
+        .code-block .kw { color:#89b4fa; }
+        .code-block .fn { color:#a6e3a1; }
+        .code-block .str { color:#a6e3a1; }
+        .code-block .cm { color:#6c7086; }
+        .code-block .num { color:#fab387; }
+        .code-block .key { color:#89dceb; }
+        .section-card { background:white; border-radius:20px; border:1px solid #F4EFEA; box-shadow:0 10px 40px -10px rgba(74,68,62,.06); overflow:hidden; margin-bottom:28px; }
+        .section-header { padding:18px 24px 14px; border-bottom:1px solid #F4EFEA; display:flex; align-items:center; gap:12px; }
+        .section-body { padding:20px 24px; }
+        .pill { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:999px; font-size:11px; font-weight:500; }
+        .toc-link { display:block; padding:4px 8px; border-radius:8px; font-size:13px; color:#8B837C; text-decoration:none; transition:all .15s; }
+        .toc-link:hover { background:#FAF9F6; color:#C9A87C; }
+        .toc-link.active { background:rgba(201,168,124,.1); color:#C9A87C; font-weight:500; }
+        .api-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; align-items:start; padding:10px 0; border-bottom:1px solid #F4EFEA; font-size:12px; }
+        .api-row:last-child { border-bottom:none; }
+        h3.sub { font-size:14px; font-weight:600; color:#4A443E; margin:16px 0 8px; }
+        .tag { display:inline-block; padding:1px 7px; border-radius:5px; font-size:10px; font-weight:600; }
+        .tag-get { background:#dbeafe; color:#1d4ed8; }
+        .tag-set { background:#dcfce7; color:#16a34a; }
+        .tag-del { background:#fee2e2; color:#dc2626; }
+        table.data-table { width:100%; font-size:12px; border-collapse:collapse; }
+        table.data-table th { background:#FAF9F6; padding:8px 12px; text-align:left; font-weight:600; color:#8B837C; border-bottom:1px solid #F4EFEA; }
+        table.data-table td { padding:8px 12px; border-bottom:1px solid #F4EFEA; vertical-align:top; color:#4A443E; }
+        table.data-table tr:last-child td { border-bottom:none; }
+        .wf-flow { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:12px; }
+        .wf-box { background:#FAF9F6; border:1px solid #F4EFEA; border-radius:8px; padding:4px 10px; white-space:nowrap; }
+        .wf-arrow { color:#8B837C; font-size:16px; line-height:1; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans min-h-screen">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-10 py-5 flex items-center gap-4 sticky top-0 z-20 shadow-soft">
+    <a href="../workflows.html" class="text-brand-textmuted hover:text-brand-gold transition flex items-center gap-2 text-sm">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Workflows
+    </a>
+    <div class="w-px h-5 bg-brand-cream"></div>
+    <i data-lucide="book-open" class="text-purple-500 w-5 h-5" stroke-width="1.5"></i>
+    <h1 class="font-serif text-xl">Developer Guide</h1>
+    <span class="text-xs bg-purple-50 text-purple-600 px-3 py-1 rounded-full font-medium">v2.1 · 14/04/2026</span>
+</header>
+
+<div class="max-w-6xl mx-auto px-8 py-10 grid grid-cols-4 gap-8">
+
+    <!-- TOC sidebar -->
+    <div class="col-span-1">
+        <div class="sticky top-24 bg-white rounded-2xl border border-brand-cream/50 shadow-soft p-4">
+            <p class="text-xs text-brand-textmuted uppercase tracking-widest font-semibold mb-3 px-2">Nội Dung</p>
+            <nav class="flex flex-col gap-0.5">
+                <a href="#architecture" class="toc-link">1. Kiến trúc hệ thống</a>
+                <a href="#folder" class="toc-link">2. Cấu trúc thư mục</a>
+                <a href="#sidebar" class="toc-link">3. Sidebar chung</a>
+                <a href="#auradb" class="toc-link">4. AuraDB — Data layer</a>
+                <a href="#combo-model" class="toc-link">5. Combo & Liệu Trình</a>
+                <a href="#booking-validation" class="toc-link">6. Booking validation</a>
+                <a href="#workflows" class="toc-link">7. Workflow flows</a>
+                <a href="#new-screen" class="toc-link">8. Thêm màn hình mới</a>
+                <a href="#report-format" class="toc-link">9. Chuẩn báo cáo</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-span-3">
+
+        <!-- 1. Architecture -->
+        <div class="section-card" id="architecture">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <i data-lucide="layers" class="w-5 h-5 text-blue-600"></i>
+                </div>
+                <h2 class="font-serif text-lg">1. Kiến Trúc Hệ Thống</h2>
+            </div>
+            <div class="section-body">
+                <p class="text-sm text-brand-textmuted mb-4">Hệ thống multi-tenant 3 tầng với 5 vai trò:</p>
+                <div class="grid grid-cols-3 gap-4 mb-5">
+                    <div class="rounded-xl border-2 border-brand-textmain/20 bg-brand-ivory p-4 text-center">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-brand-textmain mx-auto mb-2"></i>
+                        <p class="font-semibold text-sm">Tenant Admin</p>
+                        <p class="text-xs text-brand-textmuted mt-1">Tạo & quản lý nhiều Tổ Chức. Xem báo cáo tổng hợp toàn hệ thống.</p>
+                        <code class="text-xs bg-white px-2 py-0.5 rounded mt-2 block">quan-ly-tenant/</code>
+                    </div>
+                    <div class="rounded-xl border-2 border-brand-gold/30 bg-brand-gold/5 p-4 text-center">
+                        <i data-lucide="building-2" class="w-6 h-6 text-brand-gold mx-auto mb-2"></i>
+                        <p class="font-semibold text-sm">Org Owner</p>
+                        <p class="text-xs text-brand-textmuted mt-1">Chủ spa. Sở hữu 1+ Chi Nhánh. Thuê Manager. Xem doanh thu.</p>
+                        <code class="text-xs bg-white px-2 py-0.5 rounded mt-2 block">quan-ly-to-chuc/</code>
+                    </div>
+                    <div class="rounded-xl border-2 border-brand-rose/30 bg-brand-rose/5 p-4 text-center">
+                        <i data-lucide="store" class="w-6 h-6 text-brand-rose mx-auto mb-2"></i>
+                        <p class="font-semibold text-sm">Manager + Staff</p>
+                        <p class="text-xs text-brand-textmuted mt-1">Vận hành hằng ngày: booking, kho, check-in, báo cáo.</p>
+                        <code class="text-xs bg-white px-2 py-0.5 rounded mt-2 block">quan-ly-chi-nhanh/</code>
+                    </div>
+                </div>
+                <div class="code-block">
+<span class="cm">// Hierarchy</span>
+Tenant → [Tổ Chức] → [Chi Nhánh] → [Manager] → [Staff]
+                      └→ shared service catalog
+                      └→ shared customer DB (per org)
+                      └→ separate inventory per branch
+                      └→ AuraDB: localStorage scoped per branch
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Folder Structure -->
+        <div class="section-card" id="folder">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
+                    <i data-lucide="folder-tree" class="w-5 h-5 text-amber-600"></i>
+                </div>
+                <h2 class="font-serif text-lg">2. Cấu Trúc Thư Mục</h2>
+            </div>
+            <div class="section-body">
+                <div class="code-block">
+Aura Spa/
+├── index.html                    <span class="cm">← Portal selector (chọn vai trò)</span>
+├── workflows.html                <span class="cm">← Tổng hợp tất cả màn hình</span>
+├── docs/
+│   └── developer-guide.html     <span class="cm">← File này</span>
+│
+├── quan-ly-tenant/               <span class="cm">← Tenant Admin portal</span>
+│   └── index.html, chi-nhanh/, to-chuc/, bao-cao/, ...
+│
+├── quan-ly-to-chuc/              <span class="cm">← Org Owner portal</span>
+│   └── index.html, chi-nhanh/, nhan-vien/, doanh-thu/, ...
+│
+└── quan-ly-chi-nhanh/            <span class="cm">← Branch Manager/Staff portal</span>
+    ├── index.html                <span class="cm">← Dashboard</span>
+    ├── check-in.html             <span class="cm">← Customer check-in (AuraDB)</span>
+    ├── shared/
+    │   ├── sidebar.js            <span class="cm">← Sidebar chung (inject vào DOM)</span>
+    │   └── data-store.js         <span class="cm">← AuraDB localStorage module</span>
+    ├── booking/
+    │   ├── tao-booking.html      <span class="cm">← 6-step booking wizard</span>
+    │   ├── thanh-toan.html       <span class="cm">← Checkout (ghi AuraDB)</span>
+    │   └── lich-su.html, ...
+    ├── kho/
+    │   ├── index.html            <span class="cm">← Tồn kho live (AuraDB)</span>
+    │   ├── nhap-kho.html         <span class="cm">← Nhập hàng (ghi AuraDB)</span>
+    │   └── xuat-kho.html         <span class="cm">← Xuất/dùng (ghi AuraDB)</span>
+    ├── bao-cao/
+    │   ├── bao-cao-ngay.html     <span class="cm">← Báo cáo ngày (đọc AuraDB)</span>
+    │   ├── bao-cao-chi-nhanh.html<span class="cm">← Tổng hợp tháng (AuraDB + mock)</span>
+    │   └── lieu-trinh.html       <span class="cm">← Combo buổi tracker (AuraDB)</span>
+    ├── nhan-vien/
+    ├── khach-hang/
+    ├── phong/
+    ├── dich-vu/
+    │   ├── danh-sach.html
+    │   ├── goi-dich-vu.html      <span class="cm">← Gói combo nhiều dịch vụ</span>
+    │   └── ...
+    └── thong-bao/
+        └── index.html
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Sidebar -->
+        <div class="section-card" id="sidebar">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 text-green-600"></i>
+                </div>
+                <h2 class="font-serif text-lg">3. Sidebar Chung (sidebar.js)</h2>
+            </div>
+            <div class="section-body">
+                <p class="text-sm text-brand-textmuted mb-4">Tất cả màn hình trong <code>quan-ly-chi-nhanh/</code> dùng chung 1 sidebar được inject vào DOM.</p>
+                <h3 class="sub">Cách dùng — template tối thiểu</h3>
+                <div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="vi"&gt;
+&lt;head&gt;
+  <span class="cm">&lt;!-- ... fonts, tailwind, lucide ... --&gt;</span>
+&lt;/head&gt;
+&lt;body <span class="key">class</span>=<span class="str">"bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden"</span>&gt;
+
+  <span class="cm">&lt;!-- 1. Sidebar placeholder --&gt;</span>
+  &lt;div <span class="key">id</span>=<span class="str">"sidebar-root"</span>&gt;&lt;/div&gt;
+
+  <span class="cm">&lt;!-- 2. Main content area --&gt;</span>
+  &lt;div <span class="key">class</span>=<span class="str">"flex-1 flex flex-col h-screen overflow-hidden"</span>&gt;
+
+    <span class="cm">&lt;!-- Header --&gt;</span>
+    &lt;header <span class="key">class</span>=<span class="str">"bg-white border-b border-brand-cream px-8 py-4 ..."</span>&gt; ... &lt;/header&gt;
+
+    <span class="cm">&lt;!-- Scrollable body --&gt;</span>
+    &lt;div <span class="key">class</span>=<span class="str">"flex-1 overflow-y-auto"</span>&gt;
+      <span class="cm">&lt;!-- page content --&gt;</span>
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  <span class="cm">&lt;!-- 3. Scripts at bottom --&gt;</span>
+  &lt;script <span class="key">src</span>=<span class="str">"../shared/data-store.js"</span>&gt;&lt;/script&gt;
+  &lt;script <span class="key">src</span>=<span class="str">"../shared/sidebar.js"</span>&gt;&lt;/script&gt;
+  &lt;script&gt;<span class="fn">AuraSidebar</span>.<span class="fn">init</span>({ <span class="key">basePath</span>: <span class="str">'../'</span>, <span class="key">active</span>: <span class="str">'<em>nav-key</em>'</span> });&lt;/script&gt;
+&lt;/body&gt;
+                </div>
+                <h3 class="sub">basePath rules</h3>
+                <table class="data-table">
+                    <tr><th>Vị trí file</th><th>basePath</th><th>Ví dụ</th></tr>
+                    <tr><td><code>quan-ly-chi-nhanh/check-in.html</code></td><td><code>'./'</code></td><td>Root của chi-nhanh</td></tr>
+                    <tr><td><code>quan-ly-chi-nhanh/kho/index.html</code></td><td><code>'../'</code></td><td>Trong subfolder</td></tr>
+                    <tr><td><code>quan-ly-chi-nhanh/bao-cao/bao-cao-ngay.html</code></td><td><code>'../'</code></td><td>Trong subfolder</td></tr>
+                </table>
+                <h3 class="sub">Nav keys (active)</h3>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>dashboard</code> — Tổng quan</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>check-in</code> — Check-in</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>booking</code> — Tạo booking</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>lich-su</code> — Lịch sử booking</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>phong</code> — Quản lý phòng</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>kho</code> — Kho vật tư</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>nhan-vien</code> — Nhân viên</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>khach-hang</code> — Khách hàng</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>dich-vu</code> — Dịch vụ</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>bc-ngay</code> — BC ngày</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>bc-chinhanh</code> — BC tháng</div>
+                    <div class="bg-brand-ivory rounded-lg p-2"><code>bc-liet-trinh</code> — Liệu trình</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. AuraDB -->
+        <div class="section-card" id="auradb">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center">
+                    <i data-lucide="database" class="w-5 h-5 text-blue-600"></i>
+                </div>
+                <h2 class="font-serif text-lg">4. AuraDB — Data Layer</h2>
+            </div>
+            <div class="section-body">
+                <p class="text-sm text-brand-textmuted mb-4">Module <code>shared/data-store.js</code> là lớp dữ liệu dùng localStorage để giữ dữ liệu giữa các màn hình trong cùng một phiên làm việc.</p>
+
+                <h3 class="sub">localStorage Keys</h3>
+                <table class="data-table mb-5">
+                    <tr><th>Key</th><th>Kiểu dữ liệu</th><th>Mô tả</th></tr>
+                    <tr><td><code>aura_transactions</code></td><td>Transaction[]</td><td>Mỗi thanh toán hoàn tất</td></tr>
+                    <tr><td><code>aura_inventory_moves</code></td><td>InventoryMove[]</td><td>Nhập/xuất kho</td></tr>
+                    <tr><td><code>aura_daily_entries</code></td><td>DailyEntry[]</td><td>Ghi thủ công (tồn quỹ, chi phí)</td></tr>
+                    <tr><td><code>aura_combos</code></td><td>Combo[]</td><td>Combo buổi + gói dịch vụ</td></tr>
+                    <tr><td><code>aura_combo_sessions</code></td><td>ComboSession[]</td><td>Từng buổi được dùng trong combo</td></tr>
+                </table>
+
+                <h3 class="sub">Transaction Schema</h3>
+                <div class="code-block">
+<span class="cm">// Ghi khi thanh-toan.html hoàn tất</span>
+{
+  <span class="key">id</span>:        <span class="str">"tx_1713097200000"</span>,
+  <span class="key">date</span>:      <span class="str">"2026-04-14"</span>,           <span class="cm">// YYYY-MM-DD</span>
+  <span class="key">type</span>:      <span class="str">"dv"</span>,                  <span class="cm">// "dv" | "mp"</span>
+  <span class="key">method</span>:    <span class="str">"tm"</span>,                  <span class="cm">// "tm" | "the" | "ck-loc" | "ck-cty"</span>
+  <span class="key">amount</span>:    <span class="num">680000</span>,                <span class="cm">// VND</span>
+  <span class="key">bookingId</span>: <span class="str">"BK-10425"</span>,
+  <span class="key">customer</span>:  <span class="str">"Nguyễn Thị Hoa"</span>,
+  <span class="key">service</span>:   <span class="str">"Swedish Massage"</span>,
+  <span class="key">createdAt</span>: <span class="num">1713097200000</span>         <span class="cm">// timestamp</span>
+}
+                </div>
+
+                <h3 class="sub">InventoryMove Schema</h3>
+                <div class="code-block">
+<span class="cm">// Ghi khi nhap-kho.html hoặc xuat-kho.html submit</span>
+{
+  <span class="key">id</span>:         <span class="str">"mv_1713097200001"</span>,
+  <span class="key">productId</span>:  <span class="str">"NB-001"</span>,             <span class="cm">// mã NB từ báo cáo Excel</span>
+  <span class="key">delta</span>:      <span class="num">+10</span>,                  <span class="cm">// dương = nhập, âm = xuất</span>
+  <span class="key">type</span>:       <span class="str">"nhap"</span>,               <span class="cm">// "nhap" | "xuat"</span>
+  <span class="key">note</span>:       <span class="str">"Spa Supply / INV-001"</span>,
+  <span class="key">receipt</span>:    <span class="str">"INV-001"</span>,
+  <span class="key">createdAt</span>:  <span class="num">1713097200001</span>
+}
+                </div>
+
+                <h3 class="sub">Combo Schema (xem Section 5)</h3>
+                <div class="code-block">
+<span class="cm">// Combo buổi (1 dịch vụ × N lần)</span>
+{
+  <span class="key">id</span>:         <span class="str">"cb_001"</span>,
+  <span class="key">kind</span>:       <span class="str">"session"</span>,            <span class="cm">// "session" | "package"</span>
+  <span class="key">customerId</span>: <span class="str">"24D11001"</span>,
+  <span class="key">serviceId</span>:  <span class="str">"nach"</span>,               <span class="cm">// dịch vụ duy nhất</span>
+  <span class="key">totalSessions</span>: <span class="num">10</span>,
+  <span class="key">unitPrice</span>:  <span class="num">200000</span>,
+  <span class="key">purchaseDate</span>: <span class="str">"2026-01-15"</span>,
+  <span class="key">expiryDate</span>: <span class="str">"2027-01-15"</span>         <span class="cm">// tuỳ chọn</span>
+}
+
+<span class="cm">// Gói combo (nhiều dịch vụ khác nhau)</span>
+{
+  <span class="key">id</span>:         <span class="str">"cb_002"</span>,
+  <span class="key">kind</span>:       <span class="str">"package"</span>,
+  <span class="key">customerId</span>: <span class="str">"24D11001"</span>,
+  <span class="key">packageId</span>:  <span class="str">"GOI-BRIDAL"</span>,         <span class="cm">// từ goi-dich-vu.html</span>
+  <span class="key">items</span>: [                          <span class="cm">// các dịch vụ trong gói</span>
+    { <span class="key">serviceId</span>:<span class="str">"nach"</span>,  <span class="key">sessions</span>:<span class="num">10</span>, <span class="key">unitPrice</span>:<span class="num">200000</span> },
+    { <span class="key">serviceId</span>:<span class="str">"chan"</span>,  <span class="key">sessions</span>:<span class="num">5</span>,  <span class="key">unitPrice</span>:<span class="num">300000</span> },
+    { <span class="key">serviceId</span>:<span class="str">"facial"</span>,<span class="key">sessions</span>:<span class="num">3</span>,  <span class="key">unitPrice</span>:<span class="num">350000</span> },
+  ],
+  <span class="key">purchaseDate</span>: <span class="str">"2026-01-15"</span>
+}
+                </div>
+
+                <h3 class="sub">AuraDB API</h3>
+                <div class="space-y-1">
+                    <div class="api-row" style="border-color:#F4EFEA">
+                        <div><span class="tag tag-set">SET</span> <code class="text-xs">addTransaction(tx)</code></div>
+                        <div class="text-brand-textmuted text-xs">Gọi từ thanh-toan.html khi thanh toán xong</div>
+                        <div class="text-brand-textmuted text-xs">Tự tạo id + createdAt</div>
+                    </div>
+                    <div class="api-row">
+                        <div><span class="tag tag-get">GET</span> <code class="text-xs">getTransactions(date?)</code></div>
+                        <div class="text-brand-textmuted text-xs">Lấy danh sách giao dịch, lọc theo ngày</div>
+                        <div class="text-brand-textmuted text-xs">date: "YYYY-MM-DD" hoặc omit cho tất cả</div>
+                    </div>
+                    <div class="api-row">
+                        <div><span class="tag tag-get">GET</span> <code class="text-xs">getMonthlyReport(y, m)</code></div>
+                        <div class="text-brand-textmuted text-xs">Tổng hợp DT, phân loại, theo ngày</div>
+                        <div class="text-brand-textmuted text-xs">→ { dv, mp, total, byDay, byMethod }</div>
+                    </div>
+                    <div class="api-row">
+                        <div><span class="tag tag-set">SET</span> <code class="text-xs">addInventoryMove(mv)</code></div>
+                        <div class="text-brand-textmuted text-xs">Gọi từ nhap/xuat-kho khi submit</div>
+                        <div class="text-brand-textmuted text-xs">delta dương/âm</div>
+                    </div>
+                    <div class="api-row">
+                        <div><span class="tag tag-get">GET</span> <code class="text-xs">getStock(productId, base)</code></div>
+                        <div class="text-brand-textmuted text-xs">Tồn kho = base + tổng delta moves</div>
+                        <div class="text-brand-textmuted text-xs">base: qty mặc định trong INVENTORY[]</div>
+                    </div>
+                    <div class="api-row">
+                        <div><span class="tag tag-set">SET</span> <code class="text-xs">addCombo(combo)</code></div>
+                        <div class="text-brand-textmuted text-xs">Tạo combo mới (buổi hoặc gói)</div>
+                        <div class="text-brand-textmuted text-xs">kind: "session" | "package"</div>
+                    </div>
+                    <div class="api-row">
+                        <div><span class="tag tag-set">SET</span> <code class="text-xs">recordComboSession(comboId, svcId?)</code></div>
+                        <div class="text-brand-textmuted text-xs">Ghi 1 buổi đã dùng trong combo</div>
+                        <div class="text-brand-textmuted text-xs">svcId: bắt buộc với kind=package</div>
+                    </div>
+                    <div class="api-row" style="border-bottom:none">
+                        <div><span class="tag tag-del">DEL</span> <code class="text-xs">clearAll()</code></div>
+                        <div class="text-brand-textmuted text-xs">Xoá hết localStorage (dev only)</div>
+                        <div class="text-brand-textmuted text-xs">⚠️ Không dùng trên production</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Combo Model -->
+        <div class="section-card" id="combo-model">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-brand-gold/10 flex items-center justify-center">
+                    <i data-lucide="layers" class="w-5 h-5 text-brand-gold"></i>
+                </div>
+                <h2 class="font-serif text-lg">5. Combo & Liệu Trình — 2 Loại</h2>
+            </div>
+            <div class="section-body">
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="rounded-xl border-2 border-brand-gold bg-brand-gold/5 p-4">
+                        <p class="font-semibold text-brand-textmain mb-1 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-brand-gold text-white flex items-center justify-center text-xs font-bold">A</span>
+                            Combo Buổi (Liệu Trình)
+                        </p>
+                        <p class="text-xs text-brand-textmuted mb-3">Khách mua <strong>1 dịch vụ cụ thể</strong> theo số buổi. Mỗi lần đến sử dụng dịch vụ đó, ghi nhận 1 buổi.</p>
+                        <div class="bg-white rounded-lg p-3 text-xs space-y-1.5">
+                            <p class="font-medium text-brand-textmain">Ví dụ:</p>
+                            <p>Khách A mua <strong>10 buổi triệt nách</strong> × 200k/buổi</p>
+                            <p>→ Đã dùng 8 buổi, còn 2 buổi (400k)</p>
+                            <p>→ Mỗi lần đến, tạo booking chọn service "Nách" và gán combo này</p>
+                        </div>
+                        <div class="mt-3 text-xs space-y-1">
+                            <p class="text-brand-textmuted font-medium">Schema key:</p>
+                            <code class="block bg-white rounded px-2 py-1">kind: "session", serviceId: "nach", totalSessions: 10</code>
+                        </div>
+                        <div class="mt-3">
+                            <a href="../quan-ly-chi-nhanh/bao-cao/lieu-trinh.html" class="text-xs text-brand-gold hover:underline">→ Màn hình: bao-cao/lieu-trinh.html</a>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border-2 border-brand-rose bg-brand-rose/5 p-4">
+                        <p class="font-semibold text-brand-textmain mb-1 flex items-center gap-2">
+                            <span class="w-6 h-6 rounded-full bg-brand-rose text-white flex items-center justify-center text-xs font-bold">B</span>
+                            Gói Combo (Nhiều Dịch Vụ)
+                        </p>
+                        <p class="text-xs text-brand-textmuted mb-3">Khách mua <strong>1 gói</strong> bao gồm <strong>nhiều dịch vụ khác nhau</strong>. Mỗi dịch vụ trong gói có số buổi và giá riêng.</p>
+                        <div class="bg-white rounded-lg p-3 text-xs space-y-1.5">
+                            <p class="font-medium text-brand-textmain">Ví dụ:</p>
+                            <p>Gói Bridal = 10 nách + 5 chân + 3 facial</p>
+                            <p>→ Khách đến làm 1 dịch vụ → chọn gói → chọn dịch vụ → ghi buổi</p>
+                            <p>→ Hệ thống trừ buổi của đúng dịch vụ đó</p>
+                        </div>
+                        <div class="mt-3 text-xs space-y-1">
+                            <p class="text-brand-textmuted font-medium">Schema key:</p>
+                            <code class="block bg-white rounded px-2 py-1">kind: "package", items: [{serviceId, sessions, unitPrice}]</code>
+                        </div>
+                        <div class="mt-3">
+                            <a href="../quan-ly-chi-nhanh/dich-vu/goi-dich-vu.html" class="text-xs text-brand-rose hover:underline">→ Màn hình: dich-vu/goi-dich-vu.html</a>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="sub">Booking flow khi khách có combo</h3>
+                <div class="wf-flow mt-2">
+                    <div class="wf-box">Tạo Booking</div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-box bg-brand-gold/10 border-brand-gold/30">Chọn khách</div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-box">Kiểm tra combo còn buổi?</div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-box bg-green-50 border-green-200 text-green-700">Có → Gán combo, trừ buổi</div>
+                </div>
+                <div class="wf-flow mt-2">
+                    <div class="wf-box invisible">Tạo Booking</div>
+                    <span class="wf-arrow invisible">→</span>
+                    <div class="wf-box invisible">.</div>
+                    <span class="wf-arrow invisible">→</span>
+                    <div class="wf-box invisible">.</div>
+                    <span class="wf-arrow">→</span>
+                    <div class="wf-box bg-orange-50 border-orange-200 text-orange-700">Không → Booking bình thường / gợi ý mua combo</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Booking Validation -->
+        <div class="section-card" id="booking-validation">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-orange-50 flex items-center justify-center">
+                    <i data-lucide="shield-alert" class="w-5 h-5 text-orange-600"></i>
+                </div>
+                <h2 class="font-serif text-lg">6. Booking Validation (7 Checks)</h2>
+            </div>
+            <div class="section-body">
+                <p class="text-xs text-brand-textmuted mb-4">Thực hiện ở Step 4 (Chọn NV) và Step 5 (Chọn Phòng) của <code>booking/tao-booking.html</code></p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-xs font-semibold text-orange-600 uppercase tracking-wide mb-2">Nhân Viên (4 checks)</p>
+                        <div class="code-block text-xs">
+<span class="kw">const</span> hasSkill = st.skills.<span class="fn">includes</span>(skill);
+<span class="kw">const</span> inShift  = <span class="fn">isInShift</span>(st, sel.time);
+<span class="kw">const</span> onBreak  = st.status === <span class="str">'break'</span>;
+<span class="kw">const</span> isBusy   = st.status === <span class="str">'working'</span>;
+
+<span class="kw">const</span> canAssign = hasSkill && inShift
+                  && !onBreak && !isBusy;
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-blue-600 uppercase tracking-wide mb-2">Phòng (3 checks)</p>
+                        <div class="code-block text-xs">
+<span class="kw">const</span> svcOk  = room.services.<span class="fn">includes</span>(
+  service.skillRequired);
+<span class="kw">const</span> gendOk = room.gender === <span class="str">'unisex'</span>
+              || room.gender === customer.gender;
+<span class="kw">const</span> hasBed = room.beds
+  .<span class="fn">filter</span>(b => b.status === <span class="str">'available'</span>)
+  .length > <span class="num">0</span>;
+
+<span class="kw">const</span> ok = svcOk && gendOk && hasBed;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Workflows -->
+        <div class="section-card" id="workflows">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-purple-50 flex items-center justify-center">
+                    <i data-lucide="git-branch" class="w-5 h-5 text-purple-600"></i>
+                </div>
+                <h2 class="font-serif text-lg">7. Workflow Flows Tóm Tắt</h2>
+            </div>
+            <div class="section-body">
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-xs font-semibold text-brand-textmuted uppercase tracking-wide mb-2">WF-01 · Booking hoàn chỉnh</p>
+                        <div class="wf-flow">
+                            <div class="wf-box">Tạo booking</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Check-in khách</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Dịch vụ xong</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Thanh toán</div><span class="wf-arrow">→</span>
+                            <div class="wf-box bg-blue-50 border-blue-200 text-blue-700">AuraDB ghi TX</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">BC Ngày tự hiện</div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-brand-textmuted uppercase tracking-wide mb-2">WF-02 · Combo buổi</p>
+                        <div class="wf-flow">
+                            <div class="wf-box">Mua combo</div><span class="wf-arrow">→</span>
+                            <div class="wf-box bg-brand-gold/10 border-brand-gold/30">AuraDB addCombo</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Mỗi lần đến: booking</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Check-in</div><span class="wf-arrow">→</span>
+                            <div class="wf-box bg-brand-gold/10 border-brand-gold/30">recordComboSession</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Tiến độ cập nhật</div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-brand-textmuted uppercase tracking-wide mb-2">WF-07 · Kho vật tư</p>
+                        <div class="wf-flow">
+                            <div class="wf-box">Hàng về → Nhập kho</div><span class="wf-arrow">→</span>
+                            <div class="wf-box bg-green-50 border-green-200">addInventoryMove(+n)</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Tồn kho tăng</div>
+                        </div>
+                        <div class="wf-flow mt-2">
+                            <div class="wf-box">NV dùng hàng → Xuất kho</div><span class="wf-arrow">→</span>
+                            <div class="wf-box bg-orange-50 border-orange-200">addInventoryMove(-n)</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Tồn kho giảm</div><span class="wf-arrow">→</span>
+                            <div class="wf-box bg-red-50 border-red-200 text-red-600">Nếu ≤ warn → Alert</div>
+                        </div>
+                    </div>
+                    <div>
+                        <p class="text-xs font-semibold text-brand-textmuted uppercase tracking-wide mb-2">WF-09 · Báo cáo tháng → Tenant</p>
+                        <div class="wf-flow">
+                            <div class="wf-box">AuraDB accumulates</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">BC Chi Nhánh tổng hợp</div><span class="wf-arrow">→</span>
+                            <div class="wf-box">Export / Copy số liệu</div><span class="wf-arrow">→</span>
+                            <div class="wf-box bg-purple-50 border-purple-200 text-purple-700">Gửi cho Tenant</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. New Screen -->
+        <div class="section-card" id="new-screen">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-green-50 flex items-center justify-center">
+                    <i data-lucide="plus-circle" class="w-5 h-5 text-green-600"></i>
+                </div>
+                <h2 class="font-serif text-lg">8. Thêm Màn Hình Mới</h2>
+            </div>
+            <div class="section-body">
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <h3 class="sub">Checklist</h3>
+                        <ol class="text-sm space-y-2 pl-4 list-decimal text-brand-textmuted">
+                            <li>Copy template body layout (h-screen flex overflow-hidden)</li>
+                            <li>Thêm <code>&lt;div id="sidebar-root"&gt;&lt;/div&gt;</code></li>
+                            <li>Bọc nội dung trong <code>.flex-1 flex flex-col h-screen overflow-hidden</code></li>
+                            <li>Header: icon + title trong <code>flex-shrink-0</code></li>
+                            <li>Content trong <code>.flex-1 overflow-y-auto</code></li>
+                            <li>Script: <code>data-store.js</code> → <code>sidebar.js</code> → <code>AuraSidebar.init()</code></li>
+                            <li>Thêm nav item vào <code>sidebar.js</code> NAV_CONFIG nếu cần</li>
+                            <li>Thêm link vào <code>workflows.html</code></li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3 class="sub">Brand Colors Quick Ref</h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded" style="background:#FAF9F6;border:1px solid #eee"></div><code>brand-ivory</code></div>
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded" style="background:#F4EFEA;border:1px solid #eee"></div><code>brand-cream</code></div>
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-[#C9A87C]"></div><code>brand-gold</code></div>
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-[#B5956A]"></div><code>brand-goldhover</code></div>
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-[#D9B8B5]"></div><code>brand-rose</code></div>
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-[#DCD6DD]"></div><code>brand-lavender</code></div>
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-[#4A443E]"></div><code>brand-textmain</code></div>
+                            <div class="flex items-center gap-2"><div class="w-4 h-4 rounded bg-[#8B837C]"></div><code>brand-textmuted</code></div>
+                        </div>
+                        <h3 class="sub mt-4">Common Patterns</h3>
+                        <div class="space-y-1.5 text-xs">
+                            <div class="bg-brand-ivory rounded-lg p-2"><strong>Card:</strong> <code>bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6</code></div>
+                            <div class="bg-brand-ivory rounded-lg p-2"><strong>Input:</strong> <code>border border-brand-cream rounded-xl px-4 py-2.5 text-sm focus:border-brand-gold</code></div>
+                            <div class="bg-brand-ivory rounded-lg p-2"><strong>Button:</strong> <code>bg-brand-gold hover:bg-brand-goldhover text-white px-4 py-2 rounded-full text-sm</code></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. Report Format -->
+        <div class="section-card" id="report-format">
+            <div class="section-header">
+                <div class="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center">
+                    <i data-lucide="file-spreadsheet" class="w-5 h-5 text-red-500"></i>
+                </div>
+                <h2 class="font-serif text-lg">9. Chuẩn Báo Cáo — Chi Nhánh → Tenant</h2>
+            </div>
+            <div class="section-body">
+                <p class="text-sm text-brand-textmuted mb-4">Dựa trên file Excel thực tế: <code>260413 NB顧客管理表 (2026) - H.xlsx</code> và <code>260413 Shift Management_NB.xlsm</code></p>
+
+                <div class="grid grid-cols-2 gap-5">
+                    <div class="rounded-xl border border-brand-cream p-4">
+                        <p class="font-semibold text-sm mb-3 flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-4 h-4 text-brand-gold"></i> Báo Cáo Ngày
+                        </p>
+                        <p class="text-xs text-brand-textmuted mb-2">Gửi mỗi tối / sáng hôm sau cho Org Owner hoặc Tenant</p>
+                        <table class="data-table">
+                            <tr><th>Mục</th><th>Nguồn</th></tr>
+                            <tr><td>Tồn quỹ đầu ngày</td><td>Nhập tay</td></tr>
+                            <tr><td>Doanh thu DV</td><td>AuraDB transactions (type=dv)</td></tr>
+                            <tr><td>Doanh thu mỹ phẩm</td><td>AuraDB transactions (type=mp)</td></tr>
+                            <tr><td>Phân loại thanh toán</td><td>AuraDB byMethod</td></tr>
+                            <tr><td>Chi phí</td><td>Nhập tay (DailyEntry)</td></tr>
+                            <tr><td>Tồn quỹ cuối ngày</td><td>Tự tính</td></tr>
+                        </table>
+                        <a href="../quan-ly-chi-nhanh/bao-cao/bao-cao-ngay.html" class="text-xs text-brand-gold hover:underline mt-2 block">→ bao-cao-ngay.html</a>
+                    </div>
+                    <div class="rounded-xl border border-brand-cream p-4">
+                        <p class="font-semibold text-sm mb-3 flex items-center gap-2">
+                            <i data-lucide="bar-chart" class="w-4 h-4 text-brand-gold"></i> Báo Cáo Tháng
+                        </p>
+                        <p class="text-xs text-brand-textmuted mb-2">Tổng hợp cuối tháng gửi Tenant + Org Owner</p>
+                        <table class="data-table">
+                            <tr><th>Mục</th><th>Nguồn</th></tr>
+                            <tr><td>Doanh thu DV / MP / Tổng</td><td>AuraDB monthly</td></tr>
+                            <tr><td>Chi phí (theo danh mục)</td><td>AuraDB expenses</td></tr>
+                            <tr><td>Lợi nhuận</td><td>Tự tính</td></tr>
+                            <tr><td>Nhật ký theo ngày</td><td>AuraDB byDay</td></tr>
+                            <tr><td>Tỉ lệ phương thức TT</td><td>AuraDB byMethod</td></tr>
+                            <tr><td>Biểu đồ xu hướng</td><td>Chart.js + AuraDB</td></tr>
+                        </table>
+                        <a href="../quan-ly-chi-nhanh/bao-cao/bao-cao-chi-nhanh.html" class="text-xs text-brand-gold hover:underline mt-2 block">→ bao-cao-chi-nhanh.html</a>
+                    </div>
+                </div>
+
+                <div class="mt-4 rounded-xl border border-brand-cream p-4">
+                    <p class="font-semibold text-sm mb-3 flex items-center gap-2">
+                        <i data-lucide="layers" class="w-4 h-4 text-brand-gold"></i> Báo Cáo Liệu Trình
+                    </p>
+                    <p class="text-xs text-brand-textmuted mb-2">Theo dõi trạng thái combo buổi của từng khách. Map sang sheet LT của file Excel gốc.</p>
+                    <table class="data-table">
+                        <tr><th>Cột Excel</th><th>Tương ứng UI</th><th>Mô tả</th></tr>
+                        <tr><td>Mã khách (code)</td><td>LT_DATA.code</td><td>VD: 24D11001</td></tr>
+                        <tr><td>Tên khách</td><td>LT_DATA.name</td><td></td></tr>
+                        <tr><td>Dịch vụ (vùng)</td><td>LT_DATA.service</td><td>Nách, Mặt, Chân, Tay…</td></tr>
+                        <tr><td>Tổng buổi</td><td>LT_DATA.totalSessions</td><td>Số buổi đã mua</td></tr>
+                        <tr><td>Buổi đã dùng</td><td>LT_DATA.done</td><td>Tự cộng khi recordSession</td></tr>
+                        <tr><td>Ngày từng buổi</td><td>LT_DATA.sessions[]</td><td>Array "MM/DD"</td></tr>
+                        <tr><td>Đơn giá / buổi</td><td>LT_DATA.unitPrice</td><td>VND</td></tr>
+                    </table>
+                    <a href="../quan-ly-chi-nhanh/bao-cao/lieu-trinh.html" class="text-xs text-brand-gold hover:underline mt-2 block">→ bao-cao/lieu-trinh.html</a>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- /col-span-3 -->
+</div><!-- /grid -->
+
+<script>lucide.createIcons();</script>
+</body>
+</html>

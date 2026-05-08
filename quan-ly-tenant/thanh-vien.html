@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace Members | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-brand-ivory border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:bg-white focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 2.75rem;
+            height: 1.5rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(1.25rem);
+        }
+
+        /* Modal & Panel Animations */
+        .modal-active { display: flex !important; opacity: 1 !important; }
+        .panel-active { transform: translateX(0) !important; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="building" class="w-4 h-4 mr-3 opacity-70"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="users" class="w-4 h-4 mr-3"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3 opacity-70"></i> Roles
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="palette" class="w-4 h-4 mr-3 opacity-70"></i> Branding
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="globe" class="w-4 h-4 mr-3 opacity-70"></i> Domains
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Marketing Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Marketing</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="megaphone" class="w-4 h-4 mr-3 opacity-70"></i> Campaigns
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-3 opacity-70"></i> Blog CMS
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div>
+                <div class="space-y-1 pt-4 border-t border-brand-cream">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search members, branches, or settings..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="toggleModal('inviteModal')">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Invite User
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="store" class="w-4 h-4 mr-2"></i> Create Branch
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> Add Service
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-7xl mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Tenant</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Users</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10">
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Workspace Members</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm max-w-lg">Manage users, staff, and administrators who have access to your spa platform.</p>
+                    </div>
+                    <div class="flex space-x-3 mt-6 md:mt-0 relative z-10">
+                        <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-textmuted hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center">
+                            <i data-lucide="download" class="w-4 h-4 mr-2"></i> Export Users
+                        </button>
+                        <button onclick="toggleModal('inviteModal')" class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Invite User
+                        </button>
+                    </div>
+                </div>
+
+                <!-- USER SUMMARY CARDS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-brand-ivory flex items-center justify-center text-brand-gold shrink-0 border border-brand-cream">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Total Users</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">42</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center text-green-600 shrink-0 border border-green-100">
+                            <i data-lucide="check-circle" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Active Users</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">38</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center text-amber-500 shrink-0 border border-amber-100">
+                            <i data-lucide="mail-warning" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Pending Invites</p>
+                            <h3 class="font-serif text-2xl text-brand-textmain">3</h3>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl shadow-soft border border-brand-cream/50 flex items-center space-x-4 hover:shadow-premium transition-shadow">
+                        <div class="w-12 h-12 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold shrink-0 border border-brand-gold/20">
+                            <i data-lucide="shield" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Administrators</p>
+                            <h3 class="font-serif text-2xl text-brand-gold">5</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- USER MANAGEMENT TABLE AREA -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 overflow-hidden flex flex-col">
+                    
+                    <!-- FILTER BAR -->
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex flex-col lg:flex-row gap-4 justify-between items-center">
+                        <div class="flex items-center bg-white rounded-xl px-4 py-2.5 border border-brand-cream w-full lg:w-96 focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all shadow-sm">
+                            <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2 shrink-0"></i>
+                            <input type="text" placeholder="Search by name or email..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted/60 text-brand-textmain font-medium">
+                        </div>
+
+                        <div class="flex flex-wrap gap-3 w-full lg:w-auto">
+                            <!-- Role Filter -->
+                            <select class="spa-input w-auto appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2 border-brand-cream/80 bg-white">
+                                <option value="">All Roles</option>
+                                <option>Owner</option>
+                                <option>Manager</option>
+                                <option>Therapist</option>
+                                <option>Receptionist</option>
+                                <option>Marketing</option>
+                            </select>
+                            
+                            <!-- Branch Filter -->
+                            <select class="spa-input w-auto appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2 border-brand-cream/80 bg-white">
+                                <option value="">All Branches</option>
+                                <option>All Locations (Global)</option>
+                                <option>District 1 Luxury Spa</option>
+                                <option>Westside Retreat</option>
+                            </select>
+
+                            <!-- Status Filter -->
+                            <select class="spa-input w-auto appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2 border-brand-cream/80 bg-white">
+                                <option value="">All Statuses</option>
+                                <option>Active</option>
+                                <option>Invited</option>
+                                <option>Suspended</option>
+                            </select>
+
+                            <!-- Sort -->
+                            <select class="spa-input w-auto appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] pr-10 cursor-pointer py-2 bg-brand-cream/20 font-medium">
+                                <option>Sort: Newest First</option>
+                                <option>Sort: Alphabetical</option>
+                                <option>Sort: Role</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- TABLE -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse min-w-[900px]">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-brand-ivory/50 border-b border-brand-cream">
+                                    <th class="py-4 px-6 font-semibold">Member Details</th>
+                                    <th class="py-4 px-6 font-semibold">Role & Permissions</th>
+                                    <th class="py-4 px-6 font-semibold">Assigned Branch</th>
+                                    <th class="py-4 px-6 font-semibold">Status</th>
+                                    <th class="py-4 px-6 font-semibold">Last Login</th>
+                                    <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50">
+                                
+                                <!-- User 1 (Owner) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('userProfilePanel')">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif text-sm mr-3 shadow-sm shrink-0">SM</div>
+                                            <div>
+                                                <p class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                                                <p class="text-xs text-brand-textmuted">sarah@lotusspa.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-brand-gold/10 text-brand-goldhover border border-brand-gold/20">
+                                            <i data-lucide="crown" class="w-3 h-3 mr-1"></i> Owner
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <p class="text-sm text-brand-textmain">All Locations</p>
+                                        <p class="text-[10px] text-brand-textmuted uppercase tracking-wider">Global Access</p>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-green-700 bg-green-50 border border-green-200">
+                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-brand-textmuted text-xs">
+                                        Just now
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-40 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('userProfilePanel')">View Profile</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- User 2 (Manager) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('userProfilePanel')">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain border border-white font-serif text-sm mr-3 shadow-sm shrink-0">AN</div>
+                                            <div>
+                                                <p class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Anna Nguyen</p>
+                                                <p class="text-xs text-brand-textmuted">anna.n@lotusspa.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-gray-100 text-gray-700 border border-gray-200">
+                                            Manager
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <p class="text-sm text-brand-textmain">District 1 Luxury Spa</p>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-green-700 bg-green-50 border border-green-200">
+                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-brand-textmuted text-xs">
+                                        2 hours ago
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('userProfilePanel')"><i data-lucide="user" class="w-3.5 h-3.5 mr-2"></i> View Profile</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="shield" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="store" class="w-3.5 h-3.5 mr-2"></i> Change Branch</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i data-lucide="user-x" class="w-3.5 h-3.5 mr-2"></i> Deactivate User</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- User 3 (Therapist) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('userProfilePanel')">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain border border-white font-serif text-sm mr-3 shadow-sm shrink-0">ER</div>
+                                            <div>
+                                                <p class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Elena Rodriguez</p>
+                                                <p class="text-xs text-brand-textmuted">elena@lotusspa.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-teal-50 text-teal-700 border border-teal-100">
+                                            Therapist
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <p class="text-sm text-brand-textmain">District 1 Luxury Spa</p>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-green-700 bg-green-50 border border-green-200">
+                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span> Active
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-brand-textmuted text-xs">
+                                        Yesterday, 09:15 AM
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('userProfilePanel')"><i data-lucide="user" class="w-3.5 h-3.5 mr-2"></i> View Profile</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="shield" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="store" class="w-3.5 h-3.5 mr-2"></i> Change Branch</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i data-lucide="user-x" class="w-3.5 h-3.5 mr-2"></i> Deactivate User</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- User 4 (Receptionist - Invited) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('userProfilePanel')">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-ivory border border-dashed border-brand-cream flex items-center justify-center text-brand-textmuted font-serif text-sm mr-3 shrink-0">JS</div>
+                                            <div>
+                                                <p class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Jessica Smith</p>
+                                                <p class="text-xs text-brand-textmuted">jessica@lotusspa.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-brand-rose/10 text-brand-rose border border-brand-rose/20">
+                                            Receptionist
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <p class="text-sm text-brand-textmain">Westside Retreat</p>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200">
+                                            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full mr-1.5"></span> Invited
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-brand-textmuted text-xs italic">
+                                        Never logged in
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="mail" class="w-3.5 h-3.5 mr-2"></i> Resend Invitation</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition"><i data-lucide="shield" class="w-3.5 h-3.5 mr-2"></i> Edit Role</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5 mr-2"></i> Remove User</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- User 5 (Marketing) -->
+                                <tr class="hover:bg-brand-ivory/40 transition group cursor-pointer" onclick="togglePanel('userProfilePanel')">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain border border-white font-serif text-sm mr-3 shadow-sm shrink-0">RJ</div>
+                                            <div>
+                                                <p class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Robert James</p>
+                                                <p class="text-xs text-brand-textmuted">robert.marketing@lotusspa.com</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-100">
+                                            Marketing
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <p class="text-sm text-brand-textmain">All Locations</p>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium text-red-700 bg-red-50 border border-red-200">
+                                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full mr-1.5"></span> Suspended
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-brand-textmuted text-xs">
+                                        Oct 12, 2025
+                                    </td>
+                                    <td class="py-4 px-6 text-right relative dropdown-container" onclick="event.stopPropagation();">
+                                        <button class="p-2 text-brand-textmuted hover:text-brand-gold hover:bg-brand-cream/50 rounded-full transition">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                        <div class="dropdown-menu absolute right-6 top-10 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-10 overflow-hidden py-1 text-left">
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition" onclick="togglePanel('userProfilePanel')"><i data-lucide="user" class="w-3.5 h-3.5 mr-2"></i> View Profile</a>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-green-600 hover:bg-green-50 transition"><i data-lucide="user-check" class="w-3.5 h-3.5 mr-2"></i> Reactivate</a>
+                                            <div class="h-px bg-brand-cream my-1 w-full"></div>
+                                            <a href="#" class="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"><i data-lucide="trash-2" class="w-3.5 h-3.5 mr-2"></i> Remove User</a>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination Footer -->
+                    <div class="p-4 border-t border-brand-cream/50 flex justify-between items-center text-sm text-brand-textmuted bg-brand-ivory/20">
+                        <p>Showing <span class="font-medium text-brand-textmain">1</span> to <span class="font-medium text-brand-textmain">5</span> of <span class="font-medium text-brand-textmain">42</span> users</p>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm opacity-50 cursor-not-allowed">Previous</button>
+                            <button class="px-3 py-1.5 border border-brand-cream rounded-lg hover:border-brand-gold transition bg-white shadow-sm">Next</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT USER PROFILE PANEL -->
+    <div id="userProfilePanel" class="fixed inset-y-0 right-0 w-full max-w-sm bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <h3 class="font-serif text-xl text-brand-textmain">User Profile</h3>
+            <button onclick="togglePanel('userProfilePanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            
+            <!-- Profile Header -->
+            <div class="text-center">
+                <div class="w-24 h-24 mx-auto rounded-full bg-brand-cream flex items-center justify-center text-brand-textmain font-serif text-3xl border-4 border-white shadow-md mb-4 relative">
+                    AN
+                    <div class="absolute bottom-0 right-0 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+                </div>
+                <h4 class="font-serif text-2xl text-brand-textmain">Anna Nguyen</h4>
+                <p class="text-sm text-brand-textmuted mb-3">anna.n@lotusspa.com</p>
+                <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-semibold bg-gray-100 text-gray-700 border border-gray-200">
+                    Manager
+                </span>
+            </div>
+
+            <div class="h-px bg-brand-cream/80 w-full"></div>
+
+            <!-- Details -->
+            <div class="space-y-4">
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Assigned Branch</p>
+                    <p class="text-sm font-medium text-brand-textmain flex items-center">
+                        <i data-lucide="map-pin" class="w-4 h-4 mr-2 text-brand-gold opacity-70"></i> District 1 Luxury Spa
+                    </p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Status</p>
+                    <p class="text-sm font-medium text-brand-textmain flex items-center">
+                        <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span> Active Member
+                    </p>
+                </div>
+                <div>
+                    <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Last Login</p>
+                    <p class="text-sm font-medium text-brand-textmain">Today, 2:15 PM</p>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="bg-white rounded-2xl border border-brand-cream p-5 shadow-sm">
+                <h5 class="text-xs font-bold uppercase tracking-wider text-brand-textmain mb-4">Recent Activity</h5>
+                <div class="space-y-4 relative before:absolute before:inset-0 before:ml-[9px] before:translate-x-px before:h-full before:w-[1px] before:bg-brand-cream">
+                    
+                    <div class="relative flex items-start">
+                        <div class="w-5 h-5 rounded-full bg-brand-ivory border-2 border-brand-gold shrink-0 z-10 flex items-center justify-center mt-0.5"></div>
+                        <div class="pl-3">
+                            <p class="text-sm text-brand-textmain">Approved schedule for <strong>Mia Chang</strong></p>
+                            <p class="text-[10px] text-brand-textmuted mt-0.5">2 hours ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative flex items-start">
+                        <div class="w-5 h-5 rounded-full bg-brand-ivory border-2 border-brand-cream shrink-0 z-10 flex items-center justify-center mt-0.5"></div>
+                        <div class="pl-3">
+                            <p class="text-sm text-brand-textmain">Updated pricing for <em>Deep Tissue Massage</em></p>
+                            <p class="text-[10px] text-brand-textmuted mt-0.5">Yesterday, 10:30 AM</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 space-y-3">
+            <button class="w-full py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream rounded-xl text-sm font-medium hover:border-brand-gold hover:bg-white transition shadow-sm flex items-center justify-center">
+                <i data-lucide="shield" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Edit Role & Access
+            </button>
+            <div class="flex space-x-3">
+                <button class="flex-1 py-2 text-sm font-medium text-brand-textmuted border border-brand-cream rounded-xl hover:text-brand-textmain hover:bg-brand-ivory transition">
+                    Reset Pwd
+                </button>
+                <button class="flex-1 py-2 text-sm font-medium text-red-600 border border-red-100 bg-red-50 rounded-xl hover:bg-red-100 transition">
+                    Deactivate
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- INVITE USER MODAL -->
+    <div id="inviteModal" class="fixed inset-0 bg-brand-textmain/40 backdrop-blur-sm z-50 items-center justify-center opacity-0 hidden transition-opacity duration-300">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-brand-cream overflow-hidden m-4 transform scale-95 transition-transform duration-300" id="inviteModalContent">
+            
+            <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-brand-ivory/50">
+                <h3 class="font-serif text-2xl text-brand-textmain">Invite New User</h3>
+                <button onclick="toggleModal('inviteModal')" class="text-brand-textmuted hover:text-brand-gold transition p-1">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <div class="p-8 space-y-6">
+                <div class="grid grid-cols-1 gap-6">
+                    <div>
+                        <label class="spa-label">Full Name</label>
+                        <input type="text" class="spa-input" placeholder="e.g. Jane Doe">
+                    </div>
+                    <div>
+                        <label class="spa-label">Email Address</label>
+                        <input type="email" class="spa-input" placeholder="jane@lotusspa.com">
+                    </div>
+                    
+                    <div class="h-px bg-brand-cream/50 w-full"></div>
+
+                    <div>
+                        <label class="spa-label">Assign Role</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="" disabled selected>Select a role...</option>
+                            <option>Manager</option>
+                            <option>Receptionist</option>
+                            <option>Therapist</option>
+                            <option>Marketing</option>
+                            <option>HR Staff</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="spa-label">Branch Assignment</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="">All Branches (Global)</option>
+                            <option>District 1 Luxury Spa</option>
+                            <option>Westside Retreat</option>
+                        </select>
+                        <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1">Select specific branch or grant global access.</p>
+                    </div>
+                </div>
+
+                <!-- Toggle -->
+                <div class="flex items-center justify-between bg-brand-ivory p-4 rounded-xl border border-brand-cream">
+                    <div>
+                        <p class="text-sm font-medium text-brand-textmain">Send Email Invitation</p>
+                        <p class="text-[10px] text-brand-textmuted mt-0.5">User will receive an email to set their password.</p>
+                    </div>
+                    <div class="relative inline-block w-11 align-middle select-none">
+                        <input type="checkbox" id="tgl-invite" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                        <label for="tgl-invite" class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                        <div class="toggle-dot absolute block w-4 h-4 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-8 py-5 border-t border-brand-cream flex justify-end space-x-3 bg-brand-ivory/30">
+                <button onclick="toggleModal('inviteModal')" class="px-5 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                    Cancel
+                </button>
+                <button onclick="toggleModal('inviteModal')" class="px-6 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                    <i data-lucide="send" class="w-4 h-4 mr-2"></i> Send Invitation
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // UI Interaction Scripts
+        function toggleModal(modalID) {
+            const modal = document.getElementById(modalID);
+            const content = document.getElementById(modalID + 'Content');
+            
+            if (modal.classList.contains('hidden')) {
+                // Open
+                modal.classList.remove('hidden');
+                // Small delay to allow display:block to apply before animating opacity
+                setTimeout(() => {
+                    modal.classList.add('opacity-100');
+                    if(content) content.classList.replace('scale-95', 'scale-100');
+                }, 10);
+            } else {
+                // Close
+                modal.classList.remove('opacity-100');
+                if(content) content.classList.replace('scale-100', 'scale-95');
+                // Wait for transition to finish
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('inviteModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleModal('inviteModal');
+            }
+        });
+    </script>
+</body>
+</html>

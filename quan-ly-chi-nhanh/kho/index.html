@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Quan Ly Kho</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand: { ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C' } },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .nav-item-kho{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;font-size:13px;color:#8B837C;cursor:pointer;transition:all .15s;text-decoration:none}
+        .nav-item-kho:hover,.nav-item-kho.active{background:rgba(201,168,124,.1);color:#C9A87C}
+        .status-ok{background:#dcfce7;color:#16a34a}
+        .status-low{background:#fef9c3;color:#ca8a04}
+        .status-out{background:#fee2e2;color:#dc2626}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-4">
+        <i data-lucide="package-2" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Quan Ly Kho & Vat Tu</h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <button class="border border-brand-cream text-brand-textmuted px-4 py-2 rounded-full text-sm hover:border-brand-gold hover:text-brand-gold transition flex items-center gap-2">
+            <i data-lucide="download" class="w-4 h-4"></i> Xuat Bao Cao
+        </button>
+        <a href="nhap-kho.html" class="bg-brand-gold hover:bg-brand-goldhover text-white px-5 py-2 rounded-full text-sm font-medium transition shadow flex items-center gap-2">
+            <i data-lucide="package-plus" class="w-4 h-4"></i> Nhap Kho
+        </a>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto p-8">
+
+    <!-- KPI Stats -->
+    <div class="grid grid-cols-5 gap-5 mb-8">
+        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50 col-span-1">
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-1">Tong San Pham</p>
+            <p class="font-serif text-3xl mb-1">48</p>
+            <p class="text-xs text-brand-textmuted">12 danh muc</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+            <p class="text-xs text-green-600 uppercase tracking-wide mb-1">Du Kho</p>
+            <p class="font-serif text-3xl text-green-600 mb-1">34</p>
+            <p class="text-xs text-brand-textmuted">San pham</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+            <p class="text-xs text-yellow-600 uppercase tracking-wide mb-1">Sap Het</p>
+            <p class="font-serif text-3xl text-yellow-600 mb-1">10</p>
+            <p class="text-xs text-brand-textmuted">Can dat them</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+            <p class="text-xs text-red-500 uppercase tracking-wide mb-1">Het Kho</p>
+            <p class="font-serif text-3xl text-red-500 mb-1">4</p>
+            <p class="text-xs text-brand-textmuted">Khan cap</p>
+        </div>
+        <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream/50">
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-1">Gia Tri Kho</p>
+            <p class="font-serif text-3xl mb-1">42.5M</p>
+            <p class="text-xs text-green-600">+5% thang nay</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-8">
+
+        <!-- Left: product table -->
+        <div class="col-span-2">
+            <!-- Filters -->
+            <div class="flex items-center gap-3 mb-4 flex-wrap">
+                <div class="flex items-center bg-white rounded-full px-4 py-2 border border-brand-cream flex-1 max-w-xs">
+                    <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                    <input type="text" placeholder="Tim san pham..." class="bg-transparent outline-none text-sm w-full placeholder-brand-textmuted" oninput="filterInventory(this.value)">
+                </div>
+                <select class="text-sm border border-brand-cream rounded-xl px-3 py-2 bg-white outline-none" onchange="filterByCategory(this.value)">
+                    <option value="">Tat ca danh muc</option>
+                    <option>My pham</option>
+                    <option>Dau Massage</option>
+                    <option>Khan & Ga</option>
+                    <option>Thiet bi tieu hao</option>
+                    <option>Chat tay rua</option>
+                </select>
+                <select class="text-sm border border-brand-cream rounded-xl px-3 py-2 bg-white outline-none">
+                    <option>Tat ca trang thai</option>
+                    <option>Du kho</option>
+                    <option>Sap het</option>
+                    <option>Het kho</option>
+                </select>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 overflow-hidden">
+                <table class="w-full text-sm">
+                    <thead class="bg-brand-ivory border-b border-brand-cream">
+                        <tr>
+                            <th class="text-left px-5 py-3 text-xs text-brand-textmuted uppercase tracking-wide font-medium">Sản Phẩm</th>
+                            <th class="text-left px-4 py-3 text-xs text-brand-textmuted uppercase tracking-wide font-medium">Mã NB / BH</th>
+                            <th class="text-left px-4 py-3 text-xs text-brand-textmuted uppercase tracking-wide font-medium">Loại</th>
+                            <th class="text-right px-4 py-3 text-xs text-brand-textmuted uppercase tracking-wide font-medium">Tồn Kho</th>
+                            <th class="text-right px-4 py-3 text-xs text-brand-textmuted uppercase tracking-wide font-medium">Mức C.Báo</th>
+                            <th class="text-center px-4 py-3 text-xs text-brand-textmuted uppercase tracking-wide font-medium">Trạng Thái</th>
+                            <th class="px-5 py-3"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-table">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Right: charts & alerts -->
+        <div class="space-y-5">
+
+            <!-- Low stock alerts -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="font-serif text-base">Canh Bao Kho</p>
+                    <span class="text-xs bg-red-50 text-red-600 px-2 py-0.5 rounded-full font-medium">14 san pham</span>
+                </div>
+                <div class="space-y-3" id="alerts-list"></div>
+            </div>
+
+            <!-- Usage chart -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+                <p class="font-serif text-base mb-4">Tieu Thu Thang Nay</p>
+                <canvas id="usageChart" height="160"></canvas>
+            </div>
+
+            <!-- Quick actions -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+                <p class="font-serif text-base mb-3">Thao Tac Nhanh</p>
+                <div class="space-y-2">
+                    <a href="nhap-kho.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-ivory transition text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-green-50 flex items-center justify-center"><i data-lucide="package-plus" class="w-4 h-4 text-green-600"></i></div>
+                        <span>Nhap hang moi</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-brand-textmuted ml-auto"></i>
+                    </a>
+                    <a href="xuat-kho.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-ivory transition text-sm">
+                        <div class="w-8 h-8 rounded-xl bg-orange-50 flex items-center justify-center"><i data-lucide="package-minus" class="w-4 h-4 text-orange-600"></i></div>
+                        <span>Ghi xuat kho</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-brand-textmuted ml-auto"></i>
+                    </a>
+                    <button class="flex items-center gap-3 p-3 rounded-xl hover:bg-brand-ivory transition text-sm w-full text-left">
+                        <div class="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center"><i data-lucide="clipboard-list" class="w-4 h-4 text-blue-600"></i></div>
+                        <span>Kiem ke kho</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-brand-textmuted ml-auto"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div><!-- /flex-1 col -->
+
+<script>
+// Mirrors 在庫管理表 / NB委託在庫オーダー表 — NB = salon ID, BH = supplier ID
+const INVENTORY = [
+    { id:1,  nbId:'M001', bhId:'BH-MA-001', name:'Mặt nạ 5 miếng (Ma Remove Premium BC)', cat:'Mỹ phẩm KG',   unit:'Bộ',  qty:31, warn:20, used:8,  cost:500000, consignment:true  },
+    { id:2,  nbId:'M002', bhId:'BH-MA-002', name:'Kem Dưỡng Chuyên Sâu 35g',              cat:'Mỹ phẩm KG',   unit:'Lọ',  qty:14, warn:20, used:12, cost:450000, consignment:true  },
+    { id:3,  nbId:'M003', bhId:'BH-MA-003', name:'Serum Trắng Da (Brightening Serum)',     cat:'Mỹ phẩm KG',   unit:'Chai',qty:22, warn:15, used:5,  cost:620000, consignment:true  },
+    { id:4,  nbId:'M004', bhId:'BH-IN-001', name:'Kem Intensive 35g',                      cat:'Mỹ phẩm KG',   unit:'Lọ',  qty:0,  warn:10, used:6,  cost:380000, consignment:true  },
+    { id:5,  nbId:'C001', bhId:null,        name:'Khăn đa năng 3 lớp',                     cat:'Vật tư TD',    unit:'Gói', qty:48, warn:20, used:30, cost:12600,  consignment:false },
+    { id:6,  nbId:'C002', bhId:null,        name:'Khăn giấy lụa 2 lớp',                    cat:'Vật tư TD',    unit:'Gói', qty:32, warn:20, used:18, cost:16500,  consignment:false },
+    { id:7,  nbId:'C003', bhId:null,        name:'Khăn ướt kháng khuẩn',                   cat:'Vật tư TD',    unit:'Gói', qty:15, warn:10, used:12, cost:9000,   consignment:false },
+    { id:8,  nbId:'C004', bhId:null,        name:'Băng vải (Wax Strip)',                    cat:'Vật tư TD',    unit:'Cuộn',qty:8,  warn:5,  used:7,  cost:45000,  consignment:false },
+    { id:9,  nbId:'C005', bhId:null,        name:'Sáp wax nóng (Wax Bean)',                 cat:'Vật tư TD',    unit:'Kg',  qty:3,  warn:2,  used:4,  cost:180000, consignment:false },
+    { id:10, nbId:'C006', bhId:null,        name:'Nước sát khuẩn tay',                      cat:'Vệ sinh',      unit:'Chai',qty:12, warn:5,  used:4,  cost:35000,  consignment:false },
+    { id:11, nbId:'C007', bhId:null,        name:'Găng tay y tế (100c/hộp)',                cat:'Vệ sinh',      unit:'Hộp', qty:6,  warn:3,  used:3,  cost:52000,  consignment:false },
+    { id:12, nbId:'C008', bhId:null,        name:'Ống hút sinh học (100c/hộp)',              cat:'Vật tư TD',    unit:'Hộp', qty:0,  warn:5,  used:2,  cost:18000,  consignment:false },
+];
+
+function getStatus(item) {
+    if (item.qty === 0) return { cls:'status-out', label:'Het kho' };
+    if (item.qty <= item.warn) return { cls:'status-low', label:'Sap het' };
+    return { cls:'status-ok', label:'Du kho' };
+}
+
+function renderTable(items) {
+    const tb = document.getElementById('inventory-table');
+    tb.innerHTML = items.map(item => {
+        // Live stock = baseQty in data array + all movements from AuraDB
+        const liveQty = AuraDB.getStock(item.nbId, item.qty);
+        const liveItem = { ...item, qty: liveQty };
+        const st = getStatus(liveItem);
+        const pct = Math.min(100, Math.round((liveQty / (item.warn * 3)) * 100));
+        const moves = AuraDB.getInventoryMoves(item.nbId);
+        const lastMove = moves.length ? moves[moves.length - 1] : null;
+        return `
+        <tr class="border-b border-brand-cream/60 hover:bg-brand-ivory/50 transition">
+            <td class="px-5 py-3.5">
+                <div class="flex items-center gap-2">
+                    <div>
+                        <p class="font-medium text-sm">${item.name}</p>
+                        <p class="text-xs text-brand-textmuted">${item.unit} · ${item.cost.toLocaleString('vi')}đ/đv</p>
+                        ${lastMove ? `<p class="text-xs text-brand-textmuted mt-0.5">${lastMove.type === 'nhap' ? '↑ Nhập' : '↓ Xuất'} ${Math.abs(lastMove.delta)} ${item.unit} — ${new Date(lastMove.createdAt).toLocaleDateString('vi-VN')}</p>` : ''}
+                    </div>
+                    ${item.consignment ? '<span class="flex-shrink-0 text-xs bg-purple-50 text-purple-600 border border-purple-100 px-1.5 py-0.5 rounded-md">Ký gửi</span>' : ''}
+                </div>
+            </td>
+            <td class="px-4 py-3.5">
+                <p class="text-xs font-medium">${item.nbId}</p>
+                <p class="text-xs text-brand-textmuted">${item.bhId || '—'}</p>
+            </td>
+            <td class="px-4 py-3.5">
+                <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-lg">${item.cat}</span>
+            </td>
+            <td class="px-4 py-3.5 text-right">
+                <p class="font-medium">${liveQty} ${item.unit}</p>
+                <div class="w-full bg-brand-cream rounded-full h-1.5 mt-1 ml-auto" style="width:80px">
+                    <div class="h-1.5 rounded-full ${liveQty===0?'bg-red-400':liveQty<=item.warn?'bg-yellow-400':'bg-green-400'}" style="width:${pct}%"></div>
+                </div>
+            </td>
+            <td class="px-4 py-3.5 text-right text-sm text-brand-textmuted">${item.warn} ${item.unit}</td>
+            <td class="px-4 py-3.5 text-center">
+                <span class="text-xs px-2.5 py-1 rounded-full font-medium ${st.cls}">${st.label}</span>
+            </td>
+            <td class="px-5 py-3.5">
+                <div class="flex items-center gap-1">
+                    <a href="nhap-kho.html" class="p-1.5 rounded-lg hover:bg-green-50 hover:text-green-600 text-brand-textmuted transition" title="Nhập thêm">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    </a>
+                    <a href="xuat-kho.html" class="p-1.5 rounded-lg hover:bg-orange-50 hover:text-orange-600 text-brand-textmuted transition" title="Ghi sử dụng">
+                        <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+                    </a>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+    lucide.createIcons();
+}
+
+function renderAlerts() {
+    const alerts = INVENTORY
+        .map(i => ({ ...i, qty: AuraDB.getStock(i.nbId, i.qty) }))
+        .filter(i => i.qty <= i.warn)
+        .sort((a,b) => a.qty - b.qty);
+    document.getElementById('alerts-list').innerHTML = alerts.slice(0,5).map(item => {
+        const urgent = item.qty === 0;
+        return `
+        <div class="flex items-center gap-3 p-2.5 rounded-xl ${urgent?'bg-red-50':'bg-yellow-50'}">
+            <i data-lucide="${urgent?'x-circle':'alert-triangle'}" class="w-4 h-4 ${urgent?'text-red-500':'text-yellow-600'} flex-shrink-0"></i>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium truncate">${item.name}</p>
+                <p class="text-xs ${urgent?'text-red-500':'text-yellow-600'}">Con ${item.qty} / muc ${item.warn} ${item.unit}</p>
+            </div>
+            <a href="nhap-kho.html" class="text-xs bg-white border border-brand-cream px-2 py-1 rounded-lg hover:border-brand-gold hover:text-brand-gold transition flex-shrink-0">Nhap</a>
+        </div>`;
+    }).join('');
+    lucide.createIcons();
+}
+
+function filterInventory(q) {
+    const f = INVENTORY.filter(i => i.name.toLowerCase().includes(q.toLowerCase()) || i.cat.toLowerCase().includes(q.toLowerCase()));
+    renderTable(f);
+}
+function filterByCategory(cat) {
+    const f = cat ? INVENTORY.filter(i => i.cat === cat) : INVENTORY;
+    renderTable(f);
+}
+
+// Chart
+const ctx = document.getElementById('usageChart').getContext('2d');
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['My pham','Dau','Khan','Tieu hao','Tay rua','Khac'],
+        datasets: [{
+            label: 'Don vi da dung',
+            data: [39, 23, 75, 65, 11, 8],
+            backgroundColor: 'rgba(201,168,124,.5)',
+            borderColor: '#C9A87C',
+            borderWidth: 1.5,
+            borderRadius: 6,
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { legend: { display: false } },
+        scales: {
+            y: { beginAtZero: true, grid: { color:'rgba(244,239,234,.8)' }, ticks: { font:{family:'Jost'}, color:'#8B837C' } },
+            x: { grid: { display: false }, ticks: { font:{family:'Jost'}, color:'#8B837C' } }
+        }
+    }
+});
+
+renderTable(INVENTORY);
+renderAlerts();
+</script>
+
+<script src="../shared/data-store.js"></script>
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'kho' });</script>
+</body>
+</html>

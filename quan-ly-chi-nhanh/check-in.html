@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Check-in Khách</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+        .pulse-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+        .booking-card{transition:all .2s;border:2px solid transparent}
+        .booking-card:hover{border-color:#C9A87C;background:#FAF9F6}
+        .booking-card.selected{border-color:#C9A87C;background:rgba(201,168,124,.06)}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <i data-lucide="user-check" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Check-in Khach Hang</h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <span class="text-sm text-brand-textmuted">Ca hien tai: <strong class="text-brand-textmain">08:00 – 17:00</strong></span>
+        <span class="status-badge bg-green-50 text-green-700"><span class="pulse-dot bg-green-500"></span>5 booking cho ngu</span>
+    </div>
+</header>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-6xl mx-auto p-8 grid grid-cols-5 gap-6">
+
+    <!-- LEFT: Search & Upcoming -->
+    <div class="col-span-2 flex flex-col gap-5">
+
+        <!-- Search box -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+            <p class="text-sm font-medium mb-3">Tim kiem booking</p>
+            <div class="relative mb-3">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-textmuted"></i>
+                <input id="search-input" type="text" placeholder="So dien thoai, ten khach, ma booking..." oninput="doSearch(this.value)"
+                    class="w-full border border-brand-cream rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+            </div>
+            <p class="text-xs text-brand-textmuted">Hoac chon tu danh sach booking sap toi ben duoi</p>
+        </div>
+
+        <!-- Upcoming bookings today -->
+        <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5 flex-1">
+            <div class="flex items-center justify-between mb-4">
+                <p class="text-sm font-medium">Booking hom nay</p>
+                <span class="text-xs text-brand-textmuted" id="today-count">8 booking</span>
+            </div>
+            <div id="booking-list" class="flex flex-col gap-2 overflow-y-auto" style="max-height:440px"></div>
+        </div>
+    </div>
+
+    <!-- RIGHT: Check-in panel -->
+    <div class="col-span-3 flex flex-col gap-5">
+
+        <!-- Empty state -->
+        <div id="empty-panel" class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 flex flex-col items-center justify-center py-20">
+            <i data-lucide="scan-line" class="w-12 h-12 text-brand-rose opacity-40 mb-4"></i>
+            <p class="text-sm text-brand-textmuted">Chon hoac tim kiem mot booking de check-in</p>
+        </div>
+
+        <!-- Check-in detail panel (hidden until booking selected) -->
+        <div id="checkin-panel" class="hidden flex flex-col gap-5">
+
+            <!-- Customer info -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+                <div class="flex items-start justify-between mb-5">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-xl bg-brand-rose/20 flex items-center justify-center">
+                            <i data-lucide="user" class="w-7 h-7 text-brand-rose"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium text-base" id="ci-name">—</p>
+                            <p class="text-sm text-brand-textmuted" id="ci-phone">—</p>
+                            <p class="text-xs text-brand-textmuted mt-0.5" id="ci-member">—</p>
+                        </div>
+                    </div>
+                    <span id="ci-status-badge" class="status-badge bg-blue-50 text-blue-700"><span class="pulse-dot bg-blue-400"></span>Cho den</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-brand-ivory rounded-xl p-3">
+                        <p class="text-xs text-brand-textmuted mb-0.5">Ma booking</p>
+                        <p class="text-sm font-medium" id="ci-code">—</p>
+                    </div>
+                    <div class="bg-brand-ivory rounded-xl p-3">
+                        <p class="text-xs text-brand-textmuted mb-0.5">Gio hen</p>
+                        <p class="text-sm font-medium" id="ci-time">—</p>
+                    </div>
+                    <div class="bg-brand-ivory rounded-xl p-3">
+                        <p class="text-xs text-brand-textmuted mb-0.5">Dich vu</p>
+                        <p class="text-sm font-medium" id="ci-service">—</p>
+                    </div>
+                    <div class="bg-brand-ivory rounded-xl p-3">
+                        <p class="text-xs text-brand-textmuted mb-0.5">Nhan vien</p>
+                        <p class="text-sm font-medium" id="ci-staff">—</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Room & Bed assignment -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+                <p class="text-sm font-medium mb-4">Phong & Giuong phan cong</p>
+                <div class="grid grid-cols-3 gap-3" id="bed-grid"></div>
+            </div>
+
+            <!-- Identity confirm -->
+            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6">
+                <p class="text-sm font-medium mb-4">Xac nhan danh tinh</p>
+                <div class="flex flex-col gap-3">
+                    <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-brand-ivory transition">
+                        <input type="checkbox" id="chk-face" class="accent-brand-gold mt-0.5">
+                        <div>
+                            <p class="text-sm font-medium">Xac nhan khuon mat / giay to</p>
+                            <p class="text-xs text-brand-textmuted">Da kiem tra CMND / ho chieu / the hoi vien</p>
+                        </div>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-brand-ivory transition">
+                        <input type="checkbox" id="chk-waiver" class="accent-brand-gold mt-0.5">
+                        <div>
+                            <p class="text-sm font-medium">Ky cam ket lieu trinh</p>
+                            <p class="text-xs text-brand-textmuted">Khach da doc va ky vao phieu dong thuan</p>
+                        </div>
+                    </label>
+                    <label class="flex items-start gap-3 cursor-pointer p-3 rounded-xl hover:bg-brand-ivory transition">
+                        <input type="checkbox" id="chk-paid" class="accent-brand-gold mt-0.5">
+                        <div>
+                            <p class="text-sm font-medium">Dat coc / thanh toan truoc</p>
+                            <p class="text-xs text-brand-textmuted" id="ci-prepaid-label">Khong co dat coc</p>
+                        </div>
+                    </label>
+                </div>
+                <div class="mt-4">
+                    <label class="text-xs text-brand-textmuted block mb-1.5">Ghi chu check-in (tuy chon)</label>
+                    <textarea id="ci-note" rows="2" placeholder="Di ung, yeu cau dac biet, tinh trang suc khoe..."
+                        class="w-full border border-brand-cream rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory resize-none"></textarea>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex gap-3">
+                <button onclick="confirmCheckin()" id="btn-checkin"
+                    class="flex-1 bg-brand-gold hover:bg-brand-goldhover text-white py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> Xac nhan Check-in
+                </button>
+                <button onclick="clearSelection()"
+                    class="px-5 border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold rounded-xl text-sm transition">
+                    Huy
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+</div>
+</div>
+
+<!-- Success toast -->
+<div id="toast" class="hidden fixed bottom-8 right-8 bg-white border border-green-200 shadow-lg rounded-2xl px-5 py-4 flex items-center gap-3 z-50">
+    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center">
+        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-green-700">Check-in thanh cong!</p>
+        <p class="text-xs text-brand-textmuted" id="toast-msg">—</p>
+    </div>
+</div>
+
+<script>
+const BOOKINGS = [
+    { id:'BK-2401-0880', customer:'Nguyen Thi Hoa',    phone:'0901 234 567', member:'Thanh vien Vang • 240 diem', gender:'female', time:'09:00', service:'Swedish Massage',    duration:90,  staff:'Minh Phuong', room:'Phong 03', bed:'Giuong A', status:'waiting', prepaid:150000 },
+    { id:'BK-2401-0881', customer:'Le Thu Ha',          phone:'0902 345 678', member:'Thanh vien Bac • 180 diem', gender:'female', time:'09:30', service:'HydraFacial',         duration:75,  staff:'Thu Hien',    room:'Phong 05', bed:'Giuong B', status:'waiting', prepaid:0 },
+    { id:'BK-2401-0882', customer:'Tran Minh Tuan',     phone:'0903 456 789', member:'Khach moi',                 gender:'male',   time:'10:00', service:'Deep Tissue Massage', duration:60,  staff:'Duc Anh',     room:'Phong 01', bed:'Giuong A', status:'checkedin', prepaid:0 },
+    { id:'BK-2401-0883', customer:'Pham Thu Huong',     phone:'0904 567 890', member:'Thanh vien Kim • 540 diem', gender:'female', time:'11:00', service:'Lava Shell Facial',   duration:60,  staff:'Lan Huong',   room:'Phong 04', bed:'Giuong A', status:'inservice', prepaid:200000 },
+    { id:'BK-2401-0884', customer:'Vo Thi Lan',         phone:'0905 678 901', member:'Thanh vien Bac • 90 diem',  gender:'female', time:'11:30', service:'HydraFacial',         duration:75,  staff:'Minh Phuong', room:'Phong 05', bed:'Giuong A', status:'waiting', prepaid:0 },
+    { id:'BK-2401-0885', customer:'Hoang Van Khoa',     phone:'0906 789 012', member:'Khach moi',                 gender:'male',   time:'13:00', service:'Hot Stone Massage',   duration:90,  staff:'Nam Quan',    room:'Phong 02', bed:'Giuong B', status:'waiting', prepaid:100000 },
+    { id:'BK-2401-0886', customer:'Nguyen Thi Mai',     phone:'0907 890 123', member:'Thanh vien Vang • 320 diem',gender:'female', time:'14:00', service:'Swedish Massage',    duration:60,  staff:'Thu Hien',    room:'Phong 03', bed:'Giuong B', status:'waiting', prepaid:0 },
+    { id:'BK-2401-0887', customer:'Bui Duc Thanh',      phone:'0908 901 234', member:'Khach quen',                gender:'male',   time:'15:30', service:'Deep Tissue Massage', duration:90,  staff:'Duc Anh',     room:'Phong 01', bed:'Giuong B', status:'waiting', prepaid:0 },
+];
+
+const STATUS_CFG = {
+    waiting:   { label:'Cho den',    cls:'bg-blue-50 text-blue-700',   dot:'bg-blue-400' },
+    checkedin: { label:'Da den',     cls:'bg-amber-50 text-amber-700', dot:'bg-amber-500' },
+    inservice: { label:'Dang lieu',  cls:'bg-green-50 text-green-700', dot:'bg-green-500' },
+    done:      { label:'Hoan thanh', cls:'bg-brand-cream text-brand-textmuted', dot:'bg-brand-textmuted' },
+    cancelled: { label:'Da huy',     cls:'bg-red-50 text-red-700',     dot:'bg-red-400' },
+};
+
+let selectedId = null;
+
+function renderList(list) {
+    const el = document.getElementById('booking-list');
+    el.innerHTML = list.map(b => {
+        const s = STATUS_CFG[b.status] || STATUS_CFG.waiting;
+        return `<div class="booking-card rounded-xl p-3.5 cursor-pointer ${selectedId===b.id?'selected':''}" onclick="selectBooking('${b.id}')">
+            <div class="flex items-center justify-between mb-1">
+                <p class="text-sm font-medium">${b.customer}</p>
+                <span class="status-badge ${s.cls}"><span class="pulse-dot ${s.dot}"></span>${s.label}</span>
+            </div>
+            <p class="text-xs text-brand-textmuted mb-1">${b.service} • ${b.duration} phut</p>
+            <div class="flex items-center gap-3 text-xs text-brand-textmuted">
+                <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>${b.time}</span>
+                <span class="flex items-center gap-1"><i data-lucide="user" class="w-3 h-3"></i>${b.staff}</span>
+                <span class="flex items-center gap-1"><i data-lucide="door-open" class="w-3 h-3"></i>${b.room}</span>
+            </div>
+        </div>`;
+    }).join('');
+    lucide.createIcons();
+}
+
+function selectBooking(id) {
+    selectedId = id;
+    const b = BOOKINGS.find(x => x.id === id);
+    if (!b) return;
+
+    document.getElementById('empty-panel').classList.add('hidden');
+    document.getElementById('checkin-panel').classList.remove('hidden');
+
+    document.getElementById('ci-name').textContent = b.customer;
+    document.getElementById('ci-phone').textContent = b.phone;
+    document.getElementById('ci-member').textContent = b.member;
+    document.getElementById('ci-code').textContent = b.id;
+    document.getElementById('ci-time').textContent = b.time + ' • ' + b.duration + ' phut';
+    document.getElementById('ci-service').textContent = b.service;
+    document.getElementById('ci-staff').textContent = b.staff;
+    document.getElementById('ci-prepaid-label').textContent = b.prepaid > 0 ? 'Da dat coc ' + b.prepaid.toLocaleString('vi-VN') + 'd' : 'Khong co dat coc';
+
+    const s = STATUS_CFG[b.status] || STATUS_CFG.waiting;
+    const badge = document.getElementById('ci-status-badge');
+    badge.className = 'status-badge ' + s.cls;
+    badge.innerHTML = `<span class="pulse-dot ${s.dot}"></span>${s.label}`;
+
+    // Bed grid
+    const beds = [
+        { label: b.bed, status: b.status === 'waiting' ? 'assigned' : b.status, main: true },
+        { label: 'Giuong ' + (b.bed === 'Giuong A' ? 'B' : 'A'), status: 'available', main: false },
+    ];
+    const bedGrid = document.getElementById('bed-grid');
+    bedGrid.innerHTML = `
+        <div class="col-span-3 text-xs text-brand-textmuted mb-1">${b.room}</div>
+        ${beds.map(bed => `
+        <div class="rounded-xl border-2 p-3 text-center ${bed.main ? 'border-brand-gold bg-brand-gold/5' : 'border-brand-cream bg-brand-ivory opacity-60'}">
+            <i data-lucide="bed-single" class="w-5 h-5 mx-auto mb-1 ${bed.main ? 'text-brand-gold' : 'text-brand-textmuted'}"></i>
+            <p class="text-xs font-medium">${bed.label}</p>
+            <p class="text-xs ${bed.main ? 'text-brand-gold' : 'text-brand-textmuted'}">${bed.main ? 'Da phan cong' : 'Con trong'}</p>
+        </div>`).join('')}
+    `;
+
+    // Reset checkboxes
+    ['chk-face','chk-waiver','chk-paid'].forEach(id => document.getElementById(id).checked = false);
+    if (b.prepaid > 0) document.getElementById('chk-paid').checked = true;
+    document.getElementById('ci-note').value = '';
+
+    renderList(BOOKINGS);
+    lucide.createIcons();
+}
+
+function doSearch(val) {
+    const q = val.trim().toLowerCase();
+    if (!q) { renderList(BOOKINGS); return; }
+    const filtered = BOOKINGS.filter(b =>
+        b.customer.toLowerCase().includes(q) ||
+        b.phone.replace(/\s/g,'').includes(q.replace(/\s/g,'')) ||
+        b.id.toLowerCase().includes(q)
+    );
+    renderList(filtered);
+}
+
+function clearSelection() {
+    selectedId = null;
+    document.getElementById('empty-panel').classList.remove('hidden');
+    document.getElementById('checkin-panel').classList.add('hidden');
+    renderList(BOOKINGS);
+}
+
+function confirmCheckin() {
+    if (!selectedId) return;
+    const b = BOOKINGS.find(x => x.id === selectedId);
+    if (!b) return;
+    if (!document.getElementById('chk-face').checked) {
+        alert('Vui long xac nhan danh tinh khach hang truoc khi check-in.');
+        return;
+    }
+    b.status = 'checkedin';
+    showToast(`${b.customer} – ${b.service} luc ${b.time} (${b.room} / ${b.bed})`);
+    document.getElementById('ci-status-badge').className = 'status-badge bg-amber-50 text-amber-700';
+    document.getElementById('ci-status-badge').innerHTML = '<span class="pulse-dot bg-amber-500"></span>Da den';
+    renderList(BOOKINGS);
+    lucide.createIcons();
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.remove('hidden');
+    setTimeout(() => t.classList.add('hidden'), 4000);
+}
+
+document.getElementById('today-count').textContent = BOOKINGS.length + ' booking';
+renderList(BOOKINGS);
+</script>
+
+<script src="shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: './', active: 'check-in' });</script>
+</body>
+</html>

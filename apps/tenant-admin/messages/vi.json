@@ -1,0 +1,42 @@
+{
+  "brand": { "platform": "Kaori" },
+  "portal": { "name": "Kaori Platform", "subtitle": "Tenant Administrator" },
+  "nav": {
+    "dashboard": "Tổng quan",
+    "tenant": "Tổ chức",
+    "plan": "Gói đăng ký",
+    "billing": "Thanh toán",
+    "domain": "Tên miền",
+    "audit": "Audit log",
+    "integration": "Tích hợp",
+    "feature": "Tính năng",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
+  },
+  "dashboard": {
+    "title": "Tổng quan nền tảng",
+    "kpi": {
+      "tenants": "Tổ chức hoạt động",
+      "branches": "Tổng số chi nhánh",
+      "users": "Người dùng",
+      "mrr": "MRR (doanh thu định kỳ)"
+    },
+    "recentTenants": "Tổ chức mới"
+  },
+  "tenant": {
+    "title": "Danh sách tổ chức",
+    "create": "Thêm tổ chức",
+    "columns": { "code": "Mã", "name": "Tên", "plan": "Gói", "branches": "Chi nhánh", "status": "Trạng thái", "createdAt": "Ngày tạo" }
+  },
+  "plan": {
+    "title": "Gói đăng ký",
+    "starter": "Khởi đầu",
+    "professional": "Chuyên nghiệp",
+    "enterprise": "Doanh nghiệp"
+  },
+  "audit": {
+    "title": "Audit log",
+    "subtitle": "Lịch sử hoạt động bất biến",
+    "columns": { "ts": "Thời gian", "actor": "Người thực hiện", "action": "Hành động", "entity": "Đối tượng", "ip": "IP" }
+  }
+}

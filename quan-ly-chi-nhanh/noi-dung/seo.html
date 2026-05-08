@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Management | Lotus Spa CMS</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      
+                            cream: '#F4EFEA',      
+                            gold: '#C9A87C',       
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       
+                            textmain: '#2C2A28',   
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(44, 42, 40, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'floating': '0 10px 40px -10px rgba(0,0,0,0.1)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Form Inputs */
+        .cms-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-3 py-2 text-sm outline-none focus:border-brand-gold focus:ring-2 focus:ring-brand-gold/20 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .cms-label {
+            @apply block text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1.5;
+        }
+
+        /* Custom Checkbox */
+        .cms-checkbox {
+            appearance: none;
+            width: 1.125rem;
+            height: 1.125rem;
+            border: 2px solid #DCD6DD;
+            border-radius: 0.25rem;
+            background-color: white;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .cms-checkbox:checked {
+            background-color: #C9A87C;
+            border-color: #C9A87C;
+        }
+        .cms-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+
+        /* SEO Score Rings */
+        .seo-high { @apply text-green-500; }
+        .seo-medium { @apply text-yellow-500; }
+        .seo-low { @apply text-red-500; }
+
+        /* Page Type Badges */
+        .type-blog { @apply bg-blue-50 text-blue-700 border border-blue-200; }
+        .type-service { @apply bg-brand-gold/10 text-brand-goldhover border border-brand-gold/30; }
+        .type-product { @apply bg-purple-50 text-purple-700 border border-purple-200; }
+        .type-branch { @apply bg-green-50 text-green-700 border border-green-200; }
+        .type-company { @apply bg-gray-100 text-gray-700 border border-gray-200; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white relative">
+
+<div id="sidebar-root"></div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/30">
+        
+        <!-- Top Header -->
+        <header class="h-16 bg-white/90 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-6 z-40 shrink-0">
+            <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                <a href="#" class="hover:text-brand-gold transition">Marketing</a>
+                <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                <span class="text-brand-textmain">SEO Management</span>
+            </div>
+            
+            <div class="flex items-center space-x-5">
+                <button class="px-4 py-1.5 bg-brand-gold/10 text-brand-gold border border-brand-gold/30 rounded-lg text-xs font-medium hover:bg-brand-gold/20 transition flex items-center">
+                    <i data-lucide="refresh-cw" class="w-3 h-3 mr-2"></i> Refresh Data
+                </button>
+                <div class="h-5 w-px bg-brand-cream"></div>
+                <div class="flex items-center space-x-2 cursor-pointer">
+                    <div class="w-7 h-7 rounded-full bg-brand-gold text-white flex items-center justify-center text-xs font-serif shadow-sm">JD</div>
+                    <span class="text-xs font-medium text-brand-textmain">Jane Doe</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Dashboard -->
+        <div class="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto space-y-6 pb-20">
+                
+                <!-- HEADER SECTION -->
+                <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                    <div>
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">SEO Performance Hub</h2>
+                        <p class="text-brand-textmuted text-sm mt-1">Monitor index status, metadata health, and keyword rankings across your entire digital presence.</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button class="px-5 py-2 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-xl text-sm font-medium transition shadow-sm flex items-center">
+                            <i data-lucide="download" class="w-4 h-4 mr-2 text-brand-textmuted"></i> Export Report
+                        </button>
+                        <button class="px-6 py-2 bg-brand-gold text-white rounded-xl hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                            <i data-lucide="zap" class="w-4 h-4 mr-2"></i> Run Full SEO Audit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW METRICS -->
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Indexed Pages</p>
+                        <h3 class="font-serif text-3xl text-brand-textmain">145</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Avg SEO Score</p>
+                        <h3 class="font-serif text-3xl text-brand-goldhover">82<span class="text-sm font-sans text-brand-textmuted ml-1">/100</span></h3>
+                    </div>
+                    <div class="bg-brand-rose/5 p-5 rounded-2xl shadow-sm border border-brand-rose/20">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-rose mb-1">Critical Issues</p>
+                        <h3 class="font-serif text-3xl text-brand-rose">17</h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Top Page Rank</p>
+                        <h3 class="font-serif text-3xl text-brand-textmain">#1 <span class="text-[10px] font-sans text-green-500 bg-green-50 px-1.5 py-0.5 rounded">Steady</span></h3>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl shadow-soft border border-brand-cream">
+                        <p class="text-[10px] uppercase tracking-widest font-semibold text-brand-textmuted mb-1">Organic Est.</p>
+                        <h3 class="font-serif text-3xl text-brand-textmain">12.4k<span class="text-xs font-sans text-brand-textmuted ml-1">/mo</span></h3>
+                    </div>
+                </div>
+
+                <!-- MIDDLE SECTION: ISSUES & KEYWORDS -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    
+                    <!-- SEO Issues Panel -->
+                    <div class="xl:col-span-2 bg-white rounded-3xl shadow-soft border border-brand-cream flex flex-col overflow-hidden">
+                        <div class="p-5 border-b border-brand-cream/50 flex justify-between items-center bg-brand-ivory/20">
+                            <h3 class="font-serif text-lg text-brand-textmain flex items-center">
+                                <i data-lucide="alert-circle" class="w-4 h-4 mr-2 text-brand-rose"></i> Urgent SEO Fixes
+                            </h3>
+                            <span class="text-[10px] font-bold text-brand-textmuted uppercase tracking-widest">Prioritized List</span>
+                        </div>
+                        <div class="p-5 space-y-3">
+                            <!-- Issue 1 -->
+                            <div class="flex items-center justify-between p-4 bg-brand-ivory/50 rounded-2xl border border-brand-cream hover:border-brand-rose transition group cursor-pointer" onclick="togglePanel('seoDetailPanel')">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-full bg-brand-rose/10 flex items-center justify-center text-brand-rose">
+                                        <i data-lucide="file-x" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-brand-textmain">Missing Meta Description</p>
+                                        <p class="text-[11px] text-brand-textmuted">Service Page: <span class="font-medium text-brand-gold">Signature Deep Tissue Massage</span></p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider bg-red-100 text-red-700">Critical</span>
+                            </div>
+                            <!-- Issue 2 -->
+                            <div class="flex items-center justify-between p-4 bg-brand-ivory/50 rounded-2xl border border-brand-cream hover:border-brand-gold transition group cursor-pointer" onclick="togglePanel('seoDetailPanel')">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold">
+                                        <i data-lucide="type" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-brand-textmain">Title Too Short (Under 30 chars)</p>
+                                        <p class="text-[11px] text-brand-textmuted">Blog: <span class="font-medium text-brand-gold">Our 2026 Goals</span></p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-700">Warning</span>
+                            </div>
+                            <!-- Issue 3 -->
+                            <div class="flex items-center justify-between p-4 bg-brand-ivory/50 rounded-2xl border border-brand-cream hover:border-brand-gold transition group cursor-pointer">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                        <i data-lucide="image" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-brand-textmain">Missing Image Alt Text (4 items)</p>
+                                        <p class="text-[11px] text-brand-textmuted">Branch Page: <span class="font-medium text-brand-gold">Hanoi Spa Sanctuary</span></p>
+                                    </div>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider bg-blue-100 text-blue-700">Optimization</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keyword Tracking Panel -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-brand-cream flex flex-col overflow-hidden">
+                        <div class="p-5 border-b border-brand-cream/50 bg-brand-ivory/20 flex justify-between items-center">
+                            <h3 class="font-serif text-lg text-brand-textmain">Top Keywords</h3>
+                            <button class="text-[10px] uppercase font-bold tracking-widest text-brand-gold hover:text-brand-goldhover">+ Add</button>
+                        </div>
+                        <div class="flex-1 overflow-y-auto custom-scrollbar p-0">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-[9px] uppercase tracking-widest text-brand-textmuted border-b border-brand-cream">
+                                        <th class="py-3 px-4 font-semibold">Keyword</th>
+                                        <th class="py-3 px-4 font-semibold text-center">Rank</th>
+                                        <th class="py-3 px-4 font-semibold text-right">Volume</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-xs divide-y divide-brand-cream/50 text-brand-textmain">
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-4">
+                                            <p class="font-medium">luxury spa massage</p>
+                                            <p class="text-[9px] text-brand-textmuted">deep-tissue-massage</p>
+                                        </td>
+                                        <td class="py-3 px-4 text-center font-mono font-bold text-green-600">#8 <i data-lucide="trending-up" class="w-2.5 h-2.5 inline ml-0.5"></i></td>
+                                        <td class="py-3 px-4 text-right font-mono text-brand-textmuted">2.4k</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-4">
+                                            <p class="font-medium">best facial hanoi</p>
+                                            <p class="text-[9px] text-brand-textmuted">branches/hanoi</p>
+                                        </td>
+                                        <td class="py-3 px-4 text-center font-mono font-bold text-brand-gold">#12 <i data-lucide="minus" class="w-2.5 h-2.5 inline ml-0.5 opacity-50"></i></td>
+                                        <td class="py-3 px-4 text-right font-mono text-brand-textmuted">850</td>
+                                    </tr>
+                                    <tr class="hover:bg-brand-ivory/30 transition">
+                                        <td class="py-3 px-4">
+                                            <p class="font-medium">organic serum spa</p>
+                                            <p class="text-[9px] text-brand-textmuted">products/hydration-serum</p>
+                                        </td>
+                                        <td class="py-3 px-4 text-center font-mono font-bold text-brand-rose">#24 <i data-lucide="trending-down" class="w-2.5 h-2.5 inline ml-0.5"></i></td>
+                                        <td class="py-3 px-4 text-right font-mono text-brand-textmuted">1.2k</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- MAIN SEO PAGE TABLE -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream flex flex-col relative overflow-hidden">
+                    
+                    <!-- Search & Filter Area -->
+                    <div class="p-5 border-b border-brand-cream flex flex-col lg:flex-row gap-4 justify-between items-center bg-white">
+                        <div class="relative w-full lg:w-96">
+                            <i data-lucide="search" class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-brand-textmuted"></i>
+                            <input type="text" placeholder="Search page title or URL..." class="cms-input pl-9 border-transparent bg-brand-ivory/50 focus:bg-white">
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <select class="cms-input w-auto py-1.5 px-3 text-xs appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] pr-8 shadow-none border-brand-cream/50 bg-white">
+                                <option value="">Type: All</option>
+                                <option>Service Page</option>
+                                <option>Blog Article</option>
+                                <option>Branch Page</option>
+                                <option>Product Page</option>
+                            </select>
+                            <select class="cms-input w-auto py-1.5 px-3 text-xs appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_0.5rem_center] pr-8 shadow-none border-brand-cream/50 bg-white">
+                                <option value="">Score: Any</option>
+                                <option>High (90-100)</option>
+                                <option>Fair (70-89)</option>
+                                <option>Poor (< 70)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- TABLE -->
+                    <div class="overflow-x-auto min-h-[500px]">
+                        <table class="w-full text-left border-collapse whitespace-nowrap">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted border-b border-brand-cream bg-brand-ivory/20">
+                                    <th class="py-3 px-6 font-semibold">Page Title & URL</th>
+                                    <th class="py-3 px-4 font-semibold">Page Type</th>
+                                    <th class="py-3 px-4 font-semibold text-center">SEO Score</th>
+                                    <th class="py-3 px-4 font-semibold text-center">Metadata Status</th>
+                                    <th class="py-3 px-4 font-semibold">Indexing</th>
+                                    <th class="py-3 px-4 font-semibold">Last Audit</th>
+                                    <th class="py-3 px-6 font-semibold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50 bg-white text-brand-textmain">
+                                
+                                <!-- ROW 1 -->
+                                <tr class="hover:bg-brand-ivory/50 transition group cursor-pointer" onclick="togglePanel('seoDetailPanel')">
+                                    <td class="py-4 px-6">
+                                        <p class="font-medium text-brand-textmain group-hover:text-brand-gold transition">Signature Deep Tissue Massage</p>
+                                        <p class="text-[10px] text-brand-textmuted font-mono mt-0.5">/services/deep-tissue-massage</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider type-service">Service Page</span>
+                                    </td>
+                                    <td class="py-4 px-4 text-center align-middle">
+                                        <div class="flex flex-col items-center">
+                                            <div class="relative w-9 h-9 flex items-center justify-center">
+                                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                                    <path stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F4EFEA" stroke-width="2.5"></path>
+                                                    <path stroke-dasharray="91, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5" class="seo-high"></path>
+                                                </svg>
+                                                <span class="absolute text-[10px] font-bold text-brand-textmain">91</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center">
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <span class="w-2 h-2 rounded-full bg-green-500" title="Title Tag OK"></span>
+                                            <span class="w-2 h-2 rounded-full bg-brand-rose animate-pulse" title="Meta Description Missing"></span>
+                                            <span class="w-2 h-2 rounded-full bg-green-500" title="Alt Tags OK"></span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center text-[10px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                                            <i data-lucide="check" class="w-2.5 h-2.5 mr-1"></i> Indexed
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-xs font-mono text-brand-textmuted">Mar 09, 2026</p>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold transition rounded" title="Edit Metadata"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold transition rounded" title="Audit Now"><i data-lucide="zap" class="w-4 h-4"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- ROW 2 -->
+                                <tr class="hover:bg-brand-ivory/50 transition group cursor-pointer">
+                                    <td class="py-4 px-6">
+                                        <p class="font-medium text-brand-textmain group-hover:text-brand-gold transition">5 Benefits of Daily Aromatherapy</p>
+                                        <p class="text-[10px] text-brand-textmuted font-mono mt-0.5">/blog/daily-aromatherapy-benefits</p>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider type-blog">Blog Article</span>
+                                    </td>
+                                    <td class="py-4 px-4 text-center align-middle">
+                                        <div class="flex flex-col items-center">
+                                            <div class="relative w-9 h-9 flex items-center justify-center">
+                                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                                    <path stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#F4EFEA" stroke-width="2.5"></path>
+                                                    <path stroke-dasharray="74, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="2.5" class="seo-medium"></path>
+                                                </svg>
+                                                <span class="absolute text-[10px] font-bold text-brand-textmain">74</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4 text-center">
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+                                            <span class="w-2 h-2 rounded-full bg-yellow-500"></span>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <span class="inline-flex items-center text-[10px] font-medium text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                                            <i data-lucide="check" class="w-2.5 h-2.5 mr-1"></i> Indexed
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-4">
+                                        <p class="text-xs font-mono text-brand-textmuted">Mar 05, 2026</p>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="flex items-center justify-end space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold transition rounded"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                            <button class="p-1.5 text-brand-textmuted hover:text-brand-gold transition rounded"><i data-lucide="zap" class="w-4 h-4"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- PAGINATION -->
+                    <div class="p-5 border-t border-brand-cream flex justify-between items-center bg-brand-ivory/30 mt-auto shrink-0">
+                        <p class="text-xs text-brand-textmuted">Showing <span class="font-medium text-brand-textmain">1</span> to <span class="font-medium text-brand-textmain">10</span> of <span class="font-medium text-brand-textmain">145</span> pages</p>
+                        <div class="flex space-x-1">
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-brand-cream text-brand-textmuted bg-white opacity-50 cursor-not-allowed"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-brand-gold bg-brand-gold text-white font-medium shadow-sm">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-brand-cream text-brand-textmain bg-white hover:border-brand-gold transition font-medium">2</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded-lg border border-brand-cream text-brand-textmain bg-white hover:border-brand-gold transition"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SLIDE-OUT PANEL: SEO OPTIMIZATION -->
+    <div id="seoDetailPanel" class="fixed inset-y-0 right-0 w-full max-w-xl bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-[60] flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-6 py-5 border-b border-brand-cream flex justify-between items-center bg-white shrink-0 relative overflow-hidden">
+            <div class="absolute right-0 top-0 w-48 h-48 bg-gradient-to-bl from-brand-gold/10 to-transparent rounded-bl-full pointer-events-none"></div>
+            <div class="relative z-10 flex items-center">
+                <button onclick="togglePanel('seoDetailPanel')" class="mr-4 p-2 text-brand-textmuted hover:text-brand-textmain rounded-md hover:bg-brand-cream transition">
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </button>
+                <div>
+                    <h3 class="font-serif text-xl text-brand-textmain">SEO Page Optimizer</h3>
+                    <p class="text-xs text-brand-textmuted mt-0.5">Refine metadata and track keyword performance.</p>
+                </div>
+            </div>
+            <button class="relative z-10 px-6 py-2 bg-brand-gold text-white rounded-lg hover:bg-brand-goldhover transition shadow-sm text-sm font-medium">
+                Save & Update
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
+            
+            <!-- SEARCH ENGINE PREVIEW -->
+            <div>
+                <h4 class="text-[10px] uppercase tracking-widest font-bold text-brand-textmuted mb-4 border-b border-brand-cream pb-2">Search Engine Preview</h4>
+                <div class="bg-white border border-brand-cream rounded-2xl p-6 shadow-sm">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <div class="w-6 h-6 rounded-full bg-brand-ivory border border-brand-cream flex items-center justify-center">
+                            <i data-lucide="globe" class="w-3 h-3 text-brand-textmuted"></i>
+                        </div>
+                        <span class="text-[11px] text-gray-700 truncate">lotusspa.com › services › deep-tissue-massage</span>
+                    </div>
+                    <p class="text-xl text-blue-700 hover:underline cursor-pointer font-medium mb-1">Lotus Luxury Spa – Signature Deep Tissue Massage</p>
+                    <p class="text-sm text-gray-600 line-clamp-2 leading-relaxed">Experience deep muscle relaxation with our premium aromatherapy massage treatment. Perfect for relieving chronic tension and restoring balance.</p>
+                </div>
+            </div>
+
+            <!-- METADATA FORM -->
+            <div class="bg-white p-6 rounded-2xl border border-brand-cream shadow-sm space-y-6">
+                <h4 class="text-[10px] uppercase tracking-widest font-bold text-brand-textmain mb-4 flex items-center">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5 mr-2 text-brand-gold"></i> SEO Metadata Editor
+                </h4>
+                
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between items-end mb-1.5">
+                            <label class="cms-label mb-0">Meta Title</label>
+                            <span class="text-[9px] font-bold text-green-600">54 / 60 chars</span>
+                        </div>
+                        <input type="text" class="cms-input" value="Lotus Luxury Spa – Signature Deep Tissue Massage">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-end mb-1.5">
+                            <label class="cms-label mb-0">Meta Description</label>
+                            <span class="text-[9px] font-bold text-amber-600">145 / 160 chars</span>
+                        </div>
+                        <textarea class="cms-input h-24 resize-none leading-relaxed" placeholder="Write a compelling SEO description...">Experience deep muscle relaxation with our premium aromatherapy massage treatment. Perfect for relieving chronic tension and restoring balance.</textarea>
+                    </div>
+
+                    <div>
+                        <label class="cms-label">Primary Keywords</label>
+                        <div class="flex flex-wrap gap-2 mb-2">
+                            <span class="inline-flex items-center px-2 py-1 rounded-md bg-brand-ivory border border-brand-cream text-xs text-brand-textmain">deep tissue <i data-lucide="x" class="w-3 h-3 ml-1.5 cursor-pointer opacity-50 hover:opacity-100"></i></span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-md bg-brand-ivory border border-brand-cream text-xs text-brand-textmain">luxury massage <i data-lucide="x" class="w-3 h-3 ml-1.5 cursor-pointer opacity-50 hover:opacity-100"></i></span>
+                            <span class="inline-flex items-center px-2 py-1 rounded-md bg-brand-ivory border border-brand-cream text-xs text-brand-textmain">aromatherapy <i data-lucide="x" class="w-3 h-3 ml-1.5 cursor-pointer opacity-50 hover:opacity-100"></i></span>
+                        </div>
+                        <input type="text" class="cms-input py-1.5 text-xs" placeholder="Add keyword and press enter...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- OPTIMIZATION SUGGESTIONS -->
+            <div>
+                <h4 class="text-[10px] uppercase tracking-widest font-bold text-brand-textmuted mb-4 border-b border-brand-cream pb-2">Optimization Suggestions</h4>
+                <div class="space-y-3">
+                    <div class="bg-white border-l-4 border-red-500 rounded-xl p-4 shadow-sm flex items-start">
+                        <i data-lucide="info" class="w-4 h-4 text-red-500 mr-3 mt-0.5 shrink-0"></i>
+                        <div>
+                            <p class="text-xs font-bold text-brand-textmain">Add Meta Description</p>
+                            <p class="text-[11px] text-brand-textmuted mt-1">This page currently lacks a meta description, which can negatively affect click-through rates.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white border-l-4 border-amber-500 rounded-xl p-4 shadow-sm flex items-start">
+                        <i data-lucide="info" class="w-4 h-4 text-amber-500 mr-3 mt-0.5 shrink-0"></i>
+                        <div>
+                            <p class="text-xs font-bold text-brand-textmain">Improve Heading Structure</p>
+                            <p class="text-[11px] text-brand-textmuted mt-1">No H1 tag detected. Ensure the page title is wrapped in an H1 for better crawlability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Toggle Logic
+        function togglePanel(panelID) {
+            const panel = document.getElementById(panelID);
+            panel.classList.toggle('translate-x-full');
+        }
+
+        // Selection Logic (Mockup)
+        function toggleSelectAll() {
+            const master = document.getElementById('selectAll');
+            const checks = document.querySelectorAll('.row-checkbox');
+            checks.forEach(c => c.checked = master.checked);
+        }
+    </script>
+
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'seo' });</script>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Service Configuration | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)',
+                        'panel': '-10px 0 40px rgba(74, 68, 62, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu,
+        .dropdown-container:focus-within .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-white border border-brand-cream rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-gold focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60 shadow-sm;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+
+        /* Slide Panel */
+        .panel-active { transform: translateX(0) !important; }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="building" class="w-4 h-4 mr-3 opacity-70"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3 opacity-70"></i> Roles
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Analytics</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="pt-4 border-t border-brand-cream">
+                <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                </a>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search branches or configurations..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> Create Service
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="calendar-plus" class="w-4 h-4 mr-2"></i> New Booking
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-brand-rose rounded-full border border-white"></span>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-[1600px] mx-auto space-y-8 pb-12">
+                
+                <!-- BREADCRUMBS -->
+                <div class="text-xs text-brand-textmuted font-medium flex items-center space-x-2">
+                    <a href="#" class="hover:text-brand-gold transition">Dashboard</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Services</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <a href="#" class="hover:text-brand-gold transition">Deep Tissue Massage</a>
+                    <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    <span class="text-brand-gold">Branch Configuration</span>
+                </div>
+
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col lg:flex-row lg:items-end justify-between bg-white p-8 rounded-3xl shadow-soft border border-brand-cream/60 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/5 to-transparent rounded-bl-full pointer-events-none"></div>
+                    
+                    <div class="relative z-10 flex-1">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Branch Configuration</h2>
+                        </div>
+                        <p class="text-brand-textmuted text-sm max-w-2xl mb-6">Customize how this service operates across different locations. Override prices, adjust durations, and set local capacity limits.</p>
+                        
+                        <!-- Base Context Info -->
+                        <div class="bg-brand-ivory/50 rounded-2xl border border-brand-cream p-4 flex flex-wrap items-center gap-x-8 gap-y-4">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-brand-textmuted font-semibold mb-1">Service Name</p>
+                                <p class="text-sm font-medium text-brand-textmain">Deep Tissue Massage</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-brand-textmuted font-semibold mb-1">Category</p>
+                                <p class="text-sm font-medium text-brand-textmain">Massage Therapy</p>
+                            </div>
+                            <div class="w-px h-8 bg-brand-cream hidden md:block"></div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-brand-textmuted font-semibold mb-1">Base Price</p>
+                                <p class="text-sm font-serif font-medium text-brand-gold">$80.00</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] uppercase tracking-widest text-brand-textmuted font-semibold mb-1">Base Duration</p>
+                                <p class="text-sm font-medium text-brand-textmain">60 Minutes</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3 mt-6 lg:mt-0 relative z-10 shrink-0">
+                        <button class="px-5 py-2.5 bg-brand-ivory text-brand-textmain border border-brand-cream hover:border-brand-gold hover:bg-white rounded-full text-sm font-medium transition shadow-sm flex items-center">
+                            <i data-lucide="check-circle-2" class="w-4 h-4 mr-2"></i> Apply Base Settings to All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- MAIN TABLE AREA -->
+                <div class="bg-white rounded-3xl shadow-soft border border-brand-cream/60 flex flex-col overflow-hidden">
+                    
+                    <!-- FILTER BAR -->
+                    <div class="p-6 border-b border-brand-cream/50 bg-brand-ivory/30 flex justify-between items-center">
+                        <h3 class="font-serif text-xl text-brand-textmain">Branch Settings</h3>
+                        <div class="flex items-center space-x-3">
+                            <select class="spa-input w-48 py-2 !rounded-full cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                <option>Status: All</option>
+                                <option>Active Only</option>
+                                <option>Inactive Only</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="overflow-x-auto min-h-[400px]">
+                        <table class="w-full text-left border-collapse min-w-[1300px]">
+                            <thead>
+                                <tr class="text-[10px] uppercase tracking-widest text-brand-textmuted bg-white border-b border-brand-cream">
+                                    <th class="py-4 px-6 font-semibold w-1/5">Branch Name</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Status</th>
+                                    <th class="py-4 px-4 font-semibold text-right">Price Override</th>
+                                    <th class="py-4 px-4 font-semibold text-right">Duration</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Staff Req.</th>
+                                    <th class="py-4 px-4 font-semibold">Room Req.</th>
+                                    <th class="py-4 px-4 font-semibold text-center">Max/Day</th>
+                                    <th class="py-4 px-4 font-semibold">Last Updated</th>
+                                    <th class="py-4 px-6 font-semibold text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm divide-y divide-brand-cream/50 bg-white">
+                                
+                                <!-- Branch 1 -->
+                                <tr class="hover:bg-brand-ivory/30 transition group">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-cream text-brand-gold flex items-center justify-center mr-3 shrink-0">
+                                                <i data-lucide="store" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain">Downtown Spa</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-4 text-center">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">Active</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right">
+                                        <span class="font-serif text-base text-brand-textmuted line-through mr-2 opacity-60">$80</span>
+                                        <span class="font-serif text-base text-brand-gold font-medium">$90</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right text-brand-textmain font-medium">60 min</td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain">1</td>
+                                    <td class="py-5 px-4 text-brand-textmain">Massage Room</td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain">25</td>
+                                    <td class="py-5 px-4 text-xs text-brand-textmuted font-mono">Today, 09:12</td>
+                                    <td class="py-5 px-6 text-right">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold rounded-lg text-xs font-medium transition shadow-sm flex items-center justify-end ml-auto" onclick="togglePanel('branchConfigPanel', 'Downtown Spa')">
+                                            <i data-lucide="settings-2" class="w-3 h-3 mr-1.5"></i> Edit Config
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Branch 2 -->
+                                <tr class="hover:bg-brand-ivory/30 transition group bg-brand-gold/5">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-cream text-brand-gold flex items-center justify-center mr-3 shrink-0">
+                                                <i data-lucide="store" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain">Westside Retreat</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-4 text-center">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">Active</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right">
+                                        <span class="text-xs text-brand-textmuted italic">Base:</span>
+                                        <span class="font-serif text-base text-brand-textmain font-medium ml-2">$80</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right text-brand-textmain font-medium">
+                                        <span class="text-brand-gold mr-1">75 min</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain">1</td>
+                                    <td class="py-5 px-4 text-brand-textmain">VIP Suite</td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain">15</td>
+                                    <td class="py-5 px-4 text-xs text-brand-textmuted font-mono">Mar 05, 2026</td>
+                                    <td class="py-5 px-6 text-right">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold rounded-lg text-xs font-medium transition shadow-sm flex items-center justify-end ml-auto" onclick="togglePanel('branchConfigPanel', 'Westside Retreat')">
+                                            <i data-lucide="settings-2" class="w-3 h-3 mr-1.5"></i> Edit Config
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Branch 3 -->
+                                <tr class="hover:bg-brand-ivory/30 transition group opacity-60">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-gray-100 text-gray-500 flex items-center justify-center mr-3 shrink-0">
+                                                <i data-lucide="store" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain">Ocean View Clinic</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-4 text-center">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-600 border border-gray-200">Seasonal</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right">
+                                        <span class="font-serif text-base text-brand-textmain font-medium">$80</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right text-brand-textmain font-medium">60 min</td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain">1</td>
+                                    <td class="py-5 px-4 text-brand-textmuted italic">Any</td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain">10</td>
+                                    <td class="py-5 px-4 text-xs text-brand-textmuted font-mono">Feb 20, 2026</td>
+                                    <td class="py-5 px-6 text-right">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold rounded-lg text-xs font-medium transition shadow-sm flex items-center justify-end ml-auto" onclick="togglePanel('branchConfigPanel', 'Ocean View Clinic')">
+                                            <i data-lucide="settings-2" class="w-3 h-3 mr-1.5"></i> Edit Config
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                 <!-- Branch 4 -->
+                                 <tr class="hover:bg-brand-ivory/30 transition group">
+                                    <td class="py-5 px-6">
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 rounded-lg bg-brand-cream text-brand-gold flex items-center justify-center mr-3 shrink-0">
+                                                <i data-lucide="store" class="w-4 h-4"></i>
+                                            </div>
+                                            <span class="font-medium text-brand-textmain">Uptown Wellness</span>
+                                        </div>
+                                    </td>
+                                    <td class="py-5 px-4 text-center">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-700 border border-green-200">Active</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right">
+                                        <span class="font-serif text-base text-brand-textmuted line-through mr-2 opacity-60">$80</span>
+                                        <span class="font-serif text-base text-brand-gold font-medium">$85</span>
+                                    </td>
+                                    <td class="py-5 px-4 text-right text-brand-textmain font-medium">60 min</td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain">1</td>
+                                    <td class="py-5 px-4 text-brand-textmain">Massage Room</td>
+                                    <td class="py-5 px-4 text-center text-brand-textmain text-brand-rose font-medium">10 <i data-lucide="alert-circle" class="w-3 h-3 inline ml-1" title="Low capacity warning"></i></td>
+                                    <td class="py-5 px-4 text-xs text-brand-textmuted font-mono">Jan 15, 2026</td>
+                                    <td class="py-5 px-6 text-right">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream text-brand-textmain hover:border-brand-gold rounded-lg text-xs font-medium transition shadow-sm flex items-center justify-end ml-auto" onclick="togglePanel('branchConfigPanel', 'Uptown Wellness')">
+                                            <i data-lucide="settings-2" class="w-3 h-3 mr-1.5"></i> Edit Config
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- SLIDE-OUT CONFIGURATION PANEL -->
+    <div id="branchConfigPanel" class="fixed inset-y-0 right-0 w-full max-w-lg bg-brand-ivory shadow-panel transform translate-x-full transition-transform duration-300 ease-in-out z-50 flex flex-col border-l border-brand-cream">
+        
+        <!-- Panel Header -->
+        <div class="px-8 py-6 border-b border-brand-cream flex justify-between items-center bg-white shrink-0">
+            <div>
+                <p class="text-[10px] uppercase tracking-widest text-brand-textmuted font-semibold mb-1">Deep Tissue Massage Configuration</p>
+                <h3 class="font-serif text-2xl text-brand-textmain" id="panelBranchName">Downtown Spa</h3>
+            </div>
+            <button onclick="togglePanel('branchConfigPanel')" class="p-2 text-brand-textmuted hover:text-brand-gold rounded-full hover:bg-brand-ivory transition">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Panel Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+            
+            <!-- Status & Availability -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-brand-cream">
+                <label class="spa-label">Service Status at this Branch</label>
+                <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer font-medium">
+                    <option value="active" selected>Active (Available for booking)</option>
+                    <option value="inactive">Inactive (Hidden from booking)</option>
+                    <option value="seasonal">Seasonal (Temporarily unavailable)</option>
+                    <option value="maintenance">Maintenance (Staff/Room unavailable)</option>
+                </select>
+                <p class="text-[10px] text-brand-textmuted mt-2 ml-1">Inactive services will not appear in the booking portal for this location.</p>
+            </div>
+
+            <!-- Price & Duration Overrides -->
+            <div>
+                <h4 class="font-serif text-lg text-brand-textmain mb-4 border-b border-brand-cream pb-2">Price & Duration</h4>
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <label class="spa-label flex justify-between">Price Override <span class="text-brand-textmuted font-normal lowercase">Base: $80</span></label>
+                        <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all bg-white">
+                            <span class="flex items-center px-4 bg-brand-ivory border-r border-brand-cream text-brand-textmuted text-sm font-medium">$</span>
+                            <input type="number" class="w-full bg-transparent px-4 py-2.5 text-sm font-serif font-medium outline-none text-brand-textmain" placeholder="90.00" value="90.00">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="spa-label flex justify-between">Duration <span class="text-brand-textmuted font-normal lowercase">Base: 60m</span></label>
+                        <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all bg-white">
+                            <input type="number" class="w-full bg-transparent px-4 py-2.5 text-sm font-medium outline-none text-brand-textmain" placeholder="60" value="60">
+                            <span class="flex items-center px-4 bg-brand-ivory border-l border-brand-cream text-brand-textmuted text-xs font-medium">Min</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="text-xs font-medium text-brand-rose hover:text-red-600 transition mt-3 flex items-center">
+                    <i data-lucide="rotate-ccw" class="w-3 h-3 mr-1"></i> Revert to Base Values
+                </button>
+            </div>
+
+            <!-- Operational Constraints -->
+            <div>
+                <h4 class="font-serif text-lg text-brand-textmain mb-4 border-b border-brand-cream pb-2">Operational Constraints</h4>
+                <div class="space-y-5">
+                    
+                    <div class="grid grid-cols-2 gap-5">
+                        <div>
+                            <label class="spa-label">Staff Required</label>
+                            <input type="number" class="spa-input" value="1" min="1">
+                        </div>
+                        <div>
+                            <label class="spa-label">Min. Skill Level</label>
+                            <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                                <option value="any">Any Level</option>
+                                <option value="senior" selected>Senior Therapist</option>
+                                <option value="master">Master Therapist</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="spa-label">Room Requirement</label>
+                        <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%238B837C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em] cursor-pointer">
+                            <option value="">No specific room required</option>
+                            <option value="massage" selected>Massage Room</option>
+                            <option value="facial">Facial Room</option>
+                            <option value="vip">Private VIP Suite</option>
+                        </select>
+                        <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1">Booking engine will automatically allocate this room type.</p>
+                    </div>
+
+                    <div>
+                        <label class="spa-label">Max Daily Bookings (Capacity)</label>
+                        <div class="flex rounded-xl overflow-hidden shadow-sm border border-brand-cream focus-within:border-brand-gold focus-within:ring-4 focus-within:ring-brand-gold/10 transition-all bg-white max-w-[50%]">
+                            <input type="number" class="w-full bg-transparent px-4 py-2.5 text-sm font-medium outline-none text-brand-textmain" value="25">
+                            <span class="flex items-center px-4 bg-brand-ivory border-l border-brand-cream text-brand-textmuted text-xs"><i data-lucide="infinity" class="w-4 h-4"></i></span>
+                        </div>
+                        <p class="text-[10px] text-brand-textmuted mt-1.5 ml-1">Limit how many times this service can be booked per day at this branch.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <label class="spa-label">Branch-Specific Notes (Internal)</label>
+                <textarea class="spa-input h-20 resize-none text-xs" placeholder="Add any notes relevant only to this location..."></textarea>
+            </div>
+
+        </div>
+
+        <!-- Panel Footer -->
+        <div class="p-6 border-t border-brand-cream bg-white shrink-0 flex justify-end space-x-3">
+            <button onclick="togglePanel('branchConfigPanel')" class="px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-gold rounded-full text-sm font-medium transition shadow-sm">
+                Cancel
+            </button>
+            <button onclick="togglePanel('branchConfigPanel')" class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Configuration
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Panel Logic
+        function togglePanel(panelID, branchName = null) {
+            const panel = document.getElementById(panelID);
+            
+            if (branchName) {
+                document.getElementById('panelBranchName').innerText = branchName;
+            }
+            
+            panel.classList.toggle('translate-x-full');
+        }
+    </script>
+</body>
+</html>

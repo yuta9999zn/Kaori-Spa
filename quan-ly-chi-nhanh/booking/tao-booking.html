@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Tao Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6', cream: '#F4EFEA', gold: '#C9A87C',
+                            goldhover: '#B5956A', rose: '#D9B8B5', lavender: '#DCD6DD',
+                            textmain: '#4A443E', textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: { serif: ['Cinzel', 'serif'], sans: ['Jost', 'sans-serif'] },
+                    boxShadow: { soft: '0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .fi{width:100%;border:1px solid #F4EFEA;border-radius:12px;padding:10px 14px;font-size:14px;font-family:'Jost',sans-serif;background:white;color:#4A443E;outline:none;transition:border-color .2s}
+        .fi:focus{border-color:#C9A87C;box-shadow:0 0 0 3px rgba(201,168,124,.1)}
+        .fl{display:block;font-size:11px;color:#8B837C;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;font-weight:500}
+
+        /* Steps */
+        .step-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0;transition:all .3s}
+        .step-dot.done{background:#d1fae5;color:#059669}
+        .step-dot.active{background:#C9A87C;color:white;box-shadow:0 0 0 4px rgba(201,168,124,.2)}
+        .step-dot.pending{background:#F4EFEA;color:#8B837C}
+        .step-line{flex:1;height:2px;background:#F4EFEA;margin:0 4px;transition:background .3s}
+        .step-line.done{background:#C9A87C}
+
+        /* Selection cards */
+        .sel-card{border:2px solid #F4EFEA;border-radius:16px;padding:14px;cursor:pointer;transition:all .2s}
+        .sel-card:hover{border-color:#C9A87C;background:rgba(201,168,124,.04)}
+        .sel-card.selected{border-color:#C9A87C;background:rgba(201,168,124,.08)}
+        .sel-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+
+        /* Staff status pills */
+        .pill-ok{background:#d1fae5;color:#059669}
+        .pill-busy{background:#fee2e2;color:#dc2626}
+        .pill-break{background:#fef9c3;color:#ca8a04}
+        .pill-off{background:#f3f4f6;color:#6b7280}
+
+        /* Validation badges */
+        .vbadge{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;font-size:13px}
+        .vbadge.ok{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+        .vbadge.fail{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+        .vbadge.warn{background:#fefce8;color:#ca8a04;border:1px solid #fde68a}
+        .vbadge.info{background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe}
+
+        /* Time slot grid */
+        .tslot{padding:8px 12px;border-radius:10px;border:1.5px solid #F4EFEA;font-size:13px;cursor:pointer;transition:all .15s;text-align:center}
+        .tslot:hover{border-color:#C9A87C;color:#C9A87C}
+        .tslot.selected{background:#C9A87C;color:white;border-color:#C9A87C}
+        .tslot.blocked{background:#f9fafb;color:#d1d5db;cursor:not-allowed;border-color:#f3f4f6}
+
+        /* Bed selection */
+        .bed-sel{width:56px;height:68px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #F4EFEA;cursor:pointer;transition:all .2s;gap:3px;position:relative}
+        .bed-sel.free{border-color:#86efac;background:#f0fdf4}
+        .bed-sel.free:hover{border-color:#C9A87C;background:rgba(201,168,124,.08)}
+        .bed-sel.free.selected{border-color:#C9A87C;background:rgba(201,168,124,.15);box-shadow:0 0 0 3px rgba(201,168,124,.2)}
+        .bed-sel.taken{border-color:#fca5a5;background:#fef2f2;cursor:not-allowed;opacity:.6}
+        .bed-sel.cleaning{border-color:#fde047;background:#fefce8;cursor:not-allowed;opacity:.6}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-30 flex-shrink-0">
+    <div class="flex items-center gap-4">
+        <i data-lucide="plus-circle" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Tao Booking Moi</h1>
+    </div>
+    <div class="flex items-center gap-3">
+        <button onclick="history.back()" class="px-5 py-2 border border-brand-cream rounded-full text-sm text-brand-textmuted hover:border-brand-gold hover:text-brand-gold transition">Huy</button>
+        <button onclick="confirmBooking()" id="btn-confirm" class="bg-brand-gold hover:bg-brand-goldhover text-white px-6 py-2 rounded-full text-sm font-medium transition shadow flex items-center gap-2 opacity-40 cursor-not-allowed" disabled>
+            <i data-lucide="check" class="w-4 h-4"></i> Xac Nhan Booking
+        </button>
+    </div>
+</header>
+
+<!-- Step indicator -->
+<div class="bg-white border-b border-brand-cream px-8 py-4 flex-shrink-0">
+    <div class="max-w-4xl mx-auto flex items-center">
+        <div class="flex flex-col items-center">
+            <div class="step-dot active" id="sd-1">1</div>
+            <p class="text-xs mt-1 text-brand-gold font-medium">Khach Hang</p>
+        </div>
+        <div class="step-line" id="sl-1"></div>
+        <div class="flex flex-col items-center">
+            <div class="step-dot pending" id="sd-2">2</div>
+            <p class="text-xs mt-1 text-brand-textmuted">Dich Vu</p>
+        </div>
+        <div class="step-line" id="sl-2"></div>
+        <div class="flex flex-col items-center">
+            <div class="step-dot pending" id="sd-3">3</div>
+            <p class="text-xs mt-1 text-brand-textmuted">Ngay & Gio</p>
+        </div>
+        <div class="step-line" id="sl-3"></div>
+        <div class="flex flex-col items-center">
+            <div class="step-dot pending" id="sd-4">4</div>
+            <p class="text-xs mt-1 text-brand-textmuted">Nhan Vien</p>
+        </div>
+        <div class="step-line" id="sl-4"></div>
+        <div class="flex flex-col items-center">
+            <div class="step-dot pending" id="sd-5">5</div>
+            <p class="text-xs mt-1 text-brand-textmuted">Phong & Giuong</p>
+        </div>
+        <div class="step-line" id="sl-5"></div>
+        <div class="flex flex-col items-center">
+            <div class="step-dot pending" id="sd-6">6</div>
+            <p class="text-xs mt-1 text-brand-textmuted">Xac Nhan</p>
+        </div>
+    </div>
+</div>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-6xl mx-auto p-8 grid grid-cols-3 gap-8">
+
+<!-- ── MAIN FORM ───────────────────────────────── -->
+<div class="col-span-2 space-y-6">
+
+<!-- STEP 1: Customer -->
+<div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6" id="step-1">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="step-dot active text-sm">1</div>
+        <div><h2 class="font-serif text-lg">Khach Hang</h2><p class="text-xs text-brand-textmuted">Chon hoac tao khach hang moi</p></div>
+    </div>
+    <div class="flex items-center gap-3 mb-4">
+        <div class="flex-1 relative">
+            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-brand-textmuted"></i>
+            <input class="fi pl-9" placeholder="Tim theo ten, so dien thoai..." id="cust-search" oninput="searchCustomers(this.value)">
+        </div>
+        <button onclick="showNewCustForm()" class="px-4 py-2.5 border border-brand-gold text-brand-gold rounded-xl text-sm hover:bg-brand-gold/5 transition flex items-center gap-2">
+            <i data-lucide="user-plus" class="w-4 h-4"></i> Khach Moi
+        </button>
+    </div>
+    <!-- Customer results -->
+    <div class="space-y-2" id="cust-results"></div>
+    <!-- Selected customer chip -->
+    <div id="cust-selected" class="hidden mt-3 p-3 bg-brand-gold/5 border border-brand-gold/30 rounded-xl flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-brand-rose flex items-center justify-center text-white font-serif text-sm" id="cust-avatar">KH</div>
+        <div class="flex-1">
+            <p class="font-medium text-sm" id="cust-name-disp">—</p>
+            <p class="text-xs text-brand-textmuted" id="cust-detail-disp">—</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs" id="cust-gender-disp"></div>
+        <button onclick="clearCustomer()" class="text-brand-textmuted hover:text-red-500 transition"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+</div>
+
+<!-- STEP 2: Service -->
+<div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6 opacity-50 pointer-events-none" id="step-2">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="step-dot pending text-sm">2</div>
+        <div><h2 class="font-serif text-lg">Dich Vu</h2><p class="text-xs text-brand-textmuted">Chon dich vu can thuc hien</p></div>
+    </div>
+    <div class="grid grid-cols-2 gap-3" id="service-list"></div>
+    <div id="svc-selected-info" class="hidden mt-3 p-3 bg-brand-gold/5 border border-brand-gold/30 rounded-xl">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-brand-gold/10 flex items-center justify-center"><i data-lucide="sparkles" class="w-5 h-5 text-brand-gold"></i></div>
+            <div>
+                <p class="font-medium text-sm" id="svc-name-disp">—</p>
+                <p class="text-xs text-brand-textmuted"><span id="svc-dur-disp">—</span> phut · <span id="svc-price-disp">—</span></p>
+            </div>
+            <div class="ml-auto text-xs" id="svc-gender-req"></div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 3: Date & Time -->
+<div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6 opacity-50 pointer-events-none" id="step-3">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="step-dot pending text-sm">3</div>
+        <div><h2 class="font-serif text-lg">Ngay & Gio</h2><p class="text-xs text-brand-textmuted">Chon thoi diem dat lich</p></div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-5">
+        <div>
+            <label class="fl">Ngay</label>
+            <input type="date" class="fi" id="inp-date" onchange="loadTimeSlots()">
+        </div>
+        <div>
+            <label class="fl">Thoi Luong (phut)</label>
+            <input type="number" class="fi" id="inp-dur" value="60" min="30" step="30" readonly style="background:#FAF9F6">
+        </div>
+    </div>
+    <label class="fl mb-3">Chon Khung Gio</label>
+    <div class="grid grid-cols-6 gap-2" id="time-slots"></div>
+</div>
+
+<!-- STEP 4: Staff -->
+<div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6 opacity-50 pointer-events-none" id="step-4">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="step-dot pending text-sm">4</div>
+        <div>
+            <h2 class="font-serif text-lg">Nhan Vien</h2>
+            <p class="text-xs text-brand-textmuted">Kiem tra: co ky nang · dang trong ca lam · khong nghi giai lao</p>
+        </div>
+    </div>
+    <!-- Validation legend -->
+    <div class="flex flex-wrap gap-3 mb-4 text-xs">
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-green-400"></span> San sang</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-400"></span> Dang ban</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span> Nghi giai lao</div>
+        <div class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-gray-300"></span> Nghi / Ngoai ca</div>
+    </div>
+    <div class="space-y-2" id="staff-list"></div>
+    <p class="text-xs text-brand-gold mt-3 flex items-center gap-1.5" id="staff-filter-note">
+        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+        Hien thi nhan vien co ky nang phu hop voi dich vu va trong ca lam.
+    </p>
+</div>
+
+<!-- STEP 5: Room & Bed -->
+<div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6 opacity-50 pointer-events-none" id="step-5">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="step-dot pending text-sm">5</div>
+        <div>
+            <h2 class="font-serif text-lg">Phong & Giuong</h2>
+            <p class="text-xs text-brand-textmuted">Kiem tra: phong ho tro dich vu · dung gioi tinh · co giuong trong</p>
+        </div>
+    </div>
+    <!-- Filter note -->
+    <div class="mb-4 p-3 bg-brand-ivory rounded-xl border border-brand-cream text-xs text-brand-textmuted flex items-start gap-2" id="room-filter-note">
+        <i data-lucide="info" class="w-4 h-4 text-brand-gold flex-shrink-0 mt-0.5"></i>
+        <span>Chi hien thi phong phu hop: <strong>dich vu duoc ho tro</strong> + <strong>dung gioi tinh khach</strong> + <strong>co it nhat 1 giuong trong</strong>.</span>
+    </div>
+    <div class="space-y-3" id="room-list"></div>
+</div>
+
+<!-- STEP 6: Confirm -->
+<div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-6 opacity-50 pointer-events-none" id="step-6">
+    <div class="flex items-center gap-3 mb-5">
+        <div class="step-dot pending text-sm">6</div>
+        <div><h2 class="font-serif text-lg">Xac Nhan Booking</h2><p class="text-xs text-brand-textmuted">Kiem tra lai truoc khi luu</p></div>
+    </div>
+
+    <!-- Validation summary -->
+    <div class="space-y-2 mb-5" id="validation-summary"></div>
+
+    <!-- Booking summary card -->
+    <div class="bg-brand-ivory rounded-2xl p-5 space-y-3" id="booking-summary-card">
+        <div class="flex items-center justify-between text-sm">
+            <span class="text-brand-textmuted">Khach hang:</span>
+            <span class="font-medium" id="sum-cust">—</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+            <span class="text-brand-textmuted">Dich vu:</span>
+            <span class="font-medium" id="sum-svc">—</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+            <span class="text-brand-textmuted">Thoi gian:</span>
+            <span class="font-medium" id="sum-time">—</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+            <span class="text-brand-textmuted">Nhan vien:</span>
+            <span class="font-medium" id="sum-staff">—</span>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+            <span class="text-brand-textmuted">Phong / Giuong:</span>
+            <span class="font-medium" id="sum-room">—</span>
+        </div>
+        <div class="border-t border-brand-cream pt-3 flex items-center justify-between">
+            <span class="font-medium">Tong tien:</span>
+            <span class="font-serif text-xl text-brand-gold" id="sum-price">—</span>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <label class="fl">Ghi Chu</label>
+        <textarea class="fi" rows="2" placeholder="Yeu cau dac biet, di ung, ghi chu suc khoe..."></textarea>
+    </div>
+</div>
+
+</div><!-- /col-span-2 -->
+
+<!-- ── SIDEBAR ──────────────────────────────────── -->
+<div class="sticky top-32 self-start space-y-5">
+
+    <!-- Progress card -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+        <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-4">Tien Do</p>
+        <div class="space-y-3" id="progress-list">
+            <div class="flex items-center gap-3 text-sm" id="prog-1">
+                <div class="w-5 h-5 rounded-full bg-brand-cream flex items-center justify-center flex-shrink-0"><i data-lucide="circle" class="w-3 h-3 text-brand-textmuted"></i></div>
+                <span class="text-brand-textmuted">Khach hang</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm" id="prog-2">
+                <div class="w-5 h-5 rounded-full bg-brand-cream flex items-center justify-center flex-shrink-0"><i data-lucide="circle" class="w-3 h-3 text-brand-textmuted"></i></div>
+                <span class="text-brand-textmuted">Dich vu</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm" id="prog-3">
+                <div class="w-5 h-5 rounded-full bg-brand-cream flex items-center justify-center flex-shrink-0"><i data-lucide="circle" class="w-3 h-3 text-brand-textmuted"></i></div>
+                <span class="text-brand-textmuted">Ngay & Gio</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm" id="prog-4">
+                <div class="w-5 h-5 rounded-full bg-brand-cream flex items-center justify-center flex-shrink-0"><i data-lucide="circle" class="w-3 h-3 text-brand-textmuted"></i></div>
+                <span class="text-brand-textmuted">Nhan vien</span>
+            </div>
+            <div class="flex items-center gap-3 text-sm" id="prog-5">
+                <div class="w-5 h-5 rounded-full bg-brand-cream flex items-center justify-center flex-shrink-0"><i data-lucide="circle" class="w-3 h-3 text-brand-textmuted"></i></div>
+                <span class="text-brand-textmuted">Phong & Giuong</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Validation checks -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5">
+        <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-3">Kiem Tra Tự Dong</p>
+        <div class="space-y-2" id="live-checks">
+            <div class="flex items-center gap-2 text-xs text-brand-textmuted"><i data-lucide="clock" class="w-3.5 h-3.5"></i> Cho chon dich vu...</div>
+        </div>
+    </div>
+
+    <!-- Quick summary -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 p-5" id="quick-summary">
+        <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-3">Tom Tat</p>
+        <div class="space-y-2 text-sm text-brand-textmuted" id="qs-content">
+            <p class="italic text-xs">Chua co thong tin nao.</p>
+        </div>
+    </div>
+</div>
+
+</div><!-- /grid -->
+
+<script>
+lucide.createIcons();
+
+/* ═══════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════ */
+const CUSTOMERS = [
+    { id:1, name:'Nguyen Thi Hoa',  phone:'0901 234 567', gender:'female', visits:12, membership:'Gold'    },
+    { id:2, name:'Tran Van Nam',    phone:'0912 345 678', gender:'male',   visits:5,  membership:'Silver'  },
+    { id:3, name:'Le Thu Ha',       phone:'0923 456 789', gender:'female', visits:3,  membership:'Basic'   },
+    { id:4, name:'Pham Minh Duc',   phone:'0934 567 890', gender:'male',   visits:20, membership:'Platinum'},
+    { id:5, name:'Vo Thi Lan',      phone:'0945 678 901', gender:'female', visits:8,  membership:'Gold'    },
+];
+
+const SERVICES = [
+    { id:1,  name:'Swedish Massage',       cat:'Massage',   duration:60,  price:450000, genderReq:'any',    skillRequired:'massage'  },
+    { id:2,  name:'Deep Tissue Massage',   cat:'Massage',   duration:90,  price:650000, genderReq:'any',    skillRequired:'massage'  },
+    { id:3,  name:'Hot Stone Massage',     cat:'Massage',   duration:75,  price:550000, genderReq:'any',    skillRequired:'stone'    },
+    { id:4,  name:'HydraFacial',           cat:'Facial',    duration:60,  price:750000, genderReq:'any',    skillRequired:'facial'   },
+    { id:5,  name:'LED Light Therapy',     cat:'Facial',    duration:45,  price:400000, genderReq:'female', skillRequired:'facial'   },
+    { id:6,  name:'Body Scrub',            cat:'Body',      duration:60,  price:500000, genderReq:'any',    skillRequired:'body'     },
+    { id:7,  name:'Couple Massage',        cat:'Massage',   duration:90,  price:1200000,genderReq:'any',    skillRequired:'massage'  },
+    { id:8,  name:'Lava Shell Facial',     cat:'Facial',    duration:75,  price:680000, genderReq:'female', skillRequired:'facial'   },
+];
+
+const STAFF = [
+    { id:1, name:'Minh Phuong',  skills:['massage','stone'],       shift:{start:'08:00',end:'17:00'}, status:'working',   currentEnd:'11:30', gender:'female' },
+    { id:2, name:'Thanh Hang',   skills:['facial','body'],         shift:{start:'08:00',end:'17:00'}, status:'working',   currentEnd:'12:00', gender:'female' },
+    { id:3, name:'Lan Huong',    skills:['massage','body'],        shift:{start:'08:00',end:'17:00'}, status:'break',     breakEnd:'10:30',   gender:'female' },
+    { id:4, name:'Nam Quan',     skills:['massage','stone','body'],shift:{start:'08:00',end:'17:00'}, status:'available',                     gender:'male'   },
+    { id:5, name:'Kim Anh',      skills:['facial'],                shift:{start:'10:00',end:'19:00'}, status:'working',   currentEnd:'11:00', gender:'female' },
+    { id:6, name:'Duc Thanh',    skills:['massage','body'],        shift:{start:'14:00',end:'22:00'}, status:'off',                           gender:'male'   },
+    { id:7, name:'Thu Hien',     skills:['facial','body'],         shift:{start:'08:00',end:'17:00'}, status:'available',                     gender:'female' },
+    { id:8, name:'Van Long',     skills:['massage','stone'],       shift:{start:'10:00',end:'19:00'}, status:'available',                     gender:'male'   },
+];
+
+const ROOMS = [
+    {
+        id:'R01', name:'Phong 01', floor:1, type:'Standard', gender:'female',
+        services:['massage','body'],
+        beds:[
+            {id:'R01-B1', name:'Giuong A', type:'standard', status:'occupied'},
+            {id:'R01-B2', name:'Giuong B', type:'standard', status:'available'},
+        ]
+    },
+    {
+        id:'R02', name:'Phong 02', floor:1, type:'Deluxe', gender:'female',
+        services:['facial','massage'],
+        beds:[
+            {id:'R02-B1', name:'Giuong A', type:'deluxe', status:'available'},
+            {id:'R02-B2', name:'Giuong B', type:'deluxe', status:'available'},
+        ]
+    },
+    {
+        id:'R03', name:'Phong 03', floor:1, type:'Standard', gender:'female',
+        services:['massage'],
+        beds:[
+            {id:'R03-B1', name:'Giuong A', type:'standard', status:'occupied'},
+        ]
+    },
+    {
+        id:'R04', name:'Phong 04', floor:2, type:'Standard', gender:'male',
+        services:['massage','body'],
+        beds:[
+            {id:'R04-B1', name:'Giuong A', type:'standard', status:'occupied'},
+            {id:'R04-B2', name:'Giuong B', type:'standard', status:'available'},
+        ]
+    },
+    {
+        id:'R05', name:'Phong 05 VIP', floor:2, type:'VIP', gender:'unisex',
+        services:['facial','massage','body'],
+        beds:[
+            {id:'R05-B1', name:'Giuong VIP 1', type:'vip', status:'available'},
+            {id:'R05-B2', name:'Giuong VIP 2', type:'vip', status:'available'},
+        ]
+    },
+    {
+        id:'R06', name:'Phong 06', floor:2, type:'Deluxe', gender:'female',
+        services:['facial','body'],
+        beds:[
+            {id:'R06-B1', name:'Giuong A', type:'deluxe', status:'occupied'},
+            {id:'R06-B2', name:'Giuong B', type:'deluxe', status:'available'},
+        ]
+    },
+    {
+        id:'R07', name:'Phong 07', floor:3, type:'Standard', gender:'unisex',
+        services:['massage','facial'],
+        beds:[
+            {id:'R07-B1', name:'Giuong A', type:'standard', status:'cleaning'},
+            {id:'R07-B2', name:'Giuong B', type:'standard', status:'cleaning'},
+        ]
+    },
+    {
+        id:'R08', name:'Phong 08', floor:3, type:'Deluxe', gender:'male',
+        services:['massage','body'],
+        beds:[
+            {id:'R08-B1', name:'Giuong A', type:'deluxe', status:'available'},
+            {id:'R08-B2', name:'Giuong B', type:'deluxe', status:'available'},
+        ]
+    },
+];
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+const sel = { customer:null, service:null, date:null, time:null, staff:null, room:null, bed:null };
+
+/* ═══════════════════════════════════════════
+   STEP HELPERS
+═══════════════════════════════════════════ */
+function unlockStep(n) {
+    const el = document.getElementById('step-' + n);
+    el.classList.remove('opacity-50','pointer-events-none');
+}
+function markStepDone(n) {
+    const sd = document.getElementById('sd-' + n);
+    if (sd) { sd.classList.remove('active','pending'); sd.classList.add('done'); sd.innerHTML = '✓'; }
+    if (n < 6) {
+        const sl = document.getElementById('sl-' + n);
+        if (sl) sl.classList.add('done');
+        const next = document.getElementById('sd-' + (n+1));
+        if (next) { next.classList.remove('pending'); next.classList.add('active'); }
+        unlockStep(n + 1);
+    }
+    updateProgress(n);
+    updateQuickSummary();
+}
+function updateProgress(n) {
+    const labels = ['Khach hang','Dich vu','Ngay & Gio','Nhan vien','Phong & Giuong'];
+    for (let i = 1; i <= 5; i++) {
+        const row = document.getElementById('prog-' + i);
+        if (!row) continue;
+        const dot = row.querySelector('div');
+        const txt = row.querySelector('span');
+        if (i < n) {
+            dot.className = 'w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0';
+            dot.innerHTML = '<i data-lucide="check" class="w-3 h-3 text-green-600"></i>';
+            txt.className = 'text-brand-textmain font-medium text-sm';
+        } else if (i === n) {
+            dot.className = 'w-5 h-5 rounded-full bg-brand-gold flex items-center justify-center flex-shrink-0';
+            dot.innerHTML = '<span class="w-2 h-2 rounded-full bg-white"></span>';
+            txt.className = 'text-brand-gold font-medium text-sm';
+        }
+    }
+    lucide.createIcons();
+}
+
+/* ═══════════════════════════════════════════
+   STEP 1 — CUSTOMER
+═══════════════════════════════════════════ */
+function searchCustomers(q) {
+    const res = document.getElementById('cust-results');
+    if (!q || q.length < 1) { res.innerHTML = ''; return; }
+    const found = CUSTOMERS.filter(c =>
+        c.name.toLowerCase().includes(q.toLowerCase()) ||
+        c.phone.includes(q)
+    );
+    res.innerHTML = found.length ? found.map(c => `
+        <div class="sel-card flex items-center gap-3 ${sel.customer?.id===c.id?'selected':''}" onclick="selectCustomer(${c.id})">
+            <div class="w-10 h-10 rounded-full bg-brand-rose flex items-center justify-center text-white text-sm font-serif flex-shrink-0">
+                ${c.name.split(' ').pop().charAt(0)}
+            </div>
+            <div class="flex-1">
+                <p class="font-medium text-sm">${c.name}</p>
+                <p class="text-xs text-brand-textmuted">${c.phone} · Da den ${c.visits} lan</p>
+            </div>
+            <div class="flex flex-col items-end gap-1">
+                <span class="text-xs ${c.gender==='female'?'bg-pink-50 text-pink-600':'bg-blue-50 text-blue-600'} px-2 py-0.5 rounded-full">
+                    ${c.gender==='female'?'Nu':'Nam'}
+                </span>
+                <span class="text-xs bg-brand-gold/10 text-brand-gold px-2 py-0.5 rounded-full">${c.membership}</span>
+            </div>
+        </div>
+    `).join('') : '<p class="text-sm text-brand-textmuted text-center py-3">Khong tim thay. Thu "Khach Moi".</p>';
+    lucide.createIcons();
+}
+
+function selectCustomer(id) {
+    sel.customer = CUSTOMERS.find(c => c.id === id);
+    document.getElementById('cust-search').value = '';
+    document.getElementById('cust-results').innerHTML = '';
+    document.getElementById('cust-selected').classList.remove('hidden');
+    document.getElementById('cust-avatar').textContent = sel.customer.name.split(' ').pop().charAt(0);
+    document.getElementById('cust-name-disp').textContent = sel.customer.name;
+    document.getElementById('cust-detail-disp').textContent = sel.customer.phone + ' · ' + sel.customer.membership;
+    document.getElementById('cust-gender-disp').innerHTML =
+        `<span class="text-xs ${sel.customer.gender==='female'?'bg-pink-50 text-pink-600':'bg-blue-50 text-blue-600'} px-2 py-0.5 rounded-full">${sel.customer.gender==='female'?'Nu':'Nam'}</span>`;
+    markStepDone(1);
+    loadServices();
+    updateLiveChecks();
+}
+
+function clearCustomer() {
+    sel.customer = null;
+    document.getElementById('cust-selected').classList.add('hidden');
+    document.getElementById('cust-search').value = '';
+}
+
+function showNewCustForm() {
+    alert('Mo form tao khach hang moi...');
+}
+
+/* ═══════════════════════════════════════════
+   STEP 2 — SERVICE
+═══════════════════════════════════════════ */
+function loadServices() {
+    const list = document.getElementById('service-list');
+    const cats = [...new Set(SERVICES.map(s => s.cat))];
+    list.innerHTML = '';
+
+    SERVICES.forEach(svc => {
+        // Grey out gender-incompatible services
+        const incompatible = svc.genderReq !== 'any' && sel.customer && svc.genderReq !== sel.customer.gender;
+        list.innerHTML += `
+            <div class="sel-card ${incompatible?'disabled':''} ${sel.service?.id===svc.id?'selected':''}"
+                onclick="${incompatible?'':'selectService('+svc.id+')'}" >
+                <div class="flex items-center justify-between mb-1">
+                    <p class="font-medium text-sm">${svc.name}</p>
+                    <span class="text-xs bg-brand-cream text-brand-textmuted px-2 py-0.5 rounded-full">${svc.cat}</span>
+                </div>
+                <div class="flex items-center gap-3 text-xs text-brand-textmuted">
+                    <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3"></i>${svc.duration} phut</span>
+                    <span class="flex items-center gap-1"><i data-lucide="banknote" class="w-3 h-3"></i>${svc.price.toLocaleString('vi')}đ</span>
+                    ${svc.genderReq!=='any'?`<span class="${svc.genderReq==='female'?'text-pink-500':'text-blue-500'}">${svc.genderReq==='female'?'Chi Nu':'Chi Nam'}</span>`:''}
+                </div>
+                ${incompatible?'<p class="text-xs text-red-400 mt-1">Khong phu hop gioi tinh</p>':''}
+            </div>
+        `;
+    });
+    lucide.createIcons();
+}
+
+function selectService(id) {
+    sel.service = SERVICES.find(s => s.id === id);
+    document.querySelectorAll('#service-list .sel-card').forEach(c => c.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    document.getElementById('svc-selected-info').classList.remove('hidden');
+    document.getElementById('svc-name-disp').textContent = sel.service.name;
+    document.getElementById('svc-dur-disp').textContent = sel.service.duration;
+    document.getElementById('svc-price-disp').textContent = sel.service.price.toLocaleString('vi') + 'd';
+    document.getElementById('svc-gender-req').innerHTML = sel.service.genderReq !== 'any'
+        ? `<span class="text-xs bg-pink-50 text-pink-600 px-2 py-0.5 rounded-full">Yeu cau: ${sel.service.genderReq==='female'?'Khach Nu':'Khach Nam'}</span>` : '';
+    document.getElementById('inp-dur').value = sel.service.duration;
+    markStepDone(2);
+    loadTimeSlots();
+    updateLiveChecks();
+}
+
+/* ═══════════════════════════════════════════
+   STEP 3 — DATE & TIME
+═══════════════════════════════════════════ */
+function loadTimeSlots() {
+    if (!sel.service) return;
+    // Set today as default
+    const di = document.getElementById('inp-date');
+    if (!di.value) {
+        const t = new Date(); t.setDate(t.getDate());
+        di.value = t.toISOString().split('T')[0];
+    }
+    sel.date = di.value;
+
+    const slots = ['08:00','08:30','09:00','09:30','10:00','10:30','11:00','11:30',
+                   '13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30',
+                   '17:00','17:30','18:00','18:30','19:00','19:30','20:00'];
+    // Simulate some blocked slots
+    const blocked = ['09:00','10:00','10:30','14:00'];
+    const grid = document.getElementById('time-slots');
+    grid.innerHTML = slots.map(t => `
+        <div class="tslot ${blocked.includes(t)?'blocked':''} ${sel.time===t?'selected':''}"
+             onclick="${blocked.includes(t)?'':'pickTime(\''+t+'\')'}">${t}</div>
+    `).join('');
+}
+
+function pickTime(t) {
+    sel.time = t;
+    document.querySelectorAll('.tslot').forEach(el => {
+        el.classList.remove('selected');
+        if (el.textContent.trim() === t) el.classList.add('selected');
+    });
+    markStepDone(3);
+    loadStaff();
+    updateLiveChecks();
+}
+
+/* ═══════════════════════════════════════════
+   STEP 4 — STAFF  (full validation)
+═══════════════════════════════════════════ */
+function isInShift(staff, time) {
+    if (!time) return false;
+    const [sh,sm] = staff.shift.start.split(':').map(Number);
+    const [eh,em] = staff.shift.end.split(':').map(Number);
+    const [th,tm] = time.split(':').map(Number);
+    const t = th*60+tm, s = sh*60+sm, e = eh*60+em;
+    return t >= s && t < e;
+}
+
+function loadStaff() {
+    if (!sel.service || !sel.time) return;
+    const skill = sel.service.skillRequired;
+    const list = document.getElementById('staff-list');
+    list.innerHTML = '';
+
+    STAFF.forEach(st => {
+        // ── Validation checks ──
+        const hasSkill  = st.skills.includes(skill);
+        const inShift   = isInShift(st, sel.time);
+        const onBreak   = st.status === 'break';
+        const isBusy    = st.status === 'working';
+        const isOff     = st.status === 'off' || !inShift;
+
+        const canAssign = hasSkill && inShift && !onBreak && !isBusy;
+
+        // Build check badges
+        const checks = [
+            { ok: hasSkill,  label: hasSkill  ? 'Co ky nang: '+skill     : 'Khong co ky nang: '+skill     },
+            { ok: inShift,   label: inShift   ? 'Trong ca lam ('+st.shift.start+'–'+st.shift.end+')' : 'Ngoai ca ('+st.shift.start+'–'+st.shift.end+')' },
+            { ok: !onBreak,  label: onBreak   ? 'Dang nghi giai lao (den '+st.breakEnd+')' : 'Khong nghi giai lao' },
+            { ok: !isBusy,   label: isBusy    ? 'Dang phuc vu khach (xong '+st.currentEnd+')' : 'San sang nhan viec' },
+        ];
+
+        const statusColors = { available:'pill-ok', working:'pill-busy', break:'pill-break', off:'pill-off' };
+        const statusText   = { available:'San sang', working:'Dang ban', break:'Nghi giai lao', off:'Nghi/Ngoai ca' };
+
+        list.innerHTML += `
+            <div class="sel-card ${canAssign?'':'opacity-50'} ${sel.staff?.id===st.id?'selected':''}"
+                 onclick="${canAssign?'selectStaff('+st.id+')':'showBlockedReason('+st.id+')'}" >
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-brand-rose flex items-center justify-center text-white text-sm font-serif flex-shrink-0">
+                        ${st.name.charAt(0)}
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between mb-1">
+                            <p class="font-medium text-sm">${st.name}</p>
+                            <span class="text-xs px-2 py-0.5 rounded-full font-medium ${statusColors[st.status]}">${statusText[st.status]}</span>
+                        </div>
+                        <p class="text-xs text-brand-textmuted mb-2">Ca: ${st.shift.start} – ${st.shift.end}</p>
+                        <!-- Check list -->
+                        <div class="flex flex-wrap gap-1.5">
+                            ${checks.map(c => `
+                                <span class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${c.ok?'bg-green-50 text-green-700':'bg-red-50 text-red-600'}">
+                                    ${c.ok?'✓':'✗'} ${c.label}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ${canAssign?`<div class="w-5 h-5 rounded-full border-2 border-brand-cream flex items-center justify-center flex-shrink-0 mt-1 ${sel.staff?.id===st.id?'bg-brand-gold border-brand-gold':''}">${sel.staff?.id===st.id?'<span class="text-white text-xs">✓</span>':''}</div>`:''}
+                </div>
+            </div>
+        `;
+    });
+    lucide.createIcons();
+}
+
+function selectStaff(id) {
+    sel.staff = STAFF.find(s => s.id === id);
+    // Re-render to update selection state
+    loadStaff();
+    markStepDone(4);
+    loadRooms();
+    updateLiveChecks();
+}
+
+function showBlockedReason(id) {
+    const st = STAFF.find(s => s.id === id);
+    const msgs = [];
+    if (!st.skills.includes(sel.service?.skillRequired)) msgs.push('Khong co ky nang ' + sel.service?.skillRequired);
+    if (!isInShift(st, sel.time)) msgs.push('Ngoai ca lam viec');
+    if (st.status === 'break') msgs.push('Dang nghi giai lao den ' + st.breakEnd);
+    if (st.status === 'working') msgs.push('Dang phuc vu khach khac, xong luc ' + st.currentEnd);
+    alert('Ly do khong the chon ' + st.name + ':\n- ' + msgs.join('\n- '));
+}
+
+/* ═══════════════════════════════════════════
+   STEP 5 — ROOM & BED  (full validation)
+═══════════════════════════════════════════ */
+function roomGenderOk(room, customer) {
+    if (!customer) return false;
+    if (room.gender === 'unisex') return true;
+    return room.gender === customer.gender;
+}
+
+function roomServiceOk(room, service) {
+    if (!service) return false;
+    return room.services.includes(service.skillRequired);
+}
+
+function loadRooms() {
+    if (!sel.service || !sel.customer) return;
+    const list = document.getElementById('room-list');
+    list.innerHTML = '';
+
+    ROOMS.forEach(room => {
+        const svcOk    = roomServiceOk(room, sel.service);
+        const genderOk = roomGenderOk(room, sel.customer);
+        const freeBeds = room.beds.filter(b => b.status === 'available');
+        const hasBed   = freeBeds.length > 0;
+        const ok       = svcOk && genderOk && hasBed;
+
+        const bedEmojis = { standard:'🛏', deluxe:'🛁', vip:'✨', couple:'💑' };
+
+        const reasonsFail = [];
+        if (!svcOk)    reasonsFail.push('Phong khong ho tro dich vu ' + sel.service.skillRequired);
+        if (!genderOk) reasonsFail.push('Gioi tinh khach (' + (sel.customer.gender==='female'?'Nu':'Nam') + ') khong khop phong (' + room.gender + ')');
+        if (!hasBed)   reasonsFail.push('Khong con giuong trong');
+
+        list.innerHTML += `
+            <div class="sel-card ${!ok?'opacity-40 cursor-not-allowed':''}  ${sel.room?.id===room.id?'selected':''}">
+                <div class="flex items-start justify-between mb-3">
+                    <div>
+                        <p class="font-medium">${room.name}</p>
+                        <p class="text-xs text-brand-textmuted">Tang ${room.floor} · ${room.type}</p>
+                    </div>
+                    <div class="flex flex-col items-end gap-1">
+                        <span class="text-xs ${room.gender==='female'?'bg-pink-50 text-pink-600':room.gender==='male'?'bg-blue-50 text-blue-600':'bg-purple-50 text-purple-600'} px-2 py-0.5 rounded-full">
+                            ${room.gender==='female'?'Nu':room.gender==='male'?'Nam':'Nam/Nu'}
+                        </span>
+                    </div>
+                </div>
+                <!-- Validation badges -->
+                <div class="flex flex-wrap gap-1.5 mb-3">
+                    <span class="text-xs px-2 py-0.5 rounded-full ${svcOk?'bg-green-50 text-green-700':'bg-red-50 text-red-600'}">
+                        ${svcOk?'✓':'✗'} Ho tro ${sel.service?.skillRequired}
+                    </span>
+                    <span class="text-xs px-2 py-0.5 rounded-full ${genderOk?'bg-green-50 text-green-700':'bg-red-50 text-red-600'}">
+                        ${genderOk?'✓':'✗'} Gioi tinh phu hop
+                    </span>
+                    <span class="text-xs px-2 py-0.5 rounded-full ${hasBed?'bg-green-50 text-green-700':'bg-red-50 text-red-600'}">
+                        ${hasBed?'✓ '+freeBeds.length+' giuong trong':'✗ Het giuong'}
+                    </span>
+                </div>
+                ${!ok ? `<p class="text-xs text-red-500">${reasonsFail[0]}</p>` : `
+                <!-- Bed selection -->
+                <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-2">Chon Giuong</p>
+                <div class="flex gap-2 flex-wrap">
+                    ${room.beds.map(b => `
+                        <div class="bed-sel ${b.status} ${sel.bed?.id===b.id?'selected':''}"
+                             onclick="${b.status==='available'?'selectBed(\''+room.id+'\',\''+b.id+'\')':''}">
+                            <span class="text-2xl">${bedEmojis[b.type]||'🛏'}</span>
+                            <span class="text-xs font-medium" style="color:inherit">${b.name.replace('Giuong ','')}</span>
+                            <span class="text-xs" style="color:inherit">${b.status==='available'?'Trong':b.status==='occupied'?'Co khach':'Don dep'}</span>
+                        </div>
+                    `).join('')}
+                </div>`}
+            </div>
+        `;
+    });
+    lucide.createIcons();
+}
+
+function selectBed(roomId, bedId) {
+    sel.room = ROOMS.find(r => r.id === roomId);
+    sel.bed  = sel.room.beds.find(b => b.id === bedId);
+    loadRooms(); // re-render to show selection
+    markStepDone(5);
+    buildConfirmStep();
+    updateLiveChecks();
+}
+
+/* ═══════════════════════════════════════════
+   STEP 6 — CONFIRM
+═══════════════════════════════════════════ */
+function buildConfirmStep() {
+    if (!sel.customer || !sel.service || !sel.time || !sel.staff || !sel.room || !sel.bed) return;
+
+    // Final validation summary
+    const checks = [
+        { ok: true,  msg: 'Khach hang: ' + sel.customer.name                          },
+        { ok: true,  msg: 'Dich vu phu hop gioi tinh khach'                           },
+        { ok: true,  msg: 'Nhan vien co ky nang "' + sel.service.skillRequired + '"'   },
+        { ok: true,  msg: 'Nhan vien trong ca lam (' + sel.staff.shift.start + '–' + sel.staff.shift.end + ')' },
+        { ok: sel.staff.status !== 'break',  msg: sel.staff.status==='break' ? 'CANH BAO: NV dang nghi giai lao' : 'Nhan vien san sang' },
+        { ok: true,  msg: 'Phong ho tro dich vu'                                      },
+        { ok: true,  msg: 'Gioi tinh phong phu hop: ' + sel.room.gender               },
+        { ok: true,  msg: sel.bed.name + ' con trong'                                 },
+    ];
+
+    document.getElementById('validation-summary').innerHTML = checks.map(c => `
+        <div class="vbadge ${c.ok?'ok':'warn'}">
+            <span>${c.ok?'✓':'⚠'}</span> ${c.msg}
+        </div>
+    `).join('');
+
+    // Summary card
+    const endHour = (() => {
+        const [h,m] = sel.time.split(':').map(Number);
+        const total = h*60 + m + sel.service.duration;
+        return String(Math.floor(total/60)).padStart(2,'0') + ':' + String(total%60).padStart(2,'0');
+    })();
+    document.getElementById('sum-cust').textContent  = sel.customer.name;
+    document.getElementById('sum-svc').textContent   = sel.service.name + ' (' + sel.service.duration + ' phut)';
+    document.getElementById('sum-time').textContent  = sel.date + ' · ' + sel.time + ' – ' + endHour;
+    document.getElementById('sum-staff').textContent = sel.staff.name;
+    document.getElementById('sum-room').textContent  = sel.room.name + ' / ' + sel.bed.name;
+    document.getElementById('sum-price').textContent = sel.service.price.toLocaleString('vi') + 'đ';
+
+    // Enable confirm button
+    const btn = document.getElementById('btn-confirm');
+    btn.disabled = false;
+    btn.classList.remove('opacity-40','cursor-not-allowed');
+    lucide.createIcons();
+}
+
+function confirmBooking() {
+    alert('Booking da duoc xac nhan!\n\n' +
+          'Khach: ' + sel.customer.name + '\n' +
+          'Dich vu: ' + sel.service.name + '\n' +
+          'Thoi gian: ' + sel.time + ' · ' + sel.date + '\n' +
+          'Nhan vien: ' + sel.staff.name + '\n' +
+          'Phong/Giuong: ' + sel.room.name + ' / ' + sel.bed.name);
+    window.location.href = 'chi-tiet-booking.html';
+}
+
+/* ═══════════════════════════════════════════
+   LIVE CHECKS (sidebar)
+═══════════════════════════════════════════ */
+function updateLiveChecks() {
+    const checks = [];
+    if (sel.customer) checks.push({ ok:true,  msg:'Khach: ' + sel.customer.name + ' (' + (sel.customer.gender==='female'?'Nu':'Nam') + ')' });
+    if (sel.service)  checks.push({ ok:true,  msg:'Dich vu: ' + sel.service.name + ', can ky nang "' + sel.service.skillRequired + '"' });
+    if (sel.service && sel.customer && sel.service.genderReq !== 'any') {
+        const match = sel.service.genderReq === sel.customer.gender;
+        checks.push({ ok:match, msg: match ? 'Gioi tinh dich vu phu hop' : 'CANH BAO: Dich vu nay chi danh cho ' + sel.service.genderReq });
+    }
+    if (sel.time)     checks.push({ ok:true,  msg:'Gio dat: ' + sel.time });
+    if (sel.staff)    checks.push({
+        ok: sel.staff.status !== 'break',
+        msg: sel.staff.status === 'break'
+            ? 'NV ' + sel.staff.name + ' dang nghi giai lao!'
+            : 'NV ' + sel.staff.name + ' san sang'
+    });
+    if (sel.room)     checks.push({ ok:true,  msg:'Phong: ' + sel.room.name + ' (' + sel.room.gender + ')' });
+    if (sel.bed)      checks.push({ ok:true,  msg:'Giuong: ' + sel.bed.name + ' — trong' });
+
+    if (checks.length === 0) {
+        document.getElementById('live-checks').innerHTML = '<div class="flex items-center gap-2 text-xs text-brand-textmuted"><i data-lucide="clock" class="w-3.5 h-3.5"></i> Cho chon dich vu...</div>';
+    } else {
+        document.getElementById('live-checks').innerHTML = checks.map(c => `
+            <div class="flex items-start gap-2 text-xs ${c.ok?'text-green-700':'text-red-600'}">
+                <span class="flex-shrink-0">${c.ok?'✓':'✗'}</span> ${c.msg}
+            </div>
+        `).join('');
+    }
+    lucide.createIcons();
+}
+
+function updateQuickSummary() {
+    const parts = [];
+    if (sel.customer) parts.push('<span class="text-brand-textmain font-medium">' + sel.customer.name + '</span>');
+    if (sel.service)  parts.push(sel.service.name + ' · ' + sel.service.duration + ' phut');
+    if (sel.time)     parts.push(sel.time + (sel.date ? ' · ' + sel.date : ''));
+    if (sel.staff)    parts.push('NV: ' + sel.staff.name);
+    if (sel.room)     parts.push(sel.room.name + ' / ' + (sel.bed?.name || '—'));
+    document.getElementById('qs-content').innerHTML = parts.length
+        ? parts.map(p => `<div class="flex items-center gap-2 text-sm">${p}</div>`).join('')
+        : '<p class="italic text-xs text-brand-textmuted">Chua co thong tin nao.</p>';
+}
+
+/* ── Init ─────────────────────────────────── */
+// Pre-fill date to today
+const todayStr = new Date().toISOString().split('T')[0];
+document.getElementById('inp-date').value = todayStr;
+searchCustomers('');
+</script>
+</div><!-- /scroll -->
+</div><!-- /flex-1 col -->
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'tao-booking' });</script>
+</body>
+</html>

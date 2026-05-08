@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA | Theo Dõi Liệu Trình</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brand:{ivory:'#FAF9F6',cream:'#F4EFEA',gold:'#C9A87C',goldhover:'#B5956A',rose:'#D9B8B5',lavender:'#DCD6DD',textmain:'#4A443E',textmuted:'#8B837C'} },
+                    fontFamily: { serif:['Cinzel','serif'], sans:['Jost','sans-serif'] },
+                    boxShadow: { soft:'0 10px 40px -10px rgba(74,68,62,.08)' }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#FAF9F6}::-webkit-scrollbar-thumb{background:#D9B8B5;border-radius:10px}
+        .progress-bar-bg{background:#F4EFEA;border-radius:6px;height:8px;overflow:hidden}
+        .progress-bar-fill{height:100%;border-radius:6px;transition:width .5s}
+        .session-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0}
+        .dot-done{background:#C9A87C;color:#fff}
+        .dot-remaining{background:#F4EFEA;color:#8B837C;border:1.5px dashed #D9B8B5}
+        .dot-over{background:#fee2e2;color:#ef4444;border:1.5px solid #fca5a5}
+        .row-hover:hover{background:#FAF9F6}
+        .status-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:14px;font-size:11px;font-weight:500}
+        .filter-tab{padding:5px 14px;border-radius:18px;font-size:12px;border:1px solid;cursor:pointer;transition:all .15s}
+        .tab-on{border-color:#C9A87C;background:rgba(201,168,124,.1);color:#C9A87C;font-weight:500}
+        .tab-off{border-color:#F4EFEA;color:#8B837C}
+        .tab-off:hover{border-color:#C9A87C;color:#C9A87C}
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden">
+
+<div id="sidebar-root"></div>
+<div class="flex-1 flex flex-col h-screen overflow-hidden">
+
+<!-- Header -->
+<header class="bg-white border-b border-brand-cream px-8 py-4 flex items-center justify-between z-20 flex-shrink-0">
+    <div class="flex items-center gap-3">
+        <i data-lucide="layers" class="text-brand-gold w-5 h-5" stroke-width="1.5"></i>
+        <h1 class="font-serif text-xl">Theo Dõi Liệu Trình & Combo</h1>
+        <span class="text-xs bg-brand-cream text-brand-textmuted px-2.5 py-1 rounded-full" id="total-count">— liệu trình</span>
+    </div>
+    <div class="flex items-center gap-3">
+        <div class="relative">
+            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-brand-textmuted"></i>
+            <input type="text" placeholder="Tìm khách, dịch vụ..." oninput="doSearch(this.value)"
+                class="border border-brand-cream rounded-xl pl-9 pr-4 py-2 text-sm bg-brand-ivory focus:outline-none focus:border-brand-gold w-56">
+        </div>
+        <button onclick="openAddModal()" class="bg-brand-gold hover:bg-brand-goldhover text-white px-4 py-2 rounded-full text-sm font-medium flex items-center gap-1.5 transition">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm combo mới
+        </button>
+    </div>
+</header>
+<!-- Legend strip -->
+<div class="bg-white border-b border-brand-cream px-8 py-2.5 flex items-center gap-5 text-xs flex-shrink-0">
+    <span class="text-brand-textmuted font-medium">Loại:</span>
+    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-brand-gold inline-block"></span><span class="font-medium text-brand-textmain">A · Combo Buổi</span> — 1 dịch vụ × nhiều lần (vd: 10 buổi triệt nách)</span>
+    <span class="text-brand-cream">|</span>
+    <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-brand-rose inline-block"></span><span class="font-medium text-brand-textmain">B · Gói Combo</span> — nhiều dịch vụ khác nhau trong 1 gói (vd: Gói Bridal)</span>
+</div>
+
+<div class="flex-1 overflow-y-auto">
+<div class="max-w-6xl mx-auto p-8 flex flex-col gap-5">
+
+    <!-- KPI row -->
+    <div class="grid grid-cols-4 gap-4">
+        <div class="bg-white rounded-2xl border border-brand-cream/50 shadow-soft p-4">
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Đang Hoạt Động</p>
+            <p class="text-2xl font-semibold text-brand-gold mt-1" id="kpi-active">—</p>
+            <p class="text-xs text-brand-textmuted">liệu trình</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-brand-cream/50 shadow-soft p-4">
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Gần Hết Buổi</p>
+            <p class="text-2xl font-semibold text-orange-500 mt-1" id="kpi-low">—</p>
+            <p class="text-xs text-brand-textmuted">≤ 2 buổi còn lại</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-brand-cream/50 shadow-soft p-4">
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Đã Hoàn Thành</p>
+            <p class="text-2xl font-semibold text-green-600 mt-1" id="kpi-done">—</p>
+            <p class="text-xs text-brand-textmuted">tháng này</p>
+        </div>
+        <div class="bg-white rounded-2xl border border-brand-cream/50 shadow-soft p-4">
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide">Dư Đơn Vị</p>
+            <p class="text-2xl font-semibold text-blue-600 mt-1" id="kpi-value">—</p>
+            <p class="text-xs text-brand-textmuted">giá trị chưa sử dụng</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="flex items-center gap-2 flex-wrap">
+        <button class="filter-tab tab-on" id="ftab-all" onclick="setFilter('all',this)">Tất cả</button>
+        <button class="filter-tab tab-off" id="ftab-active" onclick="setFilter('active',this)">Đang dùng</button>
+        <button class="filter-tab tab-off" id="ftab-low" onclick="setFilter('low',this)">Sắp hết</button>
+        <button class="filter-tab tab-off" id="ftab-done" onclick="setFilter('done',this)">Đã xong</button>
+        <button class="filter-tab tab-off" id="ftab-over" onclick="setFilter('over',this)">Vượt buổi</button>
+        <div class="ml-auto flex items-center gap-2 text-xs text-brand-textmuted">
+            <span>Dịch vụ:</span>
+            <select id="service-filter" class="border border-brand-cream rounded-lg px-2 py-1 text-xs bg-brand-ivory focus:outline-none focus:border-brand-gold" onchange="applyFilters()">
+                <option value="">Tất cả</option>
+                <option>Nách</option>
+                <option>Mặt</option>
+                <option>Chân</option>
+                <option>Tay</option>
+                <option>Lưng</option>
+                <option>Toàn thân</option>
+                <option>Mỹ phẩm</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main table -->
+    <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 overflow-hidden">
+
+        <!-- Table header -->
+        <div class="grid grid-cols-12 gap-2 px-5 py-3 text-xs text-brand-textmuted font-medium bg-brand-cream/30 border-b border-brand-cream">
+            <div class="col-span-1">Loại</div>
+            <div class="col-span-2">Khách hàng</div>
+            <div class="col-span-2">Liệu trình / Gói</div>
+            <div class="col-span-3">Tiến độ</div>
+            <div class="col-span-1 text-right">Đơn giá</div>
+            <div class="col-span-1 text-right">Còn lại</div>
+            <div class="col-span-1 text-center">Trạng thái</div>
+            <div class="col-span-1"></div>
+        </div>
+
+        <div id="lt-table-body" class="divide-y divide-brand-cream/60"></div>
+    </div>
+
+</div>
+</div>
+</div>
+
+<!-- Detail modal -->
+<div id="modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between p-6 border-b border-brand-cream">
+            <div>
+                <p class="font-medium text-base" id="modal-name">—</p>
+                <p class="text-sm text-brand-textmuted" id="modal-sub">—</p>
+            </div>
+            <button onclick="closeModal()" class="p-2 rounded-lg hover:bg-brand-cream transition">
+                <i data-lucide="x" class="w-4 h-4 text-brand-textmuted"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <!-- Progress bar -->
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-xs text-brand-textmuted">Tiến độ</span>
+                <span class="text-xs font-medium" id="modal-progress-label">—</span>
+            </div>
+            <div class="progress-bar-bg mb-6">
+                <div class="progress-bar-fill bg-brand-gold" id="modal-progress-bar" style="width:0%"></div>
+            </div>
+            <!-- Session dots -->
+            <p class="text-xs text-brand-textmuted uppercase tracking-wide mb-3">Lịch sử từng buổi</p>
+            <div id="modal-sessions" class="flex flex-wrap gap-2 mb-6"></div>
+            <!-- Info grid -->
+            <div class="grid grid-cols-3 gap-3" id="modal-info"></div>
+            <!-- Action -->
+            <div class="mt-5 flex gap-3">
+                <button id="btn-record" onclick="recordSession()" class="flex-1 bg-brand-gold hover:bg-brand-goldhover text-white py-2.5 rounded-xl text-sm font-medium flex items-center justify-center gap-2 transition">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i> Ghi nhan buoi hom nay
+                </button>
+                <button class="px-4 border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold rounded-xl text-sm transition">
+                    Gia hạn / Mua thêm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Combo Modal -->
+<div id="add-modal" class="hidden fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 px-4">
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-xl max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between p-5 border-b border-brand-cream">
+            <p class="font-serif text-base">Them Combo Moi</p>
+            <button onclick="closeAddModal()" class="p-1.5 rounded-lg hover:bg-brand-cream transition">
+                <i data-lucide="x" class="w-4 h-4 text-brand-textmuted"></i>
+            </button>
+        </div>
+        <div class="p-5 flex flex-col gap-4">
+
+            <!-- Kind selector -->
+            <div>
+                <p class="text-xs text-brand-textmuted font-medium mb-2">Loai combo</p>
+                <div class="grid grid-cols-2 gap-3">
+                    <label class="flex items-start gap-3 p-3 rounded-xl border-2 border-brand-gold bg-brand-gold/5 cursor-pointer">
+                        <input type="radio" name="combo-kind" id="kind-session" value="session" checked
+                            onchange="toggleAddKind('session')" class="accent-brand-gold mt-0.5">
+                        <div>
+                            <p class="text-sm font-semibold">A — Combo Buoi</p>
+                            <p class="text-xs text-brand-textmuted">1 dich vu x nhieu lan (10 buoi nach, 5 buoi mat...)</p>
+                        </div>
+                    </label>
+                    <label class="flex items-start gap-3 p-3 rounded-xl border-2 border-brand-cream cursor-pointer hover:border-brand-rose transition">
+                        <input type="radio" name="combo-kind" id="kind-package" value="package"
+                            onchange="toggleAddKind('package')" class="accent-brand-gold mt-0.5">
+                        <div>
+                            <p class="text-sm font-semibold">B — Goi Combo</p>
+                            <p class="text-xs text-brand-textmuted">Nhieu dich vu khac nhau trong 1 goi (Goi Bridal...)</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Customer info (shared) -->
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="text-xs text-brand-textmuted block mb-1">Ten khach hang *</label>
+                    <input type="text" id="add-name" placeholder="Nguyen Thi A..."
+                        class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+                </div>
+                <div>
+                    <label class="text-xs text-brand-textmuted block mb-1">So dien thoai</label>
+                    <input type="text" id="add-phone" placeholder="0901 234 567"
+                        class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+                </div>
+                <div>
+                    <label class="text-xs text-brand-textmuted block mb-1">Ma khach (tu dong neu bo trong)</label>
+                    <input type="text" id="add-code" placeholder="26A04..."
+                        class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+                </div>
+            </div>
+
+            <!-- Section A: single service -->
+            <div id="section-session">
+                <p class="text-xs text-brand-textmuted font-medium mb-2">Thong tin combo buoi</p>
+                <div class="grid grid-cols-3 gap-3">
+                    <div>
+                        <label class="text-xs text-brand-textmuted block mb-1">Dich vu</label>
+                        <select id="add-service"
+                            class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+                            <option>Nach</option>
+                            <option>Mat</option>
+                            <option>Chan (dui)</option>
+                            <option>Chan (bap chan)</option>
+                            <option>Tay (canh tay)</option>
+                            <option>Lung</option>
+                            <option>Toan than</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-brand-textmuted block mb-1">So buoi</label>
+                        <input type="number" id="add-total" value="10" min="1"
+                            class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+                    </div>
+                    <div>
+                        <label class="text-xs text-brand-textmuted block mb-1">Don gia / buoi (VND)</label>
+                        <input type="number" id="add-price" value="200000" min="0"
+                            class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section B: package -->
+            <div id="section-package" class="hidden">
+                <div class="flex items-center justify-between mb-2">
+                    <p class="text-xs text-brand-textmuted font-medium">Cac dich vu trong goi</p>
+                    <button onclick="addPkgRow()" class="text-xs text-brand-gold hover:underline flex items-center gap-1">
+                        <i data-lucide="plus" class="w-3 h-3"></i> Them dich vu
+                    </button>
+                </div>
+                <div>
+                    <label class="text-xs text-brand-textmuted block mb-1">Ten goi</label>
+                    <input type="text" id="add-pkg-name" placeholder="Goi Bridal, Goi VIP..."
+                        class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory mb-3">
+                </div>
+                <div class="grid grid-cols-12 gap-2 text-xs text-brand-textmuted font-medium px-1 mb-1">
+                    <div class="col-span-4">Dich vu</div>
+                    <div class="col-span-3">So buoi</div>
+                    <div class="col-span-4">Don gia/buoi</div>
+                    <div class="col-span-1"></div>
+                </div>
+                <div id="pkg-rows" class="flex flex-col gap-2"></div>
+            </div>
+
+            <!-- Submit -->
+            <div class="flex gap-3 pt-2 border-t border-brand-cream">
+                <button onclick="submitAddForm()"
+                    class="flex-1 bg-brand-gold hover:bg-brand-goldhover text-white py-2.5 rounded-xl text-sm font-medium transition">
+                    Tao combo
+                </button>
+                <button onclick="closeAddModal()"
+                    class="px-5 border border-brand-cream text-brand-textmuted hover:border-brand-gold hover:text-brand-gold rounded-xl text-sm transition">
+                    Huy
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-8 right-8 bg-white border border-green-200 shadow-lg rounded-2xl px-5 py-4 flex items-center gap-3 z-50">
+    <div class="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+        <i data-lucide="check" class="w-4 h-4 text-green-600"></i>
+    </div>
+    <div>
+        <p class="text-sm font-medium text-green-700">Đã ghi nhận</p>
+        <p class="text-xs text-brand-textmuted" id="toast-msg">—</p>
+    </div>
+</div>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+// kind: "session" = Combo Buổi (1 dịch vụ × N lần)
+// kind: "package" = Gói Combo  (nhiều dịch vụ khác nhau gộp lại)
+
+// Mirrors LT sheet from 260413 NB顧客管理表 (2026) - H.xlsx
+const LT_DATA = [
+    // ── Loại A: Combo Buổi ─────────────────────────────────────────────────
+    { id:1,  kind:'session', code:'24D11001', name:'Tran Thi Thuy Hong', phone:'0904 505 288',
+      service:'Nach', total:10, done:8, unitPrice:200000,
+      sessions:['04/05','05/06','06/06','07/06','08/07','09/07','10/07','12/09',null,null] },
+    { id:2,  kind:'session', code:'24D11015', name:'Ta Diem Quynh', phone:'0903 456 789',
+      service:'Nach', total:5,  done:6, unitPrice:200000,
+      sessions:['04/05','05/06','06/06','07/06','08/07','09/07'] },
+    { id:3,  kind:'session', code:'25A04002', name:'Nguyen Thu Trang', phone:'0901 234 567',
+      service:'Mat', total:10, done:3, unitPrice:350000,
+      sessions:['01/02','03/03','02/04',null,null,null,null,null,null,null] },
+    { id:4,  kind:'session', code:'25A06003', name:'Le Thi Bich', phone:'0905 678 901',
+      service:'Chan (dui)', total:10, done:9, unitPrice:300000,
+      sessions:['06/06','07/06','08/06','09/06','10/06','11/07','12/07','01/08','03/09',null] },
+    { id:5,  kind:'session', code:'25B08004', name:'Hoang Minh Quan', phone:'0906 789 012',
+      service:'Lung', total:5, done:5, unitPrice:400000,
+      sessions:['08/08','09/08','10/09','11/10','12/11'] },
+    { id:6,  kind:'session', code:'25A10005', name:'Pham Thi Lan', phone:'0907 890 123',
+      service:'Toan than', total:5, done:2, unitPrice:1500000,
+      sessions:['10/10','11/11',null,null,null] },
+    { id:7,  kind:'session', code:'26A01006', name:'Vu Huong Giang', phone:'0908 901 234',
+      service:'Nach', total:10, done:1, unitPrice:200000,
+      sessions:['01/15',null,null,null,null,null,null,null,null,null] },
+    { id:8,  kind:'session', code:'26A02007', name:'Dinh Thi Ha', phone:'0909 012 345',
+      service:'Mat', total:10, done:10, unitPrice:350000,
+      sessions:['02/01','02/15','03/01','03/15','03/29','04/03','04/05','04/06','04/07','04/08'] },
+    { id:9,  kind:'session', code:'26A03008', name:'Ngo Thi Cuc', phone:'0910 123 456',
+      service:'Tay (canh tay)', total:5, done:4, unitPrice:250000,
+      sessions:['03/05','03/19','04/02','04/09',null] },
+    { id:10, kind:'session', code:'26A04009', name:'Bui Thi Thanh', phone:'0911 234 567',
+      service:'Chan (bap chan)', total:10, done:2, unitPrice:280000,
+      sessions:['04/07','04/11',null,null,null,null,null,null,null,null] },
+
+    // ── Loại B: Goi Combo (nhieu dich vu) ─────────────────────────────────
+    { id:11, kind:'package', code:'26A01010', name:'Nguyen Thi Hoa', phone:'0901 234 567',
+      packageName:'Goi Bridal',
+      items:[
+        { service:'Nach',    total:10, done:3, unitPrice:200000, sessions:['03/10','04/01','04/09',null,null,null,null,null,null,null] },
+        { service:'Chan (dui)',total:5,done:1, unitPrice:300000, sessions:['04/01',null,null,null,null] },
+        { service:'Mat',     total:3,  done:0, unitPrice:350000, sessions:[null,null,null] },
+      ]
+    },
+    { id:12, kind:'package', code:'25A08011', name:'Le Thu Ha', phone:'0902 345 678',
+      packageName:'Goi VIP Full Body',
+      items:[
+        { service:'Toan than', total:5, done:4, unitPrice:1500000, sessions:['09/01','10/05','11/10','12/15',null] },
+        { service:'Mat',       total:5, done:5, unitPrice:350000,  sessions:['09/01','10/05','11/10','12/15','01/20'] },
+        { service:'Tay (canh tay)', total:5, done:2, unitPrice:250000, sessions:['10/05','11/10',null,null,null] },
+      ]
+    },
+];
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function getComboTotals(lt) {
+    if (lt.kind === 'session') {
+        return { total: lt.total, done: lt.done, remainVal: Math.max(lt.total - lt.done, 0) * lt.unitPrice };
+    }
+    const total = lt.items.reduce((s, it) => s + it.total, 0);
+    const done  = lt.items.reduce((s, it) => s + it.done,  0);
+    const remainVal = lt.items.reduce((s, it) => s + Math.max(it.total - it.done, 0) * it.unitPrice, 0);
+    return { total, done, remainVal };
+}
+
+function getStatus(lt) {
+    const { total, done } = getComboTotals(lt);
+    if (done === total) return 'done';
+    if (done > total)  return 'over';
+    if (total - done <= 2) return 'low';
+    return 'active';
+}
+
+let filterStatus = 'all';
+let searchQ = '';
+
+function applyFilters() {
+    const svc = document.getElementById('service-filter').value;
+    let list = LT_DATA;
+    if (filterStatus !== 'all') list = list.filter(lt => getStatus(lt) === filterStatus);
+    if (svc) list = list.filter(lt =>
+        lt.kind === 'session' ? lt.service.includes(svc)
+        : lt.items.some(it => it.service.includes(svc))
+    );
+    if (searchQ) list = list.filter(lt =>
+        lt.name.toLowerCase().includes(searchQ) ||
+        lt.code.toLowerCase().includes(searchQ) ||
+        (lt.service||'').toLowerCase().includes(searchQ) ||
+        (lt.packageName||'').toLowerCase().includes(searchQ)
+    );
+    renderTable(list);
+}
+
+function setFilter(f, btn) {
+    filterStatus = f;
+    document.querySelectorAll('.filter-tab').forEach(b => { b.classList.remove('tab-on'); b.classList.add('tab-off'); });
+    btn.classList.add('tab-on'); btn.classList.remove('tab-off');
+    applyFilters();
+}
+
+function doSearch(v) { searchQ = v.toLowerCase(); applyFilters(); }
+
+// ─── RENDER TABLE ─────────────────────────────────────────────────────────────
+function renderTable(list) {
+    const STATUS_CFG = {
+        active:{ label:'Dang dung', cls:'bg-blue-50 text-blue-600' },
+        low:   { label:'Sap het',   cls:'bg-orange-50 text-orange-600' },
+        done:  { label:'Hoan thanh',cls:'bg-green-50 text-green-600' },
+        over:  { label:'Vuot buoi', cls:'bg-red-50 text-red-500' },
+    };
+    const body = document.getElementById('lt-table-body');
+    body.innerHTML = list.map(lt => {
+        const st = getStatus(lt);
+        const sc = STATUS_CFG[st];
+        const { total, done, remainVal } = getComboTotals(lt);
+        const pct = Math.min(done / total, 1) * 100;
+        const remaining = Math.max(total - done, 0);
+        const barColor = st==='over'?'bg-red-400':st==='done'?'bg-green-500':st==='low'?'bg-orange-400':'bg-brand-gold';
+        const isSession = lt.kind === 'session';
+        const kindBadge = isSession
+            ? `<span class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-brand-gold/10 text-brand-gold">A</span>`
+            : `<span class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-brand-rose/20 text-brand-rose">B</span>`;
+        const serviceLabel = isSession ? lt.service : lt.packageName;
+        const priceLabel   = isSession ? `${(lt.unitPrice/1000).toLocaleString('vi-VN')}k` : `${lt.items.length} DV`;
+
+        return `<div class="grid grid-cols-12 gap-2 px-5 py-3.5 items-center row-hover cursor-pointer" onclick="openDetail(${lt.id})">
+            <div class="col-span-1">${kindBadge}</div>
+            <div class="col-span-2">
+                <p class="text-sm font-medium">${lt.name}</p>
+                <p class="text-xs text-brand-textmuted">${lt.phone}</p>
+            </div>
+            <div class="col-span-2">
+                <p class="text-sm">${serviceLabel}</p>
+                <p class="text-xs text-brand-textmuted">${lt.code}</p>
+            </div>
+            <div class="col-span-3">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-xs font-medium">${done}</span>
+                    <span class="text-xs text-brand-textmuted">/${total} buoi</span>
+                    ${done > total ? `<span class="text-xs text-red-500">(+${done - total} du)</span>` : ''}
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill ${barColor}" style="width:${pct}%"></div>
+                </div>
+            </div>
+            <div class="col-span-1 text-right text-xs text-brand-textmuted">${priceLabel}</div>
+            <div class="col-span-1 text-right text-xs font-medium ${remaining===0?'text-green-600':'text-brand-textmain'}">${remaining > 0 ? (remainVal/1000).toLocaleString('vi-VN')+'k' : '—'}</div>
+            <div class="col-span-1 text-center"><span class="status-badge ${sc.cls}">${sc.label}</span></div>
+            <div class="col-span-1 flex justify-end">
+                <i data-lucide="chevron-right" class="w-4 h-4 text-brand-textmuted"></i>
+            </div>
+        </div>`;
+    }).join('') || '<div class="py-12 text-center text-brand-textmuted text-sm">Khong co lieu trinh nao</div>';
+    lucide.createIcons();
+    document.getElementById('total-count').textContent = list.length + ' lieu trinh';
+}
+
+// ─── KPIs ─────────────────────────────────────────────────────────────────────
+function renderKPIs() {
+    document.getElementById('kpi-active').textContent = LT_DATA.filter(lt => ['active','low'].includes(getStatus(lt))).length;
+    document.getElementById('kpi-low').textContent    = LT_DATA.filter(lt => getStatus(lt) === 'low').length;
+    document.getElementById('kpi-done').textContent   = LT_DATA.filter(lt => getStatus(lt) === 'done').length;
+    const totalUnused = LT_DATA.reduce((s, lt) => s + getComboTotals(lt).remainVal, 0);
+    document.getElementById('kpi-value').textContent  = (totalUnused/1e6).toFixed(1) + 'M';
+}
+
+// ─── DETAIL MODAL ─────────────────────────────────────────────────────────────
+let selectedId = null;
+
+function openDetail(id) {
+    selectedId = id;
+    const lt = LT_DATA.find(x => x.id === id);
+    if (!lt) return;
+    const st = getStatus(lt);
+    const { total, done, remainVal } = getComboTotals(lt);
+    const isSession = lt.kind === 'session';
+
+    document.getElementById('modal-name').textContent =
+        lt.name + ' — ' + (isSession ? lt.service : lt.packageName);
+    document.getElementById('modal-sub').textContent = lt.code + ' • ' + lt.phone +
+        (isSession ? '' : ' • Goi Combo (nhieu DV)');
+
+    const pct = Math.min(done / total, 1) * 100;
+    document.getElementById('modal-progress-bar').style.width = pct + '%';
+    document.getElementById('modal-progress-label').textContent =
+        `${done} / ${total} buoi (${pct.toFixed(0)}%)`;
+
+    // Session dots / per-service breakdown
+    let sessionHtml = '';
+    if (isSession) {
+        const totalDots = Math.max(lt.total, lt.done);
+        for (let i = 0; i < totalDots; i++) {
+            const date = lt.sessions[i];
+            if (i < lt.done) {
+                const cls = i >= lt.total ? 'dot-over' : 'dot-done';
+                sessionHtml += `<div class="session-dot ${cls}" title="Buoi ${i+1}${date?' ('+date+')':''}">${i+1}</div>`;
+            } else {
+                sessionHtml += `<div class="session-dot dot-remaining" title="Buoi ${i+1} — chua dung">${i+1}</div>`;
+            }
+        }
+    } else {
+        // Package: show each service as its own row with dots
+        sessionHtml = lt.items.map(it => {
+            const itPct = Math.min(it.done / it.total, 1) * 100;
+            const itBar = it.done === it.total ? 'bg-green-500' : it.done > it.total ? 'bg-red-400' :
+                          it.total - it.done <= 1 ? 'bg-orange-400' : 'bg-brand-gold';
+            let dots = '';
+            const totalDots = Math.max(it.total, it.done);
+            for (let i = 0; i < totalDots; i++) {
+                const date = it.sessions[i];
+                if (i < it.done) {
+                    const cls = i >= it.total ? 'dot-over' : 'dot-done';
+                    dots += `<div class="session-dot ${cls}" style="width:22px;height:22px;font-size:10px" title="Buoi ${i+1}${date?' ('+date+')':''}">${i+1}</div>`;
+                } else {
+                    dots += `<div class="session-dot dot-remaining" style="width:22px;height:22px;font-size:10px" title="Buoi ${i+1} — chua dung">${i+1}</div>`;
+                }
+            }
+            return `<div class="mb-3">
+                <div class="flex items-center justify-between mb-1">
+                    <span class="text-xs font-medium text-brand-textmain">${it.service}</span>
+                    <span class="text-xs text-brand-textmuted">${it.done}/${it.total} buoi • ${(it.unitPrice/1000).toFixed(0)}k/buoi</span>
+                </div>
+                <div class="progress-bar-bg mb-1.5"><div class="progress-bar-fill ${itBar}" style="width:${itPct}%"></div></div>
+                <div class="flex flex-wrap gap-1">${dots}</div>
+            </div>`;
+        }).join('');
+    }
+    document.getElementById('modal-sessions').innerHTML = sessionHtml;
+
+    // Info grid
+    const remaining = Math.max(total - done, 0);
+    const infoRows = isSession ? [
+        ['Don gia / buoi', (lt.unitPrice/1000).toLocaleString('vi-VN') + 'k ₫'],
+        ['Con lai', remaining + ' buoi'],
+        ['Gia tri con', (remainVal/1000).toLocaleString('vi-VN') + 'k ₫'],
+        ['Tong goi', (lt.total * lt.unitPrice / 1000).toLocaleString('vi-VN') + 'k ₫'],
+        ['Buoi da dung', done],
+        ['Trang thai', { active:'Dang dung', low:'Sap het', done:'Hoan thanh', over:'Vuot buoi' }[st]],
+    ] : [
+        ['So dich vu', lt.items.length + ' DV'],
+        ['Tong buoi mua', total],
+        ['Da su dung', done + ' buoi'],
+        ['Con lai', remaining + ' buoi'],
+        ['Gia tri con', (remainVal/1000).toLocaleString('vi-VN') + 'k ₫'],
+        ['Trang thai', { active:'Dang dung', low:'Sap het', done:'Hoan thanh', over:'Vuot buoi' }[st]],
+    ];
+    document.getElementById('modal-info').innerHTML = infoRows
+        .map(([l,v]) => `<div class="bg-brand-ivory rounded-xl p-3"><p class="text-xs text-brand-textmuted mb-0.5">${l}</p><p class="text-sm font-medium">${v}</p></div>`)
+        .join('');
+
+    // Show correct record button
+    const btnEl = document.getElementById('btn-record');
+    if (lt.kind === 'package') {
+        btnEl.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> Ghi nhan buoi — chon dich vu`;
+        btnEl.onclick = () => openPackageSessionPicker();
+    } else {
+        btnEl.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4"></i> Ghi nhan buoi hom nay`;
+        btnEl.onclick = () => recordSession();
+    }
+
+    document.getElementById('modal').classList.remove('hidden');
+    lucide.createIcons();
+}
+
+function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+function recordSession() {
+    const lt = LT_DATA.find(x => x.id === selectedId);
+    if (!lt || lt.kind !== 'session') return;
+    lt.done++;
+    const today = new Date();
+    const ds = String(today.getMonth()+1).padStart(2,'0') + '/' + String(today.getDate()).padStart(2,'0');
+    lt.sessions.push(ds);
+    // AuraDB integration
+    if (typeof AuraDB !== 'undefined') AuraDB.recordComboSession(String(lt.id));
+    showToast(`${lt.name} — Buoi ${lt.done} da duoc ghi nhan.`);
+    closeModal();
+    renderKPIs();
+    applyFilters();
+}
+
+function openPackageSessionPicker() {
+    const lt = LT_DATA.find(x => x.id === selectedId);
+    if (!lt || lt.kind !== 'package') return;
+    const opts = lt.items.map((it, idx) => {
+        const rem = it.total - it.done;
+        return `<button onclick="recordPackageSession(${lt.id},${idx})"
+            class="w-full text-left p-3 rounded-xl border border-brand-cream hover:border-brand-gold transition text-sm ${rem <= 0 ? 'opacity-40 pointer-events-none' : ''}">
+            <span class="font-medium">${it.service}</span>
+            <span class="text-xs text-brand-textmuted ml-2">${it.done}/${it.total} buoi</span>
+            ${rem <= 0 ? '<span class="text-xs text-green-600 ml-1">Het buoi</span>' : ''}
+        </button>`;
+    }).join('');
+    document.getElementById('modal-sessions').innerHTML =
+        `<div class="w-full"><p class="text-xs text-brand-textmuted mb-2 font-medium">Chon dich vu su dung hom nay:</p><div class="flex flex-col gap-2">${opts}</div></div>`;
+    lucide.createIcons();
+}
+
+function recordPackageSession(ltId, itemIdx) {
+    const lt = LT_DATA.find(x => x.id === ltId);
+    if (!lt || lt.kind !== 'package') return;
+    const it = lt.items[itemIdx];
+    if (!it) return;
+    it.done++;
+    const today = new Date();
+    const ds = String(today.getMonth()+1).padStart(2,'0') + '/' + String(today.getDate()).padStart(2,'0');
+    it.sessions[it.done - 1] = ds;
+    if (typeof AuraDB !== 'undefined') AuraDB.recordComboSession(String(lt.id), it.service);
+    showToast(`${lt.name} — ${it.service}: buoi ${it.done} da ghi nhan.`);
+    closeModal();
+    renderKPIs();
+    applyFilters();
+}
+
+// ─── ADD COMBO MODAL ──────────────────────────────────────────────────────────
+function openAddModal() {
+    document.getElementById('add-modal').classList.remove('hidden');
+    toggleAddKind(document.getElementById('kind-session').checked ? 'session' : 'package');
+    lucide.createIcons();
+}
+
+function closeAddModal() { document.getElementById('add-modal').classList.add('hidden'); }
+
+function toggleAddKind(kind) {
+    document.getElementById('section-session').classList.toggle('hidden', kind !== 'session');
+    document.getElementById('section-package').classList.toggle('hidden', kind !== 'package');
+}
+
+let pkgRows = 0;
+function addPkgRow() {
+    pkgRows++;
+    const row = document.createElement('div');
+    row.className = 'grid grid-cols-12 gap-2 items-center';
+    row.id = 'pkg-row-' + pkgRows;
+    row.innerHTML = `
+        <div class="col-span-4">
+            <select class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory">
+                <option>Nach</option><option>Mat</option><option>Chan (dui)</option>
+                <option>Chan (bap chan)</option><option>Tay (canh tay)</option>
+                <option>Lung</option><option>Toan than</option>
+            </select>
+        </div>
+        <div class="col-span-3"><input type="number" min="1" value="10" placeholder="So buoi"
+            class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory"></div>
+        <div class="col-span-4"><input type="number" min="0" value="200000" placeholder="Don gia/buoi"
+            class="w-full border border-brand-cream rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-brand-gold bg-brand-ivory"></div>
+        <div class="col-span-1 flex justify-end">
+            <button onclick="document.getElementById('pkg-row-${pkgRows}').remove()"
+                class="p-1 rounded-lg hover:bg-red-50 text-brand-textmuted hover:text-red-500 transition">
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+            </button>
+        </div>`;
+    document.getElementById('pkg-rows').appendChild(row);
+    lucide.createIcons();
+}
+
+function submitAddForm() {
+    const kind = document.querySelector('input[name="combo-kind"]:checked').value;
+    const name = document.getElementById('add-name').value.trim();
+    const phone = document.getElementById('add-phone').value.trim();
+    const code  = document.getElementById('add-code').value.trim() || '26X' + Date.now().toString().slice(-5);
+    if (!name) { alert('Vui long nhap ten khach hang.'); return; }
+
+    const today = new Date();
+    const ds = String(today.getMonth()+1).padStart(2,'0') + '/' + String(today.getDate()).padStart(2,'0');
+    const newId = Math.max(...LT_DATA.map(x => x.id)) + 1;
+
+    if (kind === 'session') {
+        const svc = document.getElementById('add-service').value;
+        const total = parseInt(document.getElementById('add-total').value) || 10;
+        const price = parseInt(document.getElementById('add-price').value) || 200000;
+        LT_DATA.push({ id:newId, kind:'session', code, name, phone, service:svc, total, done:0, unitPrice:price,
+            sessions: Array(total).fill(null) });
+    } else {
+        const pkgName = document.getElementById('add-pkg-name').value.trim() || 'Goi Combo';
+        const items = [];
+        document.querySelectorAll('#pkg-rows > div').forEach(row => {
+            const selects = row.querySelectorAll('select, input');
+            if (selects.length >= 3) {
+                const svc = selects[0].value;
+                const tot = parseInt(selects[1].value) || 5;
+                const pr  = parseInt(selects[2].value) || 200000;
+                items.push({ service:svc, total:tot, done:0, unitPrice:pr, sessions: Array(tot).fill(null) });
+            }
+        });
+        if (items.length === 0) { alert('Vui long them it nhat 1 dich vu vao goi.'); return; }
+        LT_DATA.push({ id:newId, kind:'package', code, name, phone, packageName:pkgName, items });
+    }
+
+    if (typeof AuraDB !== 'undefined') AuraDB.addCombo({ id:String(newId), kind, customerId:code });
+    closeAddModal();
+    renderKPIs();
+    applyFilters();
+    showToast(`Da tao combo moi cho ${name}.`);
+}
+
+// ─── TOAST ────────────────────────────────────────────────────────────────────
+function showToast(msg) {
+    document.getElementById('toast-msg').textContent = msg;
+    const t = document.getElementById('toast');
+    t.classList.remove('hidden');
+    setTimeout(() => t.classList.add('hidden'), 3500);
+}
+
+renderKPIs();
+applyFilters();
+</script>
+
+<script src="../shared/data-store.js"></script>
+<script src="../shared/sidebar.js"></script>
+<script>AuraSidebar.init({ basePath: '../', active: 'bc-liet-trinh' });</script>
+</body>
+</html>

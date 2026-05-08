@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty",
+    "tagline": "高端脱毛与肌肤护理"
+  },
+  "nav": {
+    "home": "首页",
+    "services": "服务",
+    "branches": "门店",
+    "booking": "预约",
+    "about": "关于我们",
+    "contact": "联系",
+    "languageSwitcher": "语言"
+  },
+  "home": {
+    "heroEyebrow": "NATURAL BEAUTY × KAORI",
+    "heroTitle": "自然之美,精致科技",
+    "heroSubtitle": "高科技激光脱毛、私密护理、光子嫩肤。在线预约,选择就近门店。",
+    "ctaBook": "立即预约",
+    "ctaServices": "查看服务",
+    "highlightsTitle": "为何选择我们",
+    "highlight1": { "title": "国际标准", "desc": "进口激光设备与认证技术师。" },
+    "highlight2": { "title": "隐私与卫生", "desc": "VIP 私密包间,每次消毒器械。" },
+    "highlight3": { "title": "价格透明", "desc": "公开标价,无隐藏费用。" }
+  },
+  "services": {
+    "title": "服务价目表",
+    "subtitle": "全门店统一价,含税。",
+    "filterAll": "全部",
+    "filterMen": "男士",
+    "filterWomen": "女士",
+    "filterUnisex": "通用",
+    "filterFace": "面部",
+    "filterArm": "手臂",
+    "filterChest": "胸部",
+    "filterBelly": "腹部",
+    "filterBack": "背部",
+    "filterVio": "VIO",
+    "filterLeg": "腿部",
+    "filterFullBody": "全身",
+    "filterBeauty": "美容",
+    "filterCombo": "套餐",
+    "duration": "{minutes}分钟",
+    "sessions": "{count}次",
+    "price": "{price, number, ::currency/VND}",
+    "bookNow": "预约"
+  },
+  "branches": {
+    "title": "Natural Beauty 门店",
+    "subtitle": "选择离您最近的门店。",
+    "openHours": "营业时间",
+    "phone": "电话",
+    "address": "地址",
+    "directions": "路线",
+    "bookHere": "在此门店预约"
+  },
+  "booking": {
+    "title": "在线预约",
+    "subtitle": "4 步完成,15 分钟内确认。",
+    "stepBranch": "门店",
+    "stepService": "服务",
+    "stepTime": "时间",
+    "stepInfo": "您的信息",
+    "next": "下一步",
+    "back": "返回",
+    "confirm": "确认预约",
+    "summary": "概要",
+    "form": {
+      "name": "姓名",
+      "phone": "电话",
+      "email": "邮箱(可选)",
+      "note": "备注",
+      "namePlaceholder": "张小姐",
+      "phonePlaceholder": "+84 9xx xxx xxx",
+      "notePlaceholder": "如有特别要求请填写"
+    },
+    "success": {
+      "title": "预约成功!",
+      "desc": "已通过短信发送确认。期待在 Natural Beauty 与您相见。",
+      "backHome": "返回首页"
+    },
+    "errors": {
+      "nameRequired": "请输入姓名",
+      "phoneInvalid": "电话号码无效",
+      "emailInvalid": "邮箱无效",
+      "branchRequired": "请选择门店",
+      "serviceRequired": "请至少选择一项服务",
+      "slotRequired": "请选择时间段"
+    }
+  },
+  "about": {
+    "title": "关于 Natural Beauty",
+    "lead": "Natural Beauty 是基于 Kaori 平台的高科技脱毛与肌肤护理连锁品牌。",
+    "missionTitle": "使命",
+    "missionText": "以透明的价格提供安全、专业的美容体验。",
+    "valuesTitle": "核心价值",
+    "value1": "用心",
+    "value2": "专业",
+    "value3": "隐私",
+    "value4": "可持续"
+  },
+  "contact": {
+    "title": "联系",
+    "subtitle": "24 小时内回复您。",
+    "form": {
+      "name": "姓名",
+      "email": "邮箱",
+      "subject": "主题",
+      "message": "内容",
+      "send": "发送"
+    },
+    "hotline": "热线",
+    "hotlineNumber": "1900 0000",
+    "address": "总部",
+    "addressValue": "575 Kim Ma, Ba Dinh, 河内"
+  },
+  "footer": {
+    "rights": "© 2026 Natural Beauty on Kaori. 保留所有权利。",
+    "policy": "隐私政策",
+    "terms": "条款",
+    "support": "支持"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "发生错误,请重试。",
+    "vnd": "₫"
+  }
+}

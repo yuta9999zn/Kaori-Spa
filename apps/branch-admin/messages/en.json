@@ -1,0 +1,126 @@
+{
+  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
+  "portal": { "name": "Branch Console", "subtitle": "Branch Manager" },
+  "nav": {
+    "dashboard": "Dashboard",
+    "booking": "Bookings",
+    "calendar": "Calendar",
+    "checkin": "Check-in",
+    "customer": "Customers",
+    "service": "Services",
+    "staff": "Staff",
+    "shift": "Shifts",
+    "attendance": "Attendance",
+    "payroll": "Payroll",
+    "room": "Rooms",
+    "inventory": "Inventory",
+    "report": "Reports",
+    "notification": "Notifications",
+    "content": "Content",
+    "settings": "Settings",
+    "logout": "Sign out"
+  },
+  "dashboard": {
+    "title": "Today at a glance",
+    "subtitle": "Updated {time}",
+    "kpi": {
+      "revenue": "Today's revenue",
+      "bookings": "Bookings",
+      "checkedIn": "Checked in",
+      "pending": "Pending",
+      "newCustomers": "New customers"
+    },
+    "todayBookings": "Today's bookings",
+    "popularServices": "Top services",
+    "noData": "No data yet"
+  },
+  "booking": {
+    "title": "Bookings",
+    "create": "New booking",
+    "filterAll": "All",
+    "filterToday": "Today",
+    "filterUpcoming": "Upcoming",
+    "filterDone": "Done",
+    "columns": {
+      "code": "Code",
+      "customer": "Customer",
+      "service": "Service",
+      "staff": "Therapist",
+      "room": "Room",
+      "time": "Time",
+      "status": "Status",
+      "amount": "Amount"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "in_progress": "In progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    }
+  },
+  "customer": {
+    "title": "Customers",
+    "create": "Add customer",
+    "search": "Search by name, phone, email…",
+    "columns": {
+      "code": "ID",
+      "name": "Name",
+      "phone": "Phone",
+      "segment": "Segment",
+      "lastVisit": "Last visit",
+      "points": "Points",
+      "spent": "Total spend"
+    },
+    "segments": { "vip": "VIP", "regular": "Regular", "new": "New", "dormant": "Dormant" }
+  },
+  "shift": {
+    "title": "Shift Manager",
+    "subtitle": "Monthly shift assignment — Early / Late / Full / Off",
+    "month": "Month", "year": "Year",
+    "prev": "Prev", "next": "Next", "today": "Today",
+    "save": "Save", "saved": "Saved", "stats": "Stats",
+    "type": { "SANG": "EARLY", "TOI": "LATE", "FULL": "FULL", "NGHI": "OFF" },
+    "typeFull": {
+      "SANG": "Early (09:00-15:00)",
+      "TOI": "Late (15:00-21:00)",
+      "FULL": "Full (09:00-21:00)",
+      "NGHI": "Day off"
+    },
+    "legend": "Click cell to assign, again to clear"
+  },
+  "attendance": {
+    "title": "Attendance",
+    "subtitle": "Today's check-in / out",
+    "checkIn": "Check in", "checkOut": "Check out",
+    "expected": "Expected", "in": "In", "out": "Out", "worked": "Worked", "minutes": "min",
+    "status": {
+      "scheduled": "Scheduled", "present": "On time", "late": "Late",
+      "absent": "Absent", "early_out": "Early out", "off": "Off", "no_shift": "No shift"
+    }
+  },
+  "room": {
+    "title": "Rooms & Beds",
+    "subtitle": "Manage rooms, beds and their availability",
+    "addRoom": "Add room",
+    "addBed": "Add bed",
+    "floor": "Floor",
+    "capacity": "Capacity",
+    "beds": "Beds",
+    "noBeds": "No beds in this room yet",
+    "type": { "normal": "Standard", "vip": "VIP", "couple": "Couple", "laser": "Laser" },
+    "bedType": { "standard": "Standard", "massage": "Massage", "laser": "Laser", "vip": "VIP" },
+    "status": { "active": "Active", "maintenance": "Maintenance", "retired": "Retired" }
+  },
+  "common": {
+    "search": "Search",
+    "filter": "Filter",
+    "loading": "Loading...",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View"
+  }
+}

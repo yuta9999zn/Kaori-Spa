@@ -1,0 +1,129 @@
+{
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty",
+    "tagline": "Triệt lông & chăm sóc da chuyên sâu"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "services": "Dịch vụ",
+    "branches": "Chi nhánh",
+    "booking": "Đặt lịch",
+    "about": "Về chúng tôi",
+    "contact": "Liên hệ",
+    "languageSwitcher": "Ngôn ngữ"
+  },
+  "home": {
+    "heroEyebrow": "NATURAL BEAUTY × KAORI",
+    "heroTitle": "Vẻ đẹp tự nhiên, công nghệ tinh tế",
+    "heroSubtitle": "Triệt lông công nghệ cao, làm đẹp vùng kín, trẻ hoá da bằng ánh sáng. Đặt lịch online, lựa chọn chi nhánh thuận tiện.",
+    "ctaBook": "Đặt lịch ngay",
+    "ctaServices": "Xem dịch vụ",
+    "highlightsTitle": "Vì sao chọn chúng tôi",
+    "highlight1": { "title": "Công nghệ chuẩn quốc tế", "desc": "Thiết bị laser nhập khẩu, kỹ thuật viên đào tạo bài bản." },
+    "highlight2": { "title": "Riêng tư & vệ sinh", "desc": "Phòng VIP riêng, dụng cụ tiệt trùng từng buổi." },
+    "highlight3": { "title": "Giá minh bạch", "desc": "Niêm yết công khai, không phụ phí ẩn." }
+  },
+  "services": {
+    "title": "Bảng giá dịch vụ",
+    "subtitle": "Giá niêm yết áp dụng tại tất cả chi nhánh, đã bao gồm thuế.",
+    "filterAll": "Tất cả",
+    "filterMen": "Nam",
+    "filterWomen": "Nữ",
+    "filterUnisex": "Không phân biệt",
+    "filterFace": "Mặt",
+    "filterArm": "Tay",
+    "filterChest": "Ngực",
+    "filterBelly": "Bụng",
+    "filterBack": "Lưng",
+    "filterVio": "V-I-O",
+    "filterLeg": "Chân",
+    "filterFullBody": "Toàn thân",
+    "filterBeauty": "Làm đẹp",
+    "filterCombo": "Combo",
+    "duration": "{minutes} phút",
+    "sessions": "{count} buổi",
+    "price": "{price, number, ::currency/VND}",
+    "bookNow": "Đặt lịch"
+  },
+  "branches": {
+    "title": "Chi nhánh Natural Beauty",
+    "subtitle": "Chọn chi nhánh gần bạn nhất để trải nghiệm dịch vụ.",
+    "openHours": "Giờ mở cửa",
+    "phone": "Điện thoại",
+    "address": "Địa chỉ",
+    "directions": "Chỉ đường",
+    "bookHere": "Đặt lịch tại đây"
+  },
+  "booking": {
+    "title": "Đặt lịch trực tuyến",
+    "subtitle": "Hoàn tất 4 bước, chúng tôi sẽ xác nhận trong vòng 15 phút.",
+    "stepBranch": "Chi nhánh",
+    "stepService": "Dịch vụ",
+    "stepTime": "Thời gian",
+    "stepInfo": "Thông tin",
+    "next": "Tiếp tục",
+    "back": "Quay lại",
+    "confirm": "Xác nhận đặt lịch",
+    "summary": "Tóm tắt",
+    "form": {
+      "name": "Họ và tên",
+      "phone": "Số điện thoại",
+      "email": "Email (tuỳ chọn)",
+      "note": "Ghi chú",
+      "namePlaceholder": "Nguyễn Thị A",
+      "phonePlaceholder": "09xx xxx xxx",
+      "notePlaceholder": "Ghi chú cho kỹ thuật viên (nếu có)"
+    },
+    "success": {
+      "title": "Đặt lịch thành công!",
+      "desc": "Chúng tôi đã gửi xác nhận qua SMS. Hẹn gặp bạn tại Natural Beauty.",
+      "backHome": "Về trang chủ"
+    },
+    "errors": {
+      "nameRequired": "Vui lòng nhập họ tên",
+      "phoneInvalid": "Số điện thoại không hợp lệ",
+      "emailInvalid": "Email không hợp lệ",
+      "branchRequired": "Vui lòng chọn chi nhánh",
+      "serviceRequired": "Vui lòng chọn ít nhất một dịch vụ",
+      "slotRequired": "Vui lòng chọn khung giờ"
+    }
+  },
+  "about": {
+    "title": "Về Natural Beauty",
+    "lead": "Natural Beauty là chuỗi spa chuyên triệt lông công nghệ cao và chăm sóc da chuyên sâu, vận hành trên nền tảng Kaori.",
+    "missionTitle": "Sứ mệnh",
+    "missionText": "Mang đến trải nghiệm làm đẹp an toàn, chuyên nghiệp với mức giá minh bạch.",
+    "valuesTitle": "Giá trị cốt lõi",
+    "value1": "Tận tâm",
+    "value2": "Chuyên môn",
+    "value3": "Riêng tư",
+    "value4": "Bền vững"
+  },
+  "contact": {
+    "title": "Liên hệ",
+    "subtitle": "Gửi câu hỏi, chúng tôi phản hồi trong vòng 24 giờ.",
+    "form": {
+      "name": "Họ và tên",
+      "email": "Email",
+      "subject": "Tiêu đề",
+      "message": "Nội dung",
+      "send": "Gửi"
+    },
+    "hotline": "Hotline",
+    "hotlineNumber": "1900 0000",
+    "address": "Trụ sở",
+    "addressValue": "575 Kim Mã, Ba Đình, Hà Nội"
+  },
+  "footer": {
+    "rights": "© 2026 Natural Beauty trên nền tảng Kaori. Mọi quyền được bảo lưu.",
+    "policy": "Chính sách bảo mật",
+    "terms": "Điều khoản",
+    "support": "Hỗ trợ"
+  },
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Có lỗi xảy ra, vui lòng thử lại.",
+    "vnd": "₫"
+  }
+}

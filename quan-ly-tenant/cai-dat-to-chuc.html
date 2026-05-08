@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Settings | Lotus Luxury Spa</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            ivory: '#FAF9F6',      // Background
+                            cream: '#F4EFEA',      // Secondary/Cards
+                            gold: '#C9A87C',       // Primary
+                            goldhover: '#B5956A',
+                            rose: '#D9B8B5',       // Accent
+                            lavender: '#DCD6DD',   // Muted Accent
+                            textmain: '#4A443E',   // Dark warm gray
+                            textmuted: '#8B837C'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'serif'],
+                        sans: ['Jost', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(74, 68, 62, 0.05)',
+                        'inner-soft': 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.02)',
+                        'premium': '0 4px 20px rgba(201, 168, 124, 0.08)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar for elegance */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D9B8B5; 
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C9A87C; 
+        }
+
+        /* Dropdown transition */
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Form Inputs */
+        .spa-input {
+            @apply w-full bg-brand-ivory border border-brand-cream rounded-xl px-4 py-3 text-sm outline-none focus:border-brand-gold focus:bg-white focus:ring-4 focus:ring-brand-gold/10 transition-all text-brand-textmain placeholder-brand-textmuted/60;
+        }
+        .spa-label {
+            @apply block text-[11px] uppercase tracking-widest font-semibold text-brand-textmuted mb-2;
+        }
+        
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #C9A87C;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #C9A87C;
+        }
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e2e8f0;
+            transition: all 0.3s;
+        }
+        .toggle-label {
+            width: 3rem;
+            height: 1.5rem;
+            background-color: #F4EFEA;
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+        .toggle-dot {
+            top: 0.125rem;
+            left: 0.125rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .toggle-checkbox:checked ~ .toggle-dot {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body class="bg-brand-ivory text-brand-textmain font-sans h-screen flex overflow-hidden selection:bg-brand-gold selection:text-white">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-white border-r border-brand-cream flex flex-col shadow-soft z-20 shrink-0">
+        <div class="h-20 flex items-center justify-center border-b border-brand-cream">
+            <i data-lucide="flower-2" class="text-brand-gold mr-2" stroke-width="1.5"></i>
+            <h1 class="font-serif text-2xl text-brand-textmain tracking-widest uppercase">Lotus</h1>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 px-4 space-y-6" id="sidebar-nav">
+            
+            <!-- Dashboard Section -->
+            <div>
+                <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4 mr-3 opacity-70"></i> Dashboard
+                </a>
+            </div>
+
+            <!-- Tenant Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Tenant</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2.5 rounded-xl transition text-sm mb-1 bg-brand-cream/50 text-brand-gold font-medium">
+                        <i data-lucide="building" class="w-4 h-4 mr-3"></i> Organization
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="store" class="w-4 h-4 mr-3 opacity-70"></i> Branches
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="users" class="w-4 h-4 mr-3 opacity-70"></i> Users
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-3 opacity-70"></i> Roles
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="palette" class="w-4 h-4 mr-3 opacity-70"></i> Branding
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="globe" class="w-4 h-4 mr-3 opacity-70"></i> Domains
+                    </a>
+                </div>
+            </div>
+
+            <!-- Operations Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Operations</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="sparkles" class="w-4 h-4 mr-3 opacity-70"></i> Services
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="calendar" class="w-4 h-4 mr-3 opacity-70"></i> Bookings
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="heart" class="w-4 h-4 mr-3 opacity-70"></i> Customers
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="user-circle" class="w-4 h-4 mr-3 opacity-70"></i> Staff
+                    </a>
+                </div>
+            </div>
+
+            <!-- Marketing Section -->
+            <div>
+                <p class="text-xs uppercase tracking-widest text-brand-textmuted mb-2 px-4 font-semibold">Marketing</p>
+                <div class="space-y-1">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="megaphone" class="w-4 h-4 mr-3 opacity-70"></i> Campaigns
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="file-text" class="w-4 h-4 mr-3 opacity-70"></i> Blog CMS
+                    </a>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div>
+                <div class="space-y-1 pt-4 border-t border-brand-cream">
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="pie-chart" class="w-4 h-4 mr-3 opacity-70"></i> Reports
+                    </a>
+                    <a href="#" class="w-full flex items-center px-4 py-2 rounded-xl transition text-sm text-brand-textmuted hover:bg-brand-cream/30 hover:text-brand-textmain">
+                        <i data-lucide="settings" class="w-4 h-4 mr-3 opacity-70"></i> Settings
+                    </a>
+                </div>
+            </div>
+
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen relative overflow-hidden bg-brand-ivory/50">
+        <!-- Top Header -->
+        <header class="h-20 bg-white/80 backdrop-blur-md border-b border-brand-cream flex items-center justify-between px-8 z-10 sticky top-0 shrink-0">
+            <div class="flex items-center bg-brand-ivory rounded-full px-4 py-2 shadow-inner-soft border border-brand-cream/50 w-96 transition focus-within:border-brand-gold focus-within:bg-white">
+                <i data-lucide="search" class="w-4 h-4 text-brand-textmuted mr-2"></i>
+                <input type="text" placeholder="Search settings..." class="bg-transparent border-none outline-none w-full text-sm placeholder-brand-textmuted font-light text-brand-textmain">
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <!-- Quick Actions Dropdown -->
+                <div class="relative dropdown-container">
+                    <button class="flex items-center text-sm font-medium bg-brand-gold text-white px-5 py-2 rounded-full hover:bg-brand-goldhover transition shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4 mr-1.5"></i> Quick Action
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu absolute right-0 mt-2 w-48 bg-white border border-brand-cream rounded-2xl shadow-soft z-50 overflow-hidden py-1">
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="store" class="w-4 h-4 mr-2"></i> Create Branch
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Invite Staff
+                        </a>
+                        <a href="#" class="flex items-center px-4 py-2.5 text-sm text-brand-textmain hover:bg-brand-ivory hover:text-brand-gold transition">
+                            <i data-lucide="sparkles" class="w-4 h-4 mr-2"></i> Add Service
+                        </a>
+                    </div>
+                </div>
+
+                <div class="h-6 w-px bg-brand-cream"></div>
+
+                <button class="relative p-2 rounded-full hover:bg-brand-cream transition text-brand-textmain">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                </button>
+                
+                <div class="flex items-center space-x-3 cursor-pointer group">
+                    <div class="text-right hidden md:block">
+                        <p class="text-sm font-medium text-brand-textmain group-hover:text-brand-gold transition">Sarah Miller</p>
+                        <p class="text-xs text-brand-textmuted">Owner & Founder</p>
+                    </div>
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-gold to-brand-rose flex items-center justify-center text-white font-serif shadow-sm">
+                        SM
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+            <div class="max-w-7xl mx-auto">
+                
+                <!-- PAGE HEADER -->
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-brand-cream/50">
+                    <div>
+                        <h2 class="font-serif text-3xl text-brand-textmain tracking-wide">Organization Settings</h2>
+                        <p class="text-brand-textmuted mt-2 text-sm">Manage your spa business information and global platform settings.</p>
+                    </div>
+                    <div class="flex space-x-4 mt-6 md:mt-0">
+                        <button class="px-6 py-2.5 bg-white text-brand-textmain border border-brand-cream hover:border-brand-textmuted rounded-full text-sm font-medium transition shadow-sm">
+                            Cancel
+                        </button>
+                        <button class="px-8 py-2.5 bg-brand-gold text-white rounded-full hover:bg-brand-goldhover transition shadow-premium text-sm font-medium flex items-center">
+                            <i data-lucide="check" class="w-4 h-4 mr-2"></i> Save Changes
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    
+                    <!-- LEFT/MAIN COLUMN (Forms) -->
+                    <div class="xl:col-span-2 space-y-8">
+                        
+                        <!-- SECTION 1: BUSINESS INFORMATION -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-8">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="building" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-2xl text-brand-textmain">Business Information</h3>
+                            </div>
+
+                            <!-- Logo Upload -->
+                            <div class="flex items-center space-x-6 mb-8 pb-8 border-b border-brand-cream/50">
+                                <div class="w-24 h-24 rounded-full bg-brand-ivory border-2 border-brand-cream border-dashed flex items-center justify-center overflow-hidden relative group cursor-pointer">
+                                    <!-- Current Logo Preview -->
+                                    <i data-lucide="flower" class="w-10 h-10 text-brand-gold" stroke-width="1.5"></i>
+                                    <!-- Hover Overlay -->
+                                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i data-lucide="camera" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-brand-textmain mb-1">Company Logo</p>
+                                    <p class="text-xs text-brand-textmuted mb-4">High-res square image. PNG or JPG, max 5MB.</p>
+                                    <div class="flex space-x-3">
+                                        <button class="px-4 py-1.5 bg-brand-ivory border border-brand-cream rounded-full text-xs font-medium hover:text-brand-gold transition">Upload New</button>
+                                        <button class="px-4 py-1.5 text-brand-rose hover:text-brand-textmain text-xs font-medium transition">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Grid -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="spa-label">Organization Name</label>
+                                    <input type="text" class="spa-input" value="Lotus Luxury Spa" placeholder="e.g. Blossom Wellness">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Business Type</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23C9A87C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                        <option selected>Wellness Resort & Spa</option>
+                                        <option>Day Spa</option>
+                                        <option>Medical Spa / Clinic</option>
+                                        <option>Salon & Beauty</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Business Phone</label>
+                                    <input type="text" class="spa-input" value="+1 (555) 019-2837" placeholder="Phone number">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Business Email</label>
+                                    <input type="email" class="spa-input" value="hello@lotusspa.com" placeholder="Email address">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Tax ID / Registration Number</label>
+                                    <input type="text" class="spa-input" value="US-99-1234567" placeholder="Tax ID">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Website URL</label>
+                                    <input type="url" class="spa-input" value="https://www.lotusspa.com" placeholder="https://">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="spa-label">Business Description</label>
+                                    <textarea class="spa-input h-28 resize-none" placeholder="Briefly describe your spa...">An oasis of tranquility offering premium organic treatments, deep tissue therapies, and advanced skincare solutions tailored to your complete wellbeing.</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 2: ADDRESS -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="map-pin" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-2xl text-brand-textmain">Headquarters Location</h3>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="md:col-span-2">
+                                    <label class="spa-label">Street Address</label>
+                                    <input type="text" class="spa-input" value="100 Wellness Boulevard, Suite 200" placeholder="Street address">
+                                </div>
+                                <div>
+                                    <label class="spa-label">City</label>
+                                    <input type="text" class="spa-input" value="Beverly Hills" placeholder="City">
+                                </div>
+                                <div>
+                                    <label class="spa-label">State / Province</label>
+                                    <input type="text" class="spa-input" value="California" placeholder="State">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Postal Code</label>
+                                    <input type="text" class="spa-input" value="90210" placeholder="Zip code">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Country</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23C9A87C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                        <option selected>United States</option>
+                                        <option>United Kingdom</option>
+                                        <option>Canada</option>
+                                        <option>Australia</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <!-- Map Placeholder -->
+                            <div class="mt-6 w-full h-40 bg-brand-cream/30 rounded-xl border border-brand-cream flex flex-col items-center justify-center text-brand-textmuted relative overflow-hidden group cursor-pointer">
+                                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGRlZnM+PHBhdHRlcm4gaWQ9ImciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgMGg0MHY0MEgweiIgZmlsbD0ibm9uZSIvPPHBhdGggZD0iTTAgNDBoNDBNNDAgMHY0MCIgc3Ryb2tlPSIjZTRkZGNjIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZykiLz48L3N2Zz4=')] opacity-50"></div>
+                                <i data-lucide="map" class="w-8 h-8 mb-2 text-brand-gold opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                                <span class="text-xs font-medium relative z-10 group-hover:text-brand-gold transition">Click to adjust map pin</span>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 3: SYSTEM SETTINGS -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6 border-b border-brand-cream/50 pb-6">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="sliders" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-2xl text-brand-textmain">Global System Settings</h3>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div>
+                                    <label class="spa-label">Default Currency</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23C9A87C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                        <option selected>USD ($)</option>
+                                        <option>EUR (€)</option>
+                                        <option>GBP (£)</option>
+                                        <option>AUD ($)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Time Zone</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23C9A87C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                        <option selected>(GMT-08:00) Pacific Time</option>
+                                        <option>(GMT-05:00) Eastern Time</option>
+                                        <option>(GMT+00:00) London</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Default Language</label>
+                                    <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23C9A87C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                        <option selected>English (US)</option>
+                                        <option>French (FR)</option>
+                                        <option>Spanish (ES)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <!-- Booking Settings -->
+                                <div>
+                                    <h4 class="text-sm font-semibold text-brand-textmain mb-4 flex items-center"><i data-lucide="calendar" class="w-4 h-4 mr-2 text-brand-gold"></i> Booking Settings</h4>
+                                    <div class="space-y-4 bg-brand-ivory/50 p-5 rounded-2xl border border-brand-cream/50">
+                                        <div>
+                                            <label class="spa-label">Default Appointment Slot</label>
+                                            <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23C9A87C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                                <option>30 Minutes</option>
+                                                <option selected>60 Minutes</option>
+                                                <option>90 Minutes</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="spa-label">Buffer Time (Clean-up)</label>
+                                            <select class="spa-input appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23C9A87C%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[position:right_1rem_center] bg-[length:1em]">
+                                                <option>None</option>
+                                                <option>10 Minutes</option>
+                                                <option selected>15 Minutes</option>
+                                                <option>30 Minutes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Customer Settings -->
+                                <div>
+                                    <h4 class="text-sm font-semibold text-brand-textmain mb-4 flex items-center"><i data-lucide="users" class="w-4 h-4 mr-2 text-brand-gold"></i> Customer Modules</h4>
+                                    <div class="space-y-5 bg-brand-ivory/50 p-5 rounded-2xl border border-brand-cream/50 h-[calc(100%-2rem)]">
+                                        
+                                        <!-- Custom Toggle 1 -->
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-brand-textmain">Loyalty Program</p>
+                                                <p class="text-[11px] text-brand-textmuted mt-0.5">Allow points earning and redemption</p>
+                                            </div>
+                                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                                <input type="checkbox" name="toggle" id="toggle-loyalty" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="toggle-loyalty" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-5 h-5 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transition-transform duration-300 transform translate-x-full"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="h-px w-full bg-brand-cream"></div>
+
+                                        <!-- Custom Toggle 2 -->
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <p class="text-sm font-medium text-brand-textmain">Membership System</p>
+                                                <p class="text-[11px] text-brand-textmuted mt-0.5">Enable recurring subscriptions</p>
+                                            </div>
+                                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                                <input type="checkbox" name="toggle" id="toggle-membership" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" checked/>
+                                                <label for="toggle-membership" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                                <div class="toggle-dot absolute block w-5 h-5 rounded-full bg-white shadow inset-y-0 left-0 pointer-events-none transition-transform duration-300 transform translate-x-full"></div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 4: BRAND INFORMATION -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="palette" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-2xl text-brand-textmain">Brand Identity</h3>
+                            </div>
+                            <p class="text-sm text-brand-textmuted mb-6">These details will be displayed on your public booking pages and marketing materials.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                                <div>
+                                    <label class="spa-label">Brand Display Name</label>
+                                    <input type="text" class="spa-input" value="Lotus Spa & Wellness" placeholder="Public name">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Brand Tagline</label>
+                                    <input type="text" class="spa-input" value="Find your inner peace." placeholder="e.g. Find your inner peace">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="spa-label">Hero Image (Booking Page)</label>
+                                    <div class="h-32 rounded-xl border-2 border-dashed border-brand-cream hover:border-brand-gold transition-colors bg-brand-ivory/50 flex flex-col items-center justify-center cursor-pointer group">
+                                        <i data-lucide="image" class="w-6 h-6 text-brand-gold mb-2 group-hover:scale-110 transition-transform"></i>
+                                        <span class="text-xs font-medium text-brand-textmain">Upload Image</span>
+                                        <span class="text-[10px] text-brand-textmuted mt-1">1920x1080px recommended</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="spa-label">Portal Background</label>
+                                    <div class="h-32 rounded-xl border-2 border-dashed border-brand-cream hover:border-brand-gold transition-colors bg-brand-ivory/50 flex flex-col items-center justify-center cursor-pointer group relative overflow-hidden">
+                                        <div class="absolute inset-0 bg-brand-cream/20"></div>
+                                        <i data-lucide="upload-cloud" class="w-6 h-6 text-brand-gold mb-2 relative z-10 group-hover:-translate-y-1 transition-transform"></i>
+                                        <span class="text-xs font-medium text-brand-textmain relative z-10">Replace Background</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SECTION 5: CONTACT INFORMATION -->
+                        <div class="bg-white rounded-3xl p-8 shadow-soft border border-brand-cream/60">
+                            <div class="flex items-center mb-6">
+                                <div class="w-10 h-10 rounded-full bg-brand-gold/10 flex items-center justify-center mr-4 text-brand-gold">
+                                    <i data-lucide="headphones" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-serif text-2xl text-brand-textmain">Public Contact</h3>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="spa-label">Support Phone</label>
+                                    <input type="text" class="spa-input" value="1-800-LOTUS-SPA" placeholder="Toll-free or support line">
+                                </div>
+                                <div>
+                                    <label class="spa-label">Support Email</label>
+                                    <input type="email" class="spa-input" value="support@lotusspa.com" placeholder="support@...">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="spa-label">Default Opening Hours</label>
+                                    <input type="text" class="spa-input" value="Monday - Sunday: 9:00 AM - 8:00 PM" placeholder="e.g. Mon-Fri 9am-6pm">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN (Sticky Preview Panel) -->
+                    <div class="xl:col-span-1">
+                        <div class="sticky top-8 bg-brand-cream/20 rounded-3xl p-6 border border-brand-cream/60 shadow-inner-soft">
+                            <h3 class="font-serif text-xl text-brand-textmain mb-1">Live Preview</h3>
+                            <p class="text-xs text-brand-textmuted mb-6">See how your brand appears to customers.</p>
+
+                            <!-- Preview Tabs -->
+                            <div class="flex space-x-1 bg-white p-1 rounded-full shadow-sm border border-brand-cream mb-6">
+                                <button class="flex-1 py-1.5 bg-brand-gold/10 text-brand-gold text-xs font-medium rounded-full">Booking Page</button>
+                                <button class="flex-1 py-1.5 text-brand-textmuted hover:text-brand-textmain text-xs font-medium rounded-full transition">Emails</button>
+                                <button class="flex-1 py-1.5 text-brand-textmuted hover:text-brand-textmain text-xs font-medium rounded-full transition">Portal</button>
+                            </div>
+
+                            <!-- Mockup Container -->
+                            <div class="bg-white rounded-2xl shadow-soft border border-brand-cream/50 overflow-hidden h-[450px] flex flex-col relative">
+                                
+                                <!-- Mockup Header -->
+                                <div class="bg-brand-ivory border-b border-brand-cream px-4 py-3 flex justify-between items-center shrink-0">
+                                    <div class="flex items-center space-x-2">
+                                        <i data-lucide="flower" class="w-4 h-4 text-brand-gold"></i>
+                                        <span class="font-serif text-[10px] font-bold tracking-widest uppercase">Lotus</span>
+                                    </div>
+                                    <i data-lucide="menu" class="w-4 h-4 text-brand-textmuted"></i>
+                                </div>
+
+                                <!-- Mockup Hero -->
+                                <div class="h-32 bg-brand-cream/40 relative flex items-center justify-center shrink-0">
+                                    <div class="text-center z-10 px-4">
+                                        <h4 class="font-serif text-sm text-brand-textmain mb-1">Lotus Spa & Wellness</h4>
+                                        <p class="text-[9px] text-brand-textmuted italic">Find your inner peace.</p>
+                                    </div>
+                                </div>
+
+                                <!-- Mockup Content -->
+                                <div class="p-4 flex-1 overflow-y-auto bg-brand-ivory custom-scrollbar">
+                                    <p class="text-[10px] uppercase tracking-wider text-brand-textmuted font-semibold mb-3">Select Service</p>
+                                    <div class="space-y-2">
+                                        <div class="bg-white p-3 rounded-xl shadow-sm border border-brand-cream flex justify-between items-center">
+                                            <div>
+                                                <p class="text-xs font-medium text-brand-textmain">Signature Massage</p>
+                                                <p class="text-[9px] text-brand-textmuted mt-0.5">60 Min • $120</p>
+                                            </div>
+                                            <div class="w-5 h-5 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold">
+                                                <i data-lucide="plus" class="w-3 h-3"></i>
+                                            </div>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-xl shadow-sm border border-brand-cream flex justify-between items-center">
+                                            <div>
+                                                <p class="text-xs font-medium text-brand-textmain">Hydrating Facial</p>
+                                                <p class="text-[9px] text-brand-textmuted mt-0.5">45 Min • $95</p>
+                                            </div>
+                                            <div class="w-5 h-5 rounded-full bg-brand-gold/10 flex items-center justify-center text-brand-gold">
+                                                <i data-lucide="plus" class="w-3 h-3"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 pt-4 border-t border-brand-cream text-center">
+                                        <p class="text-[9px] text-brand-textmuted mb-1">100 Wellness Boulevard</p>
+                                        <p class="text-[9px] text-brand-textmuted">1-800-LOTUS-SPA</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Floating Mockup Action -->
+                                <div class="absolute bottom-4 left-4 right-4 bg-brand-gold text-white text-[10px] font-medium py-2 rounded-full text-center shadow-md">
+                                    Book Appointment
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
