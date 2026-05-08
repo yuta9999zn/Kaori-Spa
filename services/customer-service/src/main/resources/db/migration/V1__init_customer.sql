@@ -6,10 +6,16 @@
 --   * Loyalty as a transaction log; current points = sum.
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 CREATE EXTENSION IF NOT EXISTS unaccent;
 CREATE SCHEMA IF NOT EXISTS customer;
 SET search_path TO customer;
+
+-- IMMUTABLE wrapper around unaccent so it can be used inside index expressions.
+CREATE OR REPLACE FUNCTION f_unaccent(text) RETURNS text AS
+$$ SELECT public.unaccent($1) $$
+LANGUAGE SQL IMMUTABLE PARALLEL SAFE STRICT;
 
 CREATE TABLE customers (
     id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -37,7 +43,7 @@ CREATE UNIQUE INDEX uniq_customers_org_phone ON customers(org_id, phone)
     WHERE deleted_at IS NULL;
 -- Trigram index on (unaccent(full_name) || phone) for fast typo-tolerant search.
 CREATE INDEX idx_customers_search ON customers
-    USING gin ((unaccent(lower(full_name)) || ' ' || phone) gin_trgm_ops);
+    USING gin ((f_unaccent(lower(full_name)) || ' ' || phone) gin_trgm_ops);
 
 -- ────────────────────────────────────────────────────────────────────────
 CREATE TABLE customer_health_notes (

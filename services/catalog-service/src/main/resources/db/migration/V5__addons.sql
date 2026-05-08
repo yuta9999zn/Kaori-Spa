@@ -53,10 +53,6 @@ BEGIN
          180000, 15);
 END $$;
 
--- Booking item gains an "add_on_codes" array + add_on_total — the booking
--- service writes both at create time.
-SET search_path TO booking;
-
-ALTER TABLE booking_items
-    ADD COLUMN IF NOT EXISTS add_on_codes  TEXT[]        NOT NULL DEFAULT '{}',
-    ADD COLUMN IF NOT EXISTS add_on_total  NUMERIC(15,2) NOT NULL DEFAULT 0;
+-- The booking-service owns its booking_items table and ships its own
+-- migration (V19__addon_columns.sql) to add `add_on_codes` + `add_on_total`.
+-- Cross-service ALTER removed to keep DBs strictly per-service.

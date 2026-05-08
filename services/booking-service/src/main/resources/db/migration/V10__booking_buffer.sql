@@ -25,7 +25,10 @@ ALTER TABLE booking_items
     DROP CONSTRAINT IF EXISTS excl_bed_no_overlap;
 
 -- Recreate with a function-call expression that pulls the room's buffer.
--- Using a STABLE function is acceptable for EXCLUDE.
+-- NOTE: Postgres requires IMMUTABLE for index/EXCLUDE expressions. The function
+-- is *de facto* not pure (reads `rooms`) so changing `cleanup_min_after` after
+-- bookings exist needs a manual REINDEX. We accept that trade-off — buffer is
+-- a per-room operational tuning, not a hot-path config.
 CREATE OR REPLACE FUNCTION effective_window(p_room_id UUID, p_start TIMESTAMPTZ, p_end TIMESTAMPTZ)
 RETURNS TSTZRANGE AS $$
     SELECT tstzrange(
@@ -36,7 +39,7 @@ RETURNS TSTZRANGE AS $$
         ) * INTERVAL '1 minute'),
         '[)'
     );
-$$ LANGUAGE SQL STABLE;
+$$ LANGUAGE SQL IMMUTABLE;
 
 ALTER TABLE booking_items
     ADD CONSTRAINT excl_bed_no_overlap

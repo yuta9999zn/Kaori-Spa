@@ -1,7 +1,7 @@
 package vn.kaori.spa.notification.sender;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.UUID;
  * returns a fake id so dev / CI environments don't blow up.
  */
 @Component
-@ConditionalOnMissingBean(EmailSender.class)
+@ConditionalOnProperty(name = "kaori.email.provider", havingValue = "stub", matchIfMissing = true)
 @Slf4j
 public class StubEmailSender implements EmailSender {
     @Override public String name() { return "stub-email"; }

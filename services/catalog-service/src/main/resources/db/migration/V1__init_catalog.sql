@@ -1,6 +1,7 @@
 -- Catalog: dịch vụ, danh mục, gói combo, giá theo branch.
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE SCHEMA IF NOT EXISTS catalog;
 SET search_path TO catalog;
 
@@ -28,7 +29,7 @@ CREATE TABLE services (
     region        VARCHAR(32) NOT NULL,
     duration_min  INT NOT NULL,
     base_price    NUMERIC(15,2) NOT NULL,
-    currency      CHAR(3) NOT NULL DEFAULT 'VND',
+    currency      VARCHAR(3) NOT NULL DEFAULT 'VND',
     is_combo      BOOLEAN NOT NULL DEFAULT FALSE,
     sessions      INT NOT NULL DEFAULT 1,
     is_active     BOOLEAN NOT NULL DEFAULT TRUE,

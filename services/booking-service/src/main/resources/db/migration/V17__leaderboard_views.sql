@@ -2,7 +2,7 @@
 -- Refresh cadence: 15 minutes (Spring @Scheduled in LeaderboardRefresher).
 -- Window: rolling 30 days from now() — recomputed on every refresh.
 --
--- All queries use booking.bookings + payment.invoices + booking.reviews so
+-- All queries use booking.bookings + booking.transactions + booking.reviews so
 -- they live in this service even though the metric naming is "analytics".
 
 CREATE SCHEMA IF NOT EXISTS analytics;
@@ -14,9 +14,9 @@ WITH revenue AS (
            COUNT(*) FILTER (WHERE b.status = 'done')   AS bookings_done,
            COUNT(*) FILTER (WHERE b.status = 'no_show') AS bookings_noshow,
            COUNT(DISTINCT b.customer_phone)             AS unique_customers,
-           COALESCE(SUM(i.total) FILTER (WHERE i.status = 'paid'), 0)::numeric(14,0) AS revenue
+           COALESCE(SUM(t.amount), 0)::numeric(14,0)    AS revenue
     FROM booking.bookings b
-    LEFT JOIN payment.invoices i ON i.booking_id = b.id
+    LEFT JOIN booking.transactions t ON t.booking_id = b.id
     WHERE b.start_at >= now() - INTERVAL '30 days'
     GROUP BY b.tenant_id, b.branch_id
 ),
@@ -82,13 +82,18 @@ staff_ratings AS (
     GROUP BY bi.staff_id
 ),
 staff_punctual AS (
-    -- on-time = check_in_at <= start_at + 5 minutes
+    -- on-time = actual_in <= expected_start + 5 minutes (when both set).
+    -- attendance_records.expected_start is a TIME-of-day, so we compose
+    -- a TIMESTAMPTZ on the same work_date for comparison.
     SELECT a.staff_id,
-           (COUNT(*) FILTER (WHERE a.check_in_at IS NOT NULL
-                              AND a.check_in_at <= a.shift_start + INTERVAL '5 minutes')::numeric
+           (COUNT(*) FILTER (
+                WHERE a.actual_in IS NOT NULL
+                  AND a.expected_start IS NOT NULL
+                  AND a.actual_in <= (a.work_date + a.expected_start)::timestamptz + INTERVAL '5 minutes'
+            )::numeric
             / NULLIF(COUNT(*), 0)::numeric)::numeric(4,3) AS on_time_pct
-    FROM booking.attendance a
-    WHERE a.shift_start >= now() - INTERVAL '30 days'
+    FROM booking.attendance_records a
+    WHERE a.work_date >= (now() - INTERVAL '30 days')::date
     GROUP BY a.staff_id
 )
 SELECT

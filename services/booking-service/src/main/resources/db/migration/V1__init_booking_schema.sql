@@ -12,6 +12,7 @@
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS btree_gist;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE SCHEMA IF NOT EXISTS booking;
 SET search_path TO booking;
 
@@ -95,7 +96,7 @@ CREATE TABLE bookings (
     start_at        TIMESTAMPTZ NOT NULL,
     end_at          TIMESTAMPTZ NOT NULL,
     total_amount    NUMERIC(15,2) NOT NULL DEFAULT 0,
-    currency        CHAR(3) NOT NULL DEFAULT 'VND',
+    currency        VARCHAR(3) NOT NULL DEFAULT 'VND',
     note            TEXT,
     idempotency_key VARCHAR(64),
     created_at      TIMESTAMPTZ NOT NULL DEFAULT now(),

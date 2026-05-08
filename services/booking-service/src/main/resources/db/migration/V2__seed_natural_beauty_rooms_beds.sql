@@ -21,8 +21,7 @@ BEGIN
     VALUES
         (nb_tenant, branch_575, 'P1', '{"vi":"Phòng 1","en":"Room 1"}'::jsonb,        'normal', 1, 2),
         (nb_tenant, branch_575, 'P2', '{"vi":"Phòng 2","en":"Room 2"}'::jsonb,        'normal', 1, 2),
-        (nb_tenant, branch_575, 'VIP1','{"vi":"Phòng VIP 1","en":"VIP Room 1"}'::jsonb,'vip',  2, 1)
-    RETURNING id INTO r1;
+        (nb_tenant, branch_575, 'VIP1','{"vi":"Phòng VIP 1","en":"VIP Room 1"}'::jsonb,'vip',  2, 1);
 
     SELECT id INTO r1 FROM rooms WHERE branch_id = branch_575 AND code = 'P1';
     SELECT id INTO r2 FROM rooms WHERE branch_id = branch_575 AND code = 'P2';

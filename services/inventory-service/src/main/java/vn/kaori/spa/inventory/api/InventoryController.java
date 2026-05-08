@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import vn.kaori.spa.inventory.domain.*;
-import vn.kaori.spa.inventory.domain.Repos.*;
 import vn.kaori.spa.shared.api.ApiResponse;
 import vn.kaori.spa.shared.audit.Audited;
 import vn.kaori.spa.shared.error.AppException;

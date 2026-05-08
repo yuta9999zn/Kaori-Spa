@@ -14,7 +14,7 @@ spring:
     baseline-on-migrate: true
     schemas: inventory
 server:
-  port: ${PORT:8088}
+  port: ${PORT:8089}
 management:
   endpoints:
     web:

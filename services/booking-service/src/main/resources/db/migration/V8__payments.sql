@@ -31,7 +31,7 @@ CREATE TABLE transactions (
     txn_type        VARCHAR(8) NOT NULL CHECK (txn_type IN ('dv', 'mp')),    -- service vs product (matches AuraDB seed)
     method_code     VARCHAR(16) NOT NULL,
     amount          NUMERIC(15, 2) NOT NULL CHECK (amount > 0),
-    currency        CHAR(3) NOT NULL DEFAULT 'VND',
+    currency        VARCHAR(3) NOT NULL DEFAULT 'VND',
     booking_id      UUID,
     customer_phone  VARCHAR(32),
     customer_name   VARCHAR(255),

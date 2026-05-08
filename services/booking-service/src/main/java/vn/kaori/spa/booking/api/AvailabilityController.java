@@ -83,12 +83,13 @@ public class AvailabilityController {
 
         List<SlotSuggestion> out = new ArrayList<>();
         for (Instant t = snap(from, slotGridMin); t.plus(dur).compareTo(to) <= 0; t = t.plus(step)) {
-            Instant slotEnd = t.plus(dur);
+            final Instant tStart = t;
+            Instant slotEnd = tStart.plus(dur);
 
             for (Bed bed : beds) {
                 boolean bedFree = occupied.stream().noneMatch(o ->
                         o.getBedId().equals(bed.getId())
-                                && overlaps(o.getStartAt(), o.getEndAt(), t, slotEnd));
+                                && overlaps(o.getStartAt(), o.getEndAt(), tStart, slotEnd));
                 if (!bedFree) continue;
 
                 UUID pickedStaff = null;

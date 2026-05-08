@@ -19,7 +19,7 @@ CREATE TABLE products (
     sku          VARCHAR(64),
     unit         VARCHAR(16) NOT NULL DEFAULT 'pcs',
     base_price   NUMERIC(15,2) NOT NULL DEFAULT 0,
-    currency     CHAR(3) NOT NULL DEFAULT 'VND',
+    currency     VARCHAR(3) NOT NULL DEFAULT 'VND',
     category     VARCHAR(64),
     is_active    BOOLEAN NOT NULL DEFAULT TRUE,
     created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),

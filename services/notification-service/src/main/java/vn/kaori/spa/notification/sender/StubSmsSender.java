@@ -1,13 +1,13 @@
 package vn.kaori.spa.notification.sender;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
 @Component
-@ConditionalOnMissingBean(SmsSender.class)
+@ConditionalOnProperty(name = "kaori.sms.provider", havingValue = "stub", matchIfMissing = true)
 @Slf4j
 public class StubSmsSender implements SmsSender {
     @Override public String name() { return "stub-sms"; }
