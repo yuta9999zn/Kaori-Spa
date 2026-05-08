@@ -146,7 +146,9 @@ public class AuthController {
                 http.getHeader("User-Agent")
         );
         return ApiResponse.ok(new TokenResponse(
-                pair.accessToken(), pair.refreshToken(), pair.accessExpiresIn(), null
+                "ok", null,
+                pair.accessToken(), pair.refreshToken(), pair.accessExpiresIn(),
+                null
         ));
     }
 

@@ -3,6 +3,7 @@
 -- which lives in tenant-service). Tables here only see tenant_id as a foreign key.
 
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE SCHEMA IF NOT EXISTS auth;
 SET search_path TO auth;
@@ -11,7 +12,7 @@ SET search_path TO auth;
 CREATE TABLE users (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     tenant_id       UUID NOT NULL,
-    email           CITEXT,
+    email           VARCHAR(255),
     phone           VARCHAR(32),
     password_hash   VARCHAR(255) NOT NULL,
     locale          VARCHAR(8) NOT NULL DEFAULT 'vi',
@@ -22,7 +23,6 @@ CREATE TABLE users (
     updated_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
     deleted_at      TIMESTAMPTZ
 );
-CREATE EXTENSION IF NOT EXISTS citext;
 CREATE UNIQUE INDEX uniq_users_tenant_email ON users (tenant_id, email)
     WHERE deleted_at IS NULL AND email IS NOT NULL;
 CREATE UNIQUE INDEX uniq_users_tenant_phone ON users (tenant_id, phone)
@@ -79,9 +79,12 @@ CREATE TABLE user_roles (
     role_id         UUID NOT NULL REFERENCES roles(id) ON DELETE CASCADE,
     scope_org_id    UUID,
     scope_branch_id UUID,
-    granted_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY (user_id, role_id, COALESCE(scope_org_id, '00000000-0000-0000-0000-000000000000'),
-                 COALESCE(scope_branch_id, '00000000-0000-0000-0000-000000000000'))
+    granted_at      TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+CREATE UNIQUE INDEX uniq_user_roles_scoped ON user_roles (
+    user_id, role_id,
+    COALESCE(scope_org_id, '00000000-0000-0000-0000-000000000000'::uuid),
+    COALESCE(scope_branch_id, '00000000-0000-0000-0000-000000000000'::uuid)
 );
 
 -- ────────────────────────────────────────────────────────────────────────
@@ -89,7 +92,7 @@ CREATE TABLE sessions (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id             UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     refresh_token_hash  VARCHAR(128) NOT NULL,
-    ip                  INET,
+    ip                  VARCHAR(45),
     user_agent          TEXT,
     expires_at          TIMESTAMPTZ NOT NULL,
     revoked_at          TIMESTAMPTZ,

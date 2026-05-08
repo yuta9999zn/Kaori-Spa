@@ -11,7 +11,7 @@ secrets/
 **/.gradle/
 *.class
 *.jar
-!gradle/wrapper/gradle-wrapper.jar
+!**/gradle/wrapper/gradle-wrapper.jar
 
 # ── Python ──────────────────────────────────────────────────────────────
 __pycache__/

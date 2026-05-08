@@ -2,6 +2,7 @@ package vn.kaori.spa.shared.outbox;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.time.Instant;
  * {@link OutboxEventStore} bean to plug into this loop.
  */
 @Component
+@ConditionalOnBean(OutboxEventStore.class)
 @RequiredArgsConstructor
 @Slf4j
 public class OutboxPublisher {
