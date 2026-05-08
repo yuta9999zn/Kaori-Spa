@@ -3,6 +3,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { api, ApiError, ctx } from './api';
 
+/** Default tenant id for the tenant-admin portal. Mirrors org-admin's ORG_ID pattern. */
+export const TENANT_ID =
+  process.env.NEXT_PUBLIC_TENANT_ID ?? '00000000-0000-0000-0000-000000000000';
+
 /** Generic data hook: load on mount + refetch helper + error/loading state. */
 export function useFetch<T>(loader: () => Promise<T>, deps: unknown[] = []) {
   const [data, setData] = useState<T | null>(null);
@@ -177,4 +181,160 @@ export function useAuditEvents(args: UseAuditEventsArgs = {}) {
     if (to) params.set('to', to);
     return api<AuditPagedResult<AuditEventDto>>(`/v1/audit-events?${params}`);
   }, [tenantId ?? '', actorId ?? '', action ?? '', entityType ?? '', from ?? '', to ?? '', page, size]);
+}
+
+// ─── Tenant domain config (tenant-service /v1/tenants/{id}/domain) ─────────
+
+export interface DomainConfigDto {
+  tenantId: string;
+  subdomain: string;
+  customDomain: string | null;
+  sslStatus: string | null;
+  sslExpiresAt: string | null;
+  forceHttps: boolean;
+  redirectOldUrl: boolean;
+  requireLogin: boolean;
+  updatedAt: string | null;
+}
+
+export interface DomainConfigInput {
+  subdomain: string;
+  customDomain?: string | null;
+  sslStatus?: string | null;
+  sslExpiresAt?: string | null;
+  forceHttps?: boolean;
+  redirectOldUrl?: boolean;
+  requireLogin?: boolean;
+}
+
+export function useDomainConfig(tenantId: string = TENANT_ID) {
+  return useFetch<DomainConfigDto>(
+    () => api<DomainConfigDto>(`/v1/tenants/${tenantId}/domain`),
+    [tenantId]
+  );
+}
+
+export function saveDomainConfig(tenantId: string, input: DomainConfigInput) {
+  return api<DomainConfigDto>(`/v1/tenants/${tenantId}/domain`, {
+    method: 'PUT',
+    body: JSON.stringify(input)
+  });
+}
+
+// ─── Tenant branding (tenant-service /v1/tenants/{id}/branding) ────────────
+
+export interface BrandingDto {
+  tenantId: string;
+  logoUrl: string | null;
+  faviconUrl: string | null;
+  primaryColor: string | null;
+  secondaryColor: string | null;
+  accentColor: string | null;
+  backgroundColor: string | null;
+  headingFont: string | null;
+  bodyFont: string | null;
+  loginWelcome: Record<string, string> | null;
+  bookingTagline: Record<string, string> | null;
+  emailLogoUrl: string | null;
+  emailHeaderBg: string | null;
+  emailFooter: Record<string, string> | null;
+  updatedAt: string | null;
+}
+
+export interface BrandingInput {
+  logoUrl?: string | null;
+  faviconUrl?: string | null;
+  primaryColor?: string | null;
+  secondaryColor?: string | null;
+  accentColor?: string | null;
+  backgroundColor?: string | null;
+  headingFont?: string | null;
+  bodyFont?: string | null;
+  loginWelcome?: Record<string, string> | null;
+  bookingTagline?: Record<string, string> | null;
+  emailLogoUrl?: string | null;
+  emailHeaderBg?: string | null;
+  emailFooter?: Record<string, string> | null;
+}
+
+export function useBranding(tenantId: string = TENANT_ID) {
+  return useFetch<BrandingDto>(
+    () => api<BrandingDto>(`/v1/tenants/${tenantId}/branding`),
+    [tenantId]
+  );
+}
+
+export function saveBranding(tenantId: string, input: BrandingInput) {
+  return api<BrandingDto>(`/v1/tenants/${tenantId}/branding`, {
+    method: 'PUT',
+    body: JSON.stringify(input)
+  });
+}
+
+// ─── Tenant feature flags (tenant-service /v1/tenants/{id}/features) ───────
+
+export interface FeatureFlagDto {
+  tenantId: string;
+  moduleKey: string;
+  enabled: boolean;
+  /** BE serializes JsonProperty `premium` as `premium` (record accessor `premium()`).
+   *  We keep both names in the type so either response shape is tolerated. */
+  premium?: boolean;
+  isPremium?: boolean;
+  configured?: boolean;
+  activatedAt: string | null;
+}
+
+export function useFeatures(tenantId: string = TENANT_ID) {
+  return useFetch<FeatureFlagDto[]>(
+    () => api<FeatureFlagDto[]>(`/v1/tenants/${tenantId}/features`),
+    [tenantId]
+  );
+}
+
+export function toggleFeature(tenantId: string, moduleKey: string, enabled: boolean) {
+  return api<FeatureFlagDto>(`/v1/tenants/${tenantId}/features/${moduleKey}`, {
+    method: 'PUT',
+    body: JSON.stringify({ enabled })
+  });
+}
+
+// ─── Tenant-wide members (auth-service /v1/members) ────────────────────────
+
+export interface TenantMemberDto {
+  userId: string;
+  fullName: string | null;
+  email: string | null;
+  phone: string | null;
+  status: string;
+  roles: string[];
+  branches: string[];
+  lastLogin: string | null;
+}
+
+export interface MembersPagedResult {
+  items: TenantMemberDto[];
+  page: number;
+  size: number;
+  total: number;
+}
+
+export interface UseMembersArgs {
+  tenantId?: string;
+  q?: string;
+  status?: string;
+  page?: number;
+  size?: number;
+}
+
+export function useMembers(args: UseMembersArgs = {}) {
+  const tid = args.tenantId ?? ctx.tenantId;
+  const { q, status, page = 0, size = 20 } = args;
+  return useFetch<MembersPagedResult>(() => {
+    const params = new URLSearchParams({ page: String(page), size: String(size) });
+    if (tid) params.set('tenantId', tid);
+    if (q && q.trim().length > 0) params.set('q', q.trim());
+    if (status && status.trim().length > 0) params.set('status', status.trim());
+    return api<MembersPagedResult>(`/v1/members?${params}`);
+  }, [tid, q ?? '', status ?? '', page, size]);
 }
