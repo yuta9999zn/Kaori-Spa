@@ -4,12 +4,14 @@
   "nav": {
     "dashboard": "Dashboard",
     "tenant": "Tenants",
+    "members": "Members",
     "plan": "Plans",
     "billing": "Billing",
     "domain": "Domains",
     "audit": "Audit log",
     "integration": "Integrations",
     "feature": "Features",
+    "branding": "Branding",
     "settings": "Settings",
     "logout": "Sign out"
   },

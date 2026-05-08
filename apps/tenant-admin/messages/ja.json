@@ -2,9 +2,9 @@
   "brand": { "platform": "Kaori" },
   "portal": { "name": "Kaori プラットフォーム", "subtitle": "Tenant Administrator" },
   "nav": {
-    "dashboard": "ダッシュボード", "tenant": "テナント", "plan": "プラン",
+    "dashboard": "ダッシュボード", "tenant": "テナント", "members": "メンバー", "plan": "プラン",
     "billing": "請求", "domain": "ドメイン", "audit": "監査ログ",
-    "integration": "連携", "feature": "機能", "settings": "設定", "logout": "ログアウト"
+    "integration": "連携", "feature": "機能", "branding": "ブランディング", "settings": "設定", "logout": "ログアウト"
   },
   "dashboard": {
     "title": "プラットフォーム概要",
@@ -21,83 +21,83 @@
     "columns": { "ts": "時間", "actor": "実行者", "action": "操作", "entity": "対象", "ip": "IP" }
   },
   "domain": {
-    "title": "Tên miền & URL đặt lịch",
-    "subtitle": "Cấu hình cách khách hàng truy cập trang đặt lịch và cổng khách hàng của tổ chức.",
-    "actions": { "cancel": "Huỷ", "save": "Lưu thay đổi", "checkAvailability": "Kiểm tra khả dụng", "disconnect": "Ngắt kết nối", "verify": "Xác minh tên miền", "renew": "Gia hạn chứng chỉ thủ công", "readDocs": "Xem tài liệu đầy đủ" },
-    "subdomain": { "title": "Subdomain nền tảng", "subtitle": "Địa chỉ đặt lịch mặc định miễn phí.", "label": "Tên subdomain", "suffix": ".kaoriplatform.com", "available": "URL khả dụng và đang hoạt động." },
-    "custom": { "title": "Tên miền tuỳ chỉnh", "subtitle": "Kết nối tên miền website riêng của bạn.", "label": "URL tên miền tuỳ chỉnh", "connected": "Đã kết nối" },
-    "ssl": { "title": "Chứng chỉ SSL", "statusLabel": "Trạng thái", "statusValue": "Đang hoạt động & bảo mật", "renewIn": "Tự gia hạn sau {days} ngày" },
+    "title": "ドメイン & 予約 URL",
+    "subtitle": "顧客がオンライン予約ページとポータルにアクセスする方法を設定します。",
+    "actions": { "cancel": "キャンセル", "save": "変更を保存", "checkAvailability": "空き状況を確認", "disconnect": "切断", "verify": "ドメインを認証", "renew": "証明書を手動更新", "readDocs": "詳細ドキュメントを見る" },
+    "subdomain": { "title": "プラットフォームサブドメイン", "subtitle": "無料の標準予約 URL です。", "label": "サブドメイン名", "suffix": ".kaoriplatform.com", "available": "URL は利用可能で稼働中です。" },
+    "custom": { "title": "カスタムドメイン", "subtitle": "自社ウェブサイトのドメインを接続します。", "label": "カスタムドメイン URL", "connected": "接続済" },
+    "ssl": { "title": "SSL 証明書", "statusLabel": "状態", "statusValue": "稼働中・安全", "renewIn": "{days} 日後に自動更新" },
     "security": {
-      "title": "Bảo mật tên miền",
-      "forceHttps": "Bắt buộc HTTPS",
-      "forceHttpsHint": "Chuyển hướng HTTP sang kết nối an toàn",
-      "redirectOld": "Chuyển hướng URL cũ",
-      "redirectOldHint": "Chuyển tiếp lưu lượng từ subdomain nền tảng",
-      "protection": "Bảo vệ trang đặt lịch",
-      "protectionHint": "Yêu cầu khách hàng đăng nhập để xem giá"
+      "title": "ドメインセキュリティ",
+      "forceHttps": "HTTPS を強制",
+      "forceHttpsHint": "HTTP トラフィックを安全な接続にリダイレクト",
+      "redirectOld": "旧 URL をリダイレクト",
+      "redirectOldHint": "プラットフォームサブドメインからのアクセスを転送",
+      "protection": "予約ページ保護",
+      "protectionHint": "料金表示に顧客ログインを必須化"
     },
-    "links": { "title": "Liên kết đặt lịch công khai", "main": "Trang chính của tổ chức", "copy": "Sao chép", "open": "Mở liên kết" },
+    "links": { "title": "公開予約リンク", "main": "組織のメインページ", "copy": "コピー", "open": "リンクを開く" },
     "guide": {
-      "title": "Hướng dẫn cài đặt",
-      "subtitle": "Làm theo các bước sau để trỏ tên miền tuỳ chỉnh về nền tảng.",
-      "step1Title": "Thêm bản ghi DNS",
-      "step1Desc": "Đăng nhập nhà cung cấp tên miền (vd: GoDaddy, Namecheap) và thêm bản ghi CNAME mới.",
-      "step2Title": "Cấu hình bản ghi",
-      "step2Type": "Loại",
-      "step2Host": "Host / Tên",
-      "step2Value": "Giá trị / Đích",
-      "step3Title": "Xác minh kết nối",
-      "step3Desc": "Bấm \"Xác minh tên miền\" ở mục Tên miền tuỳ chỉnh. Lan truyền có thể mất tới 24 giờ."
+      "title": "セットアップガイド",
+      "subtitle": "以下の手順でカスタムドメインをプラットフォームに接続します。",
+      "step1Title": "DNS レコードを追加",
+      "step1Desc": "ドメイン管理サービス(GoDaddy、Namecheap など)にログインし、新しい CNAME レコードを追加します。",
+      "step2Title": "レコードを設定",
+      "step2Type": "種別",
+      "step2Host": "ホスト / 名前",
+      "step2Value": "値 / ターゲット",
+      "step3Title": "接続を確認",
+      "step3Desc": "カスタムドメイン欄の「ドメインを認証」をクリックします。反映まで最大 24 時間かかる場合があります。"
     },
-    "preview": { "title": "Góc nhìn khách hàng", "subtitle": "Xem trước cổng đặt lịch đang hoạt động.", "heading": "Đặt lịch hẹn", "selectLocation": "Chọn chi nhánh để bắt đầu" }
+    "preview": { "title": "顧客から見た画面", "subtitle": "稼働中の予約ポータルをプレビューします。", "heading": "予約する", "selectLocation": "店舗を選択して開始" }
   },
   "members": {
-    "title": "Thành viên không gian làm việc",
-    "subtitle": "Quản lý người dùng, nhân viên và quản trị viên có quyền truy cập nền tảng.",
-    "actions": { "export": "Xuất danh sách", "invite": "Mời người dùng", "search": "Tìm theo tên hoặc email...", "viewProfile": "Xem hồ sơ", "editRole": "Sửa vai trò", "changeBranch": "Đổi chi nhánh", "deactivate": "Vô hiệu hoá", "reactivate": "Kích hoạt lại", "remove": "Xoá người dùng", "resendInvite": "Gửi lại lời mời" },
-    "kpi": { "total": "Tổng người dùng", "active": "Đang hoạt động", "pending": "Đang chờ xác nhận", "admins": "Quản trị viên" },
-    "filters": { "allRoles": "Tất cả vai trò", "allBranches": "Tất cả chi nhánh", "allStatuses": "Tất cả trạng thái", "sortNewest": "Sắp xếp: Mới nhất", "sortAlpha": "Sắp xếp: A-Z", "sortRole": "Sắp xếp: Vai trò" },
-    "columns": { "member": "Thông tin thành viên", "role": "Vai trò & quyền", "branch": "Chi nhánh", "status": "Trạng thái", "lastLogin": "Đăng nhập gần đây", "actions": "Thao tác" },
-    "roles": { "owner": "Chủ sở hữu", "manager": "Quản lý", "therapist": "Kỹ thuật viên", "receptionist": "Lễ tân", "marketing": "Marketing", "hr": "Nhân sự" },
-    "status": { "active": "Hoạt động", "invited": "Đã mời", "suspended": "Tạm khoá", "global": "Truy cập toàn cục", "neverLogin": "Chưa từng đăng nhập" },
-    "pagination": { "showing": "Hiển thị", "to": "đến", "of": "trên", "users": "người dùng", "previous": "Trước", "next": "Tiếp" }
+    "title": "ワークスペースメンバー",
+    "subtitle": "プラットフォームにアクセスできるユーザー、スタッフ、管理者を管理します。",
+    "actions": { "export": "メンバーをエクスポート", "invite": "ユーザーを招待", "search": "名前またはメールで検索...", "viewProfile": "プロフィールを表示", "editRole": "役割を編集", "changeBranch": "店舗を変更", "deactivate": "無効化", "reactivate": "再有効化", "remove": "ユーザーを削除", "resendInvite": "招待を再送" },
+    "kpi": { "total": "総ユーザー数", "active": "稼働中", "pending": "招待保留中", "admins": "管理者" },
+    "filters": { "allRoles": "すべての役割", "allBranches": "すべての店舗", "allStatuses": "すべての状態", "sortNewest": "並び順: 新着順", "sortAlpha": "並び順: A-Z", "sortRole": "並び順: 役割" },
+    "columns": { "member": "メンバー情報", "role": "役割 & 権限", "branch": "店舗", "status": "状態", "lastLogin": "最終ログイン", "actions": "操作" },
+    "roles": { "owner": "オーナー", "manager": "マネージャー", "therapist": "セラピスト", "receptionist": "受付", "marketing": "マーケティング", "hr": "人事" },
+    "status": { "active": "稼働中", "invited": "招待済", "suspended": "停止中", "global": "全体アクセス", "neverLogin": "未ログイン" },
+    "pagination": { "showing": "表示", "to": "〜", "of": "/", "users": "ユーザー", "previous": "前へ", "next": "次へ" }
   },
   "branding": {
-    "title": "Thương hiệu & giao diện",
-    "subtitle": "Tuỳ biến cách thương hiệu spa hiển thị trên dashboard, cổng đặt lịch và email khách hàng.",
-    "actions": { "reset": "Khôi phục mặc định", "save": "Lưu thương hiệu", "replace": "Thay ảnh", "remove": "Xoá", "uploadMedia": "Tải lên", "uploadImage": "Tải hình ảnh", "uploadBanner": "Tải banner", "view": "Xem", "addNew": "Thêm mới" },
-    "logo": { "title": "Logo & biểu tượng", "primaryLabel": "Logo chính", "primaryHint": "Hiển thị trên header dashboard và trang đặt lịch. Khuyến nghị PNG nền trong suốt.", "faviconLabel": "Favicon / biểu tượng app", "faviconHint": "Hiển thị trên tab trình duyệt và icon app di động. PNG vuông hoặc ICO." },
-    "colors": { "title": "Màu thương hiệu", "primary": "Màu chính", "primaryHint": "Nút bấm, liên kết kích hoạt", "secondary": "Màu phụ", "secondaryHint": "Thẻ, viền", "accent": "Màu nhấn", "accentHint": "Điểm nhấn, nhãn", "background": "Nền", "backgroundHint": "Nền ứng dụng" },
-    "typography": { "title": "Kiểu chữ", "heading": "Font tiêu đề", "body": "Font nội dung", "headingPreview": "Trải nghiệm spa cao cấp", "bodyPreview": "Thư giãn. Phục hồi. Tươi mới. Các liệu trình cao cấp được thiết kế để nâng tầm sức khoẻ và xoa dịu tâm hồn." },
-    "login": { "title": "Giao diện trang đăng nhập", "welcome": "Lời chào", "background": "Ảnh nền", "overlay": "Lớp phủ (độ mờ)" },
-    "booking": { "title": "Cổng đặt lịch", "pageTitle": "Tiêu đề trang đặt lịch", "tagline": "Khẩu hiệu thương hiệu", "banner": "Ảnh banner", "bannerHint": "Khuyến nghị 1920x600px" },
-    "email": { "title": "Mẫu email", "headerLogo": "Logo header email", "headerBg": "Màu nền header", "footer": "Footer / Tuyên bố miễn trừ" },
-    "assets": { "title": "Thư viện tài nguyên" },
-    "preview": { "title": "Xem trước trực tiếp", "subtitle": "Xem thương hiệu hiển thị tới người dùng.", "tabBooking": "Trang đặt lịch", "tabDashboard": "Dashboard", "tabEmail": "Email", "selectService": "Chọn dịch vụ", "bookButton": "Đặt lịch hẹn", "realtime": "Xem trước cập nhật theo thời gian thực" }
+    "title": "ブランディング & 外観",
+    "subtitle": "管理ダッシュボード、予約ポータル、顧客向けメールでのブランド表示をカスタマイズします。",
+    "actions": { "reset": "デフォルトに戻す", "save": "ブランドを保存", "replace": "差し替え", "remove": "削除", "uploadMedia": "メディアをアップロード", "uploadImage": "画像をアップロード", "uploadBanner": "バナーをアップロード", "view": "表示", "addNew": "新規追加" },
+    "logo": { "title": "ロゴ & アイコン", "primaryLabel": "メインロゴ", "primaryHint": "ダッシュボードヘッダーや予約ページに表示されます。透過 PNG を推奨。", "faviconLabel": "ファビコン / アプリアイコン", "faviconHint": "ブラウザタブやモバイルアプリアイコンに表示されます。正方形 PNG または ICO。" },
+    "colors": { "title": "ブランドカラー", "primary": "メインカラー", "primaryHint": "ボタン、アクティブリンク", "secondary": "サブカラー", "secondaryHint": "カード、枠線", "accent": "アクセントカラー", "accentHint": "強調、タグ", "background": "背景色", "backgroundHint": "アプリ背景" },
+    "typography": { "title": "タイポグラフィ", "heading": "見出しフォント", "body": "本文フォント", "headingPreview": "ラグジュアリーなスパ体験", "bodyPreview": "リラックス。リストア。リジュビネート。お客様のウェルネスを高め、心を癒すプレミアムトリートメントをご用意しています。" },
+    "login": { "title": "ログインページの外観", "welcome": "ウェルカムメッセージ", "background": "背景画像", "overlay": "オーバーレイ(不透明度)" },
+    "booking": { "title": "予約ポータル", "pageTitle": "予約ページタイトル", "tagline": "ブランドタグライン", "banner": "ヒーローバナー画像", "bannerHint": "1920x600px を推奨" },
+    "email": { "title": "メールテンプレート", "headerLogo": "メールヘッダーロゴ", "headerBg": "ヘッダー背景色", "footer": "フッター / 免責事項" },
+    "assets": { "title": "アセットライブラリ" },
+    "preview": { "title": "ライブプレビュー", "subtitle": "ブランドがユーザーにどう表示されるかを確認します。", "tabBooking": "予約ページ", "tabDashboard": "ダッシュボード", "tabEmail": "メール", "selectService": "サービスを選択", "bookButton": "予約する", "realtime": "プレビューはリアルタイムで更新されます" }
   },
   "feature": {
-    "title": "Module tính năng",
-    "subtitle": "Bật/tắt các module nền tảng để tuỳ biến năng lực vận hành cho spa của bạn.",
-    "actions": { "reset": "Khôi phục mặc định", "configure": "Cấu hình", "viewDetails": "Xem chi tiết", "activate": "Kích hoạt add-on", "learnMore": "Tìm hiểu thêm", "contactSales": "Liên hệ kinh doanh" },
-    "kpi": { "total": "Tổng module", "enabled": "Đang bật", "disabled": "Đang tắt", "addons": "Add-on khả dụng" },
-    "section": { "core": "Module nền tảng cốt lõi", "addons": "Add-on cao cấp" },
-    "status": { "enabled": "Đang bật", "disabled": "Đang tắt", "premium": "Tính năng cao cấp", "active": "Hoạt động" },
+    "title": "機能モジュール",
+    "subtitle": "プラットフォームのモジュールを有効/無効にして、店舗の運用機能をカスタマイズします。",
+    "actions": { "reset": "デフォルトに戻す", "configure": "設定", "viewDetails": "詳細を見る", "activate": "アドオンを有効化", "learnMore": "詳細", "contactSales": "営業に問い合わせる" },
+    "kpi": { "total": "総モジュール数", "enabled": "有効", "disabled": "無効", "addons": "利用可能なアドオン" },
+    "section": { "core": "コアプラットフォームモジュール", "addons": "プレミアムアドオン" },
+    "status": { "enabled": "有効", "disabled": "無効", "premium": "プレミアム機能", "active": "稼働中" },
     "modules": {
-      "booking": { "title": "Hệ thống đặt lịch", "desc": "Cho phép khách đặt hẹn trực tuyến và quản lý lịch nội bộ." },
-      "services": { "title": "Dịch vụ & liệu trình", "desc": "Quản lý liệu trình, danh mục, thời lượng và quy tắc giá." },
-      "crm": { "title": "Customer CRM", "desc": "Quản lý hồ sơ khách, lịch sử ghé thăm, sở thích và điểm thưởng." },
-      "staff": { "title": "Quản lý nhân viên", "desc": "Quản lý nhân sự, theo dõi giờ làm và phân chuyên môn." },
-      "reports": { "title": "Báo cáo & phân tích", "desc": "Xem hiệu suất kinh doanh, doanh thu và mức sử dụng nhân viên." },
-      "blog": { "title": "Blog CMS", "desc": "Tạo bài SEO và nội dung marketing cho cổng đặt lịch." },
-      "marketing": { "title": "Marketing tự động", "desc": "Chạy chiến dịch nhắm mục tiêu, khuyến mãi và email tự động.", "requires": "Cần module Customer CRM" },
-      "inventory": { "title": "Quản lý kho", "desc": "Theo dõi sản phẩm bán lẻ, vật tư chuyên dụng và tồn kho theo chi nhánh." },
-      "recruitment": { "title": "Tuyển dụng", "desc": "Quản lý tin tuyển dụng, theo dõi ứng viên và quy trình tuyển." }
+      "booking": { "title": "予約システム", "desc": "顧客のオンライン予約と社内カレンダー管理を実現します。" },
+      "services": { "title": "サービス & トリートメント", "desc": "メニュー、カテゴリー、所要時間、料金ルールを管理します。" },
+      "crm": { "title": "顧客 CRM", "desc": "顧客プロフィール、来店履歴、嗜好、ロイヤリティポイントを管理します。" },
+      "staff": { "title": "スタッフ管理", "desc": "従業員管理、勤務時間記録、専門分野の割当を行います。" },
+      "reports": { "title": "レポート & 分析", "desc": "業績、売上、スタッフ稼働率を可視化します。" },
+      "blog": { "title": "ブログ CMS", "desc": "予約ポータル向けの SEO 記事とマーケティングコンテンツを作成します。" },
+      "marketing": { "title": "マーケティング自動化", "desc": "ターゲティング配信、プロモーション、メール自動配信を実行します。", "requires": "顧客 CRM モジュールが必要です" },
+      "inventory": { "title": "在庫管理", "desc": "店舗別の小売商品、業務用消耗品、在庫数を追跡します。" },
+      "recruitment": { "title": "採用管理", "desc": "求人掲載、応募者管理、採用ワークフローを運用します。" }
     },
     "addons": {
-      "ai": { "title": "Trợ lý marketing AI", "desc": "Tự động sinh nội dung email, bài đăng mạng xã hội và bài blog phù hợp với thương hiệu spa của bạn." },
-      "analytics": { "title": "Analytics Pro nâng cao", "desc": "Mở khoá báo cáo tuỳ biến, dự báo và xuất dashboard theo thời gian thực." },
-      "multiloc": { "title": "Multi-Location Intelligence", "desc": "Dành cho chuỗi: so sánh hiệu suất chi nhánh, cân bằng nhân sự và đồng bộ tồn kho toàn cầu." }
+      "ai": { "title": "AI マーケティングアシスタント", "desc": "スパブランドに合わせたメール文面、SNS 投稿、ブログ記事を AI が自動生成します。" },
+      "analytics": { "title": "Analytics Pro", "desc": "カスタムレポートビルダー、予測フォーキャスト、リアルタイムダッシュボードのエクスポートを利用できます。" },
+      "multiloc": { "title": "マルチロケーションインテリジェンス", "desc": "チェーン店向け。店舗間の業績比較、スタッフの負荷分散、グローバル在庫の統合を実現します。" }
     },
-    "preview": { "title": "Xem trước module", "capabilities": "Khả năng chính", "cap1Title": "Cổng trực tuyến", "cap1Desc": "Trang đặt lịch white-label hoạt động 24/7.", "cap2Title": "Lập lịch thông minh", "cap2Desc": "Ngăn trùng lịch và tự xử lý khoảng trống của nhân viên.", "cap3Title": "Nhắc lịch", "cap3Desc": "Email và SMS nhắc tự động giảm vắng hẹn." }
+    "preview": { "title": "モジュールプレビュー", "capabilities": "主な機能", "cap1Title": "オンラインポータル", "cap1Desc": "ホワイトラベル対応の 24 時間予約ページ。", "cap2Title": "スマートスケジューリング", "cap2Desc": "重複予約を防ぎ、スタッフの空き時間を自動調整します。", "cap3Title": "リマインダー", "cap3Desc": "メール・SMS の自動リマインドで無断キャンセルを削減します。" }
   }
 }

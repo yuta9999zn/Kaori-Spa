@@ -4,24 +4,26 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   LayoutDashboard, Building, Package, CreditCard, Globe, ScrollText,
-  Plug, Sparkles, Settings, LogOut, ShieldCheck, Menu, X
+  Plug, Sparkles, Settings, LogOut, ShieldCheck, Menu, X, Users, Palette
 } from 'lucide-react';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import LocaleSwitcher from './LocaleSwitcher';
 import { logout } from '@/lib/auth';
 import { cn } from '@/lib/cn';
 
-type NavKey = 'dashboard' | 'tenant' | 'plan' | 'billing' | 'domain' | 'audit' | 'integration' | 'feature' | 'settings';
+type NavKey = 'dashboard' | 'tenant' | 'members' | 'plan' | 'billing' | 'domain' | 'audit' | 'integration' | 'feature' | 'branding' | 'settings';
 
 const NAV: Array<{ href: string; key: NavKey; Icon: typeof LayoutDashboard }> = [
   { href: '/', key: 'dashboard', Icon: LayoutDashboard },
   { href: '/tenant', key: 'tenant', Icon: Building },
+  { href: '/members', key: 'members', Icon: Users },
   { href: '/plan', key: 'plan', Icon: Package },
   { href: '/billing', key: 'billing', Icon: CreditCard },
   { href: '/domain', key: 'domain', Icon: Globe },
   { href: '/audit', key: 'audit', Icon: ScrollText },
   { href: '/integration', key: 'integration', Icon: Plug },
   { href: '/feature', key: 'feature', Icon: Sparkles },
+  { href: '/branding', key: 'branding', Icon: Palette },
   { href: '/settings', key: 'settings', Icon: Settings }
 ];
 
@@ -48,7 +50,7 @@ export default function TenantShell({ children }: { children: React.ReactNode })
             const active = pathname === href || (href !== '/' && pathname.startsWith(href));
             return (
               <li key={key}>
-                <Link href={href as '/' | '/tenant' | '/plan' | '/billing' | '/domain' | '/audit' | '/integration' | '/feature' | '/settings'}
+                <Link href={href as '/' | '/tenant' | '/members' | '/plan' | '/billing' | '/domain' | '/audit' | '/integration' | '/feature' | '/branding' | '/settings'}
                   onClick={onNavigate}
                   className={cn('flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition',
                     active ? 'bg-brand-gold/10 text-brand-gold font-medium' : 'text-brand-textmuted hover:bg-brand-cream/40 hover:text-brand-textmain')}>

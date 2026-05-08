@@ -4,12 +4,14 @@
   "nav": {
     "dashboard": "Tổng quan",
     "tenant": "Tổ chức",
+    "members": "Thành viên",
     "plan": "Gói đăng ký",
     "billing": "Thanh toán",
     "domain": "Tên miền",
     "audit": "Audit log",
     "integration": "Tích hợp",
     "feature": "Tính năng",
+    "branding": "Thương hiệu",
     "settings": "Cài đặt",
     "logout": "Đăng xuất"
   },

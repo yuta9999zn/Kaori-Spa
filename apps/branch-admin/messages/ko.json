@@ -113,111 +113,111 @@
     "status": { "active": "운영", "maintenance": "정비", "retired": "중단" }
   },
   "service": {
-    "title": "Dịch vụ",
-    "subtitle": "Quản lý liệu trình spa, gói combo, giá và danh mục dịch vụ tại các chi nhánh.",
-    "create": "Tạo dịch vụ",
-    "import": "Nhập danh mục",
-    "export": "Xuất danh mục",
-    "search": "Tìm theo tên hoặc mã dịch vụ…",
-    "minShort": "phút",
-    "durationMin": "{min} phút",
-    "mockMostBooked": "Triệt lông toàn thân nữ",
-    "filterCategoryAll": "Danh mục: Tất cả",
-    "filterStatusAll": "Trạng thái: Tất cả",
-    "prev": "Trước",
-    "next": "Sau",
-    "paginationSummary": "Hiển thị {from}–{to} trong tổng {total} dịch vụ",
+    "title": "서비스",
+    "subtitle": "스파 트리트먼트, 콤보 패키지, 가격 및 지점별 서비스 카탈로그를 관리합니다.",
+    "create": "서비스 생성",
+    "import": "카탈로그 가져오기",
+    "export": "카탈로그 내보내기",
+    "search": "서비스명 또는 코드로 검색…",
+    "minShort": "분",
+    "durationMin": "{min}분",
+    "mockMostBooked": "여성 전신 제모",
+    "filterCategoryAll": "카테고리: 전체",
+    "filterStatusAll": "상태: 전체",
+    "prev": "이전",
+    "next": "다음",
+    "paginationSummary": "총 {total}건 중 {from}–{to} 표시",
     "kpi": {
-      "total": "Tổng dịch vụ",
-      "active": "Đang hoạt động",
-      "inactive": "Tạm ngừng",
-      "mostBooked": "Đặt nhiều nhất",
-      "avgDuration": "Thời lượng TB"
+      "total": "전체 서비스",
+      "active": "운영 중",
+      "inactive": "중단",
+      "mostBooked": "최다 예약",
+      "avgDuration": "평균 소요 시간"
     },
     "columns": {
-      "name": "Tên dịch vụ",
-      "category": "Danh mục",
-      "duration": "Thời lượng",
-      "price": "Giá",
-      "staff": "KTV",
-      "branches": "Chi nhánh",
-      "popularity": "Đánh giá",
-      "status": "Trạng thái"
+      "name": "서비스명",
+      "category": "카테고리",
+      "duration": "소요 시간",
+      "price": "가격",
+      "staff": "테라피스트",
+      "branches": "지점",
+      "popularity": "평점",
+      "status": "상태"
     },
     "category": {
-      "massage": "Massage",
-      "facial": "Chăm sóc da",
-      "hair_removal": "Triệt lông",
-      "package": "Gói combo",
-      "body": "Body therapy"
+      "massage": "마사지",
+      "facial": "페이셜",
+      "hair_removal": "제모",
+      "package": "패키지",
+      "body": "바디 테라피"
     },
     "status": {
-      "active": "Hoạt động",
-      "inactive": "Tạm ngừng"
+      "active": "운영",
+      "inactive": "중단"
     },
     "sort": {
-      "popular": "Sắp xếp: Phổ biến",
-      "name": "Sắp xếp: Tên A-Z",
-      "priceDesc": "Sắp xếp: Giá cao → thấp",
-      "newest": "Sắp xếp: Mới nhất"
+      "popular": "정렬: 인기순",
+      "name": "정렬: 이름 A-Z",
+      "priceDesc": "정렬: 가격 높은순",
+      "newest": "정렬: 최신순"
     }
   },
   "content": {
-    "title": "Bài viết & Nội dung",
-    "subtitle": "Quản lý bài viết, nội dung marketing và trang SEO cho mọi chi nhánh.",
-    "create": "Tạo bài viết",
-    "search": "Tìm theo tiêu đề, slug hoặc từ khoá…",
-    "filterScopeAll": "Phạm vi: Tất cả",
-    "filterStatusAll": "Trạng thái: Tất cả",
-    "filterDateAny": "Ngày: Bất kỳ",
-    "filterLast7": "7 ngày gần nhất",
-    "filterLast30": "30 ngày gần nhất",
-    "unpublished": "Chưa xuất bản",
-    "viewsCount": "{count} lượt xem",
-    "prev": "Trước",
-    "next": "Sau",
-    "paginationSummary": "Hiển thị {from}–{to} trong tổng {total} bài viết",
+    "title": "게시물 & 콘텐츠",
+    "subtitle": "전 지점의 게시물, 마케팅 콘텐츠와 SEO 페이지를 관리합니다.",
+    "create": "게시물 작성",
+    "search": "제목, 슬러그 또는 키워드로 검색…",
+    "filterScopeAll": "범위: 전체",
+    "filterStatusAll": "상태: 전체",
+    "filterDateAny": "날짜: 전체",
+    "filterLast7": "최근 7일",
+    "filterLast30": "최근 30일",
+    "unpublished": "미게시",
+    "viewsCount": "조회수 {count}",
+    "prev": "이전",
+    "next": "다음",
+    "paginationSummary": "총 {total}건 중 {from}–{to} 표시",
     "kpi": {
-      "total": "Tổng bài viết",
-      "published": "Đã xuất bản",
-      "draft": "Bản nháp",
-      "scheduled": "Đã lên lịch",
-      "avgSeo": "Điểm SEO TB"
+      "total": "전체 게시물",
+      "published": "게시됨",
+      "draft": "초안",
+      "scheduled": "예약됨",
+      "avgSeo": "평균 SEO 점수"
     },
     "seoLabel": {
-      "good": "Tốt",
-      "medium": "Khá",
-      "low": "Cần cải thiện"
+      "good": "좋음",
+      "medium": "보통",
+      "low": "개선 필요"
     },
     "columns": {
-      "post": "Bài viết",
-      "scope": "Phạm vi",
-      "author": "Tác giả",
+      "post": "게시물",
+      "scope": "범위",
+      "author": "작성자",
       "seo": "SEO",
-      "status": "Trạng thái",
-      "metrics": "Ngày & lượt xem"
+      "status": "상태",
+      "metrics": "날짜 & 조회수"
     },
     "scope": {
-      "tenant": "Bài tenant",
-      "branch": "Bài chi nhánh",
-      "service": "Bài dịch vụ",
-      "product": "Bài sản phẩm",
-      "company": "Bài công ty"
+      "tenant": "테넌트 게시물",
+      "branch": "지점 게시물",
+      "service": "서비스 게시물",
+      "product": "제품 게시물",
+      "company": "회사 게시물"
     },
     "scopeLocation": {
-      "global": "Toàn hệ thống",
-      "corporate": "Văn phòng"
+      "global": "전체(모든 지점)",
+      "corporate": "본사"
     },
     "status": {
-      "published": "Đã xuất bản",
-      "scheduled": "Đã lên lịch",
-      "draft": "Nháp",
-      "archived": "Lưu trữ"
+      "published": "게시됨",
+      "scheduled": "예약됨",
+      "draft": "초안",
+      "archived": "보관"
     },
     "action": {
-      "preview": "Xem trước",
-      "edit": "Chỉnh sửa",
-      "delete": "Xoá"
+      "preview": "미리보기",
+      "edit": "수정",
+      "delete": "삭제"
     }
   },
   "common": {

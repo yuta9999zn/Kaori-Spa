@@ -2,9 +2,9 @@
   "brand": { "platform": "Kaori" },
   "portal": { "name": "Kaori 平台", "subtitle": "Tenant Administrator" },
   "nav": {
-    "dashboard": "总览", "tenant": "租户", "plan": "套餐",
+    "dashboard": "总览", "tenant": "租户", "members": "成员", "plan": "套餐",
     "billing": "账单", "domain": "域名", "audit": "审计日志",
-    "integration": "集成", "feature": "功能", "settings": "设置", "logout": "登出"
+    "integration": "集成", "feature": "功能", "branding": "品牌", "settings": "设置", "logout": "登出"
   },
   "dashboard": {
     "title": "平台总览",
@@ -21,83 +21,83 @@
     "columns": { "ts": "时间", "actor": "操作者", "action": "操作", "entity": "对象", "ip": "IP" }
   },
   "domain": {
-    "title": "Tên miền & URL đặt lịch",
-    "subtitle": "Cấu hình cách khách hàng truy cập trang đặt lịch và cổng khách hàng của tổ chức.",
-    "actions": { "cancel": "Huỷ", "save": "Lưu thay đổi", "checkAvailability": "Kiểm tra khả dụng", "disconnect": "Ngắt kết nối", "verify": "Xác minh tên miền", "renew": "Gia hạn chứng chỉ thủ công", "readDocs": "Xem tài liệu đầy đủ" },
-    "subdomain": { "title": "Subdomain nền tảng", "subtitle": "Địa chỉ đặt lịch mặc định miễn phí.", "label": "Tên subdomain", "suffix": ".kaoriplatform.com", "available": "URL khả dụng và đang hoạt động." },
-    "custom": { "title": "Tên miền tuỳ chỉnh", "subtitle": "Kết nối tên miền website riêng của bạn.", "label": "URL tên miền tuỳ chỉnh", "connected": "Đã kết nối" },
-    "ssl": { "title": "Chứng chỉ SSL", "statusLabel": "Trạng thái", "statusValue": "Đang hoạt động & bảo mật", "renewIn": "Tự gia hạn sau {days} ngày" },
+    "title": "域名与预约 URL",
+    "subtitle": "配置客户访问该组织在线预约页面与门户的方式。",
+    "actions": { "cancel": "取消", "save": "保存更改", "checkAvailability": "检查可用性", "disconnect": "断开连接", "verify": "验证域名", "renew": "手动续签证书", "readDocs": "查看完整文档" },
+    "subdomain": { "title": "平台子域名", "subtitle": "免费的默认预约地址。", "label": "子域名名称", "suffix": ".kaoriplatform.com", "available": "URL 可用且已生效。" },
+    "custom": { "title": "自定义域名", "subtitle": "连接您自己的网站域名。", "label": "自定义域名 URL", "connected": "已连接" },
+    "ssl": { "title": "SSL 证书", "statusLabel": "状态", "statusValue": "已生效且安全", "renewIn": "{days} 天后自动续签" },
     "security": {
-      "title": "Bảo mật tên miền",
-      "forceHttps": "Bắt buộc HTTPS",
-      "forceHttpsHint": "Chuyển hướng HTTP sang kết nối an toàn",
-      "redirectOld": "Chuyển hướng URL cũ",
-      "redirectOldHint": "Chuyển tiếp lưu lượng từ subdomain nền tảng",
-      "protection": "Bảo vệ trang đặt lịch",
-      "protectionHint": "Yêu cầu khách hàng đăng nhập để xem giá"
+      "title": "域名安全",
+      "forceHttps": "强制 HTTPS",
+      "forceHttpsHint": "将 HTTP 流量重定向到安全连接",
+      "redirectOld": "重定向旧 URL",
+      "redirectOldHint": "将平台子域名的流量转发过来",
+      "protection": "预约页面保护",
+      "protectionHint": "要求客户登录后才能查看价格"
     },
-    "links": { "title": "Liên kết đặt lịch công khai", "main": "Trang chính của tổ chức", "copy": "Sao chép", "open": "Mở liên kết" },
+    "links": { "title": "公开预约链接", "main": "组织主页", "copy": "复制", "open": "打开链接" },
     "guide": {
-      "title": "Hướng dẫn cài đặt",
-      "subtitle": "Làm theo các bước sau để trỏ tên miền tuỳ chỉnh về nền tảng.",
-      "step1Title": "Thêm bản ghi DNS",
-      "step1Desc": "Đăng nhập nhà cung cấp tên miền (vd: GoDaddy, Namecheap) và thêm bản ghi CNAME mới.",
-      "step2Title": "Cấu hình bản ghi",
-      "step2Type": "Loại",
-      "step2Host": "Host / Tên",
-      "step2Value": "Giá trị / Đích",
-      "step3Title": "Xác minh kết nối",
-      "step3Desc": "Bấm \"Xác minh tên miền\" ở mục Tên miền tuỳ chỉnh. Lan truyền có thể mất tới 24 giờ."
+      "title": "配置指南",
+      "subtitle": "按以下步骤将自定义域名指向平台。",
+      "step1Title": "添加 DNS 记录",
+      "step1Desc": "登录您的域名服务商(如 GoDaddy、Namecheap),并添加一条新的 CNAME 记录。",
+      "step2Title": "配置记录",
+      "step2Type": "类型",
+      "step2Host": "主机 / 名称",
+      "step2Value": "值 / 目标",
+      "step3Title": "验证连接",
+      "step3Desc": "在自定义域名区域点击\"验证域名\"。DNS 传播最长可能需要 24 小时。"
     },
-    "preview": { "title": "Góc nhìn khách hàng", "subtitle": "Xem trước cổng đặt lịch đang hoạt động.", "heading": "Đặt lịch hẹn", "selectLocation": "Chọn chi nhánh để bắt đầu" }
+    "preview": { "title": "客户视角", "subtitle": "预览生效中的预约门户。", "heading": "预约到店", "selectLocation": "请选择门店开始" }
   },
   "members": {
-    "title": "Thành viên không gian làm việc",
-    "subtitle": "Quản lý người dùng, nhân viên và quản trị viên có quyền truy cập nền tảng.",
-    "actions": { "export": "Xuất danh sách", "invite": "Mời người dùng", "search": "Tìm theo tên hoặc email...", "viewProfile": "Xem hồ sơ", "editRole": "Sửa vai trò", "changeBranch": "Đổi chi nhánh", "deactivate": "Vô hiệu hoá", "reactivate": "Kích hoạt lại", "remove": "Xoá người dùng", "resendInvite": "Gửi lại lời mời" },
-    "kpi": { "total": "Tổng người dùng", "active": "Đang hoạt động", "pending": "Đang chờ xác nhận", "admins": "Quản trị viên" },
-    "filters": { "allRoles": "Tất cả vai trò", "allBranches": "Tất cả chi nhánh", "allStatuses": "Tất cả trạng thái", "sortNewest": "Sắp xếp: Mới nhất", "sortAlpha": "Sắp xếp: A-Z", "sortRole": "Sắp xếp: Vai trò" },
-    "columns": { "member": "Thông tin thành viên", "role": "Vai trò & quyền", "branch": "Chi nhánh", "status": "Trạng thái", "lastLogin": "Đăng nhập gần đây", "actions": "Thao tác" },
-    "roles": { "owner": "Chủ sở hữu", "manager": "Quản lý", "therapist": "Kỹ thuật viên", "receptionist": "Lễ tân", "marketing": "Marketing", "hr": "Nhân sự" },
-    "status": { "active": "Hoạt động", "invited": "Đã mời", "suspended": "Tạm khoá", "global": "Truy cập toàn cục", "neverLogin": "Chưa từng đăng nhập" },
-    "pagination": { "showing": "Hiển thị", "to": "đến", "of": "trên", "users": "người dùng", "previous": "Trước", "next": "Tiếp" }
+    "title": "工作空间成员",
+    "subtitle": "管理可访问平台的用户、员工和管理员。",
+    "actions": { "export": "导出名单", "invite": "邀请用户", "search": "按姓名或邮箱搜索...", "viewProfile": "查看资料", "editRole": "编辑角色", "changeBranch": "更换门店", "deactivate": "停用", "reactivate": "重新启用", "remove": "移除用户", "resendInvite": "重新发送邀请" },
+    "kpi": { "total": "用户总数", "active": "活跃用户", "pending": "待确认邀请", "admins": "管理员" },
+    "filters": { "allRoles": "全部角色", "allBranches": "全部门店", "allStatuses": "全部状态", "sortNewest": "排序:最新", "sortAlpha": "排序:A-Z", "sortRole": "排序:角色" },
+    "columns": { "member": "成员信息", "role": "角色与权限", "branch": "所属门店", "status": "状态", "lastLogin": "最近登录", "actions": "操作" },
+    "roles": { "owner": "所有者", "manager": "经理", "therapist": "技师", "receptionist": "前台", "marketing": "市场", "hr": "人事" },
+    "status": { "active": "活跃", "invited": "已邀请", "suspended": "已停用", "global": "全局访问", "neverLogin": "从未登录" },
+    "pagination": { "showing": "显示", "to": "至", "of": "共", "users": "位用户", "previous": "上一页", "next": "下一页" }
   },
   "branding": {
-    "title": "Thương hiệu & giao diện",
-    "subtitle": "Tuỳ biến cách thương hiệu spa hiển thị trên dashboard, cổng đặt lịch và email khách hàng.",
-    "actions": { "reset": "Khôi phục mặc định", "save": "Lưu thương hiệu", "replace": "Thay ảnh", "remove": "Xoá", "uploadMedia": "Tải lên", "uploadImage": "Tải hình ảnh", "uploadBanner": "Tải banner", "view": "Xem", "addNew": "Thêm mới" },
-    "logo": { "title": "Logo & biểu tượng", "primaryLabel": "Logo chính", "primaryHint": "Hiển thị trên header dashboard và trang đặt lịch. Khuyến nghị PNG nền trong suốt.", "faviconLabel": "Favicon / biểu tượng app", "faviconHint": "Hiển thị trên tab trình duyệt và icon app di động. PNG vuông hoặc ICO." },
-    "colors": { "title": "Màu thương hiệu", "primary": "Màu chính", "primaryHint": "Nút bấm, liên kết kích hoạt", "secondary": "Màu phụ", "secondaryHint": "Thẻ, viền", "accent": "Màu nhấn", "accentHint": "Điểm nhấn, nhãn", "background": "Nền", "backgroundHint": "Nền ứng dụng" },
-    "typography": { "title": "Kiểu chữ", "heading": "Font tiêu đề", "body": "Font nội dung", "headingPreview": "Trải nghiệm spa cao cấp", "bodyPreview": "Thư giãn. Phục hồi. Tươi mới. Các liệu trình cao cấp được thiết kế để nâng tầm sức khoẻ và xoa dịu tâm hồn." },
-    "login": { "title": "Giao diện trang đăng nhập", "welcome": "Lời chào", "background": "Ảnh nền", "overlay": "Lớp phủ (độ mờ)" },
-    "booking": { "title": "Cổng đặt lịch", "pageTitle": "Tiêu đề trang đặt lịch", "tagline": "Khẩu hiệu thương hiệu", "banner": "Ảnh banner", "bannerHint": "Khuyến nghị 1920x600px" },
-    "email": { "title": "Mẫu email", "headerLogo": "Logo header email", "headerBg": "Màu nền header", "footer": "Footer / Tuyên bố miễn trừ" },
-    "assets": { "title": "Thư viện tài nguyên" },
-    "preview": { "title": "Xem trước trực tiếp", "subtitle": "Xem thương hiệu hiển thị tới người dùng.", "tabBooking": "Trang đặt lịch", "tabDashboard": "Dashboard", "tabEmail": "Email", "selectService": "Chọn dịch vụ", "bookButton": "Đặt lịch hẹn", "realtime": "Xem trước cập nhật theo thời gian thực" }
+    "title": "品牌与外观",
+    "subtitle": "自定义您的水疗品牌在管理后台、预约门户和客户邮件中的呈现方式。",
+    "actions": { "reset": "恢复默认", "save": "保存品牌", "replace": "替换", "remove": "移除", "uploadMedia": "上传素材", "uploadImage": "上传图片", "uploadBanner": "上传横幅", "view": "查看", "addNew": "新增" },
+    "logo": { "title": "Logo 与图标", "primaryLabel": "主 Logo", "primaryHint": "显示在管理后台顶部和预约页面。建议使用透明底 PNG。", "faviconLabel": "Favicon / 应用图标", "faviconHint": "显示在浏览器标签页和移动应用图标上。建议方形 PNG 或 ICO。" },
+    "colors": { "title": "品牌色", "primary": "主色", "primaryHint": "按钮、激活链接", "secondary": "辅助色", "secondaryHint": "卡片、边框", "accent": "强调色", "accentHint": "高亮、标签", "background": "背景色", "backgroundHint": "应用背景" },
+    "typography": { "title": "字体", "heading": "标题字体", "body": "正文字体", "headingPreview": "尊享水疗体验", "bodyPreview": "放松。修复。焕新。我们的高端疗程旨在提升您的健康,抚慰您的心灵。" },
+    "login": { "title": "登录页外观", "welcome": "欢迎语", "background": "背景图", "overlay": "遮罩(透明度)" },
+    "booking": { "title": "预约门户", "pageTitle": "预约页标题", "tagline": "品牌口号", "banner": "横幅图片", "bannerHint": "建议尺寸 1920x600px" },
+    "email": { "title": "邮件模板", "headerLogo": "邮件头部 Logo", "headerBg": "头部背景色", "footer": "页脚 / 免责声明" },
+    "assets": { "title": "素材库" },
+    "preview": { "title": "实时预览", "subtitle": "查看品牌呈现给用户的效果。", "tabBooking": "预约页", "tabDashboard": "管理后台", "tabEmail": "邮件", "selectService": "选择服务", "bookButton": "预约到店", "realtime": "预览将实时更新" }
   },
   "feature": {
-    "title": "Module tính năng",
-    "subtitle": "Bật/tắt các module nền tảng để tuỳ biến năng lực vận hành cho spa của bạn.",
-    "actions": { "reset": "Khôi phục mặc định", "configure": "Cấu hình", "viewDetails": "Xem chi tiết", "activate": "Kích hoạt add-on", "learnMore": "Tìm hiểu thêm", "contactSales": "Liên hệ kinh doanh" },
-    "kpi": { "total": "Tổng module", "enabled": "Đang bật", "disabled": "Đang tắt", "addons": "Add-on khả dụng" },
-    "section": { "core": "Module nền tảng cốt lõi", "addons": "Add-on cao cấp" },
-    "status": { "enabled": "Đang bật", "disabled": "Đang tắt", "premium": "Tính năng cao cấp", "active": "Hoạt động" },
+    "title": "功能模块",
+    "subtitle": "启用或停用平台模块,精准定制您水疗业务的运营能力。",
+    "actions": { "reset": "恢复默认", "configure": "配置", "viewDetails": "查看详情", "activate": "激活附加功能", "learnMore": "了解更多", "contactSales": "联系销售" },
+    "kpi": { "total": "模块总数", "enabled": "已启用", "disabled": "已停用", "addons": "可用附加功能" },
+    "section": { "core": "核心平台模块", "addons": "高级附加功能" },
+    "status": { "enabled": "已启用", "disabled": "已停用", "premium": "高级功能", "active": "活跃" },
     "modules": {
-      "booking": { "title": "Hệ thống đặt lịch", "desc": "Cho phép khách đặt hẹn trực tuyến và quản lý lịch nội bộ." },
-      "services": { "title": "Dịch vụ & liệu trình", "desc": "Quản lý liệu trình, danh mục, thời lượng và quy tắc giá." },
-      "crm": { "title": "Customer CRM", "desc": "Quản lý hồ sơ khách, lịch sử ghé thăm, sở thích và điểm thưởng." },
-      "staff": { "title": "Quản lý nhân viên", "desc": "Quản lý nhân sự, theo dõi giờ làm và phân chuyên môn." },
-      "reports": { "title": "Báo cáo & phân tích", "desc": "Xem hiệu suất kinh doanh, doanh thu và mức sử dụng nhân viên." },
-      "blog": { "title": "Blog CMS", "desc": "Tạo bài SEO và nội dung marketing cho cổng đặt lịch." },
-      "marketing": { "title": "Marketing tự động", "desc": "Chạy chiến dịch nhắm mục tiêu, khuyến mãi và email tự động.", "requires": "Cần module Customer CRM" },
-      "inventory": { "title": "Quản lý kho", "desc": "Theo dõi sản phẩm bán lẻ, vật tư chuyên dụng và tồn kho theo chi nhánh." },
-      "recruitment": { "title": "Tuyển dụng", "desc": "Quản lý tin tuyển dụng, theo dõi ứng viên và quy trình tuyển." }
+      "booking": { "title": "预约系统", "desc": "支持客户在线预约,并管理内部日程。" },
+      "services": { "title": "服务与疗程", "desc": "管理水疗疗程、服务类别、时长和价格规则。" },
+      "crm": { "title": "客户 CRM", "desc": "管理客户档案、到店记录、偏好和积分。" },
+      "staff": { "title": "员工管理", "desc": "管理员工、记录工时并分配专业领域。" },
+      "reports": { "title": "报表与分析", "desc": "查看业务表现、营收和员工利用率。" },
+      "blog": { "title": "博客 CMS", "desc": "为预约门户创建 SEO 文章和营销内容。" },
+      "marketing": { "title": "营销自动化", "desc": "运行精准投放活动、促销和自动化邮件。", "requires": "需要客户 CRM 模块" },
+      "inventory": { "title": "库存管理", "desc": "跟踪零售产品、专业用品及各门店的库存水平。" },
+      "recruitment": { "title": "招聘管理", "desc": "管理招聘信息、应聘者跟进和录用流程。" }
     },
     "addons": {
-      "ai": { "title": "Trợ lý marketing AI", "desc": "Tự động sinh nội dung email, bài đăng mạng xã hội và bài blog phù hợp với thương hiệu spa của bạn." },
-      "analytics": { "title": "Analytics Pro nâng cao", "desc": "Mở khoá báo cáo tuỳ biến, dự báo và xuất dashboard theo thời gian thực." },
-      "multiloc": { "title": "Multi-Location Intelligence", "desc": "Dành cho chuỗi: so sánh hiệu suất chi nhánh, cân bằng nhân sự và đồng bộ tồn kho toàn cầu." }
+      "ai": { "title": "AI 营销助手", "desc": "基于先进 AI 自动生成贴合您水疗品牌的邮件文案、社交媒体帖子和博客文章。" },
+      "analytics": { "title": "高级分析 Pro", "desc": "解锁自定义报表生成器、预测分析和实时仪表盘导出等深度洞察。" },
+      "multiloc": { "title": "多门店智能", "desc": "专为连锁门店设计:对比门店表现、跨门店调配人员、统一全局库存。" }
     },
-    "preview": { "title": "Xem trước module", "capabilities": "Khả năng chính", "cap1Title": "Cổng trực tuyến", "cap1Desc": "Trang đặt lịch white-label hoạt động 24/7.", "cap2Title": "Lập lịch thông minh", "cap2Desc": "Ngăn trùng lịch và tự xử lý khoảng trống của nhân viên.", "cap3Title": "Nhắc lịch", "cap3Desc": "Email và SMS nhắc tự động giảm vắng hẹn." }
+    "preview": { "title": "模块预览", "capabilities": "核心能力", "cap1Title": "在线门户", "cap1Desc": "全天候(24/7)运行的白标预约页面。", "cap2Title": "智能排程", "cap2Desc": "防止重复预约,自动管理员工空档。", "cap3Title": "提醒", "cap3Desc": "邮件和短信自动提醒,降低爽约率。" }
   }
 }

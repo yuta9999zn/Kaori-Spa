@@ -2,9 +2,9 @@
   "brand": { "platform": "Kaori" },
   "portal": { "name": "Kaori 플랫폼", "subtitle": "Tenant Administrator" },
   "nav": {
-    "dashboard": "대시보드", "tenant": "테넌트", "plan": "플랜",
+    "dashboard": "대시보드", "tenant": "테넌트", "members": "멤버", "plan": "플랜",
     "billing": "결제", "domain": "도메인", "audit": "감사 로그",
-    "integration": "연동", "feature": "기능", "settings": "설정", "logout": "로그아웃"
+    "integration": "연동", "feature": "기능", "branding": "브랜딩", "settings": "설정", "logout": "로그아웃"
   },
   "dashboard": {
     "title": "플랫폼 개요",
@@ -21,83 +21,83 @@
     "columns": { "ts": "시간", "actor": "실행자", "action": "동작", "entity": "객체", "ip": "IP" }
   },
   "domain": {
-    "title": "Tên miền & URL đặt lịch",
-    "subtitle": "Cấu hình cách khách hàng truy cập trang đặt lịch và cổng khách hàng của tổ chức.",
-    "actions": { "cancel": "Huỷ", "save": "Lưu thay đổi", "checkAvailability": "Kiểm tra khả dụng", "disconnect": "Ngắt kết nối", "verify": "Xác minh tên miền", "renew": "Gia hạn chứng chỉ thủ công", "readDocs": "Xem tài liệu đầy đủ" },
-    "subdomain": { "title": "Subdomain nền tảng", "subtitle": "Địa chỉ đặt lịch mặc định miễn phí.", "label": "Tên subdomain", "suffix": ".kaoriplatform.com", "available": "URL khả dụng và đang hoạt động." },
-    "custom": { "title": "Tên miền tuỳ chỉnh", "subtitle": "Kết nối tên miền website riêng của bạn.", "label": "URL tên miền tuỳ chỉnh", "connected": "Đã kết nối" },
-    "ssl": { "title": "Chứng chỉ SSL", "statusLabel": "Trạng thái", "statusValue": "Đang hoạt động & bảo mật", "renewIn": "Tự gia hạn sau {days} ngày" },
+    "title": "도메인 & 예약 URL",
+    "subtitle": "고객이 이 테넌트의 온라인 예약 페이지와 포털에 접근하는 방식을 설정합니다.",
+    "actions": { "cancel": "취소", "save": "변경 사항 저장", "checkAvailability": "사용 가능 여부 확인", "disconnect": "연결 해제", "verify": "도메인 검증", "renew": "수동으로 인증서 갱신", "readDocs": "전체 문서 보기" },
+    "subdomain": { "title": "플랫폼 서브도메인", "subtitle": "기본 제공되는 무료 예약 주소입니다.", "label": "서브도메인 이름", "suffix": ".kaoriplatform.com", "available": "URL이 사용 가능하며 활성 상태입니다." },
+    "custom": { "title": "커스텀 도메인", "subtitle": "자체 웹사이트 도메인을 연결하세요.", "label": "커스텀 도메인 URL", "connected": "연결됨" },
+    "ssl": { "title": "SSL 인증서", "statusLabel": "상태", "statusValue": "활성 & 보안 적용", "renewIn": "{days}일 후 자동 갱신" },
     "security": {
-      "title": "Bảo mật tên miền",
-      "forceHttps": "Bắt buộc HTTPS",
-      "forceHttpsHint": "Chuyển hướng HTTP sang kết nối an toàn",
-      "redirectOld": "Chuyển hướng URL cũ",
-      "redirectOldHint": "Chuyển tiếp lưu lượng từ subdomain nền tảng",
-      "protection": "Bảo vệ trang đặt lịch",
-      "protectionHint": "Yêu cầu khách hàng đăng nhập để xem giá"
+      "title": "도메인 보안",
+      "forceHttps": "HTTPS 강제 적용",
+      "forceHttpsHint": "HTTP 트래픽을 보안 연결로 리디렉션",
+      "redirectOld": "이전 URL 리디렉션",
+      "redirectOldHint": "플랫폼 서브도메인 트래픽을 전달",
+      "protection": "예약 페이지 보호",
+      "protectionHint": "가격 조회 시 고객 로그인 요구"
     },
-    "links": { "title": "Liên kết đặt lịch công khai", "main": "Trang chính của tổ chức", "copy": "Sao chép", "open": "Mở liên kết" },
+    "links": { "title": "공개 예약 링크", "main": "테넌트 메인 페이지", "copy": "복사", "open": "링크 열기" },
     "guide": {
-      "title": "Hướng dẫn cài đặt",
-      "subtitle": "Làm theo các bước sau để trỏ tên miền tuỳ chỉnh về nền tảng.",
-      "step1Title": "Thêm bản ghi DNS",
-      "step1Desc": "Đăng nhập nhà cung cấp tên miền (vd: GoDaddy, Namecheap) và thêm bản ghi CNAME mới.",
-      "step2Title": "Cấu hình bản ghi",
-      "step2Type": "Loại",
-      "step2Host": "Host / Tên",
-      "step2Value": "Giá trị / Đích",
-      "step3Title": "Xác minh kết nối",
-      "step3Desc": "Bấm \"Xác minh tên miền\" ở mục Tên miền tuỳ chỉnh. Lan truyền có thể mất tới 24 giờ."
+      "title": "설정 가이드",
+      "subtitle": "다음 단계를 따라 커스텀 도메인을 플랫폼으로 연결하세요.",
+      "step1Title": "DNS 레코드 추가",
+      "step1Desc": "도메인 등록 서비스(예: GoDaddy, Namecheap)에 로그인하여 새 CNAME 레코드를 추가합니다.",
+      "step2Title": "레코드 구성",
+      "step2Type": "유형",
+      "step2Host": "호스트 / 이름",
+      "step2Value": "값 / 대상",
+      "step3Title": "연결 검증",
+      "step3Desc": "커스텀 도메인 섹션의 \"도메인 검증\"을 클릭하세요. 전파에는 최대 24시간이 소요될 수 있습니다."
     },
-    "preview": { "title": "Góc nhìn khách hàng", "subtitle": "Xem trước cổng đặt lịch đang hoạt động.", "heading": "Đặt lịch hẹn", "selectLocation": "Chọn chi nhánh để bắt đầu" }
+    "preview": { "title": "고객 화면", "subtitle": "활성 예약 포털 미리보기.", "heading": "예약하기", "selectLocation": "시작할 지점을 선택하세요" }
   },
   "members": {
-    "title": "Thành viên không gian làm việc",
-    "subtitle": "Quản lý người dùng, nhân viên và quản trị viên có quyền truy cập nền tảng.",
-    "actions": { "export": "Xuất danh sách", "invite": "Mời người dùng", "search": "Tìm theo tên hoặc email...", "viewProfile": "Xem hồ sơ", "editRole": "Sửa vai trò", "changeBranch": "Đổi chi nhánh", "deactivate": "Vô hiệu hoá", "reactivate": "Kích hoạt lại", "remove": "Xoá người dùng", "resendInvite": "Gửi lại lời mời" },
-    "kpi": { "total": "Tổng người dùng", "active": "Đang hoạt động", "pending": "Đang chờ xác nhận", "admins": "Quản trị viên" },
-    "filters": { "allRoles": "Tất cả vai trò", "allBranches": "Tất cả chi nhánh", "allStatuses": "Tất cả trạng thái", "sortNewest": "Sắp xếp: Mới nhất", "sortAlpha": "Sắp xếp: A-Z", "sortRole": "Sắp xếp: Vai trò" },
-    "columns": { "member": "Thông tin thành viên", "role": "Vai trò & quyền", "branch": "Chi nhánh", "status": "Trạng thái", "lastLogin": "Đăng nhập gần đây", "actions": "Thao tác" },
-    "roles": { "owner": "Chủ sở hữu", "manager": "Quản lý", "therapist": "Kỹ thuật viên", "receptionist": "Lễ tân", "marketing": "Marketing", "hr": "Nhân sự" },
-    "status": { "active": "Hoạt động", "invited": "Đã mời", "suspended": "Tạm khoá", "global": "Truy cập toàn cục", "neverLogin": "Chưa từng đăng nhập" },
-    "pagination": { "showing": "Hiển thị", "to": "đến", "of": "trên", "users": "người dùng", "previous": "Trước", "next": "Tiếp" }
+    "title": "워크스페이스 멤버",
+    "subtitle": "플랫폼에 접근하는 사용자, 직원 및 관리자를 관리합니다.",
+    "actions": { "export": "사용자 내보내기", "invite": "사용자 초대", "search": "이름 또는 이메일로 검색...", "viewProfile": "프로필 보기", "editRole": "역할 수정", "changeBranch": "지점 변경", "deactivate": "비활성화", "reactivate": "재활성화", "remove": "사용자 삭제", "resendInvite": "초대 재전송" },
+    "kpi": { "total": "전체 사용자", "active": "활성 사용자", "pending": "초대 대기", "admins": "관리자" },
+    "filters": { "allRoles": "전체 역할", "allBranches": "전체 지점", "allStatuses": "전체 상태", "sortNewest": "정렬: 최신순", "sortAlpha": "정렬: 가나다순", "sortRole": "정렬: 역할" },
+    "columns": { "member": "멤버 정보", "role": "역할 & 권한", "branch": "소속 지점", "status": "상태", "lastLogin": "최근 로그인", "actions": "작업" },
+    "roles": { "owner": "소유자", "manager": "매니저", "therapist": "테라피스트", "receptionist": "리셉셔니스트", "marketing": "마케팅", "hr": "인사" },
+    "status": { "active": "활성", "invited": "초대됨", "suspended": "정지", "global": "전체 접근", "neverLogin": "로그인 이력 없음" },
+    "pagination": { "showing": "표시", "to": "~", "of": "/", "users": "명", "previous": "이전", "next": "다음" }
   },
   "branding": {
-    "title": "Thương hiệu & giao diện",
-    "subtitle": "Tuỳ biến cách thương hiệu spa hiển thị trên dashboard, cổng đặt lịch và email khách hàng.",
-    "actions": { "reset": "Khôi phục mặc định", "save": "Lưu thương hiệu", "replace": "Thay ảnh", "remove": "Xoá", "uploadMedia": "Tải lên", "uploadImage": "Tải hình ảnh", "uploadBanner": "Tải banner", "view": "Xem", "addNew": "Thêm mới" },
-    "logo": { "title": "Logo & biểu tượng", "primaryLabel": "Logo chính", "primaryHint": "Hiển thị trên header dashboard và trang đặt lịch. Khuyến nghị PNG nền trong suốt.", "faviconLabel": "Favicon / biểu tượng app", "faviconHint": "Hiển thị trên tab trình duyệt và icon app di động. PNG vuông hoặc ICO." },
-    "colors": { "title": "Màu thương hiệu", "primary": "Màu chính", "primaryHint": "Nút bấm, liên kết kích hoạt", "secondary": "Màu phụ", "secondaryHint": "Thẻ, viền", "accent": "Màu nhấn", "accentHint": "Điểm nhấn, nhãn", "background": "Nền", "backgroundHint": "Nền ứng dụng" },
-    "typography": { "title": "Kiểu chữ", "heading": "Font tiêu đề", "body": "Font nội dung", "headingPreview": "Trải nghiệm spa cao cấp", "bodyPreview": "Thư giãn. Phục hồi. Tươi mới. Các liệu trình cao cấp được thiết kế để nâng tầm sức khoẻ và xoa dịu tâm hồn." },
-    "login": { "title": "Giao diện trang đăng nhập", "welcome": "Lời chào", "background": "Ảnh nền", "overlay": "Lớp phủ (độ mờ)" },
-    "booking": { "title": "Cổng đặt lịch", "pageTitle": "Tiêu đề trang đặt lịch", "tagline": "Khẩu hiệu thương hiệu", "banner": "Ảnh banner", "bannerHint": "Khuyến nghị 1920x600px" },
-    "email": { "title": "Mẫu email", "headerLogo": "Logo header email", "headerBg": "Màu nền header", "footer": "Footer / Tuyên bố miễn trừ" },
-    "assets": { "title": "Thư viện tài nguyên" },
-    "preview": { "title": "Xem trước trực tiếp", "subtitle": "Xem thương hiệu hiển thị tới người dùng.", "tabBooking": "Trang đặt lịch", "tabDashboard": "Dashboard", "tabEmail": "Email", "selectService": "Chọn dịch vụ", "bookButton": "Đặt lịch hẹn", "realtime": "Xem trước cập nhật theo thời gian thực" }
+    "title": "브랜딩 & 외관",
+    "subtitle": "관리 대시보드, 예약 포털, 고객 이메일 전반에 스파 브랜드가 표시되는 방식을 커스터마이징합니다.",
+    "actions": { "reset": "기본값 복원", "save": "브랜딩 저장", "replace": "교체", "remove": "삭제", "uploadMedia": "미디어 업로드", "uploadImage": "이미지 업로드", "uploadBanner": "배너 업로드", "view": "보기", "addNew": "새로 추가" },
+    "logo": { "title": "로고 & 아이콘", "primaryLabel": "메인 로고", "primaryHint": "대시보드 헤더와 예약 페이지에 표시됩니다. 투명 배경 PNG 권장.", "faviconLabel": "파비콘 / 앱 아이콘", "faviconHint": "브라우저 탭과 모바일 앱 아이콘으로 표시됩니다. 정사각형 PNG 또는 ICO." },
+    "colors": { "title": "브랜드 컬러", "primary": "메인 컬러", "primaryHint": "버튼, 활성 링크", "secondary": "서브 컬러", "secondaryHint": "카드, 테두리", "accent": "강조 컬러", "accentHint": "강조 표시, 태그", "background": "배경", "backgroundHint": "앱 배경" },
+    "typography": { "title": "타이포그래피", "heading": "제목 폰트", "body": "본문 폰트", "headingPreview": "프리미엄 스파 경험", "bodyPreview": "휴식. 회복. 활력. 프리미엄 트리트먼트가 웰빙을 한 단계 끌어올리고 마음을 어루만져 드립니다." },
+    "login": { "title": "로그인 페이지 외관", "welcome": "환영 메시지", "background": "배경 이미지", "overlay": "오버레이 (불투명도)" },
+    "booking": { "title": "예약 포털", "pageTitle": "예약 페이지 제목", "tagline": "브랜드 슬로건", "banner": "히어로 배너 이미지", "bannerHint": "1920x600px 권장" },
+    "email": { "title": "이메일 템플릿", "headerLogo": "이메일 헤더 로고", "headerBg": "헤더 배경 색상", "footer": "푸터 / 면책 조항" },
+    "assets": { "title": "에셋 라이브러리" },
+    "preview": { "title": "실시간 미리보기", "subtitle": "사용자에게 노출되는 브랜딩을 확인하세요.", "tabBooking": "예약 페이지", "tabDashboard": "대시보드", "tabEmail": "이메일", "selectService": "서비스 선택", "bookButton": "예약하기", "realtime": "실시간으로 미리보기 업데이트" }
   },
   "feature": {
-    "title": "Module tính năng",
-    "subtitle": "Bật/tắt các module nền tảng để tuỳ biến năng lực vận hành cho spa của bạn.",
-    "actions": { "reset": "Khôi phục mặc định", "configure": "Cấu hình", "viewDetails": "Xem chi tiết", "activate": "Kích hoạt add-on", "learnMore": "Tìm hiểu thêm", "contactSales": "Liên hệ kinh doanh" },
-    "kpi": { "total": "Tổng module", "enabled": "Đang bật", "disabled": "Đang tắt", "addons": "Add-on khả dụng" },
-    "section": { "core": "Module nền tảng cốt lõi", "addons": "Add-on cao cấp" },
-    "status": { "enabled": "Đang bật", "disabled": "Đang tắt", "premium": "Tính năng cao cấp", "active": "Hoạt động" },
+    "title": "기능 모듈",
+    "subtitle": "플랫폼 모듈을 켜고 끄며 스파 운영 역량을 최적화하세요.",
+    "actions": { "reset": "기본값 복원", "configure": "구성", "viewDetails": "자세히 보기", "activate": "애드온 활성화", "learnMore": "자세히 알아보기", "contactSales": "영업팀 문의" },
+    "kpi": { "total": "전체 모듈", "enabled": "활성 모듈", "disabled": "비활성 모듈", "addons": "사용 가능 애드온" },
+    "section": { "core": "코어 플랫폼 모듈", "addons": "프리미엄 애드온" },
+    "status": { "enabled": "활성", "disabled": "비활성", "premium": "프리미엄 기능", "active": "운영 중" },
     "modules": {
-      "booking": { "title": "Hệ thống đặt lịch", "desc": "Cho phép khách đặt hẹn trực tuyến và quản lý lịch nội bộ." },
-      "services": { "title": "Dịch vụ & liệu trình", "desc": "Quản lý liệu trình, danh mục, thời lượng và quy tắc giá." },
-      "crm": { "title": "Customer CRM", "desc": "Quản lý hồ sơ khách, lịch sử ghé thăm, sở thích và điểm thưởng." },
-      "staff": { "title": "Quản lý nhân viên", "desc": "Quản lý nhân sự, theo dõi giờ làm và phân chuyên môn." },
-      "reports": { "title": "Báo cáo & phân tích", "desc": "Xem hiệu suất kinh doanh, doanh thu và mức sử dụng nhân viên." },
-      "blog": { "title": "Blog CMS", "desc": "Tạo bài SEO và nội dung marketing cho cổng đặt lịch." },
-      "marketing": { "title": "Marketing tự động", "desc": "Chạy chiến dịch nhắm mục tiêu, khuyến mãi và email tự động.", "requires": "Cần module Customer CRM" },
-      "inventory": { "title": "Quản lý kho", "desc": "Theo dõi sản phẩm bán lẻ, vật tư chuyên dụng và tồn kho theo chi nhánh." },
-      "recruitment": { "title": "Tuyển dụng", "desc": "Quản lý tin tuyển dụng, theo dõi ứng viên và quy trình tuyển." }
+      "booking": { "title": "예약 시스템", "desc": "고객의 온라인 예약과 내부 일정 관리를 지원합니다." },
+      "services": { "title": "서비스 & 트리트먼트", "desc": "트리트먼트, 카테고리, 소요 시간 및 가격 규칙을 관리합니다." },
+      "crm": { "title": "고객 CRM", "desc": "고객 프로필, 방문 이력, 선호도 및 적립 포인트를 관리합니다." },
+      "staff": { "title": "직원 관리", "desc": "직원 정보, 근무 시간 추적, 전문 분야를 배정합니다." },
+      "reports": { "title": "리포트 & 분석", "desc": "비즈니스 성과, 매출 및 직원 가동률을 확인합니다." },
+      "blog": { "title": "블로그 CMS", "desc": "예약 포털용 SEO 게시물과 마케팅 콘텐츠를 작성합니다." },
+      "marketing": { "title": "마케팅 자동화", "desc": "타깃 캠페인, 프로모션 및 자동 이메일을 실행합니다.", "requires": "고객 CRM 모듈 필요" },
+      "inventory": { "title": "재고 관리", "desc": "리테일 제품, 전문 소모품 및 지점별 재고를 추적합니다." },
+      "recruitment": { "title": "채용 관리", "desc": "채용 공고, 지원자 추적 및 채용 프로세스를 관리합니다." }
     },
     "addons": {
-      "ai": { "title": "Trợ lý marketing AI", "desc": "Tự động sinh nội dung email, bài đăng mạng xã hội và bài blog phù hợp với thương hiệu spa của bạn." },
-      "analytics": { "title": "Analytics Pro nâng cao", "desc": "Mở khoá báo cáo tuỳ biến, dự báo và xuất dashboard theo thời gian thực." },
-      "multiloc": { "title": "Multi-Location Intelligence", "desc": "Dành cho chuỗi: so sánh hiệu suất chi nhánh, cân bằng nhân sự và đồng bộ tồn kho toàn cầu." }
+      "ai": { "title": "AI 마케팅 어시스턴트", "desc": "스파 브랜드에 맞춘 이메일 카피, SNS 게시물, 블로그 글을 AI로 자동 생성합니다." },
+      "analytics": { "title": "어드밴스드 애널리틱스 프로", "desc": "맞춤 리포트 빌더, 예측 분석, 실시간 대시보드 내보내기로 심층 인사이트를 확보하세요." },
+      "multiloc": { "title": "멀티 로케이션 인텔리전스", "desc": "프랜차이즈를 위한 기능. 지점 간 성과 비교, 인력 배분 균형, 글로벌 재고 통합 관리를 지원합니다." }
     },
-    "preview": { "title": "Xem trước module", "capabilities": "Khả năng chính", "cap1Title": "Cổng trực tuyến", "cap1Desc": "Trang đặt lịch white-label hoạt động 24/7.", "cap2Title": "Lập lịch thông minh", "cap2Desc": "Ngăn trùng lịch và tự xử lý khoảng trống của nhân viên.", "cap3Title": "Nhắc lịch", "cap3Desc": "Email và SMS nhắc tự động giảm vắng hẹn." }
+    "preview": { "title": "모듈 미리보기", "capabilities": "주요 기능", "cap1Title": "온라인 포털", "cap1Desc": "24시간 운영되는 화이트라벨 고객 예약 페이지.", "cap2Title": "스마트 스케줄링", "cap2Desc": "중복 예약을 방지하고 직원의 빈 시간대를 자동으로 처리합니다.", "cap3Title": "리마인더", "cap3Desc": "이메일과 SMS 자동 알림으로 노쇼를 줄입니다." }
   }
 }

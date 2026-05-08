@@ -113,111 +113,111 @@
     "status": { "active": "可用", "maintenance": "维护", "retired": "停用" }
   },
   "service": {
-    "title": "Dịch vụ",
-    "subtitle": "Quản lý liệu trình spa, gói combo, giá và danh mục dịch vụ tại các chi nhánh.",
-    "create": "Tạo dịch vụ",
-    "import": "Nhập danh mục",
-    "export": "Xuất danh mục",
-    "search": "Tìm theo tên hoặc mã dịch vụ…",
-    "minShort": "phút",
-    "durationMin": "{min} phút",
-    "mockMostBooked": "Triệt lông toàn thân nữ",
-    "filterCategoryAll": "Danh mục: Tất cả",
-    "filterStatusAll": "Trạng thái: Tất cả",
-    "prev": "Trước",
-    "next": "Sau",
-    "paginationSummary": "Hiển thị {from}–{to} trong tổng {total} dịch vụ",
+    "title": "服务",
+    "subtitle": "管理各门店的水疗疗程、套餐、价格和服务目录。",
+    "create": "新建服务",
+    "import": "导入目录",
+    "export": "导出目录",
+    "search": "按服务名称或编号搜索…",
+    "minShort": "分钟",
+    "durationMin": "{min} 分钟",
+    "mockMostBooked": "女士全身脱毛",
+    "filterCategoryAll": "类别:全部",
+    "filterStatusAll": "状态:全部",
+    "prev": "上一页",
+    "next": "下一页",
+    "paginationSummary": "显示第 {from}–{to} 项,共 {total} 项服务",
     "kpi": {
-      "total": "Tổng dịch vụ",
-      "active": "Đang hoạt động",
-      "inactive": "Tạm ngừng",
-      "mostBooked": "Đặt nhiều nhất",
-      "avgDuration": "Thời lượng TB"
+      "total": "服务总数",
+      "active": "已启用",
+      "inactive": "已停用",
+      "mostBooked": "预约最多",
+      "avgDuration": "平均时长"
     },
     "columns": {
-      "name": "Tên dịch vụ",
-      "category": "Danh mục",
-      "duration": "Thời lượng",
-      "price": "Giá",
-      "staff": "KTV",
-      "branches": "Chi nhánh",
-      "popularity": "Đánh giá",
-      "status": "Trạng thái"
+      "name": "服务名称",
+      "category": "类别",
+      "duration": "时长",
+      "price": "价格",
+      "staff": "技师",
+      "branches": "门店",
+      "popularity": "评分",
+      "status": "状态"
     },
     "category": {
-      "massage": "Massage",
-      "facial": "Chăm sóc da",
-      "hair_removal": "Triệt lông",
-      "package": "Gói combo",
-      "body": "Body therapy"
+      "massage": "按摩",
+      "facial": "面部护理",
+      "hair_removal": "脱毛",
+      "package": "套餐组合",
+      "body": "身体疗法"
     },
     "status": {
-      "active": "Hoạt động",
-      "inactive": "Tạm ngừng"
+      "active": "启用",
+      "inactive": "停用"
     },
     "sort": {
-      "popular": "Sắp xếp: Phổ biến",
-      "name": "Sắp xếp: Tên A-Z",
-      "priceDesc": "Sắp xếp: Giá cao → thấp",
-      "newest": "Sắp xếp: Mới nhất"
+      "popular": "排序:热门",
+      "name": "排序:名称 A-Z",
+      "priceDesc": "排序:价格从高到低",
+      "newest": "排序:最新"
     }
   },
   "content": {
-    "title": "Bài viết & Nội dung",
-    "subtitle": "Quản lý bài viết, nội dung marketing và trang SEO cho mọi chi nhánh.",
-    "create": "Tạo bài viết",
-    "search": "Tìm theo tiêu đề, slug hoặc từ khoá…",
-    "filterScopeAll": "Phạm vi: Tất cả",
-    "filterStatusAll": "Trạng thái: Tất cả",
-    "filterDateAny": "Ngày: Bất kỳ",
-    "filterLast7": "7 ngày gần nhất",
-    "filterLast30": "30 ngày gần nhất",
-    "unpublished": "Chưa xuất bản",
-    "viewsCount": "{count} lượt xem",
-    "prev": "Trước",
-    "next": "Sau",
-    "paginationSummary": "Hiển thị {from}–{to} trong tổng {total} bài viết",
+    "title": "文章与内容",
+    "subtitle": "管理所有门店的文章、营销内容和 SEO 页面。",
+    "create": "新建文章",
+    "search": "按标题、slug 或关键词搜索…",
+    "filterScopeAll": "范围:全部",
+    "filterStatusAll": "状态:全部",
+    "filterDateAny": "日期:任意",
+    "filterLast7": "最近 7 天",
+    "filterLast30": "最近 30 天",
+    "unpublished": "未发布",
+    "viewsCount": "{count} 次浏览",
+    "prev": "上一页",
+    "next": "下一页",
+    "paginationSummary": "显示第 {from}–{to} 项,共 {total} 篇文章",
     "kpi": {
-      "total": "Tổng bài viết",
-      "published": "Đã xuất bản",
-      "draft": "Bản nháp",
-      "scheduled": "Đã lên lịch",
-      "avgSeo": "Điểm SEO TB"
+      "total": "文章总数",
+      "published": "已发布",
+      "draft": "草稿",
+      "scheduled": "已排期",
+      "avgSeo": "平均 SEO 分"
     },
     "seoLabel": {
-      "good": "Tốt",
-      "medium": "Khá",
-      "low": "Cần cải thiện"
+      "good": "优秀",
+      "medium": "一般",
+      "low": "待优化"
     },
     "columns": {
-      "post": "Bài viết",
-      "scope": "Phạm vi",
-      "author": "Tác giả",
+      "post": "文章",
+      "scope": "范围",
+      "author": "作者",
       "seo": "SEO",
-      "status": "Trạng thái",
-      "metrics": "Ngày & lượt xem"
+      "status": "状态",
+      "metrics": "日期与浏览"
     },
     "scope": {
-      "tenant": "Bài tenant",
-      "branch": "Bài chi nhánh",
-      "service": "Bài dịch vụ",
-      "product": "Bài sản phẩm",
-      "company": "Bài công ty"
+      "tenant": "租户文章",
+      "branch": "门店文章",
+      "service": "服务文章",
+      "product": "产品文章",
+      "company": "公司文章"
     },
     "scopeLocation": {
-      "global": "Toàn hệ thống",
-      "corporate": "Văn phòng"
+      "global": "全局(所有门店)",
+      "corporate": "总部"
     },
     "status": {
-      "published": "Đã xuất bản",
-      "scheduled": "Đã lên lịch",
-      "draft": "Nháp",
-      "archived": "Lưu trữ"
+      "published": "已发布",
+      "scheduled": "已排期",
+      "draft": "草稿",
+      "archived": "已归档"
     },
     "action": {
-      "preview": "Xem trước",
-      "edit": "Chỉnh sửa",
-      "delete": "Xoá"
+      "preview": "预览",
+      "edit": "编辑",
+      "delete": "删除"
     }
   },
   "common": {
