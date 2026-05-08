@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import vn.kaori.spa.auth.domain.User;
 import vn.kaori.spa.auth.domain.User2faRepository;
 import vn.kaori.spa.auth.domain.UserRepository;
+import vn.kaori.spa.auth.rbac.UserAccessResolver;
 import vn.kaori.spa.auth.security.PasswordHasher;
 import vn.kaori.spa.auth.twofa.TotpService;
 import vn.kaori.spa.shared.api.ApiResponse;
@@ -33,6 +34,7 @@ public class AuthController {
     private final SessionService sessionService;
     private final TotpService totp;
     private final LoginPendingService pendingService;
+    private final UserAccessResolver accessResolver;
 
     public record LoginRequest(
             @NotBlank UUID tenantId,
@@ -124,16 +126,18 @@ public class AuthController {
     }
 
     private TokenResponse issueFor(User user, HttpServletRequest http) {
-        Set<String> roles = Set.of("CUSTOMER");
-        Set<String> perms = Set.of("booking:read", "booking:create");
+        // Real RBAC: roles + perms + (org/branch) scope come from auth.user_roles join
+        // auth.roles (and role_permissions). Falls back to CUSTOMER if no grants.
+        UserAccessResolver.AccessProfile profile = accessResolver.resolve(user.getId());
         var pair = sessionService.createSession(
                 user.getId(), http.getRemoteAddr(), http.getHeader("User-Agent"),
-                user.getTenantId(), null, null, user.getLocale(), roles, perms
+                user.getTenantId(), profile.orgId(), profile.branchId(),
+                user.getLocale(), profile.roles(), profile.permissions()
         );
         return new TokenResponse(
                 "ok", null,
                 pair.accessToken(), pair.refreshToken(), pair.accessExpiresIn(),
-                new UserSummary(user.getId(), user.getEmail(), user.getLocale(), roles)
+                new UserSummary(user.getId(), user.getEmail(), user.getLocale(), profile.roles())
         );
     }
 

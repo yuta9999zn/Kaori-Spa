@@ -10,7 +10,8 @@ include(
     "booking-service",
     "catalog-service",
     "customer-service",
-    "inventory-service"
+    "inventory-service",
+    "content-service"
 )
 
 pluginManagement {

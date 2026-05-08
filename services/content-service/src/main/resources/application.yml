@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: content-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/kaori_content}
+    username: ${DB_USER:kaori}
+    password: ${DB_PASS:kaori}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc.time_zone: UTC
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    schemas: content
+
+server:
+  port: ${PORT:8088}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus

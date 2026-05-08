@@ -11,6 +11,7 @@ import vn.kaori.spa.auth.domain.User;
 import vn.kaori.spa.auth.domain.UserRepository;
 import vn.kaori.spa.auth.jwt.JwtService;
 import vn.kaori.spa.auth.jwt.TokenHasher;
+import vn.kaori.spa.auth.rbac.UserAccessResolver;
 import vn.kaori.spa.shared.error.AppException;
 import vn.kaori.spa.shared.error.ErrorCodes;
 
@@ -32,6 +33,7 @@ public class SessionService {
     private final UserRepository userRepository;
     private final JwtService jwt;
     private final TokenHasher hasher;
+    private final UserAccessResolver accessResolver;
 
     public record TokenPair(String accessToken, String refreshToken, long accessExpiresIn) {}
 
@@ -83,12 +85,13 @@ public class SessionService {
                         "User not found"
                 ));
 
-        // Reuse stub roles for now — M1 follow-up resolves real role/perm.
-        Set<String> roles = Set.of("CUSTOMER");
-        Set<String> perms = Set.of("booking:read", "booking:create");
+        // Re-resolve RBAC on rotation so role/permission changes since last login take
+        // effect on the next access token (no need to wait for a fresh login).
+        UserAccessResolver.AccessProfile profile = accessResolver.resolve(user.getId());
 
         return createSession(user.getId(), ip, userAgent,
-                user.getTenantId(), null, null, user.getLocale(), roles, perms);
+                user.getTenantId(), profile.orgId(), profile.branchId(),
+                user.getLocale(), profile.roles(), profile.permissions());
     }
 
     @Transactional

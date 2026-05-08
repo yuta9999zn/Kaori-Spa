@@ -449,3 +449,72 @@ export function useOrgMembers(orgId: string = ORG_ID) {
     [orgId]
   );
 }
+
+// ─── Content (CMS) ─────────────────────────────────────────────────────────
+// Backed by content-service. Org-scoped so the list spans every branch under
+// the active org. UI may further narrow with an optional `branchId`.
+
+export interface ContentPostListItem {
+  id: string;
+  branchId: string | null;
+  type: string;
+  slug: string;
+  title: Record<string, string>;
+  status: string;
+  publishedAt: string | null;
+  viewCount: number;
+  coverUrl: string | null;
+  tags: string[];
+  updatedAt: string;
+}
+
+export interface ContentPagedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export interface UseContentPostsArgs {
+  branchId?: string;
+  type?: string;
+  status?: string;
+  q?: string;
+  page?: number;
+  size?: number;
+}
+
+export function useContentPosts(args: UseContentPostsArgs = {}) {
+  const { branchId, type, status, q, page = 0, size = 20 } = args;
+  return useFetch<ContentPagedResult<ContentPostListItem>>(() => {
+    const params = new URLSearchParams({
+      orgId: ORG_ID,
+      page: String(page),
+      size: String(size)
+    });
+    if (branchId) params.set('branchId', branchId);
+    if (type) params.set('type', type);
+    if (status) params.set('status', status);
+    if (q && q.trim().length > 0) params.set('q', q.trim());
+    return api<ContentPagedResult<ContentPostListItem>>(`/v1/content?${params}`);
+  }, [branchId ?? '', type ?? '', status ?? '', q ?? '', page, size]);
+}
+
+export interface CreateContentPostInput {
+  branchId?: string;
+  type: 'article' | 'promotion' | 'event' | 'announcement' | 'seo';
+  slug: string;
+  title: Record<string, string>;
+  excerpt?: Record<string, string>;
+  body?: Record<string, string>;
+  coverUrl?: string;
+  tags?: string[];
+  scheduledAt?: string;
+}
+
+export function createContentPost(input: CreateContentPostInput) {
+  return api<unknown>('/v1/content', {
+    method: 'POST',
+    body: JSON.stringify({ orgId: ORG_ID, ...input })
+  });
+}

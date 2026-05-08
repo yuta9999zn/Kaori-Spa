@@ -127,3 +127,54 @@ export function useTenantOverview() {
     return { orgCount: orgs.length, orgs };
   });
 }
+
+// ─── Audit events (tenant-service mirror of kaori.audit.event.v1) ──────────
+
+export interface AuditEventDto {
+  id: string;
+  ts: string;
+  tenantId: string | null;
+  actorId: string | null;
+  actorName: string | null;
+  action: string;
+  entityType: string | null;
+  entityId: string | null;
+  ip: string | null;
+  userAgent: string | null;
+  payload: Record<string, unknown> | null;
+}
+
+export interface AuditPagedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export interface UseAuditEventsArgs {
+  tenantId?: string;
+  actorId?: string;
+  action?: string;
+  entityType?: string;
+  from?: string;
+  to?: string;
+  page?: number;
+  size?: number;
+}
+
+export function useAuditEvents(args: UseAuditEventsArgs = {}) {
+  const { tenantId, actorId, action, entityType, from, to, page = 0, size = 20 } = args;
+  return useFetch<AuditPagedResult<AuditEventDto>>(() => {
+    const params = new URLSearchParams({
+      page: String(page),
+      size: String(size)
+    });
+    if (tenantId) params.set('tenantId', tenantId);
+    if (actorId) params.set('actorId', actorId);
+    if (action && action.trim().length > 0) params.set('action', action.trim());
+    if (entityType && entityType.trim().length > 0) params.set('entityType', entityType.trim());
+    if (from) params.set('from', from);
+    if (to) params.set('to', to);
+    return api<AuditPagedResult<AuditEventDto>>(`/v1/audit-events?${params}`);
+  }, [tenantId ?? '', actorId ?? '', action ?? '', entityType ?? '', from ?? '', to ?? '', page, size]);
+}

@@ -11,12 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import vn.kaori.spa.auth.domain.User;
 import vn.kaori.spa.auth.domain.UserRepository;
+import vn.kaori.spa.auth.rbac.UserAccessResolver;
 import vn.kaori.spa.auth.security.PasswordHasher;
 import vn.kaori.spa.shared.api.ApiResponse;
 import vn.kaori.spa.shared.error.AppException;
 import vn.kaori.spa.shared.error.ErrorCodes;
 
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -35,6 +35,7 @@ public class PublicAuthController {
     private final UserRepository userRepository;
     private final PasswordHasher hasher;
     private final SessionService sessionService;
+    private final UserAccessResolver accessResolver;
 
     public record SignupReq(
             @NotNull UUID tenantId,
@@ -65,11 +66,14 @@ public class PublicAuthController {
         if (req.locale() != null) u.setLocale(req.locale());
         userRepository.save(u);
 
-        Set<String> roles = Set.of("CUSTOMER");
-        Set<String> perms = Set.of("booking:read", "booking:create");
+        // Self-registered customer: no user_roles rows yet, so resolver returns the
+        // CUSTOMER default. We still call the resolver so future signup hooks (auto-grant
+        // a role in some tenants) Just Work without code changes here.
+        UserAccessResolver.AccessProfile profile = accessResolver.resolve(u.getId());
         var pair = sessionService.createSession(
                 u.getId(), http.getRemoteAddr(), http.getHeader("User-Agent"),
-                u.getTenantId(), null, null, u.getLocale(), roles, perms
+                u.getTenantId(), profile.orgId(), profile.branchId(),
+                u.getLocale(), profile.roles(), profile.permissions()
         );
         return ApiResponse.ok(new TokenResponse(pair.accessToken(), pair.refreshToken(), pair.accessExpiresIn()));
     }
@@ -89,11 +93,11 @@ public class PublicAuthController {
                     HttpStatus.UNAUTHORIZED, "Phone or password incorrect");
         }
 
-        Set<String> roles = Set.of("CUSTOMER");
-        Set<String> perms = Set.of("booking:read", "booking:create");
+        UserAccessResolver.AccessProfile profile = accessResolver.resolve(u.getId());
         var pair = sessionService.createSession(
                 u.getId(), http.getRemoteAddr(), http.getHeader("User-Agent"),
-                u.getTenantId(), null, null, u.getLocale(), roles, perms
+                u.getTenantId(), profile.orgId(), profile.branchId(),
+                u.getLocale(), profile.roles(), profile.permissions()
         );
         return ApiResponse.ok(new TokenResponse(pair.accessToken(), pair.refreshToken(), pair.accessExpiresIn()));
     }

@@ -513,3 +513,49 @@ export function useCustomerSearch(q: string, orgId: string) {
     );
   }, [q, orgId]);
 }
+
+// ─── Content (CMS) ─────────────────────────────────────────────────────────
+// Backed by content-service's GET /v1/content. Branch-admin scopes the list
+// to the active branch via `ctx.branchId` so users only see posts owned by
+// their own branch (org-level posts are filtered out).
+
+const BRANCH_ADMIN_ORG_ID =
+  process.env.NEXT_PUBLIC_ORG_ID ?? '00000000-0000-0000-0000-000000000000';
+
+export interface ContentPostListItem {
+  id: string;
+  branchId: string | null;
+  type: string;
+  slug: string;
+  title: Record<string, string>;
+  status: string;
+  publishedAt: string | null;
+  viewCount: number;
+  coverUrl: string | null;
+  tags: string[];
+  updatedAt: string;
+}
+
+export interface UseContentPostsArgs {
+  type?: string;
+  status?: string;
+  q?: string;
+  page?: number;
+  size?: number;
+}
+
+export function useContentPosts(args: UseContentPostsArgs = {}) {
+  const { type, status, q, page = 0, size = 20 } = args;
+  return useFetch<PagedResult<ContentPostListItem>>(() => {
+    const params = new URLSearchParams({
+      orgId: BRANCH_ADMIN_ORG_ID,
+      branchId: ctx.branchId,
+      page: String(page),
+      size: String(size)
+    });
+    if (type) params.set('type', type);
+    if (status) params.set('status', status);
+    if (q && q.trim().length > 0) params.set('q', q.trim());
+    return api<PagedResult<ContentPostListItem>>(`/v1/content?${params}`);
+  }, [type ?? '', status ?? '', q ?? '', page, size]);
+}
