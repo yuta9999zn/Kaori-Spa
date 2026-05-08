@@ -36,5 +36,132 @@
   "role": {
     "title": "Permission matrix",
     "subtitle": "Configure role × permission"
+  },
+  "service": {
+    "title": "Service catalog",
+    "subtitle": "Customise services per branch: price overrides, duration, capacity",
+    "applyAll": "Apply base settings to all",
+    "filter": { "all": "All statuses", "active": "Active only", "inactive": "Inactive only" },
+    "base": { "service": "Service", "category": "Category", "price": "Base price", "duration": "Base duration" },
+    "columns": {
+      "branch": "Branch",
+      "status": "Status",
+      "price": "Price override",
+      "duration": "Duration",
+      "staff": "Staff req.",
+      "room": "Room",
+      "max": "Max/day",
+      "updated": "Updated",
+      "actions": "Actions"
+    },
+    "actions": { "edit": "Edit config" },
+    "context": {
+      "service": "Full body laser hair removal (women)",
+      "category": "Advanced hair removal",
+      "price": "VND 12,000,000",
+      "duration": "90 min"
+    }
+  },
+  "roleAssign": {
+    "title": "Role assignment",
+    "subtitle": "Assign roles to users at organisation or branch scope",
+    "create": "New assignment",
+    "filter": { "all": "All roles", "scopeAll": "All scopes", "search": "Search by name or email…" },
+    "kpi": {
+      "users": "Assigned users",
+      "pending": "Pending invitations",
+      "expiring": "Expiring soon",
+      "branches": "Branches covered"
+    },
+    "columns": {
+      "user": "User",
+      "role": "Role",
+      "scope": "Scope",
+      "assignedBy": "Assigned by",
+      "assignedAt": "Assigned at",
+      "expires": "Expires",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": { "active": "Active", "pending": "Pending", "expired": "Expired" },
+    "actions": { "revoke": "Revoke", "extend": "Extend" }
+  },
+  "permissionCheck": {
+    "title": "Permission check",
+    "subtitle": "Simulate user permissions and trace sensitive RBAC events",
+    "simulate": "Simulate user",
+    "kpi": {
+      "changesToday": "Permission changes today",
+      "rolesModified": "Roles modified this week",
+      "assignments": "Role assignments this week",
+      "alerts": "Security events to review"
+    },
+    "form": { "user": "User", "branch": "Branch", "action": "Action to test", "submit": "Run check" },
+    "result": { "allowed": "Allowed", "denied": "Denied", "trace": "Reason" },
+    "columns": {
+      "time": "Timestamp",
+      "actor": "Performed by",
+      "event": "Event",
+      "target": "Role / branch",
+      "description": "Description",
+      "ip": "IP"
+    }
+  },
+  "permissionMatrix": {
+    "title": "Permission matrix",
+    "subtitle": "Configure CRUD rights per role across each module",
+    "save": "Save changes",
+    "reset": "Reset to default",
+    "role": "Configuring role",
+    "scope": "Scope",
+    "assigned": "Assigned to",
+    "users": "users",
+    "groups": {
+      "operations": "Operations",
+      "marketing": "Marketing & CRM",
+      "analytics": "Analytics",
+      "tenant": "Tenant management"
+    },
+    "columns": {
+      "module": "Module",
+      "view": "View",
+      "create": "Create",
+      "edit": "Edit",
+      "delete": "Delete",
+      "manage": "Manage",
+      "all": "Select all"
+    },
+    "summary": "Access summary",
+    "summaryDesc": "Users with this role will reach the following modules"
+  },
+  "content": {
+    "title": "Branch content",
+    "subtitle": "Manage articles, promotions, events and local SEO pages per branch",
+    "create": "New branch post",
+    "branchSelector": "Viewing",
+    "kpi": {
+      "posts": "Total posts",
+      "published": "Published",
+      "scheduled": "Scheduled",
+      "promotions": "Active promotions",
+      "events": "Upcoming events"
+    },
+    "filter": { "search": "Search by title or keyword…", "type": "Type", "status": "Status", "date": "Date" },
+    "type": {
+      "promotion": "Promotion",
+      "event": "Event",
+      "announcement": "Announcement",
+      "article": "Article",
+      "seo": "SEO page"
+    },
+    "status": { "published": "Published", "draft": "Draft", "scheduled": "Scheduled", "archived": "Archived" },
+    "columns": {
+      "title": "Title",
+      "type": "Type",
+      "branch": "Branch",
+      "status": "Status",
+      "metrics": "Date & views",
+      "actions": "Actions"
+    }
   }
 }

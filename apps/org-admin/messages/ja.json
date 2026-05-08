@@ -28,5 +28,132 @@
     "invite": "メンバー招待",
     "columns": { "name": "氏名", "email": "メール", "role": "役割", "scope": "範囲", "status": "状態" }
   },
-  "role": { "title": "権限マトリクス", "subtitle": "役割 × 権限の設定" }
+  "role": { "title": "権限マトリクス", "subtitle": "役割 × 権限の設定" },
+  "service": {
+    "title": "Cấu hình dịch vụ",
+    "subtitle": "Tuỳ biến dịch vụ theo từng chi nhánh: giá, thời lượng, sức chứa",
+    "applyAll": "Áp dụng cấu hình gốc cho tất cả",
+    "filter": { "all": "Tất cả trạng thái", "active": "Đang hoạt động", "inactive": "Tạm dừng" },
+    "base": { "service": "Tên dịch vụ", "category": "Nhóm dịch vụ", "price": "Giá gốc", "duration": "Thời lượng gốc" },
+    "columns": {
+      "branch": "Chi nhánh",
+      "status": "Trạng thái",
+      "price": "Giá ghi đè",
+      "duration": "Thời lượng",
+      "staff": "Nhân viên",
+      "room": "Phòng",
+      "max": "Tối đa/ngày",
+      "updated": "Cập nhật",
+      "actions": "Thao tác"
+    },
+    "actions": { "edit": "Sửa cấu hình" },
+    "context": {
+      "service": "Triệt lông toàn thân nữ",
+      "category": "Triệt lông công nghệ cao",
+      "price": "12.000.000 ₫",
+      "duration": "90 phút"
+    }
+  },
+  "roleAssign": {
+    "title": "Gán vai trò",
+    "subtitle": "Phân vai trò cho người dùng theo phạm vi tổ chức hoặc chi nhánh",
+    "create": "Gán vai trò mới",
+    "filter": { "all": "Tất cả vai trò", "scopeAll": "Tất cả phạm vi", "search": "Tìm theo tên hoặc email…" },
+    "kpi": {
+      "users": "Người dùng đã phân vai trò",
+      "pending": "Lời mời chờ phản hồi",
+      "expiring": "Sắp hết hạn",
+      "branches": "Chi nhánh được phủ"
+    },
+    "columns": {
+      "user": "Người dùng",
+      "role": "Vai trò",
+      "scope": "Phạm vi",
+      "assignedBy": "Người gán",
+      "assignedAt": "Thời điểm",
+      "expires": "Hết hạn",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "status": { "active": "Đang dùng", "pending": "Chờ xác nhận", "expired": "Hết hạn" },
+    "actions": { "revoke": "Thu hồi", "extend": "Gia hạn" }
+  },
+  "permissionCheck": {
+    "title": "Kiểm tra quyền",
+    "subtitle": "Mô phỏng quyền của người dùng và truy vết các thay đổi quan trọng",
+    "simulate": "Mô phỏng người dùng",
+    "kpi": {
+      "changesToday": "Thay đổi quyền hôm nay",
+      "rolesModified": "Vai trò chỉnh sửa tuần này",
+      "assignments": "Lượt gán vai trò tuần",
+      "alerts": "Sự kiện cần xem xét"
+    },
+    "form": { "user": "Người dùng", "branch": "Chi nhánh", "action": "Hành động cần kiểm tra", "submit": "Kiểm tra quyền" },
+    "result": { "allowed": "Được phép", "denied": "Bị từ chối", "trace": "Lý do" },
+    "columns": {
+      "time": "Thời điểm",
+      "actor": "Người thực hiện",
+      "event": "Sự kiện",
+      "target": "Vai trò / chi nhánh",
+      "description": "Mô tả",
+      "ip": "IP"
+    }
+  },
+  "permissionMatrix": {
+    "title": "Ma trận quyền",
+    "subtitle": "Cấu hình quyền CRUD cho từng vai trò trên mỗi module",
+    "save": "Lưu thay đổi",
+    "reset": "Đặt lại mặc định",
+    "role": "Đang cấu hình vai trò",
+    "scope": "Phạm vi áp dụng",
+    "assigned": "Đã gán cho",
+    "users": "người dùng",
+    "groups": {
+      "operations": "Vận hành",
+      "marketing": "Marketing & CRM",
+      "analytics": "Báo cáo",
+      "tenant": "Quản trị tổ chức"
+    },
+    "columns": {
+      "module": "Module",
+      "view": "Xem",
+      "create": "Tạo",
+      "edit": "Sửa",
+      "delete": "Xoá",
+      "manage": "Quản lý",
+      "all": "Chọn tất cả"
+    },
+    "summary": "Tóm tắt quyền",
+    "summaryDesc": "Người dùng có vai trò này sẽ truy cập được các module sau"
+  },
+  "content": {
+    "title": "Nội dung chi nhánh",
+    "subtitle": "Quản lý bài viết, khuyến mãi, sự kiện và trang SEO theo từng chi nhánh",
+    "create": "Tạo bài chi nhánh",
+    "branchSelector": "Đang xem",
+    "kpi": {
+      "posts": "Tổng bài viết",
+      "published": "Đã xuất bản",
+      "scheduled": "Đã lên lịch",
+      "promotions": "Khuyến mãi đang chạy",
+      "events": "Sự kiện sắp tới"
+    },
+    "filter": { "search": "Tìm theo tiêu đề hoặc từ khoá…", "type": "Loại nội dung", "status": "Trạng thái", "date": "Thời gian" },
+    "type": {
+      "promotion": "Khuyến mãi",
+      "event": "Sự kiện",
+      "announcement": "Thông báo",
+      "article": "Bài viết",
+      "seo": "Trang SEO"
+    },
+    "status": { "published": "Đã xuất bản", "draft": "Bản nháp", "scheduled": "Đã lên lịch", "archived": "Lưu trữ" },
+    "columns": {
+      "title": "Tiêu đề",
+      "type": "Loại",
+      "branch": "Chi nhánh",
+      "status": "Trạng thái",
+      "metrics": "Ngày & lượt xem",
+      "actions": "Thao tác"
+    }
+  }
 }

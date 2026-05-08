@@ -1,32 +1,182 @@
 {
   "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
-  "portal": { "name": "조직 관리", "subtitle": "Organization Owner" },
+  "portal": { "name": "Quản lý Tổ chức", "subtitle": "Organization Owner" },
   "nav": {
-    "dashboard": "대시보드",
-    "branch": "지점",
-    "member": "멤버",
-    "role": "역할·권한",
-    "service": "서비스 설정",
-    "voucher": "쿠폰",
-    "content": "콘텐츠",
-    "report": "멀티 지점 리포트",
-    "settings": "설정",
-    "logout": "로그아웃"
+    "dashboard": "Tổng quan",
+    "branch": "Chi nhánh",
+    "member": "Thành viên",
+    "role": "Vai trò & Quyền",
+    "service": "Cấu hình dịch vụ",
+    "voucher": "Mã giảm giá",
+    "content": "Nội dung",
+    "report": "Báo cáo đa chi nhánh",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
   },
   "dashboard": {
-    "title": "조직 개요",
-    "kpi": { "branches": "지점", "staff": "직원", "customers": "고객", "revenue": "월 매출" },
-    "branchSummary": "지점 성과"
+    "title": "Tổ chức của bạn",
+    "kpi": {
+      "branches": "Chi nhánh",
+      "staff": "Nhân viên",
+      "customers": "Khách hàng",
+      "revenue": "Doanh thu tháng"
+    },
+    "branchSummary": "Hiệu suất chi nhánh"
   },
   "branch": {
-    "title": "지점",
-    "create": "지점 추가",
-    "columns": { "code": "코드", "name": "이름", "address": "주소", "manager": "매니저", "status": "상태" }
+    "title": "Chi nhánh",
+    "create": "Thêm chi nhánh",
+    "columns": { "code": "Mã", "name": "Tên", "address": "Địa chỉ", "manager": "Quản lý", "status": "Trạng thái" }
   },
   "member": {
-    "title": "멤버",
-    "invite": "멤버 초대",
-    "columns": { "name": "이름", "email": "이메일", "role": "역할", "scope": "범위", "status": "상태" }
+    "title": "Thành viên",
+    "invite": "Mời thành viên",
+    "columns": { "name": "Họ tên", "email": "Email", "role": "Vai trò", "scope": "Phạm vi", "status": "Trạng thái" }
   },
-  "role": { "title": "권한 매트릭스", "subtitle": "역할 × 권한 설정" }
+  "role": {
+    "title": "Ma trận quyền",
+    "subtitle": "Cấu hình role × permission"
+  },
+  "service": {
+    "title": "Cấu hình dịch vụ",
+    "subtitle": "Tuỳ biến dịch vụ theo từng chi nhánh: giá, thời lượng, sức chứa",
+    "applyAll": "Áp dụng cấu hình gốc cho tất cả",
+    "filter": { "all": "Tất cả trạng thái", "active": "Đang hoạt động", "inactive": "Tạm dừng" },
+    "base": {
+      "service": "Tên dịch vụ",
+      "category": "Nhóm dịch vụ",
+      "price": "Giá gốc",
+      "duration": "Thời lượng gốc"
+    },
+    "columns": {
+      "branch": "Chi nhánh",
+      "status": "Trạng thái",
+      "price": "Giá ghi đè",
+      "duration": "Thời lượng",
+      "staff": "Nhân viên",
+      "room": "Phòng",
+      "max": "Tối đa/ngày",
+      "updated": "Cập nhật",
+      "actions": "Thao tác"
+    },
+    "actions": { "edit": "Sửa cấu hình" },
+    "context": {
+      "service": "Triệt lông toàn thân nữ",
+      "category": "Triệt lông công nghệ cao",
+      "price": "12.000.000 ₫",
+      "duration": "90 phút"
+    }
+  },
+  "roleAssign": {
+    "title": "Gán vai trò",
+    "subtitle": "Phân vai trò cho người dùng theo phạm vi tổ chức hoặc chi nhánh",
+    "create": "Gán vai trò mới",
+    "filter": { "all": "Tất cả vai trò", "scopeAll": "Tất cả phạm vi", "search": "Tìm theo tên hoặc email…" },
+    "kpi": {
+      "users": "Người dùng đã phân vai trò",
+      "pending": "Lời mời chờ phản hồi",
+      "expiring": "Sắp hết hạn",
+      "branches": "Chi nhánh được phủ"
+    },
+    "columns": {
+      "user": "Người dùng",
+      "role": "Vai trò",
+      "scope": "Phạm vi",
+      "assignedBy": "Người gán",
+      "assignedAt": "Thời điểm",
+      "expires": "Hết hạn",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "status": { "active": "Đang dùng", "pending": "Chờ xác nhận", "expired": "Hết hạn" },
+    "actions": { "revoke": "Thu hồi", "extend": "Gia hạn" }
+  },
+  "permissionCheck": {
+    "title": "Kiểm tra quyền",
+    "subtitle": "Mô phỏng quyền của người dùng và truy vết các thay đổi quan trọng",
+    "simulate": "Mô phỏng người dùng",
+    "kpi": {
+      "changesToday": "Thay đổi quyền hôm nay",
+      "rolesModified": "Vai trò chỉnh sửa tuần này",
+      "assignments": "Lượt gán vai trò tuần",
+      "alerts": "Sự kiện cần xem xét"
+    },
+    "form": {
+      "user": "Người dùng",
+      "branch": "Chi nhánh",
+      "action": "Hành động cần kiểm tra",
+      "submit": "Kiểm tra quyền"
+    },
+    "result": { "allowed": "Được phép", "denied": "Bị từ chối", "trace": "Lý do" },
+    "columns": {
+      "time": "Thời điểm",
+      "actor": "Người thực hiện",
+      "event": "Sự kiện",
+      "target": "Vai trò / chi nhánh",
+      "description": "Mô tả",
+      "ip": "IP"
+    }
+  },
+  "permissionMatrix": {
+    "title": "Ma trận quyền",
+    "subtitle": "Cấu hình quyền CRUD cho từng vai trò trên mỗi module",
+    "save": "Lưu thay đổi",
+    "reset": "Đặt lại mặc định",
+    "role": "Đang cấu hình vai trò",
+    "scope": "Phạm vi áp dụng",
+    "assigned": "Đã gán cho",
+    "users": "người dùng",
+    "groups": {
+      "operations": "Vận hành",
+      "marketing": "Marketing & CRM",
+      "analytics": "Báo cáo",
+      "tenant": "Quản trị tổ chức"
+    },
+    "columns": {
+      "module": "Module",
+      "view": "Xem",
+      "create": "Tạo",
+      "edit": "Sửa",
+      "delete": "Xoá",
+      "manage": "Quản lý",
+      "all": "Chọn tất cả"
+    },
+    "summary": "Tóm tắt quyền",
+    "summaryDesc": "Người dùng có vai trò này sẽ truy cập được các module sau"
+  },
+  "content": {
+    "title": "Nội dung chi nhánh",
+    "subtitle": "Quản lý bài viết, khuyến mãi, sự kiện và trang SEO theo từng chi nhánh",
+    "create": "Tạo bài chi nhánh",
+    "branchSelector": "Đang xem",
+    "kpi": {
+      "posts": "Tổng bài viết",
+      "published": "Đã xuất bản",
+      "scheduled": "Đã lên lịch",
+      "promotions": "Khuyến mãi đang chạy",
+      "events": "Sự kiện sắp tới"
+    },
+    "filter": {
+      "search": "Tìm theo tiêu đề hoặc từ khoá…",
+      "type": "Loại nội dung",
+      "status": "Trạng thái",
+      "date": "Thời gian"
+    },
+    "type": {
+      "promotion": "Khuyến mãi",
+      "event": "Sự kiện",
+      "announcement": "Thông báo",
+      "article": "Bài viết",
+      "seo": "Trang SEO"
+    },
+    "status": { "published": "Đã xuất bản", "draft": "Bản nháp", "scheduled": "Đã lên lịch", "archived": "Lưu trữ" },
+    "columns": {
+      "title": "Tiêu đề",
+      "type": "Loại",
+      "branch": "Chi nhánh",
+      "status": "Trạng thái",
+      "metrics": "Ngày & lượt xem",
+      "actions": "Thao tác"
+    }
+  }
 }
