@@ -43,6 +43,14 @@ public class User {
     @Column(name = "locked_until")
     private Instant lockedUntil;
 
+    /**
+     * Most recent successful initial login. Stamped by SessionService when a
+     * fresh session is minted (NOT on token rotation). Surfaced by the
+     * tenant-admin /members page.
+     */
+    @Column(name = "last_login")
+    private Instant lastLogin;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 

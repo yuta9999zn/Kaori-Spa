@@ -124,8 +124,9 @@ public class MemberController {
      * tenant from {@link TenantContext}.
      *
      * <p>Branches are returned as scope_branch_id strings; the FE may resolve
-     * names later via tenant-service. {@code lastLogin} is always {@code null}
-     * until a {@code last_login} column is added to {@code auth.users} (TODO).
+     * names later via tenant-service. {@code lastLogin} is sourced from
+     * {@code auth.users.last_login} (added in V6) and is stamped by
+     * {@link SessionService#createSession} on every fresh login.
      */
     @GetMapping("/v1/members")
     @PreAuthorize("hasAnyRole('TENANT_OWNER','SUPER_ADMIN')")
@@ -177,7 +178,7 @@ public class MemberController {
 
         List<TenantMemberDto> items = jdbc.query(
                 """
-                SELECT u.id, p.full_name, u.email, u.phone, u.status,
+                SELECT u.id, p.full_name, u.email, u.phone, u.status, u.last_login,
                        ARRAY_AGG(DISTINCT r.code) FILTER (WHERE r.code IS NOT NULL) AS roles,
                        ARRAY_AGG(DISTINCT ur.scope_branch_id::text) FILTER (WHERE ur.scope_branch_id IS NOT NULL) AS branches
                 FROM auth.users u
@@ -191,7 +192,7 @@ public class MemberController {
                        OR p.full_name ILIKE '%' || ? || '%'
                        OR u.phone ILIKE '%' || ? || '%')
                   AND (?::text IS NULL OR u.status = ?)
-                GROUP BY u.id, p.full_name, u.email, u.phone, u.status
+                GROUP BY u.id, p.full_name, u.email, u.phone, u.status, u.last_login
                 ORDER BY p.full_name NULLS LAST, u.email
                 LIMIT ? OFFSET ?
                 """,
@@ -203,9 +204,10 @@ public class MemberController {
                     String st = rs.getString("status");
                     List<String> roleCodes = sqlArrayToList(rs.getArray("roles"));
                     List<String> branchIds = sqlArrayToList(rs.getArray("branches"));
-                    // TODO(last_login): no last_login column on auth.users yet — leave null.
+                    java.sql.Timestamp lastLoginTs = rs.getTimestamp("last_login");
+                    Instant lastLogin = lastLoginTs == null ? null : lastLoginTs.toInstant();
                     return new TenantMemberDto(uid, fullName, email, phone, st,
-                            roleCodes, branchIds, null);
+                            roleCodes, branchIds, lastLogin);
                 },
                 effectiveTenantId,
                 trimmedQ, trimmedQ, trimmedQ, trimmedQ,

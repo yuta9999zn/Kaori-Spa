@@ -338,3 +338,91 @@ export function useMembers(args: UseMembersArgs = {}) {
     return api<MembersPagedResult>(`/v1/members?${params}`);
   }, [tid, q ?? '', status ?? '', page, size]);
 }
+
+// ─── Platform overview (tenant-service /v1/platform/overview) ──────────────
+
+export interface PlatformTenantSummary {
+  id: string;
+  name: string;
+  code: string;
+  orgCount: number;
+  branchCount: number;
+  createdAt: string;
+}
+
+export interface PlatformOverviewDto {
+  tenantCount: number;
+  orgCount: number;
+  branchCount: number;
+  userCount: number;
+  /** Currently always 0 — booking-service tenant-scoped read not implemented yet. */
+  activeTenantsLast30d: number;
+  recentTenants: PlatformTenantSummary[];
+}
+
+export function usePlatformOverview() {
+  return useFetch<PlatformOverviewDto>(
+    () => api<PlatformOverviewDto>('/v1/platform/overview')
+  );
+}
+
+// ─── Webhooks (notification-service /v1/webhooks) ──────────────────────────
+
+export interface WebhookDto {
+  id: string;
+  name: string;
+  targetUrl: string;
+  eventFilters: string[];
+  active: boolean;
+  createdAt: string;
+}
+
+export function useWebhooks(tenantId: string = TENANT_ID) {
+  return useFetch<WebhookDto[]>(
+    () => api<WebhookDto[]>(`/v1/webhooks?tenantId=${tenantId}`),
+    [tenantId]
+  );
+}
+
+export function toggleWebhook(id: string) {
+  return api<void>(`/v1/webhooks/${id}/toggle`, { method: 'POST' });
+}
+
+// ─── Onboarding (tenant-service /v1/tenants/{id}/onboarding) ───────────────
+
+/** Canonical onboarding step order. */
+export const ONBOARDING_STEPS = ['welcome', 'org', 'branch', 'team', 'done'] as const;
+export type OnboardingStep = (typeof ONBOARDING_STEPS)[number];
+
+export interface OnboardingState {
+  tenantId: string;
+  currentStep: string;
+  completedSteps: string[];
+  startedAt: string;
+  completedAt: string | null;
+  metadata: Record<string, unknown>;
+}
+
+export function useOnboarding(tenantId: string = TENANT_ID) {
+  return useFetch<OnboardingState>(
+    () => api<OnboardingState>(`/v1/tenants/${tenantId}/onboarding`),
+    [tenantId]
+  );
+}
+
+export function advanceOnboarding(
+  tenantId: string,
+  step: string,
+  metadata?: Record<string, unknown>
+) {
+  return api<OnboardingState>(`/v1/tenants/${tenantId}/onboarding/advance`, {
+    method: 'POST',
+    body: JSON.stringify({ step, metadata: metadata ?? {} })
+  });
+}
+
+export function completeOnboarding(tenantId: string) {
+  return api<OnboardingState>(`/v1/tenants/${tenantId}/onboarding/complete`, {
+    method: 'POST'
+  });
+}

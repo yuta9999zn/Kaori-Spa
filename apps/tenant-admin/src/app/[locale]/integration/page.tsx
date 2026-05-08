@@ -1,7 +1,5 @@
-// TODO(M3+): WebhookManager calls /v1/webhooks directly, but no integration-service
-//            endpoint exists yet — kept as-is so it's a no-op when API is offline.
 import { setRequestLocale } from 'next-intl/server';
-import WebhookManager from './WebhookManager';
+import IntegrationView from './IntegrationView';
 
 export default async function IntegrationPage({
   params
@@ -10,5 +8,5 @@ export default async function IntegrationPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <WebhookManager />;
+  return <IntegrationView />;
 }

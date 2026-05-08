@@ -99,5 +99,42 @@
       "multiloc": { "title": "多门店智能", "desc": "专为连锁门店设计:对比门店表现、跨门店调配人员、统一全局库存。" }
     },
     "preview": { "title": "模块预览", "capabilities": "核心能力", "cap1Title": "在线门户", "cap1Desc": "全天候(24/7)运行的白标预约页面。", "cap2Title": "智能排程", "cap2Desc": "防止重复预约,自动管理员工空档。", "cap3Title": "提醒", "cap3Desc": "邮件和短信自动提醒,降低爽约率。" }
+  },
+  "analytics": {
+    "title": "Platform analytics",
+    "subtitle": "Cross-tenant aggregates from tenant-service.",
+    "kpi": { "tenants": "Tenants", "branches": "Branches", "users": "Users", "active": "Active tenants (30d)" },
+    "kpiActiveHint": "Wired when booking-service ships tenant-scoped reads.",
+    "recent": { "title": "Newest tenants", "code": "Code", "name": "Name", "orgs": "Orgs", "branches": "Branches", "createdAt": "Created", "empty": "No tenants yet." },
+    "charts": { "soonTitle": "Charts coming soon", "soonHint": "Revenue, staff and branch comparisons require analytics-service / billing data not yet shipped." },
+    "errors": { "load": "Failed to load platform overview." }
+  },
+  "integration": {
+    "title": "Webhooks",
+    "subtitle": "Push domain events to external systems (Zalo, Make.com, n8n…).",
+    "actions": { "add": "Add webhook", "addDisabledHint": "Coming soon", "toggle": "Toggle" },
+    "status": { "active": "Active", "paused": "Paused" },
+    "deliveries": { "title": "Recent deliveries", "empty": "No deliveries yet." },
+    "errors": { "load": "Failed to load webhooks." },
+    "empty": "No webhooks configured."
+  },
+  "onboarding": {
+    "title": "Tenant onboarding",
+    "subtitle": "Walk through the canonical setup steps for this tenant.",
+    "currentStep": "Current step",
+    "actions": { "advance": "Advance to next", "complete": "Mark complete", "loading": "Loading…" },
+    "steps": { "welcome": "Welcome", "org": "Organization", "branch": "Branch", "team": "Team", "done": "Done" },
+    "stepStatus": { "completed": "Completed", "current": "Current", "pending": "Pending" },
+    "completedAt": "Completed at",
+    "startedAt": "Started at",
+    "errors": { "load": "Failed to load onboarding state.", "advance": "Failed to advance step.", "complete": "Failed to mark complete." }
+  },
+  "orgSettings": {
+    "title": "Organization settings",
+    "subtitle": "Read-only overview of organizations under this tenant.",
+    "todoEdit": "Editing organization details is not yet available — the backend PUT endpoint hasn't shipped.",
+    "list": { "title": "Organizations", "empty": "No organizations yet." },
+    "fields": { "code": "Code", "slug": "Slug", "name": "Name", "primaryLocale": "Primary locale", "id": "ID" },
+    "errors": { "load": "Failed to load organizations." }
   }
 }

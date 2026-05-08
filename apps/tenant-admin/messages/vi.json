@@ -120,5 +120,48 @@
       "multiloc": { "title": "Multi-Location Intelligence", "desc": "Dành cho chuỗi: so sánh hiệu suất chi nhánh, cân bằng nhân sự và đồng bộ tồn kho toàn cầu." }
     },
     "preview": { "title": "Xem trước module", "capabilities": "Khả năng chính", "cap1Title": "Cổng trực tuyến", "cap1Desc": "Trang đặt lịch white-label hoạt động 24/7.", "cap2Title": "Lập lịch thông minh", "cap2Desc": "Ngăn trùng lịch và tự xử lý khoảng trống của nhân viên.", "cap3Title": "Nhắc lịch", "cap3Desc": "Email và SMS nhắc tự động giảm vắng hẹn." }
+  },
+  "analytics": {
+    "title": "Phân tích nền tảng",
+    "subtitle": "Tổng hợp xuyên tenant từ tenant-service.",
+    "kpi": { "tenants": "Tổ chức", "branches": "Chi nhánh", "users": "Người dùng", "active": "Tenant hoạt động (30 ngày)" },
+    "kpiActiveHint": "Sẽ kết nối khi booking-service mở API theo tenant.",
+    "recent": { "title": "Tenant mới nhất", "code": "Mã", "name": "Tên", "orgs": "Tổ chức", "branches": "Chi nhánh", "createdAt": "Ngày tạo", "empty": "Chưa có tenant." },
+    "charts": { "soonTitle": "Biểu đồ sẽ có sau", "soonHint": "So sánh doanh thu, nhân viên và chi nhánh cần dữ liệu từ analytics-service / billing chưa triển khai." },
+    "errors": { "load": "Không tải được tổng quan nền tảng." }
+  },
+  "integration": {
+    "title": "Webhooks",
+    "subtitle": "Đẩy domain event sang hệ thống ngoài (Zalo, Make.com, n8n…).",
+    "actions": { "add": "Thêm webhook", "addDisabledHint": "Sắp ra mắt", "toggle": "Bật/tắt" },
+    "status": { "active": "Đang hoạt động", "paused": "Tạm dừng" },
+    "deliveries": { "title": "Delivery gần đây", "empty": "Chưa có delivery nào." },
+    "errors": { "load": "Không tải được danh sách webhook." },
+    "empty": "Chưa cấu hình webhook nào."
+  },
+  "onboarding": {
+    "title": "Onboarding tenant",
+    "subtitle": "Đi qua các bước thiết lập chuẩn cho tenant này.",
+    "currentStep": "Bước hiện tại",
+    "actions": { "advance": "Sang bước tiếp", "complete": "Đánh dấu hoàn tất", "loading": "Đang tải…" },
+    "steps": {
+      "welcome": "Chào mừng",
+      "org": "Tổ chức",
+      "branch": "Chi nhánh",
+      "team": "Đội ngũ",
+      "done": "Hoàn tất"
+    },
+    "stepStatus": { "completed": "Đã hoàn thành", "current": "Đang ở", "pending": "Chưa làm" },
+    "completedAt": "Hoàn tất lúc",
+    "startedAt": "Bắt đầu lúc",
+    "errors": { "load": "Không tải được trạng thái onboarding.", "advance": "Không sang bước được.", "complete": "Không đánh dấu hoàn tất được." }
+  },
+  "orgSettings": {
+    "title": "Cài đặt tổ chức",
+    "subtitle": "Xem các tổ chức thuộc tenant này (chỉ đọc).",
+    "todoEdit": "Chưa thể chỉnh sửa chi tiết tổ chức — endpoint PUT chưa được triển khai.",
+    "list": { "title": "Danh sách tổ chức", "empty": "Chưa có tổ chức." },
+    "fields": { "code": "Mã", "slug": "Slug", "name": "Tên", "primaryLocale": "Ngôn ngữ chính", "id": "ID" },
+    "errors": { "load": "Không tải được danh sách tổ chức." }
   }
 }

@@ -37,10 +37,31 @@ public class SessionService {
 
     public record TokenPair(String accessToken, String refreshToken, long accessExpiresIn) {}
 
+    /**
+     * Mint a brand-new session after a successful credential check. Stamps
+     * {@code users.last_login} with the current timestamp so the tenant-admin
+     * /members page can show "last login" — this is intentionally NOT done
+     * during token rotation (see {@link #rotate}), which uses the internal
+     * {@link #mintTokens} helper instead.
+     */
     @Transactional
     public TokenPair createSession(UUID userId, String ip, String userAgent,
                                    UUID tenantId, UUID orgId, UUID branchId,
                                    String locale, Set<String> roles, Set<String> perms) {
+        TokenPair pair = mintTokens(userId, ip, userAgent, tenantId, orgId, branchId, locale, roles, perms);
+        // Initial login only: rotate() never reaches this method.
+        userRepository.touchLastLogin(userId, Instant.now());
+        return pair;
+    }
+
+    /**
+     * Internal: persist a session row + issue a token pair. Shared between
+     * initial login (which also stamps last_login) and refresh-token rotation
+     * (which does not).
+     */
+    private TokenPair mintTokens(UUID userId, String ip, String userAgent,
+                                 UUID tenantId, UUID orgId, UUID branchId,
+                                 String locale, Set<String> roles, Set<String> perms) {
         String refresh = jwt.issueRefreshToken(userId);
         sessionRepository.save(new Session(
                 userId,
@@ -89,7 +110,8 @@ public class SessionService {
         // effect on the next access token (no need to wait for a fresh login).
         UserAccessResolver.AccessProfile profile = accessResolver.resolve(user.getId());
 
-        return createSession(user.getId(), ip, userAgent,
+        // Use mintTokens (NOT createSession) so we don't bump last_login on rotate.
+        return mintTokens(user.getId(), ip, userAgent,
                 user.getTenantId(), profile.orgId(), profile.branchId(),
                 user.getLocale(), profile.roles(), profile.permissions());
     }

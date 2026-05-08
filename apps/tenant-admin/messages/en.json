@@ -115,5 +115,48 @@
       "multiloc": { "title": "Multi-location intelligence", "desc": "Designed for franchises. Compare branch performance, balance staff workloads across locations, and unify global inventory." }
     },
     "preview": { "title": "Module preview", "capabilities": "Key capabilities", "cap1Title": "Online portal", "cap1Desc": "White-labeled customer booking page available 24/7.", "cap2Title": "Smart scheduling", "cap2Desc": "Prevents double bookings and manages staff availability gaps automatically.", "cap3Title": "Reminders", "cap3Desc": "Automated email and SMS reminders to reduce no-shows." }
+  },
+  "analytics": {
+    "title": "Platform analytics",
+    "subtitle": "Cross-tenant aggregates from tenant-service.",
+    "kpi": { "tenants": "Tenants", "branches": "Branches", "users": "Users", "active": "Active tenants (30d)" },
+    "kpiActiveHint": "Wired when booking-service ships tenant-scoped reads.",
+    "recent": { "title": "Newest tenants", "code": "Code", "name": "Name", "orgs": "Orgs", "branches": "Branches", "createdAt": "Created", "empty": "No tenants yet." },
+    "charts": { "soonTitle": "Charts coming soon", "soonHint": "Revenue, staff and branch comparisons require analytics-service / billing data not yet shipped." },
+    "errors": { "load": "Failed to load platform overview." }
+  },
+  "integration": {
+    "title": "Webhooks",
+    "subtitle": "Push domain events to external systems (Zalo, Make.com, n8n…).",
+    "actions": { "add": "Add webhook", "addDisabledHint": "Coming soon", "toggle": "Toggle" },
+    "status": { "active": "Active", "paused": "Paused" },
+    "deliveries": { "title": "Recent deliveries", "empty": "No deliveries yet." },
+    "errors": { "load": "Failed to load webhooks." },
+    "empty": "No webhooks configured."
+  },
+  "onboarding": {
+    "title": "Tenant onboarding",
+    "subtitle": "Walk through the canonical setup steps for this tenant.",
+    "currentStep": "Current step",
+    "actions": { "advance": "Advance to next", "complete": "Mark complete", "loading": "Loading…" },
+    "steps": {
+      "welcome": "Welcome",
+      "org": "Organization",
+      "branch": "Branch",
+      "team": "Team",
+      "done": "Done"
+    },
+    "stepStatus": { "completed": "Completed", "current": "Current", "pending": "Pending" },
+    "completedAt": "Completed at",
+    "startedAt": "Started at",
+    "errors": { "load": "Failed to load onboarding state.", "advance": "Failed to advance step.", "complete": "Failed to mark complete." }
+  },
+  "orgSettings": {
+    "title": "Organization settings",
+    "subtitle": "Read-only overview of organizations under this tenant.",
+    "todoEdit": "Editing organization details is not yet available — the backend PUT endpoint hasn't shipped.",
+    "list": { "title": "Organizations", "empty": "No organizations yet." },
+    "fields": { "code": "Code", "slug": "Slug", "name": "Name", "primaryLocale": "Primary locale", "id": "ID" },
+    "errors": { "load": "Failed to load organizations." }
   }
 }
