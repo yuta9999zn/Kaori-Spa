@@ -47,6 +47,9 @@ public class InventoryController {
                           @NotBlank String moveType, String refType, UUID refId, String note) {}
 
     @GetMapping("/products")
+    // TODO(round-8): paginate. Returns the full active product catalog for an
+    // org. N is small today (<500) but unbounded — switch to PagedResult when
+    // the FE inventory grid consumes pages.
     public ApiResponse<List<ProductDto>> products(@RequestParam UUID orgId) {
         return ApiResponse.ok(productRepo.findAllByOrgIdAndActiveTrue(orgId)
                 .stream().map(this::toProduct).toList());
@@ -72,6 +75,9 @@ public class InventoryController {
     }
 
     @GetMapping("/stock")
+    // TODO(round-8): paginate. Returns one row per product with non-zero stock
+    // for a branch. N is bounded by product catalog size — same comment as
+    // /products above.
     public ApiResponse<List<StockRow>> stock(@RequestParam UUID branchId) {
         var balances = balanceRepo.findAllByIdBranchId(branchId);
         var ids = balances.stream().map(b -> b.getId().getProductId()).toList();
@@ -113,6 +119,8 @@ public class InventoryController {
     }
 
     @GetMapping("/moves")
+    // TODO(round-8): paginate. Move history grows monotonically — add a date
+    // window + page params before this endpoint hits production traffic.
     public ApiResponse<List<MoveDto>> moves(@RequestParam(required = false) UUID branchId,
                                             @RequestParam(required = false) UUID productId) {
         if (productId != null) {

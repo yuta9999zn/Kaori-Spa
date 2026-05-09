@@ -50,12 +50,15 @@ public class WebhookController {
     @GetMapping
     @PreAuthorize("hasAnyRole('TENANT_OWNER','ORG_OWNER')")
     @SuppressWarnings("unchecked")
+    // TODO(round-8): paginate. Webhooks per tenant are very small N (<50) but
+    // capping to 200 protects against pathological data.
     public ApiResponse<List<WebhookDto>> list(@RequestParam UUID tenantId) {
         var rows = (List<Object[]>) em.createNativeQuery("""
             SELECT id, name, target_url, event_filters, is_active, created_at
             FROM notification.webhooks
             WHERE tenant_id = :tid
             ORDER BY created_at DESC
+            LIMIT 200
             """)
             .setParameter("tid", tenantId)
             .getResultList();

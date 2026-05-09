@@ -58,6 +58,9 @@ public class AvailabilityController {
             @RequestParam(defaultValue = "20") int limit
     ) {
         if (durationMin <= 0 || from.isAfter(to)) return ApiResponse.ok(List.of());
+        // Cap the result set so a malicious / sloppy client cannot ask for
+        // millions of suggestions and force us to walk every grid cell × bed.
+        limit = Math.min(Math.max(limit, 1), 200);
 
         List<Bed> beds = bedRepo.findAllByTenantIdAndBranchIdAndStatus(tenantId, branchId, "active");
         if (beds.isEmpty()) return ApiResponse.ok(List.of());

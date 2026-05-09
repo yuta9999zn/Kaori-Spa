@@ -1,6 +1,8 @@
 package vn.kaori.spa.auth.rbac;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,6 +74,12 @@ public class RoleService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "rolePermissions", key = "#id"),
+            // We don't track which users hold this role, so blow the whole userAccess
+            // cache. Role updates are rare (admin action) so the hit-rate cost is fine.
+            @CacheEvict(value = "userAccess", allEntries = true)
+    })
     public Role update(UUID id, UUID tenantId, Map<String, String> name, List<String> permissionCodes) {
         Role r = get(id, tenantId);
         if (name != null && !name.isEmpty()) {
@@ -84,6 +92,10 @@ public class RoleService {
     }
 
     @Transactional
+    @Caching(evict = {
+            @CacheEvict(value = "rolePermissions", key = "#id"),
+            @CacheEvict(value = "userAccess", allEntries = true)
+    })
     public void delete(UUID id, UUID tenantId) {
         Role r = get(id, tenantId);
         if (r.isSystem()) {

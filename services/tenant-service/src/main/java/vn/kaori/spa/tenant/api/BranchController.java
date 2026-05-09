@@ -41,6 +41,9 @@ public class BranchController {
 
     @GetMapping
     @PreAuthorize("hasRole('ORG_OWNER') or hasRole('TENANT_OWNER') or hasRole('BRANCH_MANAGER')")
+    // TODO(round-8): paginate. Returns all branches for an org — typical N is
+    // small (<100) but unbounded in principle. Switch to PagedResult when the
+    // tenant-admin /branches table consumes it.
     public ApiResponse<List<BranchDto>> list(@PathVariable UUID orgId) {
         UUID tid = TenantContext.requireTenantId();
         return ApiResponse.ok(repo.findAllByTenantIdAndOrgId(tid, orgId).stream().map(this::toDto).toList());

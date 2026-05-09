@@ -28,6 +28,9 @@ public class ServiceController {
                              boolean usesWax, boolean usesMachine, boolean active) {}
 
     @GetMapping
+    // TODO(round-8): paginate. Returns the full active service catalog for an
+    // org. N is typically <500 (one per service code) so memory is bounded for
+    // now, but should switch to PagedResult once the FE catalog grid pages.
     public ApiResponse<List<ServiceDto>> search(
             @RequestParam UUID orgId,
             @RequestParam(required = false) String gender,

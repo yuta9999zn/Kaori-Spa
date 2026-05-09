@@ -120,6 +120,8 @@ public class ReportController {
             @RequestParam LocalDate to,
             @RequestParam(defaultValue = "10") int limit
     ) {
+        // Cap so a careless caller can't ask for the full service catalog.
+        int safeLimit = Math.min(Math.max(limit, 1), 100);
         List<Object[]> rows = em.createNativeQuery("""
             SELECT i.service_code,
                    COUNT(*)                AS times,
@@ -139,7 +141,7 @@ public class ReportController {
             .setParameter("branchId", branchId)
             .setParameter("from", from.atStartOfDay())
             .setParameter("toExclusive", to.plusDays(1).atStartOfDay())
-            .setParameter("lim", limit)
+            .setParameter("lim", safeLimit)
             .getResultList();
 
         return ApiResponse.ok(rows.stream().map(r -> new TopService(

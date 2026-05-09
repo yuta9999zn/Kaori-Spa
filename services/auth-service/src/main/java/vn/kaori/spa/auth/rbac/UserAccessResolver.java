@@ -1,6 +1,7 @@
 package vn.kaori.spa.auth.rbac;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.kaori.spa.auth.domain.Permission;
@@ -70,6 +71,7 @@ public class UserAccessResolver {
      * </ul>
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "userAccess", key = "#userId")
     public AccessProfile resolve(UUID userId) {
         List<UserRole> grants = userRoleRepository.findAllByUserId(userId);
         if (grants.isEmpty()) {

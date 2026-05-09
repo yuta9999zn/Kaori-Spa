@@ -42,6 +42,7 @@ public class CampaignController {
     @GetMapping
     @PreAuthorize("hasAnyRole('TENANT_OWNER','ORG_OWNER','MARKETING')")
     @SuppressWarnings("unchecked")
+    // TODO(round-8): paginate. Cap to 200 so an old tenant cannot OOM us.
     public ApiResponse<List<CampaignDto>> list(@RequestParam UUID tenantId) {
         var rows = (List<Object[]>) em.createNativeQuery("""
             SELECT id, name, channel, template_code, status, scheduled_at,
@@ -49,6 +50,7 @@ public class CampaignController {
             FROM notification.campaigns
             WHERE tenant_id = :tid
             ORDER BY created_at DESC
+            LIMIT 200
             """)
             .setParameter("tid", tenantId)
             .getResultList();

@@ -54,6 +54,9 @@ public class VoucherController {
     @GetMapping
     @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER','MARKETING')")
     @SuppressWarnings("unchecked")
+    // TODO(round-8): paginate. Returns all vouchers for an org — typically <200
+    // active vouchers but unbounded over time as expired ones accumulate. Cap
+    // at 500 in SQL for now so an old org can't OOM the response.
     public ApiResponse<List<AdminVoucherDto>> list(@RequestParam UUID orgId) {
         var rows = (List<Object[]>) em.createNativeQuery("""
             SELECT id, code, kind, value, cap_amount, min_bill, valid_from, valid_to,
@@ -61,6 +64,7 @@ public class VoucherController {
             FROM catalog.vouchers
             WHERE org_id = :org
             ORDER BY created_at DESC
+            LIMIT 500
             """)
             .setParameter("org", orgId)
             .getResultList();

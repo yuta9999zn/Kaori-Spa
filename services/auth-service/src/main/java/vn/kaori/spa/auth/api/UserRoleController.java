@@ -3,6 +3,7 @@ package vn.kaori.spa.auth.api;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +59,9 @@ public class UserRoleController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER')")
+    // TODO(round-8): paginate. Filtered by (userId, orgId, branchId) so result
+    // sets are usually small, but a tenant-wide call (no filters) could grow
+    // unbounded. Switch to PagedResult once the FE consumes it.
     public ApiResponse<List<UserRoleDto>> list(@RequestParam(required = false) UUID userId,
                                                 @RequestParam(required = false) UUID orgId,
                                                 @RequestParam(required = false) UUID branchId) {
@@ -70,6 +74,7 @@ public class UserRoleController {
     @PostMapping
     @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER')")
     @Audited(action = "user_role.assign", entityType = "user_role", entityIdExpression = "#req.userId")
+    @CacheEvict(value = "userAccess", key = "#req.userId")
     public ApiResponse<UserRoleDto> assign(@Valid @RequestBody AssignReq req) {
         UUID tenantId = TenantContext.requireTenantId();
 
@@ -89,6 +94,7 @@ public class UserRoleController {
     @DeleteMapping("/{userId}/{roleId}")
     @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER')")
     @Audited(action = "user_role.revoke", entityType = "user_role", entityIdExpression = "#userId")
+    @CacheEvict(value = "userAccess", key = "#userId")
     public ApiResponse<Void> revoke(@PathVariable UUID userId, @PathVariable UUID roleId) {
         UUID tenantId = TenantContext.requireTenantId();
         // Ensure both belong to tenant before deleting (defence in depth).

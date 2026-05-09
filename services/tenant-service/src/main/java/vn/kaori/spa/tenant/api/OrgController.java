@@ -48,6 +48,9 @@ public class OrgController {
 
     @GetMapping
     @PreAuthorize("hasRole('TENANT_OWNER') or hasRole('SUPER_ADMIN')")
+    // TODO(round-8): paginate. Currently returns the full list of orgs for the
+    // tenant; safe at small N (typical tenant has <50 orgs) but unbounded in
+    // theory. Switch to PagedResult<OrgDto> when the FE switcher consumes it.
     public ApiResponse<List<OrgDto>> list() {
         UUID tid = TenantContext.requireTenantId();
         return ApiResponse.ok(repo.findAllByTenantId(tid).stream().map(this::toDto).toList());

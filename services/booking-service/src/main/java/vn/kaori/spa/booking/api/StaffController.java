@@ -38,6 +38,8 @@ public class StaffController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('BRANCH_MANAGER','ORG_OWNER','TENANT_OWNER','RECEPTIONIST')")
+    // TODO(round-8): paginate if any branch ever exceeds ~200 active staff.
+    // Today every branch caps out at <50 active therapists so this is safe.
     public ApiResponse<List<StaffDto>> list(@RequestParam UUID tenantId, @RequestParam UUID branchId) {
         return ApiResponse.ok(staffRepo.findAllByTenantIdAndBranchIdAndActiveTrue(tenantId, branchId)
                 .stream().map(this::toDto).toList());

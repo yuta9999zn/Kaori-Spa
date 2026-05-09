@@ -47,6 +47,8 @@ public class RoleController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER')")
+    // TODO(round-8): paginate if a tenant ever defines >100 custom roles.
+    // Today every tenant has <30 roles (system + a few custom) so this is safe.
     public ApiResponse<List<RoleDto>> list(@RequestParam(required = false) String scope) {
         UUID tenantId = TenantContext.requireTenantId();
         List<Role> roles = roleService.list(tenantId, scope);

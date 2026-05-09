@@ -32,6 +32,10 @@ public class MyBranchesController {
                                Map<String, String> address, BigDecimal lat, BigDecimal lng, boolean active) {}
 
     @GetMapping("/branches")
+    // TODO(round-8): replace findAll() with a tenant-scoped query + cap. Today
+    // we filter in-memory after pulling every branch, which is wasteful at
+    // platform scale even though per-tenant N is small. Move filtering into the
+    // repository and add a hard cap (~200 branches per user).
     public ApiResponse<List<BranchOption>> myBranches() {
         TenantContext.Principal p = TenantContext.get();
         if (p == null) return ApiResponse.ok(List.of());

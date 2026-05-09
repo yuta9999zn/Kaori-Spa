@@ -58,6 +58,9 @@ public class MemberController {
 
     @GetMapping("/v1/orgs/{orgId}/members")
     @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER','BRANCH_MANAGER')")
+    // TODO(round-8): paginate. Returns every user_role assignment scoped to
+    // the org. For an org with many staff this loads N×roles rows; switch to
+    // PagedResult and push grouping into SQL once /v1/members is fully wired.
     public ApiResponse<List<MemberDto>> listMembers(@PathVariable UUID orgId) {
         UUID tenantId = TenantContext.requireTenantId();
 
