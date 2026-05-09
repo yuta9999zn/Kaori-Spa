@@ -32,9 +32,110 @@
   },
   "plan": {
     "title": "Gói đăng ký",
+    "subtitle": "Quản lý gói nền tảng, theo dõi giới hạn sử dụng và cập nhật thông tin thanh toán.",
     "starter": "Khởi đầu",
     "professional": "Chuyên nghiệp",
-    "enterprise": "Doanh nghiệp"
+    "enterprise": "Doanh nghiệp",
+    "breadcrumb": { "dashboard": "Tổng quan", "settings": "Cài đặt" },
+    "actions": {
+      "downloadInvoice": "Tải hoá đơn",
+      "upgrade": "Nâng cấp gói",
+      "cancel": "Huỷ đăng ký",
+      "changePlan": "Đổi gói",
+      "edit": "Chỉnh sửa"
+    },
+    "current": {
+      "activeBadge": "Đang hoạt động",
+      "perMonth": "mỗi tháng",
+      "nextBilling": "Ngày thanh toán tiếp theo",
+      "featuresTitle": "Tính năng của gói hiện tại",
+      "features": {
+        "branches": "Tối đa {count} chi nhánh đang hoạt động",
+        "staff": "{count} tài khoản nhân viên",
+        "customers": "Số lượng khách hàng không giới hạn",
+        "analytics": "Báo cáo & phân tích nâng cao",
+        "support": "Hỗ trợ ưu tiên qua email"
+      }
+    },
+    "usage": {
+      "title": "Mức sử dụng nền tảng",
+      "subtitle": "Tỷ lệ sử dụng hiện tại so với giới hạn của gói.",
+      "staff": "Tài khoản nhân viên",
+      "branches": "Chi nhánh đang hoạt động",
+      "storage": "Dung lượng lưu trữ",
+      "bookings": "Lịch hẹn trong tháng",
+      "unlimited": "Không giới hạn",
+      "scaleHint": "Sắp đạt giới hạn? Liên hệ đội thành công khách hàng để mở rộng tự động hoặc nhận ưu đãi doanh nghiệp."
+    },
+    "billing": {
+      "title": "Thông tin thanh toán",
+      "companyName": "Tên công ty",
+      "address": "Địa chỉ thanh toán",
+      "taxId": "Mã số thuế / VAT"
+    },
+    "payment": {
+      "title": "Phương thức thanh toán",
+      "holder": "Chủ thẻ",
+      "expires": "Hết hạn",
+      "addBank": "Thêm chuyển khoản",
+      "updateCard": "Cập nhật thẻ"
+    },
+    "invoices": {
+      "title": "Lịch sử hoá đơn",
+      "pdf": "PDF",
+      "cols": {
+        "id": "Mã hoá đơn",
+        "date": "Ngày",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "action": "Thao tác"
+      },
+      "status": {
+        "paid": "Đã thanh toán",
+        "pending": "Chờ thanh toán"
+      }
+    },
+    "compare": {
+      "title": "Bảng giá nền tảng",
+      "subtitle": "Mở rộng quy mô spa với các tính năng được thiết kế để tăng trưởng.",
+      "monthly": "Theo tháng",
+      "yearly": "Theo năm (Tiết kiệm 20%)",
+      "currentBadge": "Gói hiện tại",
+      "active": "Đang dùng",
+      "downgrade": "Hạ gói",
+      "upgradeEnterprise": "Nâng cấp Doanh nghiệp"
+    },
+    "tiers": {
+      "starter": {
+        "price": "690.000 ₫",
+        "priceShort": "690K",
+        "tagline": "Phù hợp với kỹ thuật viên độc lập và spa một chi nhánh.",
+        "f1": "1 chi nhánh đang hoạt động",
+        "f2": "Tối đa 5 nhân viên",
+        "f3": "Trang đặt lịch tiêu chuẩn",
+        "f4": "Báo cáo cơ bản"
+      },
+      "professional": {
+        "price": "1.890.000 ₫",
+        "priceShort": "1.89M",
+        "tagline": "Tất cả những gì cần để vận hành chuỗi spa nhiều chi nhánh.",
+        "f1": "Tối đa 5 chi nhánh hoạt động",
+        "f2": "Tối đa 50 nhân viên",
+        "f3": "Cổng đặt lịch white-label",
+        "f4": "Báo cáo & phân tích nâng cao",
+        "f5": "Hỗ trợ ưu tiên qua email"
+      },
+      "enterprise": {
+        "price": "4.790.000 ₫",
+        "priceShort": "4.79M",
+        "tagline": "Hạ tầng riêng cho chuỗi spa và franchise lớn.",
+        "f1": "Chi nhánh không giới hạn",
+        "f2": "Người dùng không giới hạn",
+        "f3": "Phát triển ứng dụng tuỳ chỉnh",
+        "f4": "Truy cập API & Webhook",
+        "f5": "Account Manager riêng 24/7"
+      }
+    }
   },
   "audit": {
     "title": "Audit log",

@@ -1,32 +1,199 @@
 {
-  "brand": { "platform": "Kaori" },
-  "portal": { "name": "Kaori 플랫폼", "subtitle": "Tenant Administrator" },
+  "brand": {
+    "platform": "Kaori"
+  },
+  "portal": {
+    "name": "Kaori 플랫폼",
+    "subtitle": "Tenant Administrator"
+  },
   "nav": {
-    "dashboard": "대시보드", "tenant": "테넌트", "members": "멤버", "plan": "플랜",
-    "billing": "결제", "domain": "도메인", "audit": "감사 로그",
-    "integration": "연동", "feature": "기능", "branding": "브랜딩", "settings": "설정", "logout": "로그아웃"
+    "dashboard": "대시보드",
+    "tenant": "테넌트",
+    "members": "멤버",
+    "plan": "플랜",
+    "billing": "결제",
+    "domain": "도메인",
+    "audit": "감사 로그",
+    "integration": "연동",
+    "feature": "기능",
+    "branding": "브랜딩",
+    "settings": "설정",
+    "logout": "로그아웃"
   },
   "dashboard": {
     "title": "플랫폼 개요",
-    "kpi": { "tenants": "활성 테넌트", "branches": "총 지점", "users": "사용자", "mrr": "월간 정기 매출" },
+    "kpi": {
+      "tenants": "활성 테넌트",
+      "branches": "총 지점",
+      "users": "사용자",
+      "mrr": "월간 정기 매출"
+    },
     "recentTenants": "신규 테넌트"
   },
   "tenant": {
-    "title": "테넌트 목록", "create": "테넌트 추가",
-    "columns": { "code": "코드", "name": "이름", "plan": "플랜", "branches": "지점", "status": "상태", "createdAt": "생성일" }
+    "title": "테넌트 목록",
+    "create": "테넌트 추가",
+    "columns": {
+      "code": "코드",
+      "name": "이름",
+      "plan": "플랜",
+      "branches": "지점",
+      "status": "상태",
+      "createdAt": "생성일"
+    }
   },
-  "plan": { "title": "플랜", "starter": "스타터", "professional": "프로", "enterprise": "엔터프라이즈" },
+  "plan": {
+    "title": "플랜",
+    "starter": "스타터",
+    "professional": "프로",
+    "enterprise": "엔터프라이즈",
+    "subtitle": "Quản lý gói nền tảng, theo dõi giới hạn sử dụng và cập nhật thông tin thanh toán.",
+    "breadcrumb": {
+      "dashboard": "Tổng quan",
+      "settings": "Cài đặt"
+    },
+    "actions": {
+      "downloadInvoice": "Tải hoá đơn",
+      "upgrade": "Nâng cấp gói",
+      "cancel": "Huỷ đăng ký",
+      "changePlan": "Đổi gói",
+      "edit": "Chỉnh sửa"
+    },
+    "current": {
+      "activeBadge": "Đang hoạt động",
+      "perMonth": "mỗi tháng",
+      "nextBilling": "Ngày thanh toán tiếp theo",
+      "featuresTitle": "Tính năng của gói hiện tại",
+      "features": {
+        "branches": "Tối đa {count} chi nhánh đang hoạt động",
+        "staff": "{count} tài khoản nhân viên",
+        "customers": "Số lượng khách hàng không giới hạn",
+        "analytics": "Báo cáo & phân tích nâng cao",
+        "support": "Hỗ trợ ưu tiên qua email"
+      }
+    },
+    "usage": {
+      "title": "Mức sử dụng nền tảng",
+      "subtitle": "Tỷ lệ sử dụng hiện tại so với giới hạn của gói.",
+      "staff": "Tài khoản nhân viên",
+      "branches": "Chi nhánh đang hoạt động",
+      "storage": "Dung lượng lưu trữ",
+      "bookings": "Lịch hẹn trong tháng",
+      "unlimited": "Không giới hạn",
+      "scaleHint": "Sắp đạt giới hạn? Liên hệ đội thành công khách hàng để mở rộng tự động hoặc nhận ưu đãi doanh nghiệp."
+    },
+    "billing": {
+      "title": "Thông tin thanh toán",
+      "companyName": "Tên công ty",
+      "address": "Địa chỉ thanh toán",
+      "taxId": "Mã số thuế / VAT"
+    },
+    "payment": {
+      "title": "Phương thức thanh toán",
+      "holder": "Chủ thẻ",
+      "expires": "Hết hạn",
+      "addBank": "Thêm chuyển khoản",
+      "updateCard": "Cập nhật thẻ"
+    },
+    "invoices": {
+      "title": "Lịch sử hoá đơn",
+      "pdf": "PDF",
+      "cols": {
+        "id": "Mã hoá đơn",
+        "date": "Ngày",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "action": "Thao tác"
+      },
+      "status": {
+        "paid": "Đã thanh toán",
+        "pending": "Chờ thanh toán"
+      }
+    },
+    "compare": {
+      "title": "Bảng giá nền tảng",
+      "subtitle": "Mở rộng quy mô spa với các tính năng được thiết kế để tăng trưởng.",
+      "monthly": "Theo tháng",
+      "yearly": "Theo năm (Tiết kiệm 20%)",
+      "currentBadge": "Gói hiện tại",
+      "active": "Đang dùng",
+      "downgrade": "Hạ gói",
+      "upgradeEnterprise": "Nâng cấp Doanh nghiệp"
+    },
+    "tiers": {
+      "starter": {
+        "price": "690.000 ₫",
+        "priceShort": "690K",
+        "tagline": "Phù hợp với kỹ thuật viên độc lập và spa một chi nhánh.",
+        "f1": "1 chi nhánh đang hoạt động",
+        "f2": "Tối đa 5 nhân viên",
+        "f3": "Trang đặt lịch tiêu chuẩn",
+        "f4": "Báo cáo cơ bản"
+      },
+      "professional": {
+        "price": "1.890.000 ₫",
+        "priceShort": "1.89M",
+        "tagline": "Tất cả những gì cần để vận hành chuỗi spa nhiều chi nhánh.",
+        "f1": "Tối đa 5 chi nhánh hoạt động",
+        "f2": "Tối đa 50 nhân viên",
+        "f3": "Cổng đặt lịch white-label",
+        "f4": "Báo cáo & phân tích nâng cao",
+        "f5": "Hỗ trợ ưu tiên qua email"
+      },
+      "enterprise": {
+        "price": "4.790.000 ₫",
+        "priceShort": "4.79M",
+        "tagline": "Hạ tầng riêng cho chuỗi spa và franchise lớn.",
+        "f1": "Chi nhánh không giới hạn",
+        "f2": "Người dùng không giới hạn",
+        "f3": "Phát triển ứng dụng tuỳ chỉnh",
+        "f4": "Truy cập API & Webhook",
+        "f5": "Account Manager riêng 24/7"
+      }
+    }
+  },
   "audit": {
-    "title": "감사 로그", "subtitle": "불변 활동 이력",
-    "columns": { "ts": "시간", "actor": "실행자", "action": "동작", "entity": "객체", "ip": "IP" }
+    "title": "감사 로그",
+    "subtitle": "불변 활동 이력",
+    "columns": {
+      "ts": "시간",
+      "actor": "실행자",
+      "action": "동작",
+      "entity": "객체",
+      "ip": "IP"
+    }
   },
   "domain": {
     "title": "도메인 & 예약 URL",
     "subtitle": "고객이 이 테넌트의 온라인 예약 페이지와 포털에 접근하는 방식을 설정합니다.",
-    "actions": { "cancel": "취소", "save": "변경 사항 저장", "checkAvailability": "사용 가능 여부 확인", "disconnect": "연결 해제", "verify": "도메인 검증", "renew": "수동으로 인증서 갱신", "readDocs": "전체 문서 보기" },
-    "subdomain": { "title": "플랫폼 서브도메인", "subtitle": "기본 제공되는 무료 예약 주소입니다.", "label": "서브도메인 이름", "suffix": ".kaoriplatform.com", "available": "URL이 사용 가능하며 활성 상태입니다." },
-    "custom": { "title": "커스텀 도메인", "subtitle": "자체 웹사이트 도메인을 연결하세요.", "label": "커스텀 도메인 URL", "connected": "연결됨" },
-    "ssl": { "title": "SSL 인증서", "statusLabel": "상태", "statusValue": "활성 & 보안 적용", "renewIn": "{days}일 후 자동 갱신" },
+    "actions": {
+      "cancel": "취소",
+      "save": "변경 사항 저장",
+      "checkAvailability": "사용 가능 여부 확인",
+      "disconnect": "연결 해제",
+      "verify": "도메인 검증",
+      "renew": "수동으로 인증서 갱신",
+      "readDocs": "전체 문서 보기"
+    },
+    "subdomain": {
+      "title": "플랫폼 서브도메인",
+      "subtitle": "기본 제공되는 무료 예약 주소입니다.",
+      "label": "서브도메인 이름",
+      "suffix": ".kaoriplatform.com",
+      "available": "URL이 사용 가능하며 활성 상태입니다."
+    },
+    "custom": {
+      "title": "커스텀 도메인",
+      "subtitle": "자체 웹사이트 도메인을 연결하세요.",
+      "label": "커스텀 도메인 URL",
+      "connected": "연결됨"
+    },
+    "ssl": {
+      "title": "SSL 인증서",
+      "statusLabel": "상태",
+      "statusValue": "활성 & 보안 적용",
+      "renewIn": "{days}일 후 자동 갱신"
+    },
     "security": {
       "title": "도메인 보안",
       "forceHttps": "HTTPS 강제 적용",
@@ -36,7 +203,12 @@
       "protection": "예약 페이지 보호",
       "protectionHint": "가격 조회 시 고객 로그인 요구"
     },
-    "links": { "title": "공개 예약 링크", "main": "테넌트 메인 페이지", "copy": "복사", "open": "링크 열기" },
+    "links": {
+      "title": "공개 예약 링크",
+      "main": "테넌트 메인 페이지",
+      "copy": "복사",
+      "open": "링크 열기"
+    },
     "guide": {
       "title": "설정 가이드",
       "subtitle": "다음 단계를 따라 커스텀 도메인을 플랫폼으로 연결하세요.",
@@ -49,92 +221,331 @@
       "step3Title": "연결 검증",
       "step3Desc": "커스텀 도메인 섹션의 \"도메인 검증\"을 클릭하세요. 전파에는 최대 24시간이 소요될 수 있습니다."
     },
-    "preview": { "title": "고객 화면", "subtitle": "활성 예약 포털 미리보기.", "heading": "예약하기", "selectLocation": "시작할 지점을 선택하세요" }
+    "preview": {
+      "title": "고객 화면",
+      "subtitle": "활성 예약 포털 미리보기.",
+      "heading": "예약하기",
+      "selectLocation": "시작할 지점을 선택하세요"
+    }
   },
   "members": {
     "title": "워크스페이스 멤버",
     "subtitle": "플랫폼에 접근하는 사용자, 직원 및 관리자를 관리합니다.",
-    "actions": { "export": "사용자 내보내기", "invite": "사용자 초대", "search": "이름 또는 이메일로 검색...", "viewProfile": "프로필 보기", "editRole": "역할 수정", "changeBranch": "지점 변경", "deactivate": "비활성화", "reactivate": "재활성화", "remove": "사용자 삭제", "resendInvite": "초대 재전송" },
-    "kpi": { "total": "전체 사용자", "active": "활성 사용자", "pending": "초대 대기", "admins": "관리자" },
-    "filters": { "allRoles": "전체 역할", "allBranches": "전체 지점", "allStatuses": "전체 상태", "sortNewest": "정렬: 최신순", "sortAlpha": "정렬: 가나다순", "sortRole": "정렬: 역할" },
-    "columns": { "member": "멤버 정보", "role": "역할 & 권한", "branch": "소속 지점", "status": "상태", "lastLogin": "최근 로그인", "actions": "작업" },
-    "roles": { "owner": "소유자", "manager": "매니저", "therapist": "테라피스트", "receptionist": "리셉셔니스트", "marketing": "마케팅", "hr": "인사" },
-    "status": { "active": "활성", "invited": "초대됨", "suspended": "정지", "global": "전체 접근", "neverLogin": "로그인 이력 없음" },
-    "pagination": { "showing": "표시", "to": "~", "of": "/", "users": "명", "previous": "이전", "next": "다음" }
+    "actions": {
+      "export": "사용자 내보내기",
+      "invite": "사용자 초대",
+      "search": "이름 또는 이메일로 검색...",
+      "viewProfile": "프로필 보기",
+      "editRole": "역할 수정",
+      "changeBranch": "지점 변경",
+      "deactivate": "비활성화",
+      "reactivate": "재활성화",
+      "remove": "사용자 삭제",
+      "resendInvite": "초대 재전송"
+    },
+    "kpi": {
+      "total": "전체 사용자",
+      "active": "활성 사용자",
+      "pending": "초대 대기",
+      "admins": "관리자"
+    },
+    "filters": {
+      "allRoles": "전체 역할",
+      "allBranches": "전체 지점",
+      "allStatuses": "전체 상태",
+      "sortNewest": "정렬: 최신순",
+      "sortAlpha": "정렬: 가나다순",
+      "sortRole": "정렬: 역할"
+    },
+    "columns": {
+      "member": "멤버 정보",
+      "role": "역할 & 권한",
+      "branch": "소속 지점",
+      "status": "상태",
+      "lastLogin": "최근 로그인",
+      "actions": "작업"
+    },
+    "roles": {
+      "owner": "소유자",
+      "manager": "매니저",
+      "therapist": "테라피스트",
+      "receptionist": "리셉셔니스트",
+      "marketing": "마케팅",
+      "hr": "인사"
+    },
+    "status": {
+      "active": "활성",
+      "invited": "초대됨",
+      "suspended": "정지",
+      "global": "전체 접근",
+      "neverLogin": "로그인 이력 없음"
+    },
+    "pagination": {
+      "showing": "표시",
+      "to": "~",
+      "of": "/",
+      "users": "명",
+      "previous": "이전",
+      "next": "다음"
+    }
   },
   "branding": {
     "title": "브랜딩 & 외관",
     "subtitle": "관리 대시보드, 예약 포털, 고객 이메일 전반에 스파 브랜드가 표시되는 방식을 커스터마이징합니다.",
-    "actions": { "reset": "기본값 복원", "save": "브랜딩 저장", "replace": "교체", "remove": "삭제", "uploadMedia": "미디어 업로드", "uploadImage": "이미지 업로드", "uploadBanner": "배너 업로드", "view": "보기", "addNew": "새로 추가" },
-    "logo": { "title": "로고 & 아이콘", "primaryLabel": "메인 로고", "primaryHint": "대시보드 헤더와 예약 페이지에 표시됩니다. 투명 배경 PNG 권장.", "faviconLabel": "파비콘 / 앱 아이콘", "faviconHint": "브라우저 탭과 모바일 앱 아이콘으로 표시됩니다. 정사각형 PNG 또는 ICO." },
-    "colors": { "title": "브랜드 컬러", "primary": "메인 컬러", "primaryHint": "버튼, 활성 링크", "secondary": "서브 컬러", "secondaryHint": "카드, 테두리", "accent": "강조 컬러", "accentHint": "강조 표시, 태그", "background": "배경", "backgroundHint": "앱 배경" },
-    "typography": { "title": "타이포그래피", "heading": "제목 폰트", "body": "본문 폰트", "headingPreview": "프리미엄 스파 경험", "bodyPreview": "휴식. 회복. 활력. 프리미엄 트리트먼트가 웰빙을 한 단계 끌어올리고 마음을 어루만져 드립니다." },
-    "login": { "title": "로그인 페이지 외관", "welcome": "환영 메시지", "background": "배경 이미지", "overlay": "오버레이 (불투명도)" },
-    "booking": { "title": "예약 포털", "pageTitle": "예약 페이지 제목", "tagline": "브랜드 슬로건", "banner": "히어로 배너 이미지", "bannerHint": "1920x600px 권장" },
-    "email": { "title": "이메일 템플릿", "headerLogo": "이메일 헤더 로고", "headerBg": "헤더 배경 색상", "footer": "푸터 / 면책 조항" },
-    "assets": { "title": "에셋 라이브러리" },
-    "preview": { "title": "실시간 미리보기", "subtitle": "사용자에게 노출되는 브랜딩을 확인하세요.", "tabBooking": "예약 페이지", "tabDashboard": "대시보드", "tabEmail": "이메일", "selectService": "서비스 선택", "bookButton": "예약하기", "realtime": "실시간으로 미리보기 업데이트" }
+    "actions": {
+      "reset": "기본값 복원",
+      "save": "브랜딩 저장",
+      "replace": "교체",
+      "remove": "삭제",
+      "uploadMedia": "미디어 업로드",
+      "uploadImage": "이미지 업로드",
+      "uploadBanner": "배너 업로드",
+      "view": "보기",
+      "addNew": "새로 추가"
+    },
+    "logo": {
+      "title": "로고 & 아이콘",
+      "primaryLabel": "메인 로고",
+      "primaryHint": "대시보드 헤더와 예약 페이지에 표시됩니다. 투명 배경 PNG 권장.",
+      "faviconLabel": "파비콘 / 앱 아이콘",
+      "faviconHint": "브라우저 탭과 모바일 앱 아이콘으로 표시됩니다. 정사각형 PNG 또는 ICO."
+    },
+    "colors": {
+      "title": "브랜드 컬러",
+      "primary": "메인 컬러",
+      "primaryHint": "버튼, 활성 링크",
+      "secondary": "서브 컬러",
+      "secondaryHint": "카드, 테두리",
+      "accent": "강조 컬러",
+      "accentHint": "강조 표시, 태그",
+      "background": "배경",
+      "backgroundHint": "앱 배경"
+    },
+    "typography": {
+      "title": "타이포그래피",
+      "heading": "제목 폰트",
+      "body": "본문 폰트",
+      "headingPreview": "프리미엄 스파 경험",
+      "bodyPreview": "휴식. 회복. 활력. 프리미엄 트리트먼트가 웰빙을 한 단계 끌어올리고 마음을 어루만져 드립니다."
+    },
+    "login": {
+      "title": "로그인 페이지 외관",
+      "welcome": "환영 메시지",
+      "background": "배경 이미지",
+      "overlay": "오버레이 (불투명도)"
+    },
+    "booking": {
+      "title": "예약 포털",
+      "pageTitle": "예약 페이지 제목",
+      "tagline": "브랜드 슬로건",
+      "banner": "히어로 배너 이미지",
+      "bannerHint": "1920x600px 권장"
+    },
+    "email": {
+      "title": "이메일 템플릿",
+      "headerLogo": "이메일 헤더 로고",
+      "headerBg": "헤더 배경 색상",
+      "footer": "푸터 / 면책 조항"
+    },
+    "assets": {
+      "title": "에셋 라이브러리"
+    },
+    "preview": {
+      "title": "실시간 미리보기",
+      "subtitle": "사용자에게 노출되는 브랜딩을 확인하세요.",
+      "tabBooking": "예약 페이지",
+      "tabDashboard": "대시보드",
+      "tabEmail": "이메일",
+      "selectService": "서비스 선택",
+      "bookButton": "예약하기",
+      "realtime": "실시간으로 미리보기 업데이트"
+    }
   },
   "feature": {
     "title": "기능 모듈",
     "subtitle": "플랫폼 모듈을 켜고 끄며 스파 운영 역량을 최적화하세요.",
-    "actions": { "reset": "기본값 복원", "configure": "구성", "viewDetails": "자세히 보기", "activate": "애드온 활성화", "learnMore": "자세히 알아보기", "contactSales": "영업팀 문의" },
-    "kpi": { "total": "전체 모듈", "enabled": "활성 모듈", "disabled": "비활성 모듈", "addons": "사용 가능 애드온" },
-    "section": { "core": "코어 플랫폼 모듈", "addons": "프리미엄 애드온" },
-    "status": { "enabled": "활성", "disabled": "비활성", "premium": "프리미엄 기능", "active": "운영 중" },
+    "actions": {
+      "reset": "기본값 복원",
+      "configure": "구성",
+      "viewDetails": "자세히 보기",
+      "activate": "애드온 활성화",
+      "learnMore": "자세히 알아보기",
+      "contactSales": "영업팀 문의"
+    },
+    "kpi": {
+      "total": "전체 모듈",
+      "enabled": "활성 모듈",
+      "disabled": "비활성 모듈",
+      "addons": "사용 가능 애드온"
+    },
+    "section": {
+      "core": "코어 플랫폼 모듈",
+      "addons": "프리미엄 애드온"
+    },
+    "status": {
+      "enabled": "활성",
+      "disabled": "비활성",
+      "premium": "프리미엄 기능",
+      "active": "운영 중"
+    },
     "modules": {
-      "booking": { "title": "예약 시스템", "desc": "고객의 온라인 예약과 내부 일정 관리를 지원합니다." },
-      "services": { "title": "서비스 & 트리트먼트", "desc": "트리트먼트, 카테고리, 소요 시간 및 가격 규칙을 관리합니다." },
-      "crm": { "title": "고객 CRM", "desc": "고객 프로필, 방문 이력, 선호도 및 적립 포인트를 관리합니다." },
-      "staff": { "title": "직원 관리", "desc": "직원 정보, 근무 시간 추적, 전문 분야를 배정합니다." },
-      "reports": { "title": "리포트 & 분석", "desc": "비즈니스 성과, 매출 및 직원 가동률을 확인합니다." },
-      "blog": { "title": "블로그 CMS", "desc": "예약 포털용 SEO 게시물과 마케팅 콘텐츠를 작성합니다." },
-      "marketing": { "title": "마케팅 자동화", "desc": "타깃 캠페인, 프로모션 및 자동 이메일을 실행합니다.", "requires": "고객 CRM 모듈 필요" },
-      "inventory": { "title": "재고 관리", "desc": "리테일 제품, 전문 소모품 및 지점별 재고를 추적합니다." },
-      "recruitment": { "title": "채용 관리", "desc": "채용 공고, 지원자 추적 및 채용 프로세스를 관리합니다." }
+      "booking": {
+        "title": "예약 시스템",
+        "desc": "고객의 온라인 예약과 내부 일정 관리를 지원합니다."
+      },
+      "services": {
+        "title": "서비스 & 트리트먼트",
+        "desc": "트리트먼트, 카테고리, 소요 시간 및 가격 규칙을 관리합니다."
+      },
+      "crm": {
+        "title": "고객 CRM",
+        "desc": "고객 프로필, 방문 이력, 선호도 및 적립 포인트를 관리합니다."
+      },
+      "staff": {
+        "title": "직원 관리",
+        "desc": "직원 정보, 근무 시간 추적, 전문 분야를 배정합니다."
+      },
+      "reports": {
+        "title": "리포트 & 분석",
+        "desc": "비즈니스 성과, 매출 및 직원 가동률을 확인합니다."
+      },
+      "blog": {
+        "title": "블로그 CMS",
+        "desc": "예약 포털용 SEO 게시물과 마케팅 콘텐츠를 작성합니다."
+      },
+      "marketing": {
+        "title": "마케팅 자동화",
+        "desc": "타깃 캠페인, 프로모션 및 자동 이메일을 실행합니다.",
+        "requires": "고객 CRM 모듈 필요"
+      },
+      "inventory": {
+        "title": "재고 관리",
+        "desc": "리테일 제품, 전문 소모품 및 지점별 재고를 추적합니다."
+      },
+      "recruitment": {
+        "title": "채용 관리",
+        "desc": "채용 공고, 지원자 추적 및 채용 프로세스를 관리합니다."
+      }
     },
     "addons": {
-      "ai": { "title": "AI 마케팅 어시스턴트", "desc": "스파 브랜드에 맞춘 이메일 카피, SNS 게시물, 블로그 글을 AI로 자동 생성합니다." },
-      "analytics": { "title": "어드밴스드 애널리틱스 프로", "desc": "맞춤 리포트 빌더, 예측 분석, 실시간 대시보드 내보내기로 심층 인사이트를 확보하세요." },
-      "multiloc": { "title": "멀티 로케이션 인텔리전스", "desc": "프랜차이즈를 위한 기능. 지점 간 성과 비교, 인력 배분 균형, 글로벌 재고 통합 관리를 지원합니다." }
+      "ai": {
+        "title": "AI 마케팅 어시스턴트",
+        "desc": "스파 브랜드에 맞춘 이메일 카피, SNS 게시물, 블로그 글을 AI로 자동 생성합니다."
+      },
+      "analytics": {
+        "title": "어드밴스드 애널리틱스 프로",
+        "desc": "맞춤 리포트 빌더, 예측 분석, 실시간 대시보드 내보내기로 심층 인사이트를 확보하세요."
+      },
+      "multiloc": {
+        "title": "멀티 로케이션 인텔리전스",
+        "desc": "프랜차이즈를 위한 기능. 지점 간 성과 비교, 인력 배분 균형, 글로벌 재고 통합 관리를 지원합니다."
+      }
     },
-    "preview": { "title": "모듈 미리보기", "capabilities": "주요 기능", "cap1Title": "온라인 포털", "cap1Desc": "24시간 운영되는 화이트라벨 고객 예약 페이지.", "cap2Title": "스마트 스케줄링", "cap2Desc": "중복 예약을 방지하고 직원의 빈 시간대를 자동으로 처리합니다.", "cap3Title": "리마인더", "cap3Desc": "이메일과 SMS 자동 알림으로 노쇼를 줄입니다." }
+    "preview": {
+      "title": "모듈 미리보기",
+      "capabilities": "주요 기능",
+      "cap1Title": "온라인 포털",
+      "cap1Desc": "24시간 운영되는 화이트라벨 고객 예약 페이지.",
+      "cap2Title": "스마트 스케줄링",
+      "cap2Desc": "중복 예약을 방지하고 직원의 빈 시간대를 자동으로 처리합니다.",
+      "cap3Title": "리마인더",
+      "cap3Desc": "이메일과 SMS 자동 알림으로 노쇼를 줄입니다."
+    }
   },
   "analytics": {
     "title": "플랫폼 분석",
     "subtitle": "tenant-service 기반 테넌트 전체 집계 데이터.",
-    "kpi": { "tenants": "테넌트", "branches": "지점", "users": "사용자", "active": "활성 테넌트 (30일)" },
+    "kpi": {
+      "tenants": "테넌트",
+      "branches": "지점",
+      "users": "사용자",
+      "active": "활성 테넌트 (30일)"
+    },
     "kpiActiveHint": "booking-service가 테넌트 범위 읽기 API를 제공하면 연결됩니다.",
-    "recent": { "title": "신규 테넌트", "code": "코드", "name": "이름", "orgs": "조직", "branches": "지점", "createdAt": "생성일", "empty": "아직 테넌트가 없습니다." },
-    "charts": { "soonTitle": "차트 준비 중", "soonHint": "매출, 인력, 지점 비교에는 아직 제공되지 않은 analytics-service / 결제 데이터가 필요합니다." },
-    "errors": { "load": "플랫폼 개요를 불러오지 못했습니다." }
+    "recent": {
+      "title": "신규 테넌트",
+      "code": "코드",
+      "name": "이름",
+      "orgs": "조직",
+      "branches": "지점",
+      "createdAt": "생성일",
+      "empty": "아직 테넌트가 없습니다."
+    },
+    "charts": {
+      "soonTitle": "차트 준비 중",
+      "soonHint": "매출, 인력, 지점 비교에는 아직 제공되지 않은 analytics-service / 결제 데이터가 필요합니다."
+    },
+    "errors": {
+      "load": "플랫폼 개요를 불러오지 못했습니다."
+    }
   },
   "integration": {
     "title": "Webhooks",
     "subtitle": "도메인 이벤트를 외부 시스템(Zalo, Make.com, n8n 등)으로 전송합니다.",
-    "actions": { "add": "Webhook 추가", "addDisabledHint": "곧 제공", "toggle": "켜기/끄기" },
-    "status": { "active": "활성", "paused": "일시 중지" },
-    "deliveries": { "title": "최근 전송 내역", "empty": "전송 내역이 없습니다." },
-    "errors": { "load": "Webhook 목록을 불러오지 못했습니다." },
+    "actions": {
+      "add": "Webhook 추가",
+      "addDisabledHint": "곧 제공",
+      "toggle": "켜기/끄기"
+    },
+    "status": {
+      "active": "활성",
+      "paused": "일시 중지"
+    },
+    "deliveries": {
+      "title": "최근 전송 내역",
+      "empty": "전송 내역이 없습니다."
+    },
+    "errors": {
+      "load": "Webhook 목록을 불러오지 못했습니다."
+    },
     "empty": "구성된 Webhook이 없습니다."
   },
   "onboarding": {
     "title": "테넌트 온보딩",
     "subtitle": "이 테넌트의 표준 설정 단계를 순서대로 진행합니다.",
     "currentStep": "현재 단계",
-    "actions": { "advance": "다음 단계로", "complete": "완료로 표시", "loading": "로딩 중…" },
-    "steps": { "welcome": "환영", "org": "조직", "branch": "지점", "team": "팀", "done": "완료" },
-    "stepStatus": { "completed": "완료됨", "current": "진행 중", "pending": "대기" },
+    "actions": {
+      "advance": "다음 단계로",
+      "complete": "완료로 표시",
+      "loading": "로딩 중…"
+    },
+    "steps": {
+      "welcome": "환영",
+      "org": "조직",
+      "branch": "지점",
+      "team": "팀",
+      "done": "완료"
+    },
+    "stepStatus": {
+      "completed": "완료됨",
+      "current": "진행 중",
+      "pending": "대기"
+    },
     "completedAt": "완료 시각",
     "startedAt": "시작 시각",
-    "errors": { "load": "온보딩 상태를 불러오지 못했습니다.", "advance": "다음 단계로 진행하지 못했습니다.", "complete": "완료로 표시하지 못했습니다." }
+    "errors": {
+      "load": "온보딩 상태를 불러오지 못했습니다.",
+      "advance": "다음 단계로 진행하지 못했습니다.",
+      "complete": "완료로 표시하지 못했습니다."
+    }
   },
   "orgSettings": {
     "title": "조직 설정",
     "subtitle": "이 테넌트에 속한 조직을 읽기 전용으로 표시합니다.",
     "todoEdit": "조직 상세 편집은 아직 사용할 수 없습니다 — 백엔드 PUT 엔드포인트가 출시되지 않았습니다.",
-    "list": { "title": "조직 목록", "empty": "아직 조직이 없습니다." },
-    "fields": { "code": "코드", "slug": "슬러그", "name": "이름", "primaryLocale": "기본 언어", "id": "ID" },
-    "errors": { "load": "조직 목록을 불러오지 못했습니다." }
+    "list": {
+      "title": "조직 목록",
+      "empty": "아직 조직이 없습니다."
+    },
+    "fields": {
+      "code": "코드",
+      "slug": "슬러그",
+      "name": "이름",
+      "primaryLocale": "기본 언어",
+      "id": "ID"
+    },
+    "errors": {
+      "load": "조직 목록을 불러오지 못했습니다."
+    }
   }
 }

@@ -1,6 +1,12 @@
 {
-  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
-  "portal": { "name": "Branch Console", "subtitle": "Branch Manager" },
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty"
+  },
+  "portal": {
+    "name": "Branch Console",
+    "subtitle": "Branch Manager"
+  },
   "nav": {
     "dashboard": "Dashboard",
     "booking": "Bookings",
@@ -72,15 +78,30 @@
       "points": "Points",
       "spent": "Total spend"
     },
-    "segments": { "vip": "VIP", "regular": "Regular", "new": "New", "dormant": "Dormant" }
+    "segments": {
+      "vip": "VIP",
+      "regular": "Regular",
+      "new": "New",
+      "dormant": "Dormant"
+    }
   },
   "shift": {
     "title": "Shift Manager",
     "subtitle": "Monthly shift assignment — Early / Late / Full / Off",
-    "month": "Month", "year": "Year",
-    "prev": "Prev", "next": "Next", "today": "Today",
-    "save": "Save", "saved": "Saved", "stats": "Stats",
-    "type": { "SANG": "EARLY", "TOI": "LATE", "FULL": "FULL", "NGHI": "OFF" },
+    "month": "Month",
+    "year": "Year",
+    "prev": "Prev",
+    "next": "Next",
+    "today": "Today",
+    "save": "Save",
+    "saved": "Saved",
+    "stats": "Stats",
+    "type": {
+      "SANG": "EARLY",
+      "TOI": "LATE",
+      "FULL": "FULL",
+      "NGHI": "OFF"
+    },
     "typeFull": {
       "SANG": "Early (09:00-15:00)",
       "TOI": "Late (15:00-21:00)",
@@ -92,11 +113,21 @@
   "attendance": {
     "title": "Attendance",
     "subtitle": "Today's check-in / out",
-    "checkIn": "Check in", "checkOut": "Check out",
-    "expected": "Expected", "in": "In", "out": "Out", "worked": "Worked", "minutes": "min",
+    "checkIn": "Check in",
+    "checkOut": "Check out",
+    "expected": "Expected",
+    "in": "In",
+    "out": "Out",
+    "worked": "Worked",
+    "minutes": "min",
     "status": {
-      "scheduled": "Scheduled", "present": "On time", "late": "Late",
-      "absent": "Absent", "early_out": "Early out", "off": "Off", "no_shift": "No shift"
+      "scheduled": "Scheduled",
+      "present": "On time",
+      "late": "Late",
+      "absent": "Absent",
+      "early_out": "Early out",
+      "off": "Off",
+      "no_shift": "No shift"
     }
   },
   "room": {
@@ -108,9 +139,23 @@
     "capacity": "Capacity",
     "beds": "Beds",
     "noBeds": "No beds in this room yet",
-    "type": { "normal": "Standard", "vip": "VIP", "couple": "Couple", "laser": "Laser" },
-    "bedType": { "standard": "Standard", "massage": "Massage", "laser": "Laser", "vip": "VIP" },
-    "status": { "active": "Active", "maintenance": "Maintenance", "retired": "Retired" }
+    "type": {
+      "normal": "Standard",
+      "vip": "VIP",
+      "couple": "Couple",
+      "laser": "Laser"
+    },
+    "bedType": {
+      "standard": "Standard",
+      "massage": "Massage",
+      "laser": "Laser",
+      "vip": "VIP"
+    },
+    "status": {
+      "active": "Active",
+      "maintenance": "Maintenance",
+      "retired": "Retired"
+    }
   },
   "service": {
     "title": "Services",
@@ -649,5 +694,820 @@
     "onlyUnread": "Only unread",
     "empty": "No notifications",
     "markRead": "Mark as read"
+  },
+  "serviceOverview": {
+    "title": "Services Overview",
+    "subtitle": "Manage treatments, packages, and pricing across branches.",
+    "create": "Create Service",
+    "import": "Import",
+    "export": "Export",
+    "min": "min",
+    "searchPh": "Search by service name or code...",
+    "filterCategoryAll": "Category: All",
+    "filterStatusAll": "Status: All",
+    "kpi": {
+      "total": "Total Services",
+      "active": "Active",
+      "inactive": "Inactive",
+      "mostBooked": "Most Booked",
+      "avgDuration": "Avg Duration"
+    },
+    "cat": {
+      "massage": "Massage",
+      "facial": "Facial",
+      "hair_removal": "Hair Removal",
+      "package": "Package"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "cols": {
+      "name": "Service Name",
+      "category": "Category",
+      "duration": "Duration",
+      "price": "Price",
+      "staffReq": "Staff Req.",
+      "popularity": "Popularity",
+      "status": "Status",
+      "actions": "Actions"
+    }
+  },
+  "serviceList": {
+    "title": "Service Catalog",
+    "subtitle": "Card view with images, ratings and short descriptions.",
+    "create": "Create Service",
+    "min": "min",
+    "searchPh": "Search services...",
+    "filterAll": "Category: All",
+    "branchesCount": "{count} branches",
+    "cat": {
+      "massage": "Massage",
+      "facial": "Facial",
+      "hair_removal": "Hair Removal",
+      "package": "Package"
+    },
+    "sort": {
+      "popular": "Most popular",
+      "name": "Name A-Z",
+      "priceHigh": "Price: high to low",
+      "newest": "Newest"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "serviceCategories": {
+    "title": "Service Categories",
+    "subtitle": "Group services so customers can browse easily.",
+    "newCategory": "New Category",
+    "searchPh": "Search categories...",
+    "kpi": {
+      "total": "Total Categories",
+      "active": "Active",
+      "inactive": "Inactive",
+      "uncategorized": "Uncategorized"
+    },
+    "cols": {
+      "name": "Category",
+      "slug": "URL slug",
+      "services": "Services",
+      "active": "Active",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "servicePackages": {
+    "title": "Service Packages & Combos",
+    "subtitle": "Bundle services into discounted treatment packages.",
+    "newCombo": "New Package",
+    "kpi": {
+      "total": "Total Packages",
+      "active": "Active",
+      "draft": "Draft",
+      "expiringSoon": "Expiring soon"
+    },
+    "serviceCount": "Services",
+    "discount": "Discount",
+    "comboPrice": "Combo Price",
+    "validUntil": "Valid until",
+    "edit": "Edit",
+    "promote": "Promote",
+    "audience": {
+      "label": "Audience",
+      "all": "All",
+      "member": "Members",
+      "vip": "VIP"
+    },
+    "status": {
+      "active": "Active",
+      "draft": "Draft",
+      "expired": "Expired"
+    }
+  },
+  "serviceImport": {
+    "title": "Import & Sync Services",
+    "subtitle": "Upload a CSV/Excel file or sync from a partner POS.",
+    "newImport": "New Import",
+    "downloadTemplate": "Download template",
+    "history": "Import history",
+    "methods": {
+      "csv": {
+        "title": "CSV / Excel Import",
+        "desc": "Download the template, fill in your data and upload.",
+        "cta": "Get started"
+      },
+      "api": {
+        "title": "API Sync",
+        "desc": "Connect a POS like KiotViet or Misa for automatic sync.",
+        "cta": "Configure"
+      },
+      "manual": {
+        "title": "Manual Mapping",
+        "desc": "Map source columns to Kaori fields before importing.",
+        "cta": "Open mapper"
+      }
+    },
+    "quickUpload": {
+      "title": "Quick Upload",
+      "desc": "Drag a CSV / Excel file here or click to choose.",
+      "cta": "Choose file"
+    },
+    "integrations": {
+      "title": "Active integrations",
+      "lastSync": "Last sync",
+      "connected": "Connected",
+      "notConnected": "Not connected",
+      "connect": "Connect"
+    },
+    "source": {
+      "csv": "CSV/Excel",
+      "api": "API",
+      "manual": "Manual"
+    },
+    "status": {
+      "completed": "Completed",
+      "partial": "Partial",
+      "failed": "Failed"
+    },
+    "cols": {
+      "file": "File name",
+      "source": "Source",
+      "rows": "Rows",
+      "success": "Success",
+      "failed": "Failed",
+      "user": "Run by",
+      "time": "When",
+      "status": "Status"
+    }
+  },
+  "serviceContent": {
+    "title": "Service Content Manager",
+    "subtitle": "Descriptions, benefits, FAQ and imagery shown to customers.",
+    "newContent": "New content",
+    "translate": "Auto-translate",
+    "contentList": "Existing content",
+    "quickEditor": "Quick editor",
+    "addImage": "Add image",
+    "preview": "Preview",
+    "publish": "Publish",
+    "kpi": {
+      "total": "Total items",
+      "published": "Published",
+      "draft": "Draft",
+      "review": "In review",
+      "translation": "Translated"
+    },
+    "type": {
+      "description": "Description",
+      "benefits": "Benefits",
+      "process": "Process",
+      "faq": "FAQ"
+    },
+    "status": {
+      "published": "Published",
+      "draft": "Draft",
+      "review": "In review"
+    },
+    "cols": {
+      "title": "Title",
+      "type": "Type",
+      "lang": "Lang",
+      "status": "Status",
+      "updated": "Updated",
+      "actions": "Actions"
+    },
+    "fields": {
+      "contentTitle": "Title",
+      "titlePh": "e.g. 5 Benefits of Diode Hair Removal",
+      "body": "Body",
+      "bodyPh": "Write markdown content..."
+    }
+  },
+  "serviceAvailability": {
+    "title": "Service Availability Rules",
+    "subtitle": "Define hours, days and capacity per service.",
+    "newRule": "New rule",
+    "ruleList": "Active rules",
+    "appliesTo": "Applies to",
+    "capacity": "Capacity",
+    "kpi": {
+      "total": "Total rules",
+      "active": "Active",
+      "paused": "Paused",
+      "exceptions": "Exceptions",
+      "conflicts": "Conflicts"
+    },
+    "type": {
+      "standard": "Standard",
+      "premium": "Premium",
+      "maintenance": "Maintenance"
+    },
+    "status": {
+      "active": "Active",
+      "paused": "Paused"
+    },
+    "builder": {
+      "title": "New rule",
+      "ruleName": "Rule name",
+      "ruleNamePh": "e.g. Morning Massage Mon-Fri",
+      "applyTo": "Apply to",
+      "allServices": "All services",
+      "byCategory": "By category",
+      "specific": "Specific services",
+      "from": "From",
+      "to": "To",
+      "capacity": "Max capacity",
+      "save": "Save rule"
+    }
+  },
+  "serviceForm": {
+    "title": "Create New Service",
+    "subtitle": "Set basic info, pricing, staff and customer-facing content.",
+    "cancel": "Cancel",
+    "saveDraft": "Save draft",
+    "publish": "Publish",
+    "addTag": "Add tag",
+    "sections": {
+      "basic": "Basic Information",
+      "pricing": "Pricing & Duration",
+      "staff": "Staff & Resources",
+      "media": "Media & Description",
+      "advanced": "Advanced Settings",
+      "tags": "Tags"
+    },
+    "fields": {
+      "name": "Service name",
+      "code": "Internal code",
+      "category": "Category",
+      "shortDesc": "Short description",
+      "shortDescPh": "1-2 sentence summary shown on cards.",
+      "price": "Price (VND)",
+      "discount": "Discount %",
+      "duration": "Duration (min)",
+      "bufferTime": "Buffer between slots (min)",
+      "staffHint": "Pick which staff are allowed to deliver this service.",
+      "longDesc": "Long description",
+      "longDescPh": "Treatment, benefits, contra-indications...",
+      "gender": "Gender restriction",
+      "minAge": "Minimum age"
+    },
+    "cat": {
+      "massage": "Massage",
+      "facial": "Facial",
+      "hair_removal": "Hair Removal",
+      "package": "Package"
+    },
+    "gender": {
+      "any": "Any gender",
+      "female": "Female only",
+      "male": "Male only"
+    },
+    "flags": {
+      "requireRoom": "Requires a room",
+      "allowOnline": "Allow online booking",
+      "featured": "Featured on storefront"
+    },
+    "media": {
+      "upload": "Upload hero image",
+      "hint": "PNG / JPG, max 5MB. Recommended 1200×800."
+    }
+  },
+  "serviceDetail": {
+    "min": "min",
+    "edit": "Edit",
+    "viewBookings": "View bookings",
+    "description": "Service description",
+    "branchAvailability": "Branch availability",
+    "assignedStaff": "Assigned staff",
+    "customerFeedback": "Customer feedback",
+    "analytics": "Analytics",
+    "relatedServices": "Related services",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "staffCount": "{count} staff",
+    "breadcrumb": {
+      "services": "Services"
+    },
+    "kpi": {
+      "bookings": "Total bookings",
+      "revenue": "Revenue",
+      "completion": "Completion rate",
+      "rating": "Rating"
+    },
+    "cat": {
+      "massage": "Massage",
+      "facial": "Facial",
+      "hair_removal": "Hair Removal",
+      "package": "Package"
+    },
+    "analyticsRow": {
+      "thisMonth": "This month",
+      "repeatRate": "Repeat rate",
+      "cancelRate": "Cancellation rate"
+    }
+  },
+  "customerLoyalty": {
+    "subtitle": "Loyalty points management",
+    "goldMember": "Gold Member",
+    "adjust": "Adjust Points",
+    "redeem": "Redeem Points",
+    "history": "Transaction history",
+    "typeAll": "Type: All",
+    "type": {
+      "earned": "Earned",
+      "redeemed": "Redeemed",
+      "manual": "Manual",
+      "expired": "Expired"
+    },
+    "cols": {
+      "date": "Date & ID",
+      "typeSource": "Type & source",
+      "change": "Change",
+      "balance": "Balance after",
+      "notes": "Notes"
+    },
+    "redeemFor10": "Redeemed for $10 service discount",
+    "managerDiscretion": "Manager discretion",
+    "referralBonus": "Customer referral bonus - applied by Sarah M.",
+    "systemAuto": "System auto",
+    "expiredNote": "Points exceeded 12 month validity",
+    "pts": "pts",
+    "loyaltyCard": "Loyalty card",
+    "availablePoints": "Available points",
+    "valueApprox": "≈ {value} value",
+    "rewardCatalog": "Reward catalog",
+    "howEarned": "How points are earned",
+    "rewards": {
+      "discount": "$10 service discount",
+      "applyAtCheckout": "Applied at checkout",
+      "essentialOil": "Free essential oil add-on",
+      "retailProduct": "Retail product",
+      "facial": "Complimentary facial",
+      "facialDuration": "30 min service"
+    },
+    "rules": {
+      "standardRate": "Standard rate: 1 pt per $4 on services",
+      "retailBonus": "Retail bonus: 2 pts per $4 on retail",
+      "expiry": "Points expire 12 months after earning"
+    },
+    "kpi": {
+      "balance": "Current balance",
+      "totalEarned": "Total earned (lifetime)",
+      "totalRedeemed": "Total redeemed",
+      "expiringSoon": "Expiring soon",
+      "next30d": "Next 30 days"
+    }
+  },
+  "customerHealthNotes": {
+    "subtitle": "Health profile & clinical notes",
+    "editHealth": "Edit health info",
+    "addNote": "Add note",
+    "criticalAlerts": "Critical health alerts",
+    "alert": {
+      "allergy": "Allergies: {items}",
+      "condition": "Condition: {item}"
+    },
+    "skinType": "Skin type & condition",
+    "medicalHistory": "Medical history / injuries",
+    "lastIntakeUpdate": "Last intake update",
+    "clinicalNotes": "Clinical notes",
+    "categoryAll": "Category: All",
+    "category": {
+      "allergy": "Allergy",
+      "injury": "Injury",
+      "preference": "Preference",
+      "progress": "Progress"
+    },
+    "byStaff": "By {name}",
+    "contraindications": "Contraindications & allergies",
+    "wellnessAttributes": "Wellness attributes",
+    "massagePressure": "Massage pressure",
+    "sensitivities": "Other sensitivities",
+    "pressure": {
+      "light": "Light",
+      "medium": "Medium",
+      "strong": "Strong"
+    },
+    "conditions": {
+      "lowBP": "Low blood pressure",
+      "recentSurgery": "Recent surgery"
+    },
+    "mock": {
+      "allergyNote": "Mild reaction to lavender oil — switched to sweet orange.",
+      "injuryNote": "Lower back pain — avoid deep pressure on L4-L5.",
+      "preferenceNote": "Prefers meditation music, dim lighting. Tea after: ginger.",
+      "medicalHistory": "Right knee surgery 2024, no chronic conditions",
+      "sensitivities": "Sensitive to strong fragrances"
+    }
+  },
+  "customerCommunication": {
+    "title": "Customer Communication",
+    "subtitle": "Manage multichannel campaigns & messages",
+    "sendMessage": "Send message",
+    "createCampaign": "Create campaign",
+    "campaigns": "Campaigns",
+    "quickSend": "Quick send",
+    "searchCustomer": "Search customer",
+    "searchPlaceholder": "Name or phone...",
+    "messageContent": "Message content",
+    "messagePlaceholder": "Compose message...",
+    "send": "Send",
+    "kpi": {
+      "sentToday": "Sent today",
+      "activeCampaigns": "Active campaigns",
+      "deliveryRate": "Delivery rate",
+      "openRate": "Open rate (email)",
+      "responseRate": "Response / click rate"
+    },
+    "cols": {
+      "campaign": "Campaign",
+      "channel": "Channel",
+      "audience": "Audience",
+      "sent": "Sent",
+      "openRate": "Open rate",
+      "status": "Status"
+    },
+    "channel": {
+      "label": "Communication channel",
+      "email": "Email",
+      "sms": "SMS",
+      "zalo": "Zalo"
+    },
+    "audience": {
+      "allCustomers": "All customers",
+      "vip": "VIP",
+      "regulars": "Regulars"
+    },
+    "status": {
+      "active": "Active",
+      "scheduled": "Scheduled",
+      "completed": "Completed"
+    }
+  },
+  "customerMembership": {
+    "subtitle": "Service packages & memberships",
+    "useSession": "Use session",
+    "addPackage": "Add package",
+    "activePackages": "Active packages",
+    "packageHistory": "Package history",
+    "sessionUsage": "Session usage",
+    "expiry": "Expiry",
+    "price": "Price",
+    "validThru": "Valid thru",
+    "memberLevel": "Member level",
+    "activeBenefits": "Active benefits",
+    "ofTotal": "of {total}",
+    "allServices": "All services",
+    "kpi": {
+      "activePackages": "Active packages",
+      "sessionsRemaining": "Sessions remaining",
+      "expiredPackages": "Expired packages",
+      "totalValue": "Total package value",
+      "membershipDiscount": "Membership discount"
+    },
+    "cols": {
+      "package": "Package",
+      "price": "Price",
+      "usage": "Usage",
+      "endDate": "End date",
+      "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "expired": "Expired",
+      "completed": "Completed"
+    },
+    "benefit": {
+      "discount": "10% off all services",
+      "priority": "Priority booking",
+      "birthday": "Birthday gift",
+      "refer": "Referral rewards"
+    }
+  },
+  "customerImportExport": {
+    "title": "Customer Import / Export",
+    "subtitle": "Import CSV/Excel or export customer data",
+    "downloadTemplate": "Download template",
+    "importSection": "Import",
+    "exportSection": "Export",
+    "dropZone": "Drop file here or click to select",
+    "supportedFormats": "Supports CSV, XLSX (max 10MB)",
+    "selectFile": "Select file",
+    "fieldMapping": "Field mapping",
+    "mapping": {
+      "source": "Source field",
+      "target": "Target field"
+    },
+    "previousJobs": "Previous jobs",
+    "cols": {
+      "id": "ID",
+      "type": "Type",
+      "file": "File",
+      "rows": "Rows",
+      "status": "Status",
+      "date": "Date",
+      "by": "By"
+    },
+    "type": {
+      "import": "Import",
+      "export": "Export"
+    },
+    "status": {
+      "success": "Success",
+      "failed": "Failed",
+      "partial": "Partial"
+    },
+    "export": {
+      "dateRange": "Date range (registration)",
+      "segment": "Customer segment",
+      "allCustomers": "All customers",
+      "format": "File format",
+      "run": "Run export"
+    }
+  },
+  "customerBookingHistory": {
+    "subtitle": "Visit history & upcoming appointments",
+    "upcoming": "Upcoming appointment",
+    "viewDetail": "View detail",
+    "history": "Booking history",
+    "amount": "Amount",
+    "every3w": "~3 weeks",
+    "kpi": {
+      "totalVisits": "Total visits",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShows": "No-shows",
+      "avgFreq": "Avg visit freq.",
+      "avgSpend": "Avg spend / visit"
+    },
+    "filter": {
+      "all": "All",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShow": "No-show"
+    },
+    "cols": {
+      "code": "Code",
+      "date": "Date & time",
+      "service": "Service",
+      "staff": "Staff",
+      "amount": "Amount",
+      "payment": "Payment",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "payment": {
+      "paid": "Paid",
+      "unpaid": "Unpaid",
+      "refunded": "Refunded"
+    },
+    "status": {
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShow": "No-show",
+      "upcoming": "Upcoming"
+    }
+  },
+  "customerPaymentHistory": {
+    "subtitle": "Invoices & payment ledger",
+    "issueRefund": "Issue refund",
+    "newInvoice": "New invoice",
+    "history": "Payment history",
+    "kpi": {
+      "totalSpending": "Total spending",
+      "totalPayments": "Total payments",
+      "totalRefunds": "Total refunds",
+      "avgPayment": "Avg payment value",
+      "preferredMethod": "Preferred method"
+    },
+    "filter": {
+      "all": "All"
+    },
+    "cols": {
+      "invoice": "Invoice",
+      "date": "Date",
+      "type": "Type",
+      "method": "Method",
+      "bookingRef": "Booking",
+      "amount": "Amount",
+      "status": "Status"
+    },
+    "type": {
+      "payment": "Payment",
+      "refund": "Refund",
+      "partial": "Partial",
+      "deposit": "Deposit"
+    },
+    "method": {
+      "card": "Card",
+      "cash": "Cash",
+      "transfer": "Transfer",
+      "momo": "MoMo"
+    },
+    "status": {
+      "success": "Success",
+      "refunded": "Refunded",
+      "pending": "Pending"
+    }
+  },
+  "customerSegments": {
+    "title": "Segments & Tags",
+    "subtitle": "Manage customer segments and tags",
+    "createTag": "Create tag",
+    "createSegment": "Create segment",
+    "segments": "Segments",
+    "tags": "Tags",
+    "quickRule": "Quick rule",
+    "ruleHint": "Define a rule and preview matching customers.",
+    "preview": "Preview",
+    "matchingCustomers": "Matching customers",
+    "view": "View",
+    "kpi": {
+      "totalSegments": "Total segments",
+      "totalTags": "Total tags",
+      "taggedCustomers": "Tagged customers",
+      "largestSegment": "Largest segment",
+      "inactiveSegment": "Inactive segment"
+    },
+    "cols": {
+      "segment": "Segment",
+      "type": "Type",
+      "count": "Count",
+      "trend": "Trend",
+      "actions": "Actions"
+    },
+    "type": {
+      "auto": "Auto",
+      "manual": "Manual"
+    }
+  },
+  "customerAnalytics": {
+    "title": "Customer Analytics",
+    "subtitle": "Insights and trends about your customers",
+    "growth": "Customer growth",
+    "sources": "Acquisition sources",
+    "spendingTiers": "Spending tiers",
+    "topCustomers": "Top customers (LTV)",
+    "retentionAnalysis": "Retention analysis",
+    "churnAnalysis": "Churn analysis",
+    "avgVisits": "Avg visits / customer",
+    "visitFrequency": "Visit frequency",
+    "every45d": "Every 45 days",
+    "inactiveCustomers": "Inactive customers",
+    "atRisk": "At risk (>60d)",
+    "chartPlaceholder": "Last 8 weeks",
+    "kpi": {
+      "totalDatabase": "Total database",
+      "newCustomers": "New customers",
+      "retention": "Retention rate",
+      "ltv": "Avg spend (LTV)",
+      "avgPerVisit": "Avg spend / visit",
+      "churn": "Churn rate (>90d)"
+    },
+    "range": {
+      "30d": "30 days",
+      "90d": "90 days",
+      "year": "12 months"
+    },
+    "cols": {
+      "customer": "Customer",
+      "visits": "Visits",
+      "ltv": "LTV"
+    },
+    "source": {
+      "direct": "Direct",
+      "referral": "Referral",
+      "social": "Social",
+      "walkin": "Walk-in",
+      "other": "Other"
+    }
+  },
+  "customerForm": {
+    "title": "Create customer",
+    "subtitle": "Enter information to create a new customer profile",
+    "save": "Save",
+    "cancel": "Cancel",
+    "section": {
+      "basic": "Basic information",
+      "contact": "Contact details",
+      "membership": "Membership & status",
+      "health": "Health & preferences",
+      "crm": "CRM & marketing"
+    },
+    "field": {
+      "firstName": "First name",
+      "lastName": "Last name",
+      "gender": "Gender",
+      "dob": "Date of birth",
+      "phone": "Phone number",
+      "email": "Email address",
+      "address": "Home address",
+      "membershipLevel": "Membership level",
+      "accountStatus": "Account status",
+      "registrationBranch": "Registration branch",
+      "preferredTherapist": "Preferred therapist",
+      "preferredRoom": "Preferred room type",
+      "skinCondition": "Skin condition",
+      "allergies": "Known allergies",
+      "referralSource": "Referral source",
+      "notes": "Internal notes"
+    },
+    "placeholder": {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "address": "Street, ward, district, city",
+      "skinCondition": "Combination, sensitive...",
+      "allergies": "Lavender, latex...",
+      "notes": "Important info for therapists..."
+    },
+    "gender": {
+      "female": "Female",
+      "male": "Male",
+      "other": "Other"
+    },
+    "level": {
+      "regular": "Regular",
+      "silver": "Silver",
+      "gold": "Gold",
+      "platinum": "Platinum"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "blocked": "Blocked"
+    },
+    "room": {
+      "standard": "Standard",
+      "couple": "Couple",
+      "vip": "VIP"
+    },
+    "referral": {
+      "direct": "Direct",
+      "referral": "Referral",
+      "social": "Social",
+      "walkin": "Walk-in"
+    },
+    "duplicate": {
+      "title": "Phone number may already exist",
+      "message": "Another customer is using this number. Verify before continuing."
+    }
+  },
+  "staffOverview": {
+    "title": "Staff Overview",
+    "subtitle": "Workforce status & performance",
+    "viewAll": "View all",
+    "addStaff": "Add staff",
+    "workforceDistribution": "Workforce distribution",
+    "staffByBranch": "Staff by branch",
+    "todayStatus": "Today status",
+    "checkedIn": "Checked in",
+    "onLeaveToday": "On leave today",
+    "recentActivity": "Recent staff activity",
+    "topPerformers": "Top performers",
+    "thisMonth": "This month",
+    "today": "Today",
+    "role": {
+      "therapist": "Therapist",
+      "receptionist": "Receptionist",
+      "manager": "Manager",
+      "support": "Support"
+    },
+    "activity": {
+      "checkedIn": "Checked in",
+      "completedShift": "Completed shift",
+      "onLeave": "On leave"
+    },
+    "kpi": {
+      "totalStaff": "Total staff",
+      "workingToday": "Working today",
+      "onLeave": "On leave",
+      "newThisMonth": "New this month"
+    }
   }
 }

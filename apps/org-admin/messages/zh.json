@@ -126,6 +126,133 @@
     "summary": "Tóm tắt quyền",
     "summaryDesc": "Người dùng có vai trò này sẽ truy cập được các module sau"
   },
+  "orgContent": {
+    "title": "Nội dung công ty",
+    "subtitle": "Quản lý trang giới thiệu, câu chuyện thương hiệu, lãnh đạo và nội dung báo chí của tổ chức.",
+    "options": "Tuỳ chọn",
+    "createPost": "Tạo bài công ty",
+    "search": "Tìm theo tiêu đề, slug…",
+    "advancedFilters": "Bộ lọc nâng cao",
+    "views": "lượt xem",
+    "founderCeo": "Founder & CEO",
+    "hrDept": "Phòng Nhân sự",
+    "prTeam": "Đội PR",
+    "externalLink": "Liên kết ngoài",
+    "unpublished": "Chưa xuất bản",
+    "viewAll": "Xem tất cả",
+    "kpi": {
+      "totalPages": "Tổng trang",
+      "published": "Đã xuất bản",
+      "drafts": "Bản nháp",
+      "press": "Bài báo chí",
+      "awards": "Giải thưởng"
+    },
+    "filter": {
+      "typeAll": "Loại nội dung: Tất cả",
+      "statusAll": "Trạng thái: Tất cả",
+      "dateAny": "Thời gian: Bất kỳ",
+      "last7": "7 ngày qua",
+      "last30": "30 ngày qua"
+    },
+    "type": {
+      "story": "Câu chuyện thương hiệu",
+      "leader": "Hồ sơ lãnh đạo",
+      "press": "Bài báo chí",
+      "award": "Giải thưởng / Chứng nhận"
+    },
+    "status": {
+      "published": "Đã xuất bản",
+      "draft": "Bản nháp",
+      "scheduled": "Đã lên lịch",
+      "archived": "Lưu trữ"
+    },
+    "cols": {
+      "title": "Tiêu đề & chi tiết",
+      "contentType": "Loại nội dung",
+      "author": "Tác giả",
+      "status": "Trạng thái",
+      "dateMetrics": "Ngày & chỉ số",
+      "actions": "Thao tác"
+    },
+    "actions": {
+      "preview": "Xem trước",
+      "edit": "Chỉnh sửa",
+      "analytics": "Phân tích",
+      "delete": "Xoá"
+    },
+    "pagination": {
+      "showing": "Hiển thị {from} đến {to} trong {total} trang"
+    }
+  },
+  "branchReport": {
+    "title": "Báo cáo chi nhánh",
+    "subtitle": "Theo dõi hiệu suất hằng ngày và hằng tuần của một chi nhánh cụ thể.",
+    "branchLabel": "Spa Quận 1",
+    "export": "Xuất báo cáo",
+    "viewAll": "Xem tất cả",
+    "breadcrumb": {
+      "dashboard": "Tổng quan",
+      "analytics": "Phân tích"
+    },
+    "range": {
+      "today": "Hôm nay",
+      "last7": "7 ngày qua",
+      "last30": "30 ngày qua",
+      "custom": "Khoảng tuỳ chọn…"
+    },
+    "kpi": {
+      "revenue": "Doanh thu hôm nay",
+      "bookings": "Lịch hẹn hôm nay",
+      "customers": "Khách hôm nay",
+      "staff": "Nhân viên đang làm",
+      "delta": "{value}%",
+      "stable": "Ổn định",
+      "utilization": "{value}% sử dụng",
+      "slotsRemaining": "Còn {count} khung giờ trống",
+      "newReturning": "{newCount} mới / {returningCount} quay lại",
+      "staffSplit": "{therapists} kỹ thuật viên / {reception} lễ tân"
+    },
+    "charts": {
+      "revenueTitle": "Xu hướng doanh thu",
+      "revenueSubtitle": "Hiệu suất theo ngày trong khoảng đã chọn.",
+      "roomTitle": "Hiệu suất phòng",
+      "roomSubtitle": "Tỷ lệ phòng trị liệu được sử dụng hôm nay.",
+      "hourlyTitle": "Lịch hẹn theo giờ",
+      "hourlySubtitle": "Phân bổ lịch hẹn trong ngày.",
+      "placeholder": "Biểu đồ sẽ kết nối khi analytics-service có dữ liệu."
+    },
+    "slots": {
+      "title": "Khung giờ phổ biến",
+      "subtitle": "Khoảng thời gian khách đặt lịch nhiều nhất.",
+      "low": "Vắng",
+      "med": "Trung bình",
+      "high": "Đông",
+      "peak": "Cao điểm"
+    },
+    "mix": {
+      "massage": "Massage ({percent}%)",
+      "facial": "Chăm sóc da ({percent}%)"
+    },
+    "servicePerf": {
+      "title": "Hiệu suất dịch vụ",
+      "subtitle": "Dịch vụ được đặt nhiều nhất hôm nay.",
+      "cols": {
+        "service": "Tên dịch vụ",
+        "bookings": "Lịch hẹn",
+        "revenue": "Doanh thu"
+      }
+    },
+    "staffPerf": {
+      "title": "Hiệu suất nhân viên",
+      "subtitle": "Năng suất kỹ thuật viên tại chi nhánh này.",
+      "cols": {
+        "name": "Tên nhân viên",
+        "services": "Dịch vụ",
+        "revenue": "Doanh thu",
+        "rating": "Đánh giá"
+      }
+    }
+  },
   "content": {
     "title": "Nội dung chi nhánh",
     "subtitle": "Quản lý bài viết, khuyến mãi, sự kiện và trang SEO theo từng chi nhánh",

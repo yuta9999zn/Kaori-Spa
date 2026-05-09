@@ -30,7 +30,113 @@
     "create": "Add tenant",
     "columns": { "code": "Code", "name": "Name", "plan": "Plan", "branches": "Branches", "status": "Status", "createdAt": "Created" }
   },
-  "plan": { "title": "Plans", "starter": "Starter", "professional": "Professional", "enterprise": "Enterprise" },
+  "plan": {
+    "title": "Subscription & plan",
+    "subtitle": "Manage your spa platform subscription, view limits, and update billing information.",
+    "starter": "Starter",
+    "professional": "Professional",
+    "enterprise": "Enterprise",
+    "breadcrumb": { "dashboard": "Dashboard", "settings": "Settings" },
+    "actions": {
+      "downloadInvoice": "Download invoice",
+      "upgrade": "Upgrade plan",
+      "cancel": "Cancel subscription",
+      "changePlan": "Change plan",
+      "edit": "Edit"
+    },
+    "current": {
+      "activeBadge": "Active subscription",
+      "perMonth": "per month",
+      "nextBilling": "Next billing date",
+      "featuresTitle": "Current plan features",
+      "features": {
+        "branches": "Up to {count} active branches",
+        "staff": "{count} staff users / accounts",
+        "customers": "Unlimited customer profiles",
+        "analytics": "Advanced analytics & reports",
+        "support": "Priority email support"
+      }
+    },
+    "usage": {
+      "title": "Platform usage",
+      "subtitle": "Current utilization across your workspace limits.",
+      "staff": "Staff users",
+      "branches": "Active branches",
+      "storage": "Asset storage",
+      "bookings": "Monthly bookings",
+      "unlimited": "Unlimited",
+      "scaleHint": "Approaching your limits? Contact our success team to scale infrastructure or unlock enterprise discounts."
+    },
+    "billing": {
+      "title": "Billing information",
+      "companyName": "Company name",
+      "address": "Billing address",
+      "taxId": "Tax ID / VAT"
+    },
+    "payment": {
+      "title": "Payment method",
+      "holder": "Card holder",
+      "expires": "Expires",
+      "addBank": "Add bank transfer",
+      "updateCard": "Update card"
+    },
+    "invoices": {
+      "title": "Invoice history",
+      "pdf": "PDF",
+      "cols": {
+        "id": "Invoice ID",
+        "date": "Billing date",
+        "amount": "Amount",
+        "status": "Status",
+        "action": "Action"
+      },
+      "status": {
+        "paid": "Paid",
+        "pending": "Pending"
+      }
+    },
+    "compare": {
+      "title": "Platform pricing",
+      "subtitle": "Scale your spa business with features designed for growth.",
+      "monthly": "Monthly billing",
+      "yearly": "Yearly (Save 20%)",
+      "currentBadge": "Current plan",
+      "active": "Active",
+      "downgrade": "Downgrade",
+      "upgradeEnterprise": "Upgrade to Enterprise"
+    },
+    "tiers": {
+      "starter": {
+        "price": "VND 690,000",
+        "priceShort": "690K",
+        "tagline": "Perfect for independent therapists and single-location salons.",
+        "f1": "1 active branch",
+        "f2": "Up to 5 staff users",
+        "f3": "Standard booking page",
+        "f4": "Basic analytics"
+      },
+      "professional": {
+        "price": "VND 1,890,000",
+        "priceShort": "1.89M",
+        "tagline": "Everything you need to manage a growing multi-branch spa.",
+        "f1": "Up to 5 active branches",
+        "f2": "Up to 50 staff users",
+        "f3": "White-label booking portal",
+        "f4": "Advanced analytics & reports",
+        "f5": "Priority email support"
+      },
+      "enterprise": {
+        "price": "VND 4,790,000",
+        "priceShort": "4.79M",
+        "tagline": "Dedicated infrastructure for large-scale wellness franchises.",
+        "f1": "Unlimited branches",
+        "f2": "Unlimited users",
+        "f3": "Custom app development",
+        "f4": "API & webhook access",
+        "f5": "24/7 dedicated account manager"
+      }
+    }
+  },
   "audit": {
     "title": "Audit log",
     "subtitle": "Immutable activity history",

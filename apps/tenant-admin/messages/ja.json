@@ -1,32 +1,199 @@
 {
-  "brand": { "platform": "Kaori" },
-  "portal": { "name": "Kaori プラットフォーム", "subtitle": "Tenant Administrator" },
+  "brand": {
+    "platform": "Kaori"
+  },
+  "portal": {
+    "name": "Kaori プラットフォーム",
+    "subtitle": "Tenant Administrator"
+  },
   "nav": {
-    "dashboard": "ダッシュボード", "tenant": "テナント", "members": "メンバー", "plan": "プラン",
-    "billing": "請求", "domain": "ドメイン", "audit": "監査ログ",
-    "integration": "連携", "feature": "機能", "branding": "ブランディング", "settings": "設定", "logout": "ログアウト"
+    "dashboard": "ダッシュボード",
+    "tenant": "テナント",
+    "members": "メンバー",
+    "plan": "プラン",
+    "billing": "請求",
+    "domain": "ドメイン",
+    "audit": "監査ログ",
+    "integration": "連携",
+    "feature": "機能",
+    "branding": "ブランディング",
+    "settings": "設定",
+    "logout": "ログアウト"
   },
   "dashboard": {
     "title": "プラットフォーム概要",
-    "kpi": { "tenants": "稼働中テナント", "branches": "総店舗数", "users": "ユーザー", "mrr": "月次定期売上" },
+    "kpi": {
+      "tenants": "稼働中テナント",
+      "branches": "総店舗数",
+      "users": "ユーザー",
+      "mrr": "月次定期売上"
+    },
     "recentTenants": "新規テナント"
   },
   "tenant": {
-    "title": "テナント一覧", "create": "テナント追加",
-    "columns": { "code": "コード", "name": "名称", "plan": "プラン", "branches": "店舗", "status": "状態", "createdAt": "作成日" }
+    "title": "テナント一覧",
+    "create": "テナント追加",
+    "columns": {
+      "code": "コード",
+      "name": "名称",
+      "plan": "プラン",
+      "branches": "店舗",
+      "status": "状態",
+      "createdAt": "作成日"
+    }
   },
-  "plan": { "title": "プラン", "starter": "スターター", "professional": "プロ", "enterprise": "エンタープライズ" },
+  "plan": {
+    "title": "プラン",
+    "starter": "スターター",
+    "professional": "プロ",
+    "enterprise": "エンタープライズ",
+    "subtitle": "Quản lý gói nền tảng, theo dõi giới hạn sử dụng và cập nhật thông tin thanh toán.",
+    "breadcrumb": {
+      "dashboard": "Tổng quan",
+      "settings": "Cài đặt"
+    },
+    "actions": {
+      "downloadInvoice": "Tải hoá đơn",
+      "upgrade": "Nâng cấp gói",
+      "cancel": "Huỷ đăng ký",
+      "changePlan": "Đổi gói",
+      "edit": "Chỉnh sửa"
+    },
+    "current": {
+      "activeBadge": "Đang hoạt động",
+      "perMonth": "mỗi tháng",
+      "nextBilling": "Ngày thanh toán tiếp theo",
+      "featuresTitle": "Tính năng của gói hiện tại",
+      "features": {
+        "branches": "Tối đa {count} chi nhánh đang hoạt động",
+        "staff": "{count} tài khoản nhân viên",
+        "customers": "Số lượng khách hàng không giới hạn",
+        "analytics": "Báo cáo & phân tích nâng cao",
+        "support": "Hỗ trợ ưu tiên qua email"
+      }
+    },
+    "usage": {
+      "title": "Mức sử dụng nền tảng",
+      "subtitle": "Tỷ lệ sử dụng hiện tại so với giới hạn của gói.",
+      "staff": "Tài khoản nhân viên",
+      "branches": "Chi nhánh đang hoạt động",
+      "storage": "Dung lượng lưu trữ",
+      "bookings": "Lịch hẹn trong tháng",
+      "unlimited": "Không giới hạn",
+      "scaleHint": "Sắp đạt giới hạn? Liên hệ đội thành công khách hàng để mở rộng tự động hoặc nhận ưu đãi doanh nghiệp."
+    },
+    "billing": {
+      "title": "Thông tin thanh toán",
+      "companyName": "Tên công ty",
+      "address": "Địa chỉ thanh toán",
+      "taxId": "Mã số thuế / VAT"
+    },
+    "payment": {
+      "title": "Phương thức thanh toán",
+      "holder": "Chủ thẻ",
+      "expires": "Hết hạn",
+      "addBank": "Thêm chuyển khoản",
+      "updateCard": "Cập nhật thẻ"
+    },
+    "invoices": {
+      "title": "Lịch sử hoá đơn",
+      "pdf": "PDF",
+      "cols": {
+        "id": "Mã hoá đơn",
+        "date": "Ngày",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "action": "Thao tác"
+      },
+      "status": {
+        "paid": "Đã thanh toán",
+        "pending": "Chờ thanh toán"
+      }
+    },
+    "compare": {
+      "title": "Bảng giá nền tảng",
+      "subtitle": "Mở rộng quy mô spa với các tính năng được thiết kế để tăng trưởng.",
+      "monthly": "Theo tháng",
+      "yearly": "Theo năm (Tiết kiệm 20%)",
+      "currentBadge": "Gói hiện tại",
+      "active": "Đang dùng",
+      "downgrade": "Hạ gói",
+      "upgradeEnterprise": "Nâng cấp Doanh nghiệp"
+    },
+    "tiers": {
+      "starter": {
+        "price": "690.000 ₫",
+        "priceShort": "690K",
+        "tagline": "Phù hợp với kỹ thuật viên độc lập và spa một chi nhánh.",
+        "f1": "1 chi nhánh đang hoạt động",
+        "f2": "Tối đa 5 nhân viên",
+        "f3": "Trang đặt lịch tiêu chuẩn",
+        "f4": "Báo cáo cơ bản"
+      },
+      "professional": {
+        "price": "1.890.000 ₫",
+        "priceShort": "1.89M",
+        "tagline": "Tất cả những gì cần để vận hành chuỗi spa nhiều chi nhánh.",
+        "f1": "Tối đa 5 chi nhánh hoạt động",
+        "f2": "Tối đa 50 nhân viên",
+        "f3": "Cổng đặt lịch white-label",
+        "f4": "Báo cáo & phân tích nâng cao",
+        "f5": "Hỗ trợ ưu tiên qua email"
+      },
+      "enterprise": {
+        "price": "4.790.000 ₫",
+        "priceShort": "4.79M",
+        "tagline": "Hạ tầng riêng cho chuỗi spa và franchise lớn.",
+        "f1": "Chi nhánh không giới hạn",
+        "f2": "Người dùng không giới hạn",
+        "f3": "Phát triển ứng dụng tuỳ chỉnh",
+        "f4": "Truy cập API & Webhook",
+        "f5": "Account Manager riêng 24/7"
+      }
+    }
+  },
   "audit": {
-    "title": "監査ログ", "subtitle": "変更不可の活動履歴",
-    "columns": { "ts": "時間", "actor": "実行者", "action": "操作", "entity": "対象", "ip": "IP" }
+    "title": "監査ログ",
+    "subtitle": "変更不可の活動履歴",
+    "columns": {
+      "ts": "時間",
+      "actor": "実行者",
+      "action": "操作",
+      "entity": "対象",
+      "ip": "IP"
+    }
   },
   "domain": {
     "title": "ドメイン & 予約 URL",
     "subtitle": "顧客がオンライン予約ページとポータルにアクセスする方法を設定します。",
-    "actions": { "cancel": "キャンセル", "save": "変更を保存", "checkAvailability": "空き状況を確認", "disconnect": "切断", "verify": "ドメインを認証", "renew": "証明書を手動更新", "readDocs": "詳細ドキュメントを見る" },
-    "subdomain": { "title": "プラットフォームサブドメイン", "subtitle": "無料の標準予約 URL です。", "label": "サブドメイン名", "suffix": ".kaoriplatform.com", "available": "URL は利用可能で稼働中です。" },
-    "custom": { "title": "カスタムドメイン", "subtitle": "自社ウェブサイトのドメインを接続します。", "label": "カスタムドメイン URL", "connected": "接続済" },
-    "ssl": { "title": "SSL 証明書", "statusLabel": "状態", "statusValue": "稼働中・安全", "renewIn": "{days} 日後に自動更新" },
+    "actions": {
+      "cancel": "キャンセル",
+      "save": "変更を保存",
+      "checkAvailability": "空き状況を確認",
+      "disconnect": "切断",
+      "verify": "ドメインを認証",
+      "renew": "証明書を手動更新",
+      "readDocs": "詳細ドキュメントを見る"
+    },
+    "subdomain": {
+      "title": "プラットフォームサブドメイン",
+      "subtitle": "無料の標準予約 URL です。",
+      "label": "サブドメイン名",
+      "suffix": ".kaoriplatform.com",
+      "available": "URL は利用可能で稼働中です。"
+    },
+    "custom": {
+      "title": "カスタムドメイン",
+      "subtitle": "自社ウェブサイトのドメインを接続します。",
+      "label": "カスタムドメイン URL",
+      "connected": "接続済"
+    },
+    "ssl": {
+      "title": "SSL 証明書",
+      "statusLabel": "状態",
+      "statusValue": "稼働中・安全",
+      "renewIn": "{days} 日後に自動更新"
+    },
     "security": {
       "title": "ドメインセキュリティ",
       "forceHttps": "HTTPS を強制",
@@ -36,7 +203,12 @@
       "protection": "予約ページ保護",
       "protectionHint": "料金表示に顧客ログインを必須化"
     },
-    "links": { "title": "公開予約リンク", "main": "組織のメインページ", "copy": "コピー", "open": "リンクを開く" },
+    "links": {
+      "title": "公開予約リンク",
+      "main": "組織のメインページ",
+      "copy": "コピー",
+      "open": "リンクを開く"
+    },
     "guide": {
       "title": "セットアップガイド",
       "subtitle": "以下の手順でカスタムドメインをプラットフォームに接続します。",
@@ -49,92 +221,331 @@
       "step3Title": "接続を確認",
       "step3Desc": "カスタムドメイン欄の「ドメインを認証」をクリックします。反映まで最大 24 時間かかる場合があります。"
     },
-    "preview": { "title": "顧客から見た画面", "subtitle": "稼働中の予約ポータルをプレビューします。", "heading": "予約する", "selectLocation": "店舗を選択して開始" }
+    "preview": {
+      "title": "顧客から見た画面",
+      "subtitle": "稼働中の予約ポータルをプレビューします。",
+      "heading": "予約する",
+      "selectLocation": "店舗を選択して開始"
+    }
   },
   "members": {
     "title": "ワークスペースメンバー",
     "subtitle": "プラットフォームにアクセスできるユーザー、スタッフ、管理者を管理します。",
-    "actions": { "export": "メンバーをエクスポート", "invite": "ユーザーを招待", "search": "名前またはメールで検索...", "viewProfile": "プロフィールを表示", "editRole": "役割を編集", "changeBranch": "店舗を変更", "deactivate": "無効化", "reactivate": "再有効化", "remove": "ユーザーを削除", "resendInvite": "招待を再送" },
-    "kpi": { "total": "総ユーザー数", "active": "稼働中", "pending": "招待保留中", "admins": "管理者" },
-    "filters": { "allRoles": "すべての役割", "allBranches": "すべての店舗", "allStatuses": "すべての状態", "sortNewest": "並び順: 新着順", "sortAlpha": "並び順: A-Z", "sortRole": "並び順: 役割" },
-    "columns": { "member": "メンバー情報", "role": "役割 & 権限", "branch": "店舗", "status": "状態", "lastLogin": "最終ログイン", "actions": "操作" },
-    "roles": { "owner": "オーナー", "manager": "マネージャー", "therapist": "セラピスト", "receptionist": "受付", "marketing": "マーケティング", "hr": "人事" },
-    "status": { "active": "稼働中", "invited": "招待済", "suspended": "停止中", "global": "全体アクセス", "neverLogin": "未ログイン" },
-    "pagination": { "showing": "表示", "to": "〜", "of": "/", "users": "ユーザー", "previous": "前へ", "next": "次へ" }
+    "actions": {
+      "export": "メンバーをエクスポート",
+      "invite": "ユーザーを招待",
+      "search": "名前またはメールで検索...",
+      "viewProfile": "プロフィールを表示",
+      "editRole": "役割を編集",
+      "changeBranch": "店舗を変更",
+      "deactivate": "無効化",
+      "reactivate": "再有効化",
+      "remove": "ユーザーを削除",
+      "resendInvite": "招待を再送"
+    },
+    "kpi": {
+      "total": "総ユーザー数",
+      "active": "稼働中",
+      "pending": "招待保留中",
+      "admins": "管理者"
+    },
+    "filters": {
+      "allRoles": "すべての役割",
+      "allBranches": "すべての店舗",
+      "allStatuses": "すべての状態",
+      "sortNewest": "並び順: 新着順",
+      "sortAlpha": "並び順: A-Z",
+      "sortRole": "並び順: 役割"
+    },
+    "columns": {
+      "member": "メンバー情報",
+      "role": "役割 & 権限",
+      "branch": "店舗",
+      "status": "状態",
+      "lastLogin": "最終ログイン",
+      "actions": "操作"
+    },
+    "roles": {
+      "owner": "オーナー",
+      "manager": "マネージャー",
+      "therapist": "セラピスト",
+      "receptionist": "受付",
+      "marketing": "マーケティング",
+      "hr": "人事"
+    },
+    "status": {
+      "active": "稼働中",
+      "invited": "招待済",
+      "suspended": "停止中",
+      "global": "全体アクセス",
+      "neverLogin": "未ログイン"
+    },
+    "pagination": {
+      "showing": "表示",
+      "to": "〜",
+      "of": "/",
+      "users": "ユーザー",
+      "previous": "前へ",
+      "next": "次へ"
+    }
   },
   "branding": {
     "title": "ブランディング & 外観",
     "subtitle": "管理ダッシュボード、予約ポータル、顧客向けメールでのブランド表示をカスタマイズします。",
-    "actions": { "reset": "デフォルトに戻す", "save": "ブランドを保存", "replace": "差し替え", "remove": "削除", "uploadMedia": "メディアをアップロード", "uploadImage": "画像をアップロード", "uploadBanner": "バナーをアップロード", "view": "表示", "addNew": "新規追加" },
-    "logo": { "title": "ロゴ & アイコン", "primaryLabel": "メインロゴ", "primaryHint": "ダッシュボードヘッダーや予約ページに表示されます。透過 PNG を推奨。", "faviconLabel": "ファビコン / アプリアイコン", "faviconHint": "ブラウザタブやモバイルアプリアイコンに表示されます。正方形 PNG または ICO。" },
-    "colors": { "title": "ブランドカラー", "primary": "メインカラー", "primaryHint": "ボタン、アクティブリンク", "secondary": "サブカラー", "secondaryHint": "カード、枠線", "accent": "アクセントカラー", "accentHint": "強調、タグ", "background": "背景色", "backgroundHint": "アプリ背景" },
-    "typography": { "title": "タイポグラフィ", "heading": "見出しフォント", "body": "本文フォント", "headingPreview": "ラグジュアリーなスパ体験", "bodyPreview": "リラックス。リストア。リジュビネート。お客様のウェルネスを高め、心を癒すプレミアムトリートメントをご用意しています。" },
-    "login": { "title": "ログインページの外観", "welcome": "ウェルカムメッセージ", "background": "背景画像", "overlay": "オーバーレイ(不透明度)" },
-    "booking": { "title": "予約ポータル", "pageTitle": "予約ページタイトル", "tagline": "ブランドタグライン", "banner": "ヒーローバナー画像", "bannerHint": "1920x600px を推奨" },
-    "email": { "title": "メールテンプレート", "headerLogo": "メールヘッダーロゴ", "headerBg": "ヘッダー背景色", "footer": "フッター / 免責事項" },
-    "assets": { "title": "アセットライブラリ" },
-    "preview": { "title": "ライブプレビュー", "subtitle": "ブランドがユーザーにどう表示されるかを確認します。", "tabBooking": "予約ページ", "tabDashboard": "ダッシュボード", "tabEmail": "メール", "selectService": "サービスを選択", "bookButton": "予約する", "realtime": "プレビューはリアルタイムで更新されます" }
+    "actions": {
+      "reset": "デフォルトに戻す",
+      "save": "ブランドを保存",
+      "replace": "差し替え",
+      "remove": "削除",
+      "uploadMedia": "メディアをアップロード",
+      "uploadImage": "画像をアップロード",
+      "uploadBanner": "バナーをアップロード",
+      "view": "表示",
+      "addNew": "新規追加"
+    },
+    "logo": {
+      "title": "ロゴ & アイコン",
+      "primaryLabel": "メインロゴ",
+      "primaryHint": "ダッシュボードヘッダーや予約ページに表示されます。透過 PNG を推奨。",
+      "faviconLabel": "ファビコン / アプリアイコン",
+      "faviconHint": "ブラウザタブやモバイルアプリアイコンに表示されます。正方形 PNG または ICO。"
+    },
+    "colors": {
+      "title": "ブランドカラー",
+      "primary": "メインカラー",
+      "primaryHint": "ボタン、アクティブリンク",
+      "secondary": "サブカラー",
+      "secondaryHint": "カード、枠線",
+      "accent": "アクセントカラー",
+      "accentHint": "強調、タグ",
+      "background": "背景色",
+      "backgroundHint": "アプリ背景"
+    },
+    "typography": {
+      "title": "タイポグラフィ",
+      "heading": "見出しフォント",
+      "body": "本文フォント",
+      "headingPreview": "ラグジュアリーなスパ体験",
+      "bodyPreview": "リラックス。リストア。リジュビネート。お客様のウェルネスを高め、心を癒すプレミアムトリートメントをご用意しています。"
+    },
+    "login": {
+      "title": "ログインページの外観",
+      "welcome": "ウェルカムメッセージ",
+      "background": "背景画像",
+      "overlay": "オーバーレイ(不透明度)"
+    },
+    "booking": {
+      "title": "予約ポータル",
+      "pageTitle": "予約ページタイトル",
+      "tagline": "ブランドタグライン",
+      "banner": "ヒーローバナー画像",
+      "bannerHint": "1920x600px を推奨"
+    },
+    "email": {
+      "title": "メールテンプレート",
+      "headerLogo": "メールヘッダーロゴ",
+      "headerBg": "ヘッダー背景色",
+      "footer": "フッター / 免責事項"
+    },
+    "assets": {
+      "title": "アセットライブラリ"
+    },
+    "preview": {
+      "title": "ライブプレビュー",
+      "subtitle": "ブランドがユーザーにどう表示されるかを確認します。",
+      "tabBooking": "予約ページ",
+      "tabDashboard": "ダッシュボード",
+      "tabEmail": "メール",
+      "selectService": "サービスを選択",
+      "bookButton": "予約する",
+      "realtime": "プレビューはリアルタイムで更新されます"
+    }
   },
   "feature": {
     "title": "機能モジュール",
     "subtitle": "プラットフォームのモジュールを有効/無効にして、店舗の運用機能をカスタマイズします。",
-    "actions": { "reset": "デフォルトに戻す", "configure": "設定", "viewDetails": "詳細を見る", "activate": "アドオンを有効化", "learnMore": "詳細", "contactSales": "営業に問い合わせる" },
-    "kpi": { "total": "総モジュール数", "enabled": "有効", "disabled": "無効", "addons": "利用可能なアドオン" },
-    "section": { "core": "コアプラットフォームモジュール", "addons": "プレミアムアドオン" },
-    "status": { "enabled": "有効", "disabled": "無効", "premium": "プレミアム機能", "active": "稼働中" },
+    "actions": {
+      "reset": "デフォルトに戻す",
+      "configure": "設定",
+      "viewDetails": "詳細を見る",
+      "activate": "アドオンを有効化",
+      "learnMore": "詳細",
+      "contactSales": "営業に問い合わせる"
+    },
+    "kpi": {
+      "total": "総モジュール数",
+      "enabled": "有効",
+      "disabled": "無効",
+      "addons": "利用可能なアドオン"
+    },
+    "section": {
+      "core": "コアプラットフォームモジュール",
+      "addons": "プレミアムアドオン"
+    },
+    "status": {
+      "enabled": "有効",
+      "disabled": "無効",
+      "premium": "プレミアム機能",
+      "active": "稼働中"
+    },
     "modules": {
-      "booking": { "title": "予約システム", "desc": "顧客のオンライン予約と社内カレンダー管理を実現します。" },
-      "services": { "title": "サービス & トリートメント", "desc": "メニュー、カテゴリー、所要時間、料金ルールを管理します。" },
-      "crm": { "title": "顧客 CRM", "desc": "顧客プロフィール、来店履歴、嗜好、ロイヤリティポイントを管理します。" },
-      "staff": { "title": "スタッフ管理", "desc": "従業員管理、勤務時間記録、専門分野の割当を行います。" },
-      "reports": { "title": "レポート & 分析", "desc": "業績、売上、スタッフ稼働率を可視化します。" },
-      "blog": { "title": "ブログ CMS", "desc": "予約ポータル向けの SEO 記事とマーケティングコンテンツを作成します。" },
-      "marketing": { "title": "マーケティング自動化", "desc": "ターゲティング配信、プロモーション、メール自動配信を実行します。", "requires": "顧客 CRM モジュールが必要です" },
-      "inventory": { "title": "在庫管理", "desc": "店舗別の小売商品、業務用消耗品、在庫数を追跡します。" },
-      "recruitment": { "title": "採用管理", "desc": "求人掲載、応募者管理、採用ワークフローを運用します。" }
+      "booking": {
+        "title": "予約システム",
+        "desc": "顧客のオンライン予約と社内カレンダー管理を実現します。"
+      },
+      "services": {
+        "title": "サービス & トリートメント",
+        "desc": "メニュー、カテゴリー、所要時間、料金ルールを管理します。"
+      },
+      "crm": {
+        "title": "顧客 CRM",
+        "desc": "顧客プロフィール、来店履歴、嗜好、ロイヤリティポイントを管理します。"
+      },
+      "staff": {
+        "title": "スタッフ管理",
+        "desc": "従業員管理、勤務時間記録、専門分野の割当を行います。"
+      },
+      "reports": {
+        "title": "レポート & 分析",
+        "desc": "業績、売上、スタッフ稼働率を可視化します。"
+      },
+      "blog": {
+        "title": "ブログ CMS",
+        "desc": "予約ポータル向けの SEO 記事とマーケティングコンテンツを作成します。"
+      },
+      "marketing": {
+        "title": "マーケティング自動化",
+        "desc": "ターゲティング配信、プロモーション、メール自動配信を実行します。",
+        "requires": "顧客 CRM モジュールが必要です"
+      },
+      "inventory": {
+        "title": "在庫管理",
+        "desc": "店舗別の小売商品、業務用消耗品、在庫数を追跡します。"
+      },
+      "recruitment": {
+        "title": "採用管理",
+        "desc": "求人掲載、応募者管理、採用ワークフローを運用します。"
+      }
     },
     "addons": {
-      "ai": { "title": "AI マーケティングアシスタント", "desc": "スパブランドに合わせたメール文面、SNS 投稿、ブログ記事を AI が自動生成します。" },
-      "analytics": { "title": "Analytics Pro", "desc": "カスタムレポートビルダー、予測フォーキャスト、リアルタイムダッシュボードのエクスポートを利用できます。" },
-      "multiloc": { "title": "マルチロケーションインテリジェンス", "desc": "チェーン店向け。店舗間の業績比較、スタッフの負荷分散、グローバル在庫の統合を実現します。" }
+      "ai": {
+        "title": "AI マーケティングアシスタント",
+        "desc": "スパブランドに合わせたメール文面、SNS 投稿、ブログ記事を AI が自動生成します。"
+      },
+      "analytics": {
+        "title": "Analytics Pro",
+        "desc": "カスタムレポートビルダー、予測フォーキャスト、リアルタイムダッシュボードのエクスポートを利用できます。"
+      },
+      "multiloc": {
+        "title": "マルチロケーションインテリジェンス",
+        "desc": "チェーン店向け。店舗間の業績比較、スタッフの負荷分散、グローバル在庫の統合を実現します。"
+      }
     },
-    "preview": { "title": "モジュールプレビュー", "capabilities": "主な機能", "cap1Title": "オンラインポータル", "cap1Desc": "ホワイトラベル対応の 24 時間予約ページ。", "cap2Title": "スマートスケジューリング", "cap2Desc": "重複予約を防ぎ、スタッフの空き時間を自動調整します。", "cap3Title": "リマインダー", "cap3Desc": "メール・SMS の自動リマインドで無断キャンセルを削減します。" }
+    "preview": {
+      "title": "モジュールプレビュー",
+      "capabilities": "主な機能",
+      "cap1Title": "オンラインポータル",
+      "cap1Desc": "ホワイトラベル対応の 24 時間予約ページ。",
+      "cap2Title": "スマートスケジューリング",
+      "cap2Desc": "重複予約を防ぎ、スタッフの空き時間を自動調整します。",
+      "cap3Title": "リマインダー",
+      "cap3Desc": "メール・SMS の自動リマインドで無断キャンセルを削減します。"
+    }
   },
   "analytics": {
     "title": "プラットフォーム分析",
     "subtitle": "tenant-service から取得したテナント横断の集計データ。",
-    "kpi": { "tenants": "テナント", "branches": "店舗", "users": "ユーザー", "active": "稼働中テナント (30日)" },
+    "kpi": {
+      "tenants": "テナント",
+      "branches": "店舗",
+      "users": "ユーザー",
+      "active": "稼働中テナント (30日)"
+    },
     "kpiActiveHint": "booking-service がテナント単位の読取 API を提供した時点で接続されます。",
-    "recent": { "title": "新規テナント", "code": "コード", "name": "名称", "orgs": "組織", "branches": "店舗", "createdAt": "作成日", "empty": "テナントはまだありません。" },
-    "charts": { "soonTitle": "チャートは近日公開", "soonHint": "売上・スタッフ・店舗の比較には未提供の analytics-service / 請求データが必要です。" },
-    "errors": { "load": "プラットフォーム概要を読み込めませんでした。" }
+    "recent": {
+      "title": "新規テナント",
+      "code": "コード",
+      "name": "名称",
+      "orgs": "組織",
+      "branches": "店舗",
+      "createdAt": "作成日",
+      "empty": "テナントはまだありません。"
+    },
+    "charts": {
+      "soonTitle": "チャートは近日公開",
+      "soonHint": "売上・スタッフ・店舗の比較には未提供の analytics-service / 請求データが必要です。"
+    },
+    "errors": {
+      "load": "プラットフォーム概要を読み込めませんでした。"
+    }
   },
   "integration": {
     "title": "Webhooks",
     "subtitle": "ドメインイベントを外部システム (Zalo、Make.com、n8n など) に送信します。",
-    "actions": { "add": "Webhook を追加", "addDisabledHint": "近日公開", "toggle": "オン/オフ" },
-    "status": { "active": "稼働中", "paused": "一時停止" },
-    "deliveries": { "title": "最近の配信", "empty": "配信履歴はまだありません。" },
-    "errors": { "load": "Webhook 一覧を読み込めませんでした。" },
+    "actions": {
+      "add": "Webhook を追加",
+      "addDisabledHint": "近日公開",
+      "toggle": "オン/オフ"
+    },
+    "status": {
+      "active": "稼働中",
+      "paused": "一時停止"
+    },
+    "deliveries": {
+      "title": "最近の配信",
+      "empty": "配信履歴はまだありません。"
+    },
+    "errors": {
+      "load": "Webhook 一覧を読み込めませんでした。"
+    },
     "empty": "Webhook はまだ設定されていません。"
   },
   "onboarding": {
     "title": "テナントオンボーディング",
     "subtitle": "このテナントの標準セットアップ手順を順に進めます。",
     "currentStep": "現在のステップ",
-    "actions": { "advance": "次のステップへ", "complete": "完了としてマーク", "loading": "読み込み中…" },
-    "steps": { "welcome": "ようこそ", "org": "組織", "branch": "店舗", "team": "チーム", "done": "完了" },
-    "stepStatus": { "completed": "完了", "current": "現在", "pending": "未着手" },
+    "actions": {
+      "advance": "次のステップへ",
+      "complete": "完了としてマーク",
+      "loading": "読み込み中…"
+    },
+    "steps": {
+      "welcome": "ようこそ",
+      "org": "組織",
+      "branch": "店舗",
+      "team": "チーム",
+      "done": "完了"
+    },
+    "stepStatus": {
+      "completed": "完了",
+      "current": "現在",
+      "pending": "未着手"
+    },
     "completedAt": "完了日時",
     "startedAt": "開始日時",
-    "errors": { "load": "オンボーディング状態を読み込めませんでした。", "advance": "次のステップに進めませんでした。", "complete": "完了としてマークできませんでした。" }
+    "errors": {
+      "load": "オンボーディング状態を読み込めませんでした。",
+      "advance": "次のステップに進めませんでした。",
+      "complete": "完了としてマークできませんでした。"
+    }
   },
   "orgSettings": {
     "title": "組織設定",
     "subtitle": "このテナント配下の組織を読み取り専用で表示します。",
     "todoEdit": "組織詳細の編集はまだ利用できません — バックエンドの PUT エンドポイントが未提供です。",
-    "list": { "title": "組織一覧", "empty": "組織はまだありません。" },
-    "fields": { "code": "コード", "slug": "スラッグ", "name": "名称", "primaryLocale": "主要言語", "id": "ID" },
-    "errors": { "load": "組織一覧を読み込めませんでした。" }
+    "list": {
+      "title": "組織一覧",
+      "empty": "組織はまだありません。"
+    },
+    "fields": {
+      "code": "コード",
+      "slug": "スラッグ",
+      "name": "名称",
+      "primaryLocale": "主要言語",
+      "id": "ID"
+    },
+    "errors": {
+      "load": "組織一覧を読み込めませんでした。"
+    }
   }
 }

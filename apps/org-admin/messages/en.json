@@ -134,6 +134,133 @@
     "summary": "Access summary",
     "summaryDesc": "Users with this role will reach the following modules"
   },
+  "orgContent": {
+    "title": "Company content",
+    "subtitle": "Manage company profile pages, brand stories, leadership and PR content for your organisation.",
+    "options": "Options",
+    "createPost": "Create company post",
+    "search": "Search titles, slugs…",
+    "advancedFilters": "Advanced filters",
+    "views": "views",
+    "founderCeo": "Founder & CEO",
+    "hrDept": "HR Dept",
+    "prTeam": "PR Team",
+    "externalLink": "External link",
+    "unpublished": "Unpublished",
+    "viewAll": "View all",
+    "kpi": {
+      "totalPages": "Total pages",
+      "published": "Published",
+      "drafts": "Drafts",
+      "press": "Press articles",
+      "awards": "Awards"
+    },
+    "filter": {
+      "typeAll": "Content type: All",
+      "statusAll": "Status: All",
+      "dateAny": "Date: Any",
+      "last7": "Last 7 days",
+      "last30": "Last 30 days"
+    },
+    "type": {
+      "story": "Brand story",
+      "leader": "Leadership profile",
+      "press": "Press article",
+      "award": "Award / Cert"
+    },
+    "status": {
+      "published": "Published",
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "archived": "Archived"
+    },
+    "cols": {
+      "title": "Title & details",
+      "contentType": "Content type",
+      "author": "Author",
+      "status": "Status",
+      "dateMetrics": "Date & metrics",
+      "actions": "Actions"
+    },
+    "actions": {
+      "preview": "Preview",
+      "edit": "Edit",
+      "analytics": "Analytics",
+      "delete": "Delete"
+    },
+    "pagination": {
+      "showing": "Showing {from} to {to} of {total} pages"
+    }
+  },
+  "branchReport": {
+    "title": "Branch report",
+    "subtitle": "Monitor the daily and weekly performance of a specific branch.",
+    "branchLabel": "District 1 Spa",
+    "export": "Export report",
+    "viewAll": "View all",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "analytics": "Analytics"
+    },
+    "range": {
+      "today": "Today",
+      "last7": "Last 7 days",
+      "last30": "Last 30 days",
+      "custom": "Custom range…"
+    },
+    "kpi": {
+      "revenue": "Today's revenue",
+      "bookings": "Today's bookings",
+      "customers": "Customers today",
+      "staff": "Active staff",
+      "delta": "{value}%",
+      "stable": "Stable",
+      "utilization": "{value}% utilization",
+      "slotsRemaining": "{count} slots remaining",
+      "newReturning": "{newCount} new / {returningCount} returning",
+      "staffSplit": "{therapists} therapists / {reception} reception"
+    },
+    "charts": {
+      "revenueTitle": "Revenue trend",
+      "revenueSubtitle": "Daily performance over the selected period.",
+      "roomTitle": "Room utilisation",
+      "roomSubtitle": "Occupancy rate of treatment rooms today.",
+      "hourlyTitle": "Bookings per hour",
+      "hourlySubtitle": "Distribution of appointments across the day.",
+      "placeholder": "Charts will wire when analytics-service ships data."
+    },
+    "slots": {
+      "title": "Popular times",
+      "subtitle": "Busiest booking periods.",
+      "low": "Quiet",
+      "med": "Moderate",
+      "high": "Busy",
+      "peak": "Peak hours"
+    },
+    "mix": {
+      "massage": "Massage ({percent}%)",
+      "facial": "Facial ({percent}%)"
+    },
+    "servicePerf": {
+      "title": "Service performance",
+      "subtitle": "Top booked services today.",
+      "cols": {
+        "service": "Service",
+        "bookings": "Bookings",
+        "revenue": "Revenue"
+      }
+    },
+    "staffPerf": {
+      "title": "Staff performance",
+      "subtitle": "Therapist productivity for this branch.",
+      "cols": {
+        "name": "Staff name",
+        "services": "Services",
+        "revenue": "Revenue",
+        "rating": "Rating"
+      }
+    }
+  },
   "content": {
     "title": "Branch content",
     "subtitle": "Manage articles, promotions, events and local SEO pages per branch",

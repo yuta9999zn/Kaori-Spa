@@ -1,6 +1,12 @@
 {
-  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
-  "portal": { "name": "Quản lý Chi nhánh", "subtitle": "Branch Manager" },
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty"
+  },
+  "portal": {
+    "name": "Quản lý Chi nhánh",
+    "subtitle": "Branch Manager"
+  },
   "nav": {
     "dashboard": "Tổng quan",
     "booking": "Đặt lịch",
@@ -72,15 +78,30 @@
       "points": "Điểm",
       "spent": "Tổng chi"
     },
-    "segments": { "vip": "VIP", "regular": "Thường xuyên", "new": "Mới", "dormant": "Lâu chưa quay lại" }
+    "segments": {
+      "vip": "VIP",
+      "regular": "Thường xuyên",
+      "new": "Mới",
+      "dormant": "Lâu chưa quay lại"
+    }
   },
   "shift": {
     "title": "Quản lý ca làm việc",
     "subtitle": "Phân ca theo tháng — SÁNG / TỐI / FULL / NGHỈ",
-    "month": "Tháng", "year": "Năm",
-    "prev": "Trước", "next": "Sau", "today": "Hôm nay",
-    "save": "Lưu", "saved": "Đã lưu", "stats": "Thống kê",
-    "type": { "SANG": "SÁNG", "TOI": "TỐI", "FULL": "FULL", "NGHI": "NGHỈ" },
+    "month": "Tháng",
+    "year": "Năm",
+    "prev": "Trước",
+    "next": "Sau",
+    "today": "Hôm nay",
+    "save": "Lưu",
+    "saved": "Đã lưu",
+    "stats": "Thống kê",
+    "type": {
+      "SANG": "SÁNG",
+      "TOI": "TỐI",
+      "FULL": "FULL",
+      "NGHI": "NGHỈ"
+    },
     "typeFull": {
       "SANG": "Ca sáng (09:00-15:00)",
       "TOI": "Ca tối (15:00-21:00)",
@@ -92,11 +113,21 @@
   "attendance": {
     "title": "Chấm công",
     "subtitle": "Trạng thái nhân viên hôm nay",
-    "checkIn": "Vào ca", "checkOut": "Tan ca",
-    "expected": "Ca dự kiến", "in": "Vào", "out": "Ra", "worked": "Làm việc", "minutes": "phút",
+    "checkIn": "Vào ca",
+    "checkOut": "Tan ca",
+    "expected": "Ca dự kiến",
+    "in": "Vào",
+    "out": "Ra",
+    "worked": "Làm việc",
+    "minutes": "phút",
     "status": {
-      "scheduled": "Đã phân ca", "present": "Đúng giờ", "late": "Đi muộn",
-      "absent": "Vắng", "early_out": "Về sớm", "off": "Nghỉ", "no_shift": "Chưa phân ca"
+      "scheduled": "Đã phân ca",
+      "present": "Đúng giờ",
+      "late": "Đi muộn",
+      "absent": "Vắng",
+      "early_out": "Về sớm",
+      "off": "Nghỉ",
+      "no_shift": "Chưa phân ca"
     }
   },
   "room": {
@@ -108,9 +139,23 @@
     "capacity": "Sức chứa",
     "beds": "Giường",
     "noBeds": "Phòng này chưa có giường",
-    "type": { "normal": "Phòng thường", "vip": "Phòng VIP", "couple": "Phòng đôi", "laser": "Phòng laser" },
-    "bedType": { "standard": "Tiêu chuẩn", "massage": "Massage", "laser": "Laser", "vip": "VIP" },
-    "status": { "active": "Hoạt động", "maintenance": "Bảo trì", "retired": "Ngừng" }
+    "type": {
+      "normal": "Phòng thường",
+      "vip": "Phòng VIP",
+      "couple": "Phòng đôi",
+      "laser": "Phòng laser"
+    },
+    "bedType": {
+      "standard": "Tiêu chuẩn",
+      "massage": "Massage",
+      "laser": "Laser",
+      "vip": "VIP"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "maintenance": "Bảo trì",
+      "retired": "Ngừng"
+    }
   },
   "service": {
     "title": "Dịch vụ",
@@ -649,5 +694,820 @@
     "onlyUnread": "Chỉ hiển thị chưa đọc",
     "empty": "Không có thông báo nào",
     "markRead": "Đánh dấu đã đọc"
+  },
+  "serviceOverview": {
+    "title": "Tổng quan dịch vụ",
+    "subtitle": "Quản lý liệu trình, gói và giá ở mọi chi nhánh.",
+    "create": "Tạo dịch vụ",
+    "import": "Nhập",
+    "export": "Xuất",
+    "min": "phút",
+    "searchPh": "Tìm theo tên hoặc mã dịch vụ...",
+    "filterCategoryAll": "Danh mục: Tất cả",
+    "filterStatusAll": "Trạng thái: Tất cả",
+    "kpi": {
+      "total": "Tổng dịch vụ",
+      "active": "Đang hoạt động",
+      "inactive": "Ngừng",
+      "mostBooked": "Đặt nhiều nhất",
+      "avgDuration": "Thời lượng TB"
+    },
+    "cat": {
+      "massage": "Massage",
+      "facial": "Chăm sóc da",
+      "hair_removal": "Triệt lông",
+      "package": "Combo"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "inactive": "Ngừng"
+    },
+    "cols": {
+      "name": "Tên dịch vụ",
+      "category": "Danh mục",
+      "duration": "Thời lượng",
+      "price": "Giá",
+      "staffReq": "KTV cần",
+      "popularity": "Độ phổ biến",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    }
+  },
+  "serviceList": {
+    "title": "Danh sách dịch vụ",
+    "subtitle": "Xem dạng thẻ với hình ảnh, đánh giá và mô tả ngắn.",
+    "create": "Tạo dịch vụ",
+    "min": "phút",
+    "searchPh": "Tìm dịch vụ...",
+    "filterAll": "Danh mục: Tất cả",
+    "branchesCount": "{count} chi nhánh",
+    "cat": {
+      "massage": "Massage",
+      "facial": "Chăm sóc da",
+      "hair_removal": "Triệt lông",
+      "package": "Combo"
+    },
+    "sort": {
+      "popular": "Phổ biến nhất",
+      "name": "Tên A-Z",
+      "priceHigh": "Giá cao - thấp",
+      "newest": "Mới nhất"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "inactive": "Ngừng"
+    }
+  },
+  "serviceCategories": {
+    "title": "Danh mục dịch vụ",
+    "subtitle": "Tổ chức dịch vụ theo nhóm để khách hàng dễ tìm.",
+    "newCategory": "Tạo danh mục",
+    "searchPh": "Tìm danh mục...",
+    "kpi": {
+      "total": "Tổng danh mục",
+      "active": "Đang dùng",
+      "inactive": "Ngừng",
+      "uncategorized": "Chưa phân loại"
+    },
+    "cols": {
+      "name": "Tên danh mục",
+      "slug": "Mã URL",
+      "services": "Dịch vụ",
+      "active": "Đang bật",
+      "status": "Trạng thái",
+      "actions": "Thao tác"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "inactive": "Ngừng"
+    }
+  },
+  "servicePackages": {
+    "title": "Gói combo dịch vụ",
+    "subtitle": "Tạo gói liệu trình, ưu đãi và combo bán kèm.",
+    "newCombo": "Tạo gói combo",
+    "kpi": {
+      "total": "Tổng gói",
+      "active": "Đang bán",
+      "draft": "Bản nháp",
+      "expiringSoon": "Sắp hết hạn"
+    },
+    "serviceCount": "Số dịch vụ",
+    "discount": "Giảm",
+    "comboPrice": "Giá combo",
+    "validUntil": "Hiệu lực đến",
+    "edit": "Chỉnh sửa",
+    "promote": "Đẩy bán",
+    "audience": {
+      "label": "Đối tượng",
+      "all": "Tất cả",
+      "member": "Hội viên",
+      "vip": "Khách VIP"
+    },
+    "status": {
+      "active": "Đang bán",
+      "draft": "Nháp",
+      "expired": "Hết hạn"
+    }
+  },
+  "serviceImport": {
+    "title": "Nhập & đồng bộ dịch vụ",
+    "subtitle": "Tải lên file CSV/Excel hoặc đồng bộ từ POS đối tác.",
+    "newImport": "Nhập mới",
+    "downloadTemplate": "Tải mẫu",
+    "history": "Lịch sử nhập",
+    "methods": {
+      "csv": {
+        "title": "Nhập CSV / Excel",
+        "desc": "Tải file mẫu, điền dữ liệu và upload lên hệ thống.",
+        "cta": "Bắt đầu"
+      },
+      "api": {
+        "title": "Đồng bộ API",
+        "desc": "Kết nối POS như KiotViet, Misa để đồng bộ tự động.",
+        "cta": "Cấu hình"
+      },
+      "manual": {
+        "title": "Ánh xạ thủ công",
+        "desc": "Map cột dữ liệu giữa nguồn và Kaori trước khi nhập.",
+        "cta": "Mở mapper"
+      }
+    },
+    "quickUpload": {
+      "title": "Upload nhanh",
+      "desc": "Kéo thả file CSV / Excel vào đây hoặc bấm chọn file.",
+      "cta": "Chọn file"
+    },
+    "integrations": {
+      "title": "Tích hợp đang hoạt động",
+      "lastSync": "Đồng bộ cuối",
+      "connected": "Đã kết nối",
+      "notConnected": "Chưa kết nối",
+      "connect": "Kết nối"
+    },
+    "source": {
+      "csv": "CSV/Excel",
+      "api": "API",
+      "manual": "Thủ công"
+    },
+    "status": {
+      "completed": "Hoàn tất",
+      "partial": "Một phần",
+      "failed": "Lỗi"
+    },
+    "cols": {
+      "file": "Tên file",
+      "source": "Nguồn",
+      "rows": "Bản ghi",
+      "success": "Thành công",
+      "failed": "Lỗi",
+      "user": "Người chạy",
+      "time": "Thời gian",
+      "status": "Trạng thái"
+    }
+  },
+  "serviceContent": {
+    "title": "Quản lý nội dung dịch vụ",
+    "subtitle": "Mô tả, lợi ích, FAQ và hình ảnh hiển thị cho khách.",
+    "newContent": "Soạn nội dung",
+    "translate": "Dịch tự động",
+    "contentList": "Nội dung đã có",
+    "quickEditor": "Soạn nhanh",
+    "addImage": "Thêm ảnh",
+    "preview": "Xem trước",
+    "publish": "Xuất bản",
+    "kpi": {
+      "total": "Tổng nội dung",
+      "published": "Đã đăng",
+      "draft": "Nháp",
+      "review": "Chờ duyệt",
+      "translation": "Tỷ lệ dịch"
+    },
+    "type": {
+      "description": "Mô tả",
+      "benefits": "Lợi ích",
+      "process": "Quy trình",
+      "faq": "FAQ"
+    },
+    "status": {
+      "published": "Đã đăng",
+      "draft": "Nháp",
+      "review": "Chờ duyệt"
+    },
+    "cols": {
+      "title": "Tiêu đề",
+      "type": "Loại",
+      "lang": "Ngôn ngữ",
+      "status": "Trạng thái",
+      "updated": "Cập nhật",
+      "actions": "Thao tác"
+    },
+    "fields": {
+      "contentTitle": "Tiêu đề",
+      "titlePh": "VD: 5 lợi ích của triệt lông Diode",
+      "body": "Nội dung",
+      "bodyPh": "Soạn nội dung markdown..."
+    }
+  },
+  "serviceAvailability": {
+    "title": "Quy tắc khả dụng",
+    "subtitle": "Xác định khung giờ, ngày và sức chứa cho từng dịch vụ.",
+    "newRule": "Tạo quy tắc",
+    "ruleList": "Quy tắc đang áp dụng",
+    "appliesTo": "Áp dụng cho",
+    "capacity": "Sức chứa",
+    "kpi": {
+      "total": "Tổng quy tắc",
+      "active": "Đang chạy",
+      "paused": "Tạm dừng",
+      "exceptions": "Ngoại lệ",
+      "conflicts": "Xung đột"
+    },
+    "type": {
+      "standard": "Tiêu chuẩn",
+      "premium": "Cao cấp",
+      "maintenance": "Bảo trì"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "paused": "Tạm dừng"
+    },
+    "builder": {
+      "title": "Tạo quy tắc mới",
+      "ruleName": "Tên quy tắc",
+      "ruleNamePh": "VD: Massage buổi sáng T2-T6",
+      "applyTo": "Áp dụng cho",
+      "allServices": "Tất cả dịch vụ",
+      "byCategory": "Theo danh mục",
+      "specific": "Dịch vụ cụ thể",
+      "from": "Từ",
+      "to": "Đến",
+      "capacity": "Sức chứa tối đa",
+      "save": "Lưu quy tắc"
+    }
+  },
+  "serviceForm": {
+    "title": "Tạo dịch vụ mới",
+    "subtitle": "Khai báo thông tin cơ bản, giá, KTV và mô tả hiển thị.",
+    "cancel": "Huỷ",
+    "saveDraft": "Lưu nháp",
+    "publish": "Xuất bản",
+    "addTag": "Thêm tag",
+    "sections": {
+      "basic": "Thông tin cơ bản",
+      "pricing": "Giá & thời lượng",
+      "staff": "KTV & nguồn lực",
+      "media": "Hình ảnh & mô tả",
+      "advanced": "Cấu hình nâng cao",
+      "tags": "Nhãn"
+    },
+    "fields": {
+      "name": "Tên dịch vụ",
+      "code": "Mã nội bộ",
+      "category": "Danh mục",
+      "shortDesc": "Mô tả ngắn",
+      "shortDescPh": "Tóm tắt 1-2 câu hiển thị trên thẻ.",
+      "price": "Giá (VND)",
+      "discount": "Giảm giá %",
+      "duration": "Thời lượng (phút)",
+      "bufferTime": "Buffer giữa các slot (phút)",
+      "staffHint": "Chọn KTV được phép thực hiện dịch vụ này.",
+      "longDesc": "Mô tả chi tiết",
+      "longDescPh": "Liệu trình, lợi ích, lưu ý...",
+      "gender": "Giới tính áp dụng",
+      "minAge": "Tuổi tối thiểu"
+    },
+    "cat": {
+      "massage": "Massage",
+      "facial": "Chăm sóc da",
+      "hair_removal": "Triệt lông",
+      "package": "Combo"
+    },
+    "gender": {
+      "any": "Mọi giới tính",
+      "female": "Chỉ nữ",
+      "male": "Chỉ nam"
+    },
+    "flags": {
+      "requireRoom": "Yêu cầu phòng",
+      "allowOnline": "Cho phép đặt online",
+      "featured": "Hiển thị nổi bật"
+    },
+    "media": {
+      "upload": "Tải ảnh đại diện",
+      "hint": "PNG / JPG, tối đa 5MB. Khuyến nghị 1200×800."
+    }
+  },
+  "serviceDetail": {
+    "min": "phút",
+    "edit": "Chỉnh sửa",
+    "viewBookings": "Xem booking",
+    "description": "Mô tả dịch vụ",
+    "branchAvailability": "Tính khả dụng theo chi nhánh",
+    "assignedStaff": "KTV phụ trách",
+    "customerFeedback": "Đánh giá khách hàng",
+    "analytics": "Phân tích",
+    "relatedServices": "Dịch vụ liên quan",
+    "available": "Sẵn sàng",
+    "unavailable": "Không khả dụng",
+    "staffCount": "{count} KTV",
+    "breadcrumb": {
+      "services": "Dịch vụ"
+    },
+    "kpi": {
+      "bookings": "Tổng booking",
+      "revenue": "Doanh thu",
+      "completion": "Tỷ lệ hoàn tất",
+      "rating": "Đánh giá"
+    },
+    "cat": {
+      "massage": "Massage",
+      "facial": "Chăm sóc da",
+      "hair_removal": "Triệt lông",
+      "package": "Combo"
+    },
+    "analyticsRow": {
+      "thisMonth": "Tháng này",
+      "repeatRate": "Khách quay lại",
+      "cancelRate": "Tỷ lệ huỷ"
+    }
+  },
+  "customerLoyalty": {
+    "subtitle": "Quản lý điểm thưởng",
+    "goldMember": "Thành viên Vàng",
+    "adjust": "Điều chỉnh điểm",
+    "redeem": "Đổi thưởng",
+    "history": "Lịch sử giao dịch",
+    "typeAll": "Loại: Tất cả",
+    "type": {
+      "earned": "Tích điểm",
+      "redeemed": "Đã đổi",
+      "manual": "Điều chỉnh tay",
+      "expired": "Hết hạn"
+    },
+    "cols": {
+      "date": "Ngày & ID",
+      "typeSource": "Loại & nguồn",
+      "change": "Thay đổi",
+      "balance": "Số dư sau",
+      "notes": "Ghi chú"
+    },
+    "redeemFor10": "Đổi $10 giảm giá dịch vụ",
+    "managerDiscretion": "Quản lý duyệt",
+    "referralBonus": "Bonus giới thiệu khách - duyệt bởi Sarah M.",
+    "systemAuto": "Hệ thống tự động",
+    "expiredNote": "Điểm quá 12 tháng hết hạn",
+    "pts": "điểm",
+    "loyaltyCard": "Thẻ thành viên",
+    "availablePoints": "Điểm khả dụng",
+    "valueApprox": "≈ {value} giá trị",
+    "rewardCatalog": "Catalog phần thưởng",
+    "howEarned": "Cách tích điểm",
+    "rewards": {
+      "discount": "$10 giảm giá dịch vụ",
+      "applyAtCheckout": "Áp dụng khi thanh toán",
+      "essentialOil": "Tinh dầu miễn phí",
+      "retailProduct": "Sản phẩm bán lẻ",
+      "facial": "Facial miễn phí",
+      "facialDuration": "Dịch vụ 30 phút"
+    },
+    "rules": {
+      "standardRate": "Tỷ lệ chuẩn: 1 điểm / $4 dịch vụ",
+      "retailBonus": "Bonus retail: 2 điểm / $4 sản phẩm",
+      "expiry": "Điểm hết hạn sau 12 tháng tính từ ngày tích"
+    },
+    "kpi": {
+      "balance": "Số dư hiện tại",
+      "totalEarned": "Tổng đã tích (vĩnh viễn)",
+      "totalRedeemed": "Tổng đã đổi",
+      "expiringSoon": "Sắp hết hạn",
+      "next30d": "30 ngày tới"
+    }
+  },
+  "customerHealthNotes": {
+    "subtitle": "Hồ sơ sức khoẻ & ghi chú lâm sàng",
+    "editHealth": "Sửa thông tin sức khoẻ",
+    "addNote": "Thêm ghi chú",
+    "criticalAlerts": "Cảnh báo sức khoẻ quan trọng",
+    "alert": {
+      "allergy": "Dị ứng: {items}",
+      "condition": "Tình trạng: {item}"
+    },
+    "skinType": "Loại da & tình trạng",
+    "medicalHistory": "Tiền sử y tế / chấn thương",
+    "lastIntakeUpdate": "Lần cập nhật gần nhất",
+    "clinicalNotes": "Ghi chú lâm sàng",
+    "categoryAll": "Loại: Tất cả",
+    "category": {
+      "allergy": "Dị ứng",
+      "injury": "Chấn thương",
+      "preference": "Sở thích",
+      "progress": "Tiến triển"
+    },
+    "byStaff": "Bởi {name}",
+    "contraindications": "Chống chỉ định & dị ứng",
+    "wellnessAttributes": "Thuộc tính chăm sóc",
+    "massagePressure": "Lực massage",
+    "sensitivities": "Nhạy cảm khác",
+    "pressure": {
+      "light": "Nhẹ",
+      "medium": "Vừa",
+      "strong": "Mạnh"
+    },
+    "conditions": {
+      "lowBP": "Huyết áp thấp",
+      "recentSurgery": "Phẫu thuật gần đây"
+    },
+    "mock": {
+      "allergyNote": "Khách phản ứng nhẹ với tinh dầu lavender, đã đổi sang tinh dầu cam.",
+      "injuryNote": "Khách báo đau lưng dưới, tránh ấn mạnh vùng L4-L5.",
+      "preferenceNote": "Thích nhạc thiền, ánh sáng tối. Trà sau liệu trình: trà gừng.",
+      "medicalHistory": "Phẫu thuật gối phải 2024, không bệnh nền",
+      "sensitivities": "Nhạy cảm với mùi hương mạnh"
+    }
+  },
+  "customerCommunication": {
+    "title": "Giao tiếp khách hàng",
+    "subtitle": "Quản lý chiến dịch & tin nhắn đa kênh",
+    "sendMessage": "Gửi tin nhắn",
+    "createCampaign": "Tạo chiến dịch",
+    "campaigns": "Chiến dịch",
+    "quickSend": "Gửi nhanh",
+    "searchCustomer": "Tìm khách hàng",
+    "searchPlaceholder": "Nhập tên hoặc SĐT...",
+    "messageContent": "Nội dung tin nhắn",
+    "messagePlaceholder": "Soạn nội dung...",
+    "send": "Gửi",
+    "kpi": {
+      "sentToday": "Đã gửi hôm nay",
+      "activeCampaigns": "Chiến dịch đang chạy",
+      "deliveryRate": "Tỷ lệ gửi thành công",
+      "openRate": "Tỷ lệ mở (Email)",
+      "responseRate": "Tỷ lệ phản hồi / click"
+    },
+    "cols": {
+      "campaign": "Chiến dịch",
+      "channel": "Kênh",
+      "audience": "Đối tượng",
+      "sent": "Đã gửi",
+      "openRate": "Tỷ lệ mở",
+      "status": "Trạng thái"
+    },
+    "channel": {
+      "label": "Kênh giao tiếp",
+      "email": "Email",
+      "sms": "SMS",
+      "zalo": "Zalo"
+    },
+    "audience": {
+      "allCustomers": "Tất cả khách",
+      "vip": "VIP",
+      "regulars": "Khách thường"
+    },
+    "status": {
+      "active": "Đang chạy",
+      "scheduled": "Đã lên lịch",
+      "completed": "Hoàn thành"
+    }
+  },
+  "customerMembership": {
+    "subtitle": "Gói dịch vụ & thẻ thành viên",
+    "useSession": "Dùng buổi",
+    "addPackage": "Thêm gói",
+    "activePackages": "Gói đang hoạt động",
+    "packageHistory": "Lịch sử gói",
+    "sessionUsage": "Sử dụng buổi",
+    "expiry": "Hết hạn",
+    "price": "Giá",
+    "validThru": "Hiệu lực đến",
+    "memberLevel": "Hạng thành viên",
+    "activeBenefits": "Quyền lợi đang có",
+    "ofTotal": "của {total}",
+    "allServices": "Mọi dịch vụ",
+    "kpi": {
+      "activePackages": "Gói đang hoạt động",
+      "sessionsRemaining": "Buổi còn lại",
+      "expiredPackages": "Gói đã hết hạn",
+      "totalValue": "Tổng giá trị gói",
+      "membershipDiscount": "Giảm giá thành viên"
+    },
+    "cols": {
+      "package": "Gói",
+      "price": "Giá",
+      "usage": "Sử dụng",
+      "endDate": "Ngày kết thúc",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "active": "Đang hoạt động",
+      "expired": "Hết hạn",
+      "completed": "Hoàn thành"
+    },
+    "benefit": {
+      "discount": "10% giảm giá tất cả dịch vụ",
+      "priority": "Ưu tiên đặt lịch",
+      "birthday": "Quà sinh nhật đặc biệt",
+      "refer": "Thưởng giới thiệu khách"
+    }
+  },
+  "customerImportExport": {
+    "title": "Nhập / Xuất khách hàng",
+    "subtitle": "Import CSV/Excel hoặc export dữ liệu khách hàng",
+    "downloadTemplate": "Tải template",
+    "importSection": "Nhập dữ liệu",
+    "exportSection": "Xuất dữ liệu",
+    "dropZone": "Kéo file vào đây hoặc nhấp để chọn",
+    "supportedFormats": "Hỗ trợ CSV, XLSX (tối đa 10MB)",
+    "selectFile": "Chọn file",
+    "fieldMapping": "Mapping trường dữ liệu",
+    "mapping": {
+      "source": "Trường gốc",
+      "target": "Trường đích"
+    },
+    "previousJobs": "Lịch sử công việc",
+    "cols": {
+      "id": "ID",
+      "type": "Loại",
+      "file": "File",
+      "rows": "Số dòng",
+      "status": "Trạng thái",
+      "date": "Ngày",
+      "by": "Người thực hiện"
+    },
+    "type": {
+      "import": "Nhập",
+      "export": "Xuất"
+    },
+    "status": {
+      "success": "Thành công",
+      "failed": "Thất bại",
+      "partial": "Một phần"
+    },
+    "export": {
+      "dateRange": "Khoảng ngày (đăng ký)",
+      "segment": "Phân khúc khách hàng",
+      "allCustomers": "Tất cả khách hàng",
+      "format": "Định dạng file",
+      "run": "Xuất file"
+    }
+  },
+  "customerBookingHistory": {
+    "subtitle": "Lịch sử & lịch sắp tới",
+    "upcoming": "Lịch hẹn sắp tới",
+    "viewDetail": "Xem chi tiết",
+    "history": "Lịch sử booking",
+    "amount": "Giá",
+    "every3w": "~3 tuần",
+    "kpi": {
+      "totalVisits": "Tổng lượt",
+      "completed": "Hoàn thành",
+      "cancelled": "Đã huỷ",
+      "noShows": "Không đến",
+      "avgFreq": "Tần suất TB",
+      "avgSpend": "Chi tiêu / lượt"
+    },
+    "filter": {
+      "all": "Tất cả",
+      "completed": "Hoàn thành",
+      "cancelled": "Đã huỷ",
+      "noShow": "Không đến"
+    },
+    "cols": {
+      "code": "Mã",
+      "date": "Ngày & giờ",
+      "service": "Dịch vụ",
+      "staff": "KTV",
+      "amount": "Số tiền",
+      "payment": "Thanh toán",
+      "status": "Trạng thái",
+      "actions": "Hành động"
+    },
+    "payment": {
+      "paid": "Đã thanh toán",
+      "unpaid": "Chưa thanh toán",
+      "refunded": "Đã hoàn"
+    },
+    "status": {
+      "completed": "Hoàn thành",
+      "cancelled": "Đã huỷ",
+      "noShow": "Không đến",
+      "upcoming": "Sắp tới"
+    }
+  },
+  "customerPaymentHistory": {
+    "subtitle": "Hoá đơn & thanh toán",
+    "issueRefund": "Hoàn tiền",
+    "newInvoice": "Tạo hoá đơn",
+    "history": "Lịch sử thanh toán",
+    "kpi": {
+      "totalSpending": "Tổng chi tiêu",
+      "totalPayments": "Số lần thanh toán",
+      "totalRefunds": "Tổng đã hoàn",
+      "avgPayment": "Giá trị TB",
+      "preferredMethod": "Phương thức ưa dùng"
+    },
+    "filter": {
+      "all": "Tất cả"
+    },
+    "cols": {
+      "invoice": "Hoá đơn",
+      "date": "Ngày",
+      "type": "Loại",
+      "method": "Phương thức",
+      "bookingRef": "Booking",
+      "amount": "Số tiền",
+      "status": "Trạng thái"
+    },
+    "type": {
+      "payment": "Thanh toán",
+      "refund": "Hoàn tiền",
+      "partial": "Một phần",
+      "deposit": "Cọc"
+    },
+    "method": {
+      "card": "Thẻ",
+      "cash": "Tiền mặt",
+      "transfer": "Chuyển khoản",
+      "momo": "MoMo"
+    },
+    "status": {
+      "success": "Thành công",
+      "refunded": "Đã hoàn",
+      "pending": "Đang chờ"
+    }
+  },
+  "customerSegments": {
+    "title": "Phân khúc & Tag",
+    "subtitle": "Quản lý phân khúc khách hàng và tag",
+    "createTag": "Tạo tag",
+    "createSegment": "Tạo phân khúc",
+    "segments": "Phân khúc",
+    "tags": "Tag",
+    "quickRule": "Quy tắc nhanh",
+    "ruleHint": "Định nghĩa rule và xem preview số khách phù hợp.",
+    "preview": "Xem trước",
+    "matchingCustomers": "Khách phù hợp",
+    "view": "Xem",
+    "kpi": {
+      "totalSegments": "Tổng phân khúc",
+      "totalTags": "Tổng tag",
+      "taggedCustomers": "Khách có tag",
+      "largestSegment": "Phân khúc lớn nhất",
+      "inactiveSegment": "Phân khúc không hoạt động"
+    },
+    "cols": {
+      "segment": "Phân khúc",
+      "type": "Loại",
+      "count": "Số khách",
+      "trend": "Xu hướng",
+      "actions": "Hành động"
+    },
+    "type": {
+      "auto": "Tự động",
+      "manual": "Thủ công"
+    }
+  },
+  "customerAnalytics": {
+    "title": "Phân tích khách hàng",
+    "subtitle": "Insight & xu hướng khách hàng",
+    "growth": "Tăng trưởng khách hàng",
+    "sources": "Nguồn khách",
+    "spendingTiers": "Phân tầng chi tiêu",
+    "topCustomers": "Top khách hàng (LTV)",
+    "retentionAnalysis": "Phân tích giữ chân",
+    "churnAnalysis": "Phân tích rời bỏ",
+    "avgVisits": "Lượt TB / khách",
+    "visitFrequency": "Tần suất ghé",
+    "every45d": "Mỗi 45 ngày",
+    "inactiveCustomers": "Khách không hoạt động",
+    "atRisk": "Có nguy cơ (>60d)",
+    "chartPlaceholder": "Biểu đồ 8 tuần gần nhất",
+    "kpi": {
+      "totalDatabase": "Tổng database",
+      "newCustomers": "Khách mới",
+      "retention": "Tỷ lệ giữ chân",
+      "ltv": "LTV trung bình",
+      "avgPerVisit": "Chi tiêu / lượt",
+      "churn": "Tỷ lệ rời bỏ (>90d)"
+    },
+    "range": {
+      "30d": "30 ngày",
+      "90d": "90 ngày",
+      "year": "12 tháng"
+    },
+    "cols": {
+      "customer": "Khách",
+      "visits": "Lượt",
+      "ltv": "LTV"
+    },
+    "source": {
+      "direct": "Trực tiếp",
+      "referral": "Giới thiệu",
+      "social": "Mạng xã hội",
+      "walkin": "Walk-in",
+      "other": "Khác"
+    }
+  },
+  "customerForm": {
+    "title": "Tạo khách hàng mới",
+    "subtitle": "Nhập thông tin để tạo hồ sơ khách",
+    "save": "Lưu",
+    "cancel": "Huỷ",
+    "section": {
+      "basic": "Thông tin cơ bản",
+      "contact": "Liên hệ",
+      "membership": "Thành viên & trạng thái",
+      "health": "Sức khoẻ & sở thích",
+      "crm": "CRM & marketing"
+    },
+    "field": {
+      "firstName": "Tên",
+      "lastName": "Họ",
+      "gender": "Giới tính",
+      "dob": "Ngày sinh",
+      "phone": "Số điện thoại",
+      "email": "Email",
+      "address": "Địa chỉ",
+      "membershipLevel": "Hạng thành viên",
+      "accountStatus": "Trạng thái",
+      "registrationBranch": "Chi nhánh đăng ký",
+      "preferredTherapist": "KTV ưa thích",
+      "preferredRoom": "Loại phòng",
+      "skinCondition": "Tình trạng da",
+      "allergies": "Dị ứng đã biết",
+      "referralSource": "Nguồn giới thiệu",
+      "notes": "Ghi chú nội bộ"
+    },
+    "placeholder": {
+      "firstName": "Nguyễn",
+      "lastName": "Văn An",
+      "address": "Số nhà, đường, quận, thành phố",
+      "skinCondition": "Da hỗn hợp, nhạy cảm...",
+      "allergies": "Lavender, latex...",
+      "notes": "Lưu ý đặc biệt cho KTV..."
+    },
+    "gender": {
+      "female": "Nữ",
+      "male": "Nam",
+      "other": "Khác"
+    },
+    "level": {
+      "regular": "Thường",
+      "silver": "Bạc",
+      "gold": "Vàng",
+      "platinum": "Bạch kim"
+    },
+    "status": {
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động",
+      "blocked": "Khoá"
+    },
+    "room": {
+      "standard": "Chuẩn",
+      "couple": "Đôi",
+      "vip": "VIP"
+    },
+    "referral": {
+      "direct": "Trực tiếp",
+      "referral": "Giới thiệu",
+      "social": "Mạng xã hội",
+      "walkin": "Walk-in"
+    },
+    "duplicate": {
+      "title": "Số điện thoại có thể đã tồn tại",
+      "message": "Một khách hàng khác đang dùng số này. Hãy kiểm tra trước khi tiếp tục."
+    }
+  },
+  "staffOverview": {
+    "title": "Tổng quan nhân viên",
+    "subtitle": "Tình hình nhân sự & hiệu suất",
+    "viewAll": "Xem tất cả",
+    "addStaff": "Thêm nhân viên",
+    "workforceDistribution": "Phân bố vai trò",
+    "staffByBranch": "Nhân viên theo chi nhánh",
+    "todayStatus": "Tình trạng hôm nay",
+    "checkedIn": "Đã check-in",
+    "onLeaveToday": "Nghỉ hôm nay",
+    "recentActivity": "Hoạt động gần đây",
+    "topPerformers": "Top hiệu suất",
+    "thisMonth": "Tháng này",
+    "today": "Hôm nay",
+    "role": {
+      "therapist": "Kỹ thuật viên",
+      "receptionist": "Lễ tân",
+      "manager": "Quản lý",
+      "support": "Hỗ trợ"
+    },
+    "activity": {
+      "checkedIn": "Vừa check-in",
+      "completedShift": "Hoàn thành ca",
+      "onLeave": "Đăng ký nghỉ"
+    },
+    "kpi": {
+      "totalStaff": "Tổng nhân viên",
+      "workingToday": "Làm việc hôm nay",
+      "onLeave": "Đang nghỉ",
+      "newThisMonth": "Mới tháng này"
+    }
   }
 }

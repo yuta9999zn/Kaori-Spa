@@ -1,32 +1,199 @@
 {
-  "brand": { "platform": "Kaori" },
-  "portal": { "name": "Kaori 平台", "subtitle": "Tenant Administrator" },
+  "brand": {
+    "platform": "Kaori"
+  },
+  "portal": {
+    "name": "Kaori 平台",
+    "subtitle": "Tenant Administrator"
+  },
   "nav": {
-    "dashboard": "总览", "tenant": "租户", "members": "成员", "plan": "套餐",
-    "billing": "账单", "domain": "域名", "audit": "审计日志",
-    "integration": "集成", "feature": "功能", "branding": "品牌", "settings": "设置", "logout": "登出"
+    "dashboard": "总览",
+    "tenant": "租户",
+    "members": "成员",
+    "plan": "套餐",
+    "billing": "账单",
+    "domain": "域名",
+    "audit": "审计日志",
+    "integration": "集成",
+    "feature": "功能",
+    "branding": "品牌",
+    "settings": "设置",
+    "logout": "登出"
   },
   "dashboard": {
     "title": "平台总览",
-    "kpi": { "tenants": "活跃租户", "branches": "门店总数", "users": "用户", "mrr": "月度经常性收入" },
+    "kpi": {
+      "tenants": "活跃租户",
+      "branches": "门店总数",
+      "users": "用户",
+      "mrr": "月度经常性收入"
+    },
     "recentTenants": "最新租户"
   },
   "tenant": {
-    "title": "租户列表", "create": "添加租户",
-    "columns": { "code": "编号", "name": "名称", "plan": "套餐", "branches": "门店", "status": "状态", "createdAt": "创建时间" }
+    "title": "租户列表",
+    "create": "添加租户",
+    "columns": {
+      "code": "编号",
+      "name": "名称",
+      "plan": "套餐",
+      "branches": "门店",
+      "status": "状态",
+      "createdAt": "创建时间"
+    }
   },
-  "plan": { "title": "套餐", "starter": "起步版", "professional": "专业版", "enterprise": "企业版" },
+  "plan": {
+    "title": "套餐",
+    "starter": "起步版",
+    "professional": "专业版",
+    "enterprise": "企业版",
+    "subtitle": "Quản lý gói nền tảng, theo dõi giới hạn sử dụng và cập nhật thông tin thanh toán.",
+    "breadcrumb": {
+      "dashboard": "Tổng quan",
+      "settings": "Cài đặt"
+    },
+    "actions": {
+      "downloadInvoice": "Tải hoá đơn",
+      "upgrade": "Nâng cấp gói",
+      "cancel": "Huỷ đăng ký",
+      "changePlan": "Đổi gói",
+      "edit": "Chỉnh sửa"
+    },
+    "current": {
+      "activeBadge": "Đang hoạt động",
+      "perMonth": "mỗi tháng",
+      "nextBilling": "Ngày thanh toán tiếp theo",
+      "featuresTitle": "Tính năng của gói hiện tại",
+      "features": {
+        "branches": "Tối đa {count} chi nhánh đang hoạt động",
+        "staff": "{count} tài khoản nhân viên",
+        "customers": "Số lượng khách hàng không giới hạn",
+        "analytics": "Báo cáo & phân tích nâng cao",
+        "support": "Hỗ trợ ưu tiên qua email"
+      }
+    },
+    "usage": {
+      "title": "Mức sử dụng nền tảng",
+      "subtitle": "Tỷ lệ sử dụng hiện tại so với giới hạn của gói.",
+      "staff": "Tài khoản nhân viên",
+      "branches": "Chi nhánh đang hoạt động",
+      "storage": "Dung lượng lưu trữ",
+      "bookings": "Lịch hẹn trong tháng",
+      "unlimited": "Không giới hạn",
+      "scaleHint": "Sắp đạt giới hạn? Liên hệ đội thành công khách hàng để mở rộng tự động hoặc nhận ưu đãi doanh nghiệp."
+    },
+    "billing": {
+      "title": "Thông tin thanh toán",
+      "companyName": "Tên công ty",
+      "address": "Địa chỉ thanh toán",
+      "taxId": "Mã số thuế / VAT"
+    },
+    "payment": {
+      "title": "Phương thức thanh toán",
+      "holder": "Chủ thẻ",
+      "expires": "Hết hạn",
+      "addBank": "Thêm chuyển khoản",
+      "updateCard": "Cập nhật thẻ"
+    },
+    "invoices": {
+      "title": "Lịch sử hoá đơn",
+      "pdf": "PDF",
+      "cols": {
+        "id": "Mã hoá đơn",
+        "date": "Ngày",
+        "amount": "Số tiền",
+        "status": "Trạng thái",
+        "action": "Thao tác"
+      },
+      "status": {
+        "paid": "Đã thanh toán",
+        "pending": "Chờ thanh toán"
+      }
+    },
+    "compare": {
+      "title": "Bảng giá nền tảng",
+      "subtitle": "Mở rộng quy mô spa với các tính năng được thiết kế để tăng trưởng.",
+      "monthly": "Theo tháng",
+      "yearly": "Theo năm (Tiết kiệm 20%)",
+      "currentBadge": "Gói hiện tại",
+      "active": "Đang dùng",
+      "downgrade": "Hạ gói",
+      "upgradeEnterprise": "Nâng cấp Doanh nghiệp"
+    },
+    "tiers": {
+      "starter": {
+        "price": "690.000 ₫",
+        "priceShort": "690K",
+        "tagline": "Phù hợp với kỹ thuật viên độc lập và spa một chi nhánh.",
+        "f1": "1 chi nhánh đang hoạt động",
+        "f2": "Tối đa 5 nhân viên",
+        "f3": "Trang đặt lịch tiêu chuẩn",
+        "f4": "Báo cáo cơ bản"
+      },
+      "professional": {
+        "price": "1.890.000 ₫",
+        "priceShort": "1.89M",
+        "tagline": "Tất cả những gì cần để vận hành chuỗi spa nhiều chi nhánh.",
+        "f1": "Tối đa 5 chi nhánh hoạt động",
+        "f2": "Tối đa 50 nhân viên",
+        "f3": "Cổng đặt lịch white-label",
+        "f4": "Báo cáo & phân tích nâng cao",
+        "f5": "Hỗ trợ ưu tiên qua email"
+      },
+      "enterprise": {
+        "price": "4.790.000 ₫",
+        "priceShort": "4.79M",
+        "tagline": "Hạ tầng riêng cho chuỗi spa và franchise lớn.",
+        "f1": "Chi nhánh không giới hạn",
+        "f2": "Người dùng không giới hạn",
+        "f3": "Phát triển ứng dụng tuỳ chỉnh",
+        "f4": "Truy cập API & Webhook",
+        "f5": "Account Manager riêng 24/7"
+      }
+    }
+  },
   "audit": {
-    "title": "审计日志", "subtitle": "不可篡改的活动记录",
-    "columns": { "ts": "时间", "actor": "操作者", "action": "操作", "entity": "对象", "ip": "IP" }
+    "title": "审计日志",
+    "subtitle": "不可篡改的活动记录",
+    "columns": {
+      "ts": "时间",
+      "actor": "操作者",
+      "action": "操作",
+      "entity": "对象",
+      "ip": "IP"
+    }
   },
   "domain": {
     "title": "域名与预约 URL",
     "subtitle": "配置客户访问该组织在线预约页面与门户的方式。",
-    "actions": { "cancel": "取消", "save": "保存更改", "checkAvailability": "检查可用性", "disconnect": "断开连接", "verify": "验证域名", "renew": "手动续签证书", "readDocs": "查看完整文档" },
-    "subdomain": { "title": "平台子域名", "subtitle": "免费的默认预约地址。", "label": "子域名名称", "suffix": ".kaoriplatform.com", "available": "URL 可用且已生效。" },
-    "custom": { "title": "自定义域名", "subtitle": "连接您自己的网站域名。", "label": "自定义域名 URL", "connected": "已连接" },
-    "ssl": { "title": "SSL 证书", "statusLabel": "状态", "statusValue": "已生效且安全", "renewIn": "{days} 天后自动续签" },
+    "actions": {
+      "cancel": "取消",
+      "save": "保存更改",
+      "checkAvailability": "检查可用性",
+      "disconnect": "断开连接",
+      "verify": "验证域名",
+      "renew": "手动续签证书",
+      "readDocs": "查看完整文档"
+    },
+    "subdomain": {
+      "title": "平台子域名",
+      "subtitle": "免费的默认预约地址。",
+      "label": "子域名名称",
+      "suffix": ".kaoriplatform.com",
+      "available": "URL 可用且已生效。"
+    },
+    "custom": {
+      "title": "自定义域名",
+      "subtitle": "连接您自己的网站域名。",
+      "label": "自定义域名 URL",
+      "connected": "已连接"
+    },
+    "ssl": {
+      "title": "SSL 证书",
+      "statusLabel": "状态",
+      "statusValue": "已生效且安全",
+      "renewIn": "{days} 天后自动续签"
+    },
     "security": {
       "title": "域名安全",
       "forceHttps": "强制 HTTPS",
@@ -36,7 +203,12 @@
       "protection": "预约页面保护",
       "protectionHint": "要求客户登录后才能查看价格"
     },
-    "links": { "title": "公开预约链接", "main": "组织主页", "copy": "复制", "open": "打开链接" },
+    "links": {
+      "title": "公开预约链接",
+      "main": "组织主页",
+      "copy": "复制",
+      "open": "打开链接"
+    },
     "guide": {
       "title": "配置指南",
       "subtitle": "按以下步骤将自定义域名指向平台。",
@@ -49,92 +221,331 @@
       "step3Title": "验证连接",
       "step3Desc": "在自定义域名区域点击\"验证域名\"。DNS 传播最长可能需要 24 小时。"
     },
-    "preview": { "title": "客户视角", "subtitle": "预览生效中的预约门户。", "heading": "预约到店", "selectLocation": "请选择门店开始" }
+    "preview": {
+      "title": "客户视角",
+      "subtitle": "预览生效中的预约门户。",
+      "heading": "预约到店",
+      "selectLocation": "请选择门店开始"
+    }
   },
   "members": {
     "title": "工作空间成员",
     "subtitle": "管理可访问平台的用户、员工和管理员。",
-    "actions": { "export": "导出名单", "invite": "邀请用户", "search": "按姓名或邮箱搜索...", "viewProfile": "查看资料", "editRole": "编辑角色", "changeBranch": "更换门店", "deactivate": "停用", "reactivate": "重新启用", "remove": "移除用户", "resendInvite": "重新发送邀请" },
-    "kpi": { "total": "用户总数", "active": "活跃用户", "pending": "待确认邀请", "admins": "管理员" },
-    "filters": { "allRoles": "全部角色", "allBranches": "全部门店", "allStatuses": "全部状态", "sortNewest": "排序:最新", "sortAlpha": "排序:A-Z", "sortRole": "排序:角色" },
-    "columns": { "member": "成员信息", "role": "角色与权限", "branch": "所属门店", "status": "状态", "lastLogin": "最近登录", "actions": "操作" },
-    "roles": { "owner": "所有者", "manager": "经理", "therapist": "技师", "receptionist": "前台", "marketing": "市场", "hr": "人事" },
-    "status": { "active": "活跃", "invited": "已邀请", "suspended": "已停用", "global": "全局访问", "neverLogin": "从未登录" },
-    "pagination": { "showing": "显示", "to": "至", "of": "共", "users": "位用户", "previous": "上一页", "next": "下一页" }
+    "actions": {
+      "export": "导出名单",
+      "invite": "邀请用户",
+      "search": "按姓名或邮箱搜索...",
+      "viewProfile": "查看资料",
+      "editRole": "编辑角色",
+      "changeBranch": "更换门店",
+      "deactivate": "停用",
+      "reactivate": "重新启用",
+      "remove": "移除用户",
+      "resendInvite": "重新发送邀请"
+    },
+    "kpi": {
+      "total": "用户总数",
+      "active": "活跃用户",
+      "pending": "待确认邀请",
+      "admins": "管理员"
+    },
+    "filters": {
+      "allRoles": "全部角色",
+      "allBranches": "全部门店",
+      "allStatuses": "全部状态",
+      "sortNewest": "排序:最新",
+      "sortAlpha": "排序:A-Z",
+      "sortRole": "排序:角色"
+    },
+    "columns": {
+      "member": "成员信息",
+      "role": "角色与权限",
+      "branch": "所属门店",
+      "status": "状态",
+      "lastLogin": "最近登录",
+      "actions": "操作"
+    },
+    "roles": {
+      "owner": "所有者",
+      "manager": "经理",
+      "therapist": "技师",
+      "receptionist": "前台",
+      "marketing": "市场",
+      "hr": "人事"
+    },
+    "status": {
+      "active": "活跃",
+      "invited": "已邀请",
+      "suspended": "已停用",
+      "global": "全局访问",
+      "neverLogin": "从未登录"
+    },
+    "pagination": {
+      "showing": "显示",
+      "to": "至",
+      "of": "共",
+      "users": "位用户",
+      "previous": "上一页",
+      "next": "下一页"
+    }
   },
   "branding": {
     "title": "品牌与外观",
     "subtitle": "自定义您的水疗品牌在管理后台、预约门户和客户邮件中的呈现方式。",
-    "actions": { "reset": "恢复默认", "save": "保存品牌", "replace": "替换", "remove": "移除", "uploadMedia": "上传素材", "uploadImage": "上传图片", "uploadBanner": "上传横幅", "view": "查看", "addNew": "新增" },
-    "logo": { "title": "Logo 与图标", "primaryLabel": "主 Logo", "primaryHint": "显示在管理后台顶部和预约页面。建议使用透明底 PNG。", "faviconLabel": "Favicon / 应用图标", "faviconHint": "显示在浏览器标签页和移动应用图标上。建议方形 PNG 或 ICO。" },
-    "colors": { "title": "品牌色", "primary": "主色", "primaryHint": "按钮、激活链接", "secondary": "辅助色", "secondaryHint": "卡片、边框", "accent": "强调色", "accentHint": "高亮、标签", "background": "背景色", "backgroundHint": "应用背景" },
-    "typography": { "title": "字体", "heading": "标题字体", "body": "正文字体", "headingPreview": "尊享水疗体验", "bodyPreview": "放松。修复。焕新。我们的高端疗程旨在提升您的健康,抚慰您的心灵。" },
-    "login": { "title": "登录页外观", "welcome": "欢迎语", "background": "背景图", "overlay": "遮罩(透明度)" },
-    "booking": { "title": "预约门户", "pageTitle": "预约页标题", "tagline": "品牌口号", "banner": "横幅图片", "bannerHint": "建议尺寸 1920x600px" },
-    "email": { "title": "邮件模板", "headerLogo": "邮件头部 Logo", "headerBg": "头部背景色", "footer": "页脚 / 免责声明" },
-    "assets": { "title": "素材库" },
-    "preview": { "title": "实时预览", "subtitle": "查看品牌呈现给用户的效果。", "tabBooking": "预约页", "tabDashboard": "管理后台", "tabEmail": "邮件", "selectService": "选择服务", "bookButton": "预约到店", "realtime": "预览将实时更新" }
+    "actions": {
+      "reset": "恢复默认",
+      "save": "保存品牌",
+      "replace": "替换",
+      "remove": "移除",
+      "uploadMedia": "上传素材",
+      "uploadImage": "上传图片",
+      "uploadBanner": "上传横幅",
+      "view": "查看",
+      "addNew": "新增"
+    },
+    "logo": {
+      "title": "Logo 与图标",
+      "primaryLabel": "主 Logo",
+      "primaryHint": "显示在管理后台顶部和预约页面。建议使用透明底 PNG。",
+      "faviconLabel": "Favicon / 应用图标",
+      "faviconHint": "显示在浏览器标签页和移动应用图标上。建议方形 PNG 或 ICO。"
+    },
+    "colors": {
+      "title": "品牌色",
+      "primary": "主色",
+      "primaryHint": "按钮、激活链接",
+      "secondary": "辅助色",
+      "secondaryHint": "卡片、边框",
+      "accent": "强调色",
+      "accentHint": "高亮、标签",
+      "background": "背景色",
+      "backgroundHint": "应用背景"
+    },
+    "typography": {
+      "title": "字体",
+      "heading": "标题字体",
+      "body": "正文字体",
+      "headingPreview": "尊享水疗体验",
+      "bodyPreview": "放松。修复。焕新。我们的高端疗程旨在提升您的健康,抚慰您的心灵。"
+    },
+    "login": {
+      "title": "登录页外观",
+      "welcome": "欢迎语",
+      "background": "背景图",
+      "overlay": "遮罩(透明度)"
+    },
+    "booking": {
+      "title": "预约门户",
+      "pageTitle": "预约页标题",
+      "tagline": "品牌口号",
+      "banner": "横幅图片",
+      "bannerHint": "建议尺寸 1920x600px"
+    },
+    "email": {
+      "title": "邮件模板",
+      "headerLogo": "邮件头部 Logo",
+      "headerBg": "头部背景色",
+      "footer": "页脚 / 免责声明"
+    },
+    "assets": {
+      "title": "素材库"
+    },
+    "preview": {
+      "title": "实时预览",
+      "subtitle": "查看品牌呈现给用户的效果。",
+      "tabBooking": "预约页",
+      "tabDashboard": "管理后台",
+      "tabEmail": "邮件",
+      "selectService": "选择服务",
+      "bookButton": "预约到店",
+      "realtime": "预览将实时更新"
+    }
   },
   "feature": {
     "title": "功能模块",
     "subtitle": "启用或停用平台模块,精准定制您水疗业务的运营能力。",
-    "actions": { "reset": "恢复默认", "configure": "配置", "viewDetails": "查看详情", "activate": "激活附加功能", "learnMore": "了解更多", "contactSales": "联系销售" },
-    "kpi": { "total": "模块总数", "enabled": "已启用", "disabled": "已停用", "addons": "可用附加功能" },
-    "section": { "core": "核心平台模块", "addons": "高级附加功能" },
-    "status": { "enabled": "已启用", "disabled": "已停用", "premium": "高级功能", "active": "活跃" },
+    "actions": {
+      "reset": "恢复默认",
+      "configure": "配置",
+      "viewDetails": "查看详情",
+      "activate": "激活附加功能",
+      "learnMore": "了解更多",
+      "contactSales": "联系销售"
+    },
+    "kpi": {
+      "total": "模块总数",
+      "enabled": "已启用",
+      "disabled": "已停用",
+      "addons": "可用附加功能"
+    },
+    "section": {
+      "core": "核心平台模块",
+      "addons": "高级附加功能"
+    },
+    "status": {
+      "enabled": "已启用",
+      "disabled": "已停用",
+      "premium": "高级功能",
+      "active": "活跃"
+    },
     "modules": {
-      "booking": { "title": "预约系统", "desc": "支持客户在线预约,并管理内部日程。" },
-      "services": { "title": "服务与疗程", "desc": "管理水疗疗程、服务类别、时长和价格规则。" },
-      "crm": { "title": "客户 CRM", "desc": "管理客户档案、到店记录、偏好和积分。" },
-      "staff": { "title": "员工管理", "desc": "管理员工、记录工时并分配专业领域。" },
-      "reports": { "title": "报表与分析", "desc": "查看业务表现、营收和员工利用率。" },
-      "blog": { "title": "博客 CMS", "desc": "为预约门户创建 SEO 文章和营销内容。" },
-      "marketing": { "title": "营销自动化", "desc": "运行精准投放活动、促销和自动化邮件。", "requires": "需要客户 CRM 模块" },
-      "inventory": { "title": "库存管理", "desc": "跟踪零售产品、专业用品及各门店的库存水平。" },
-      "recruitment": { "title": "招聘管理", "desc": "管理招聘信息、应聘者跟进和录用流程。" }
+      "booking": {
+        "title": "预约系统",
+        "desc": "支持客户在线预约,并管理内部日程。"
+      },
+      "services": {
+        "title": "服务与疗程",
+        "desc": "管理水疗疗程、服务类别、时长和价格规则。"
+      },
+      "crm": {
+        "title": "客户 CRM",
+        "desc": "管理客户档案、到店记录、偏好和积分。"
+      },
+      "staff": {
+        "title": "员工管理",
+        "desc": "管理员工、记录工时并分配专业领域。"
+      },
+      "reports": {
+        "title": "报表与分析",
+        "desc": "查看业务表现、营收和员工利用率。"
+      },
+      "blog": {
+        "title": "博客 CMS",
+        "desc": "为预约门户创建 SEO 文章和营销内容。"
+      },
+      "marketing": {
+        "title": "营销自动化",
+        "desc": "运行精准投放活动、促销和自动化邮件。",
+        "requires": "需要客户 CRM 模块"
+      },
+      "inventory": {
+        "title": "库存管理",
+        "desc": "跟踪零售产品、专业用品及各门店的库存水平。"
+      },
+      "recruitment": {
+        "title": "招聘管理",
+        "desc": "管理招聘信息、应聘者跟进和录用流程。"
+      }
     },
     "addons": {
-      "ai": { "title": "AI 营销助手", "desc": "基于先进 AI 自动生成贴合您水疗品牌的邮件文案、社交媒体帖子和博客文章。" },
-      "analytics": { "title": "高级分析 Pro", "desc": "解锁自定义报表生成器、预测分析和实时仪表盘导出等深度洞察。" },
-      "multiloc": { "title": "多门店智能", "desc": "专为连锁门店设计:对比门店表现、跨门店调配人员、统一全局库存。" }
+      "ai": {
+        "title": "AI 营销助手",
+        "desc": "基于先进 AI 自动生成贴合您水疗品牌的邮件文案、社交媒体帖子和博客文章。"
+      },
+      "analytics": {
+        "title": "高级分析 Pro",
+        "desc": "解锁自定义报表生成器、预测分析和实时仪表盘导出等深度洞察。"
+      },
+      "multiloc": {
+        "title": "多门店智能",
+        "desc": "专为连锁门店设计:对比门店表现、跨门店调配人员、统一全局库存。"
+      }
     },
-    "preview": { "title": "模块预览", "capabilities": "核心能力", "cap1Title": "在线门户", "cap1Desc": "全天候(24/7)运行的白标预约页面。", "cap2Title": "智能排程", "cap2Desc": "防止重复预约,自动管理员工空档。", "cap3Title": "提醒", "cap3Desc": "邮件和短信自动提醒,降低爽约率。" }
+    "preview": {
+      "title": "模块预览",
+      "capabilities": "核心能力",
+      "cap1Title": "在线门户",
+      "cap1Desc": "全天候(24/7)运行的白标预约页面。",
+      "cap2Title": "智能排程",
+      "cap2Desc": "防止重复预约,自动管理员工空档。",
+      "cap3Title": "提醒",
+      "cap3Desc": "邮件和短信自动提醒,降低爽约率。"
+    }
   },
   "analytics": {
     "title": "平台分析",
     "subtitle": "来自 tenant-service 的跨租户汇总数据。",
-    "kpi": { "tenants": "租户", "branches": "门店", "users": "用户", "active": "活跃租户(30 天)" },
+    "kpi": {
+      "tenants": "租户",
+      "branches": "门店",
+      "users": "用户",
+      "active": "活跃租户(30 天)"
+    },
     "kpiActiveHint": "待 booking-service 提供按租户读取接口后接入。",
-    "recent": { "title": "最新租户", "code": "编号", "name": "名称", "orgs": "组织", "branches": "门店", "createdAt": "创建时间", "empty": "暂无租户。" },
-    "charts": { "soonTitle": "图表即将上线", "soonHint": "营收、员工与门店对比需要 analytics-service / 账单数据,目前尚未提供。" },
-    "errors": { "load": "无法加载平台总览。" }
+    "recent": {
+      "title": "最新租户",
+      "code": "编号",
+      "name": "名称",
+      "orgs": "组织",
+      "branches": "门店",
+      "createdAt": "创建时间",
+      "empty": "暂无租户。"
+    },
+    "charts": {
+      "soonTitle": "图表即将上线",
+      "soonHint": "营收、员工与门店对比需要 analytics-service / 账单数据,目前尚未提供。"
+    },
+    "errors": {
+      "load": "无法加载平台总览。"
+    }
   },
   "integration": {
     "title": "Webhooks",
     "subtitle": "将领域事件推送至外部系统(Zalo、Make.com、n8n 等)。",
-    "actions": { "add": "添加 Webhook", "addDisabledHint": "即将上线", "toggle": "启用/停用" },
-    "status": { "active": "运行中", "paused": "已暂停" },
-    "deliveries": { "title": "最近投递", "empty": "暂无投递记录。" },
-    "errors": { "load": "无法加载 Webhook 列表。" },
+    "actions": {
+      "add": "添加 Webhook",
+      "addDisabledHint": "即将上线",
+      "toggle": "启用/停用"
+    },
+    "status": {
+      "active": "运行中",
+      "paused": "已暂停"
+    },
+    "deliveries": {
+      "title": "最近投递",
+      "empty": "暂无投递记录。"
+    },
+    "errors": {
+      "load": "无法加载 Webhook 列表。"
+    },
     "empty": "尚未配置任何 Webhook。"
   },
   "onboarding": {
     "title": "租户入门",
     "subtitle": "依次完成该租户的标准初始化步骤。",
     "currentStep": "当前步骤",
-    "actions": { "advance": "进入下一步", "complete": "标记完成", "loading": "加载中…" },
-    "steps": { "welcome": "欢迎", "org": "组织", "branch": "门店", "team": "团队", "done": "完成" },
-    "stepStatus": { "completed": "已完成", "current": "进行中", "pending": "待处理" },
+    "actions": {
+      "advance": "进入下一步",
+      "complete": "标记完成",
+      "loading": "加载中…"
+    },
+    "steps": {
+      "welcome": "欢迎",
+      "org": "组织",
+      "branch": "门店",
+      "team": "团队",
+      "done": "完成"
+    },
+    "stepStatus": {
+      "completed": "已完成",
+      "current": "进行中",
+      "pending": "待处理"
+    },
     "completedAt": "完成时间",
     "startedAt": "开始时间",
-    "errors": { "load": "无法加载入门状态。", "advance": "无法进入下一步。", "complete": "无法标记为已完成。" }
+    "errors": {
+      "load": "无法加载入门状态。",
+      "advance": "无法进入下一步。",
+      "complete": "无法标记为已完成。"
+    }
   },
   "orgSettings": {
     "title": "组织设置",
     "subtitle": "以只读模式查看该租户下的组织。",
     "todoEdit": "暂不支持编辑组织详情 —— 后端 PUT 接口尚未上线。",
-    "list": { "title": "组织列表", "empty": "暂无组织。" },
-    "fields": { "code": "编号", "slug": "Slug", "name": "名称", "primaryLocale": "主要语言", "id": "ID" },
-    "errors": { "load": "无法加载组织列表。" }
+    "list": {
+      "title": "组织列表",
+      "empty": "暂无组织。"
+    },
+    "fields": {
+      "code": "编号",
+      "slug": "Slug",
+      "name": "名称",
+      "primaryLocale": "主要语言",
+      "id": "ID"
+    },
+    "errors": {
+      "load": "无法加载组织列表。"
+    }
   }
 }
