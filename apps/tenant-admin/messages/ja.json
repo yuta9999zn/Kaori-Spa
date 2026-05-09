@@ -47,108 +47,108 @@
     "starter": "スターター",
     "professional": "プロ",
     "enterprise": "エンタープライズ",
-    "subtitle": "Quản lý gói nền tảng, theo dõi giới hạn sử dụng và cập nhật thông tin thanh toán.",
+    "subtitle": "プラットフォームのプランを管理し、使用量を確認、請求情報を更新します。",
     "breadcrumb": {
-      "dashboard": "Tổng quan",
-      "settings": "Cài đặt"
+      "dashboard": "ダッシュボード",
+      "settings": "設定"
     },
     "actions": {
-      "downloadInvoice": "Tải hoá đơn",
-      "upgrade": "Nâng cấp gói",
-      "cancel": "Huỷ đăng ký",
-      "changePlan": "Đổi gói",
-      "edit": "Chỉnh sửa"
+      "downloadInvoice": "請求書をダウンロード",
+      "upgrade": "プランをアップグレード",
+      "cancel": "サブスクリプションを解約",
+      "changePlan": "プラン変更",
+      "edit": "編集"
     },
     "current": {
-      "activeBadge": "Đang hoạt động",
-      "perMonth": "mỗi tháng",
-      "nextBilling": "Ngày thanh toán tiếp theo",
-      "featuresTitle": "Tính năng của gói hiện tại",
+      "activeBadge": "稼働中",
+      "perMonth": "月額",
+      "nextBilling": "次回請求日",
+      "featuresTitle": "現在のプランの機能",
       "features": {
-        "branches": "Tối đa {count} chi nhánh đang hoạt động",
-        "staff": "{count} tài khoản nhân viên",
-        "customers": "Số lượng khách hàng không giới hạn",
-        "analytics": "Báo cáo & phân tích nâng cao",
-        "support": "Hỗ trợ ưu tiên qua email"
+        "branches": "最大 {count} 店舗まで稼働可能",
+        "staff": "{count} スタッフアカウント",
+        "customers": "顧客数は無制限",
+        "analytics": "高度なレポート & 分析",
+        "support": "メール優先サポート"
       }
     },
     "usage": {
-      "title": "Mức sử dụng nền tảng",
-      "subtitle": "Tỷ lệ sử dụng hiện tại so với giới hạn của gói.",
-      "staff": "Tài khoản nhân viên",
-      "branches": "Chi nhánh đang hoạt động",
-      "storage": "Dung lượng lưu trữ",
-      "bookings": "Lịch hẹn trong tháng",
-      "unlimited": "Không giới hạn",
-      "scaleHint": "Sắp đạt giới hạn? Liên hệ đội thành công khách hàng để mở rộng tự động hoặc nhận ưu đãi doanh nghiệp."
+      "title": "プラットフォーム使用状況",
+      "subtitle": "プラン上限に対する現在の使用率。",
+      "staff": "スタッフアカウント",
+      "branches": "稼働中の店舗",
+      "storage": "ストレージ容量",
+      "bookings": "月間予約",
+      "unlimited": "無制限",
+      "scaleHint": "上限が近づいていますか?カスタマーサクセスチームにご連絡いただければ、スケールアップやエンタープライズ特典をご提案します。"
     },
     "billing": {
-      "title": "Thông tin thanh toán",
-      "companyName": "Tên công ty",
-      "address": "Địa chỉ thanh toán",
-      "taxId": "Mã số thuế / VAT"
+      "title": "請求情報",
+      "companyName": "会社名",
+      "address": "請求先住所",
+      "taxId": "税番号 / VAT"
     },
     "payment": {
-      "title": "Phương thức thanh toán",
-      "holder": "Chủ thẻ",
-      "expires": "Hết hạn",
-      "addBank": "Thêm chuyển khoản",
-      "updateCard": "Cập nhật thẻ"
+      "title": "支払方法",
+      "holder": "カード名義人",
+      "expires": "有効期限",
+      "addBank": "銀行振込を追加",
+      "updateCard": "カードを更新"
     },
     "invoices": {
-      "title": "Lịch sử hoá đơn",
+      "title": "請求書履歴",
       "pdf": "PDF",
       "cols": {
-        "id": "Mã hoá đơn",
-        "date": "Ngày",
-        "amount": "Số tiền",
-        "status": "Trạng thái",
-        "action": "Thao tác"
+        "id": "請求書番号",
+        "date": "日付",
+        "amount": "金額",
+        "status": "状態",
+        "action": "操作"
       },
       "status": {
-        "paid": "Đã thanh toán",
-        "pending": "Chờ thanh toán"
+        "paid": "支払済",
+        "pending": "支払待ち"
       }
     },
     "compare": {
-      "title": "Bảng giá nền tảng",
-      "subtitle": "Mở rộng quy mô spa với các tính năng được thiết kế để tăng trưởng.",
-      "monthly": "Theo tháng",
-      "yearly": "Theo năm (Tiết kiệm 20%)",
-      "currentBadge": "Gói hiện tại",
-      "active": "Đang dùng",
-      "downgrade": "Hạ gói",
-      "upgradeEnterprise": "Nâng cấp Doanh nghiệp"
+      "title": "プラットフォーム料金",
+      "subtitle": "成長を支える機能でスパビジネスを拡大しましょう。",
+      "monthly": "月額",
+      "yearly": "年額 (20% お得)",
+      "currentBadge": "現在のプラン",
+      "active": "利用中",
+      "downgrade": "ダウングレード",
+      "upgradeEnterprise": "エンタープライズへ"
     },
     "tiers": {
       "starter": {
         "price": "690.000 ₫",
         "priceShort": "690K",
-        "tagline": "Phù hợp với kỹ thuật viên độc lập và spa một chi nhánh.",
-        "f1": "1 chi nhánh đang hoạt động",
-        "f2": "Tối đa 5 nhân viên",
-        "f3": "Trang đặt lịch tiêu chuẩn",
-        "f4": "Báo cáo cơ bản"
+        "tagline": "独立セラピストや単店舗スパに最適。",
+        "f1": "稼働中 1 店舗",
+        "f2": "スタッフ最大 5 名",
+        "f3": "標準予約ページ",
+        "f4": "基本レポート"
       },
       "professional": {
         "price": "1.890.000 ₫",
         "priceShort": "1.89M",
-        "tagline": "Tất cả những gì cần để vận hành chuỗi spa nhiều chi nhánh.",
-        "f1": "Tối đa 5 chi nhánh hoạt động",
-        "f2": "Tối đa 50 nhân viên",
-        "f3": "Cổng đặt lịch white-label",
-        "f4": "Báo cáo & phân tích nâng cao",
-        "f5": "Hỗ trợ ưu tiên qua email"
+        "tagline": "多店舗スパ運営に必要なすべてを。",
+        "f1": "稼働中 最大 5 店舗",
+        "f2": "スタッフ最大 50 名",
+        "f3": "ホワイトラベル予約ポータル",
+        "f4": "高度なレポート & 分析",
+        "f5": "メール優先サポート"
       },
       "enterprise": {
         "price": "4.790.000 ₫",
         "priceShort": "4.79M",
-        "tagline": "Hạ tầng riêng cho chuỗi spa và franchise lớn.",
-        "f1": "Chi nhánh không giới hạn",
-        "f2": "Người dùng không giới hạn",
-        "f3": "Phát triển ứng dụng tuỳ chỉnh",
-        "f4": "Truy cập API & Webhook",
-        "f5": "Account Manager riêng 24/7"
+        "tagline": "大規模スパチェーン・フランチャイズ向けの専用インフラ。",
+        "f1": "店舗数無制限",
+        "f2": "ユーザー数無制限",
+        "f3": "カスタムアプリ開発",
+        "f4": "API & Webhook アクセス",
+        "f5": "24/7 専任アカウントマネージャー"
       }
     }
   },

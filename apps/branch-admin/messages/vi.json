@@ -276,6 +276,59 @@
     "delete": "Xoá",
     "view": "Xem"
   },
+  "report": {
+    "title": "Báo cáo doanh thu",
+    "subtitle": "Tổng hợp doanh thu, chi phí và lợi nhuận theo tháng",
+    "export": "Xuất Excel",
+    "monthShort": "T{month}",
+    "workingDays": "{days} ngày làm việc",
+    "kpi": {
+      "total": "Tổng doanh thu",
+      "totalDelta": "+{value}% so với tháng trước",
+      "services": "Dịch vụ",
+      "servicesShare": "{pct}% tổng doanh thu",
+      "cosmetics": "Mỹ phẩm",
+      "cosmeticsShare": "{pct}% tổng doanh thu",
+      "expenses": "Chi phí",
+      "expensesShare": "{pct}% tổng doanh thu"
+    },
+    "sections": {
+      "dailyRevenue": "Doanh thu T{month} theo ngày",
+      "chartHint": "Hover để xem chi tiết từng ngày",
+      "pl": "Báo cáo Lãi & Lỗ",
+      "paymentMix": "Phương thức thanh toán",
+      "dailyLog": "Nhật ký theo ngày",
+      "yearly": "Tổng quan năm {year}"
+    },
+    "pl": {
+      "revenue": "Doanh thu",
+      "servicesLine": "Doanh thu dịch vụ",
+      "cosmeticsLine": "Doanh thu mỹ phẩm",
+      "expenses": "Tổng chi phí",
+      "profit": "Lợi nhuận"
+    },
+    "columns": {
+      "date": "Ngày",
+      "services": "Dịch vụ",
+      "cosmetics": "Mỹ phẩm",
+      "total": "Tổng"
+    },
+    "expense": {
+      "towels": "Khăn giặt",
+      "supplies": "Vật tư tiêu hao",
+      "rent": "Mặt bằng",
+      "marketing": "Marketing",
+      "utilities": "Điện nước",
+      "salary": "Lương",
+      "other": "Khác"
+    },
+    "payment": {
+      "cash": "Tiền mặt",
+      "transfer": "Chuyển khoản",
+      "company": "Công nợ",
+      "card": "Thẻ"
+    }
+  },
   "reportBranch": {
     "title": "Tổng hợp tháng",
     "subtitle": "Báo cáo doanh thu, chi phí và lợi nhuận của chi nhánh trong tháng",

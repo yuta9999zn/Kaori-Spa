@@ -47,108 +47,108 @@
     "starter": "起步版",
     "professional": "专业版",
     "enterprise": "企业版",
-    "subtitle": "Quản lý gói nền tảng, theo dõi giới hạn sử dụng và cập nhật thông tin thanh toán.",
+    "subtitle": "管理平台订阅、查看用量上限并更新结算信息。",
     "breadcrumb": {
-      "dashboard": "Tổng quan",
-      "settings": "Cài đặt"
+      "dashboard": "总览",
+      "settings": "设置"
     },
     "actions": {
-      "downloadInvoice": "Tải hoá đơn",
-      "upgrade": "Nâng cấp gói",
-      "cancel": "Huỷ đăng ký",
-      "changePlan": "Đổi gói",
-      "edit": "Chỉnh sửa"
+      "downloadInvoice": "下载发票",
+      "upgrade": "升级套餐",
+      "cancel": "取消订阅",
+      "changePlan": "更换套餐",
+      "edit": "编辑"
     },
     "current": {
-      "activeBadge": "Đang hoạt động",
-      "perMonth": "mỗi tháng",
-      "nextBilling": "Ngày thanh toán tiếp theo",
-      "featuresTitle": "Tính năng của gói hiện tại",
+      "activeBadge": "订阅生效中",
+      "perMonth": "每月",
+      "nextBilling": "下一次结算日",
+      "featuresTitle": "当前套餐功能",
       "features": {
-        "branches": "Tối đa {count} chi nhánh đang hoạt động",
-        "staff": "{count} tài khoản nhân viên",
-        "customers": "Số lượng khách hàng không giới hạn",
-        "analytics": "Báo cáo & phân tích nâng cao",
-        "support": "Hỗ trợ ưu tiên qua email"
+        "branches": "最多 {count} 家活跃门店",
+        "staff": "{count} 个员工账号",
+        "customers": "客户档案不限量",
+        "analytics": "高级分析与报表",
+        "support": "邮件优先支持"
       }
     },
     "usage": {
-      "title": "Mức sử dụng nền tảng",
-      "subtitle": "Tỷ lệ sử dụng hiện tại so với giới hạn của gói.",
-      "staff": "Tài khoản nhân viên",
-      "branches": "Chi nhánh đang hoạt động",
-      "storage": "Dung lượng lưu trữ",
-      "bookings": "Lịch hẹn trong tháng",
-      "unlimited": "Không giới hạn",
-      "scaleHint": "Sắp đạt giới hạn? Liên hệ đội thành công khách hàng để mở rộng tự động hoặc nhận ưu đãi doanh nghiệp."
+      "title": "平台用量",
+      "subtitle": "当前用量与套餐上限对比。",
+      "staff": "员工账号",
+      "branches": "活跃门店",
+      "storage": "存储空间",
+      "bookings": "当月预约",
+      "unlimited": "不限",
+      "scaleHint": "即将达到上限?联系客户成功团队即可弹性扩容,或获取企业优惠。"
     },
     "billing": {
-      "title": "Thông tin thanh toán",
-      "companyName": "Tên công ty",
-      "address": "Địa chỉ thanh toán",
-      "taxId": "Mã số thuế / VAT"
+      "title": "结算信息",
+      "companyName": "公司名称",
+      "address": "账单地址",
+      "taxId": "税号 / VAT"
     },
     "payment": {
-      "title": "Phương thức thanh toán",
-      "holder": "Chủ thẻ",
-      "expires": "Hết hạn",
-      "addBank": "Thêm chuyển khoản",
-      "updateCard": "Cập nhật thẻ"
+      "title": "支付方式",
+      "holder": "持卡人",
+      "expires": "有效期",
+      "addBank": "添加银行转账",
+      "updateCard": "更新银行卡"
     },
     "invoices": {
-      "title": "Lịch sử hoá đơn",
+      "title": "发票历史",
       "pdf": "PDF",
       "cols": {
-        "id": "Mã hoá đơn",
-        "date": "Ngày",
-        "amount": "Số tiền",
-        "status": "Trạng thái",
-        "action": "Thao tác"
+        "id": "发票编号",
+        "date": "日期",
+        "amount": "金额",
+        "status": "状态",
+        "action": "操作"
       },
       "status": {
-        "paid": "Đã thanh toán",
-        "pending": "Chờ thanh toán"
+        "paid": "已支付",
+        "pending": "待支付"
       }
     },
     "compare": {
-      "title": "Bảng giá nền tảng",
-      "subtitle": "Mở rộng quy mô spa với các tính năng được thiết kế để tăng trưởng.",
-      "monthly": "Theo tháng",
-      "yearly": "Theo năm (Tiết kiệm 20%)",
-      "currentBadge": "Gói hiện tại",
-      "active": "Đang dùng",
-      "downgrade": "Hạ gói",
-      "upgradeEnterprise": "Nâng cấp Doanh nghiệp"
+      "title": "平台定价",
+      "subtitle": "为成长型 spa 量身打造,按需扩展。",
+      "monthly": "按月计费",
+      "yearly": "按年计费(节省 20%)",
+      "currentBadge": "当前套餐",
+      "active": "使用中",
+      "downgrade": "降级",
+      "upgradeEnterprise": "升级到企业版"
     },
     "tiers": {
       "starter": {
-        "price": "690.000 ₫",
+        "price": "VND 690,000",
         "priceShort": "690K",
-        "tagline": "Phù hợp với kỹ thuật viên độc lập và spa một chi nhánh.",
-        "f1": "1 chi nhánh đang hoạt động",
-        "f2": "Tối đa 5 nhân viên",
-        "f3": "Trang đặt lịch tiêu chuẩn",
-        "f4": "Báo cáo cơ bản"
+        "tagline": "适合独立技师与单店 spa。",
+        "f1": "1 家活跃门店",
+        "f2": "最多 5 个员工账号",
+        "f3": "标准预约页面",
+        "f4": "基础数据分析"
       },
       "professional": {
-        "price": "1.890.000 ₫",
+        "price": "VND 1,890,000",
         "priceShort": "1.89M",
-        "tagline": "Tất cả những gì cần để vận hành chuỗi spa nhiều chi nhánh.",
-        "f1": "Tối đa 5 chi nhánh hoạt động",
-        "f2": "Tối đa 50 nhân viên",
-        "f3": "Cổng đặt lịch white-label",
-        "f4": "Báo cáo & phân tích nâng cao",
-        "f5": "Hỗ trợ ưu tiên qua email"
+        "tagline": "运营成长中多门店连锁所需的一切。",
+        "f1": "最多 5 家活跃门店",
+        "f2": "最多 50 个员工账号",
+        "f3": "白标预约门户",
+        "f4": "高级分析与报表",
+        "f5": "邮件优先支持"
       },
       "enterprise": {
-        "price": "4.790.000 ₫",
+        "price": "VND 4,790,000",
         "priceShort": "4.79M",
-        "tagline": "Hạ tầng riêng cho chuỗi spa và franchise lớn.",
-        "f1": "Chi nhánh không giới hạn",
-        "f2": "Người dùng không giới hạn",
-        "f3": "Phát triển ứng dụng tuỳ chỉnh",
-        "f4": "Truy cập API & Webhook",
-        "f5": "Account Manager riêng 24/7"
+        "tagline": "为大型 spa 与连锁加盟提供专属基础设施。",
+        "f1": "门店数量不限",
+        "f2": "用户数量不限",
+        "f3": "定制 App 开发",
+        "f4": "API 与 Webhook 接入",
+        "f5": "7×24 专属客户经理"
       }
     }
   },

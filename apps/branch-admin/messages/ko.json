@@ -276,1238 +276,1291 @@
     "delete": "삭제",
     "view": "보기"
   },
-  "reportBranch": {
-    "title": "Tổng hợp tháng",
-    "subtitle": "Báo cáo doanh thu, chi phí và lợi nhuận của chi nhánh trong tháng",
-    "exportPdf": "Xuất PDF",
-    "exportExcel": "Xuất Excel",
-    "monthLabel": "Tháng {month}/{year}",
+  "report": {
+    "title": "매출 리포트",
+    "subtitle": "월간 매출·비용·순이익 요약",
+    "export": "Excel 내보내기",
+    "monthShort": "{month}월",
+    "workingDays": "근무일 {days}일",
     "kpi": {
-      "revenue": "Doanh thu",
-      "expense": "Chi phí",
-      "profit": "Lợi nhuận",
-      "margin": "Biên LN gộp"
+      "total": "총매출",
+      "totalDelta": "전월 대비 +{value}%",
+      "services": "서비스",
+      "servicesShare": "매출의 {pct}%",
+      "cosmetics": "화장품",
+      "cosmeticsShare": "매출의 {pct}%",
+      "expenses": "비용",
+      "expensesShare": "매출의 {pct}%"
     },
     "sections": {
-      "revenueByService": "Doanh thu theo nhóm dịch vụ",
-      "topStaff": "Top nhân viên đóng góp",
-      "expenseBreakdown": "Cơ cấu chi phí",
-      "monthly": "Doanh thu 12 tháng"
+      "dailyRevenue": "{month}월 일별 매출",
+      "chartHint": "마우스 오버 시 일별 상세",
+      "pl": "손익 분석",
+      "paymentMix": "결제 수단",
+      "dailyLog": "일별 로그",
+      "yearly": "{year}년 연간 요약"
+    },
+    "pl": {
+      "revenue": "매출",
+      "servicesLine": "서비스 매출",
+      "cosmeticsLine": "화장품 매출",
+      "expenses": "총비용",
+      "profit": "순이익"
     },
     "columns": {
-      "category": "Danh mục",
-      "amount": "Số tiền",
-      "share": "Tỷ trọng",
-      "staff": "Nhân viên",
-      "bookings": "Lượt",
-      "revenue": "Doanh thu"
+      "date": "날짜",
+      "services": "서비스",
+      "cosmetics": "화장품",
+      "total": "합계"
+    },
+    "expense": {
+      "towels": "세탁비",
+      "supplies": "소모품",
+      "rent": "임대료",
+      "marketing": "마케팅",
+      "utilities": "공과금",
+      "salary": "급여",
+      "other": "기타"
+    },
+    "payment": {
+      "cash": "현금",
+      "transfer": "계좌이체",
+      "company": "외상",
+      "card": "카드"
+    }
+  },
+  "reportBranch": {
+    "title": "월간 지점 리포트",
+    "subtitle": "지점의 월간 매출, 비용, 순이익 요약 리포트",
+    "exportPdf": "PDF 내보내기",
+    "exportExcel": "Excel 내보내기",
+    "monthLabel": "{year}년 {month}월",
+    "kpi": {
+      "revenue": "매출",
+      "expense": "비용",
+      "profit": "순이익",
+      "margin": "매출총이익률"
+    },
+    "sections": {
+      "revenueByService": "서비스 그룹별 매출",
+      "topStaff": "기여도 상위 직원",
+      "expenseBreakdown": "비용 구성",
+      "monthly": "12개월 매출"
+    },
+    "columns": {
+      "category": "카테고리",
+      "amount": "금액",
+      "share": "비중",
+      "staff": "직원",
+      "bookings": "예약 수",
+      "revenue": "매출"
     }
   },
   "reportDaily": {
-    "title": "Báo cáo ngày",
-    "subtitle": "Chi tiết doanh thu và hoạt động trong ngày",
-    "datePicker": "Chọn ngày",
-    "exportPdf": "Xuất PDF",
+    "title": "일간 리포트",
+    "subtitle": "당일 매출과 활동의 상세 내역",
+    "datePicker": "날짜 선택",
+    "exportPdf": "PDF 내보내기",
     "kpi": {
-      "revenue": "Doanh thu hôm nay",
-      "bookings": "Số booking",
-      "newCustomers": "Khách mới",
-      "avgTicket": "TB/đơn"
+      "revenue": "오늘의 매출",
+      "bookings": "예약 수",
+      "newCustomers": "신규 고객",
+      "avgTicket": "평균 객단가"
     },
     "sections": {
-      "hourlyRevenue": "Doanh thu theo giờ",
-      "transactionLog": "Nhật ký giao dịch",
-      "shiftSummary": "Tổng kết ca",
-      "cashflow": "Dòng tiền"
+      "hourlyRevenue": "시간대별 매출",
+      "transactionLog": "거래 로그",
+      "shiftSummary": "근무 요약",
+      "cashflow": "현금 흐름"
     },
     "columns": {
-      "time": "Giờ",
-      "code": "Mã",
-      "customer": "Khách",
-      "service": "Dịch vụ",
-      "staff": "KTV",
-      "amount": "Giá trị",
-      "method": "Phương thức"
+      "time": "시간",
+      "code": "코드",
+      "customer": "고객",
+      "service": "서비스",
+      "staff": "테라피스트",
+      "amount": "금액",
+      "method": "결제 수단"
     }
   },
   "reportStaffPerformance": {
-    "title": "Hiệu suất nhân viên",
-    "subtitle": "So sánh doanh thu, lượt phục vụ và hoa hồng theo nhân viên",
-    "exportExcel": "Xuất Excel",
+    "title": "직원 성과",
+    "subtitle": "직원별 매출, 서비스 횟수, 수당을 비교",
+    "exportExcel": "Excel 내보내기",
     "kpi": {
-      "totalRevenue": "Tổng doanh thu",
-      "totalBookings": "Tổng lượt phục vụ",
-      "topStaff": "Nhân viên dẫn đầu",
-      "avgRating": "Đánh giá TB",
-      "totalCommission": "Hoa hồng đã trả"
+      "totalRevenue": "총매출",
+      "totalBookings": "총 서비스 횟수",
+      "topStaff": "최고 성과자",
+      "avgRating": "평균 평점",
+      "totalCommission": "지급 수당"
     },
     "sections": {
-      "trend": "Xu hướng hiệu suất",
-      "ranking": "Bảng xếp hạng",
-      "serviceBreakdown": "Phân bổ theo dịch vụ"
+      "trend": "성과 추이",
+      "ranking": "리더보드",
+      "serviceBreakdown": "서비스별 분석"
     },
     "columns": {
-      "rank": "Hạng",
-      "staff": "Nhân viên",
-      "revenue": "Doanh thu",
-      "bookings": "Lượt",
-      "rating": "Đánh giá",
-      "commission": "Hoa hồng"
+      "rank": "순위",
+      "staff": "직원",
+      "revenue": "매출",
+      "bookings": "세션",
+      "rating": "평점",
+      "commission": "수당"
     }
   },
   "reportTreatments": {
-    "title": "Theo dõi liệu trình & combo",
-    "subtitle": "Quản lý tiến độ liệu trình của khách hàng và doanh thu combo",
-    "addCombo": "Thêm combo mới",
+    "title": "트리트먼트 & 콤보",
+    "subtitle": "고객 트리트먼트 진행 상황과 콤보 매출을 추적",
+    "addCombo": "콤보 추가",
     "kpi": {
-      "activeTreatments": "Liệu trình đang hoạt động",
-      "completedThisMonth": "Hoàn tất trong tháng",
-      "expiringSoon": "Sắp hết hạn",
-      "totalRevenue": "Doanh thu liệu trình"
+      "activeTreatments": "진행 중인 트리트먼트",
+      "completedThisMonth": "이번 달 완료",
+      "expiringSoon": "만료 임박",
+      "totalRevenue": "트리트먼트 매출"
     },
     "sections": {
-      "ongoing": "Liệu trình đang chạy",
-      "comboCatalog": "Danh mục combo"
+      "ongoing": "진행 중인 트리트먼트",
+      "comboCatalog": "콤보 카탈로그"
     },
     "columns": {
-      "code": "Mã",
-      "customer": "Khách",
-      "combo": "Combo",
-      "progress": "Tiến độ",
-      "remaining": "Còn lại",
-      "expiry": "Hết hạn",
-      "status": "Trạng thái"
+      "code": "코드",
+      "customer": "고객",
+      "combo": "콤보",
+      "progress": "진행률",
+      "remaining": "잔여",
+      "expiry": "만료일",
+      "status": "상태"
     },
     "status": {
-      "active": "Đang dùng",
-      "completed": "Hoàn tất",
-      "expiring": "Sắp hết",
-      "paused": "Tạm dừng"
+      "active": "진행 중",
+      "completed": "완료",
+      "expiring": "만료 임박",
+      "paused": "일시 중지"
     }
   },
   "reportBookingAnalysis": {
-    "title": "Phân tích booking",
-    "subtitle": "Phân tích sâu về lượng booking, tỷ lệ chuyển đổi và nguồn",
-    "exportExcel": "Xuất Excel",
+    "title": "예약 분석",
+    "subtitle": "예약량, 전환율, 유입 경로 심층 분석",
+    "exportExcel": "Excel 내보내기",
     "kpi": {
-      "totalBookings": "Tổng booking",
-      "completed": "Hoàn tất",
-      "cancelled": "Huỷ",
-      "conversion": "Tỷ lệ chuyển đổi",
-      "totalRevenue": "Doanh thu",
-      "avgValue": "Giá trị TB"
+      "totalBookings": "총 예약",
+      "completed": "완료",
+      "cancelled": "취소",
+      "conversion": "전환율",
+      "totalRevenue": "매출",
+      "avgValue": "평균 금액"
     },
     "sections": {
-      "volume": "Khối lượng booking",
-      "peakHours": "Khung giờ cao điểm",
-      "popularServices": "Dịch vụ phổ biến",
-      "staffUtilization": "Sử dụng nhân lực",
-      "funnel": "Phễu chuyển đổi",
-      "source": "Doanh thu theo nguồn"
+      "volume": "예약량",
+      "peakHours": "피크 타임",
+      "popularServices": "인기 서비스",
+      "staffUtilization": "직원 가동률",
+      "funnel": "전환 퍼널",
+      "source": "유입 경로별 매출"
     },
     "columns": {
-      "service": "Dịch vụ",
-      "count": "Số lượng",
-      "share": "Tỷ trọng",
-      "revenue": "Doanh thu",
-      "staff": "Nhân viên",
-      "utilization": "Sử dụng"
+      "service": "서비스",
+      "count": "건수",
+      "share": "비중",
+      "revenue": "매출",
+      "staff": "직원",
+      "utilization": "가동률"
     },
     "funnel": {
-      "viewed": "Lượt xem",
-      "started": "Bắt đầu",
-      "submitted": "Gửi đặt",
-      "confirmed": "Xác nhận",
-      "completed": "Hoàn tất"
+      "viewed": "조회",
+      "started": "시작",
+      "submitted": "제출",
+      "confirmed": "확정",
+      "completed": "완료"
     }
   },
   "reportCustomerAnalysis": {
-    "title": "Phân tích khách hàng",
-    "subtitle": "Phân khúc, giữ chân và LTV của khách hàng",
-    "exportExcel": "Xuất Excel",
+    "title": "고객 분석",
+    "subtitle": "고객 세그먼트, 리텐션 및 LTV",
+    "exportExcel": "Excel 내보내기",
     "kpi": {
-      "total": "Tổng khách",
-      "new": "Khách mới",
-      "returning": "Khách quay lại",
-      "ltv": "LTV TB",
-      "avgTicket": "Đơn TB",
-      "retention": "Giữ chân"
+      "total": "총 고객",
+      "new": "신규 고객",
+      "returning": "재방문 고객",
+      "ltv": "평균 LTV",
+      "avgTicket": "평균 객단가",
+      "retention": "리텐션"
     },
     "sections": {
-      "growth": "Tăng trưởng khách",
-      "acquisition": "Nguồn khách",
-      "spendingTiers": "Phân khúc chi tiêu",
-      "topCustomers": "Top khách (LTV)",
-      "retention": "Phân tích giữ chân",
-      "churn": "Phân tích rời bỏ"
+      "growth": "고객 증가 추이",
+      "acquisition": "유입 경로",
+      "spendingTiers": "지출 구간",
+      "topCustomers": "상위 고객 (LTV)",
+      "retention": "리텐션 분석",
+      "churn": "이탈 분석"
     },
     "columns": {
-      "rank": "Hạng",
-      "customer": "Khách hàng",
-      "visits": "Số lần",
+      "rank": "순위",
+      "customer": "고객",
+      "visits": "방문 횟수",
       "ltv": "LTV"
     }
   },
   "contentSeo": {
-    "title": "Trung tâm SEO",
-    "subtitle": "Theo dõi điểm SEO, từ khoá và trang cần tối ưu",
-    "exportPdf": "Xuất PDF",
-    "newPage": "Trang mới",
+    "title": "SEO 허브",
+    "subtitle": "SEO 점수, 키워드, 개선이 필요한 페이지를 추적",
+    "exportPdf": "PDF 내보내기",
+    "newPage": "새 페이지",
     "kpi": {
-      "totalPages": "Tổng số trang",
-      "avgScore": "Điểm SEO TB",
-      "issues": "Trang có vấn đề",
-      "topRanking": "Xếp hạng đầu",
-      "monthlyVisits": "Truy cập/tháng"
+      "totalPages": "전체 페이지",
+      "avgScore": "평균 SEO 점수",
+      "issues": "이슈가 있는 페이지",
+      "topRanking": "상위 랭킹",
+      "monthlyVisits": "월간 방문 수"
     },
     "sections": {
-      "scoreTrend": "Xu hướng điểm SEO",
-      "topKeywords": "Top từ khoá",
-      "pages": "Trang đang theo dõi"
+      "scoreTrend": "SEO 점수 추이",
+      "topKeywords": "상위 키워드",
+      "pages": "추적 중인 페이지"
     },
     "columns": {
-      "page": "Trang",
-      "score": "Điểm",
-      "keyword": "Từ khoá",
-      "rank": "Hạng",
-      "visits": "Lượt truy cập",
-      "status": "Trạng thái"
+      "page": "페이지",
+      "score": "점수",
+      "keyword": "키워드",
+      "rank": "순위",
+      "visits": "방문 수",
+      "status": "상태"
     },
     "status": {
-      "good": "Tốt",
-      "warning": "Cần cải thiện",
-      "critical": "Kém"
+      "good": "좋음",
+      "warning": "개선 필요",
+      "critical": "심각"
     }
   },
   "contentForm": {
-    "title": "Tạo / sửa bài viết",
-    "subtitle": "Soạn nội dung, gắn ảnh, cấu hình SEO và xuất bản",
-    "save": "Lưu nháp",
-    "publish": "Xuất bản",
-    "preview": "Xem trước",
+    "title": "게시물 작성 / 편집",
+    "subtitle": "콘텐츠 작성, 미디어 첨부, SEO 설정 후 게시",
+    "save": "초안 저장",
+    "publish": "게시",
+    "preview": "미리보기",
     "fields": {
-      "titlePlaceholder": "Nhập tiêu đề bài viết...",
-      "contentPlaceholder": "Bắt đầu viết nội dung...",
-      "postType": "Loại bài",
-      "targetService": "Dịch vụ liên quan",
-      "category": "Danh mục",
-      "tags": "Tags",
-      "slug": "Slug / URL",
-      "metaTitle": "Meta title",
-      "metaDesc": "Meta description",
-      "featured": "Ảnh đại diện",
-      "scheduledAt": "Lịch xuất bản",
-      "author": "Tác giả"
+      "titlePlaceholder": "게시물 제목 입력...",
+      "contentPlaceholder": "내용을 작성하세요...",
+      "postType": "게시물 유형",
+      "targetService": "관련 서비스",
+      "category": "카테고리",
+      "tags": "태그",
+      "slug": "슬러그 / URL",
+      "metaTitle": "메타 제목",
+      "metaDesc": "메타 설명",
+      "featured": "대표 이미지",
+      "scheduledAt": "게시 예약",
+      "author": "작성자"
     },
     "sections": {
-      "publish": "Xuất bản",
-      "media": "Ảnh & Media",
-      "taxonomy": "Phân loại",
-      "seo": "Tối ưu SEO",
-      "scheduling": "Lịch & tác giả"
+      "publish": "게시",
+      "media": "이미지 & 미디어",
+      "taxonomy": "분류",
+      "seo": "SEO 최적화",
+      "scheduling": "예약 & 작성자"
     },
     "postType": {
-      "news": "Tin tức",
-      "service": "Bài dịch vụ",
-      "product": "Bài sản phẩm",
-      "blog": "Blog"
+      "news": "뉴스",
+      "service": "서비스 게시물",
+      "product": "제품 게시물",
+      "blog": "블로그"
     }
   },
   "contentMedia": {
-    "title": "Thư viện media",
-    "subtitle": "Quản lý ảnh, video và tài sản số dùng chung",
-    "upload": "Tải lên",
-    "newFolder": "Thư mục mới",
-    "search": "Tìm theo tên file...",
+    "title": "미디어 라이브러리",
+    "subtitle": "공유 이미지, 동영상, 디지털 에셋 관리",
+    "upload": "업로드",
+    "newFolder": "새 폴더",
+    "search": "파일명으로 검색...",
     "kpi": {
-      "totalAssets": "Tổng tài sản",
-      "totalSize": "Dung lượng",
-      "images": "Ảnh",
-      "videos": "Video",
-      "documents": "Tài liệu"
+      "totalAssets": "전체 에셋",
+      "totalSize": "사용 용량",
+      "images": "이미지",
+      "videos": "동영상",
+      "documents": "문서"
     },
     "sections": {
-      "folders": "Thư mục",
-      "assets": "Tài sản"
+      "folders": "폴더",
+      "assets": "에셋"
     },
     "filters": {
-      "all": "Tất cả",
-      "image": "Ảnh",
-      "video": "Video",
-      "document": "Tài liệu"
+      "all": "전체",
+      "image": "이미지",
+      "video": "동영상",
+      "document": "문서"
     },
     "details": {
-      "title": "Chi tiết tài sản",
-      "name": "Tên",
-      "type": "Loại",
-      "size": "Kích thước",
-      "uploadedAt": "Tải lên",
-      "uploadedBy": "Người tải"
+      "title": "에셋 상세",
+      "name": "이름",
+      "type": "유형",
+      "size": "크기",
+      "uploadedAt": "업로드 일시",
+      "uploadedBy": "업로더"
     }
   },
   "inventoryIn": {
-    "title": "Nhập kho",
-    "subtitle": "Tạo phiếu nhập, ghi nhận hàng nhập từ nhà cung cấp",
-    "newReceipt": "Phiếu nhập mới",
+    "title": "입고 관리",
+    "subtitle": "입고 전표 작성 및 공급사 입고 기록",
+    "newReceipt": "신규 입고 전표",
     "kpi": {
-      "todayReceipts": "Phiếu nhập hôm nay",
-      "totalValue": "Tổng giá trị",
-      "totalUnits": "Tổng đơn vị",
-      "suppliers": "Nhà cung cấp"
+      "todayReceipts": "오늘의 입고 전표",
+      "totalValue": "총 금액",
+      "totalUnits": "총 수량",
+      "suppliers": "공급사"
     },
     "form": {
-      "supplier": "Nhà cung cấp",
-      "receiptCode": "Mã phiếu",
-      "receiptDate": "Ngày nhập",
-      "note": "Ghi chú",
-      "items": "Mặt hàng",
-      "addItem": "Thêm mặt hàng",
-      "submit": "Lưu phiếu nhập"
+      "supplier": "공급사",
+      "receiptCode": "전표 번호",
+      "receiptDate": "입고일",
+      "note": "비고",
+      "items": "품목",
+      "addItem": "품목 추가",
+      "submit": "입고 전표 저장"
     },
     "columns": {
-      "code": "Mã phiếu",
-      "supplier": "Nhà cung cấp",
-      "date": "Ngày",
-      "items": "Mặt hàng",
-      "total": "Tổng",
-      "status": "Trạng thái",
-      "product": "Sản phẩm",
-      "qty": "Số lượng",
-      "unit": "ĐVT",
-      "unitPrice": "Đơn giá",
-      "subtotal": "Thành tiền"
+      "code": "전표 번호",
+      "supplier": "공급사",
+      "date": "일자",
+      "items": "품목",
+      "total": "합계",
+      "status": "상태",
+      "product": "상품",
+      "qty": "수량",
+      "unit": "단위",
+      "unitPrice": "단가",
+      "subtotal": "소계"
     },
     "status": {
-      "draft": "Nháp",
-      "pending": "Chờ duyệt",
-      "received": "Đã nhập"
+      "draft": "초안",
+      "pending": "승인 대기",
+      "received": "입고 완료"
     }
   },
   "inventoryOut": {
-    "title": "Xuất kho / sử dụng vật tư",
-    "subtitle": "Ghi nhận xuất hàng cho dịch vụ, bán lẻ hoặc chuyển kho",
-    "newIssue": "Phiếu xuất mới",
+    "title": "출고 / 자재 사용",
+    "subtitle": "서비스 사용, 소매 판매 또는 이동을 위한 출고 기록",
+    "newIssue": "신규 출고 전표",
     "kpi": {
-      "todayIssues": "Phiếu xuất hôm nay",
-      "totalUnits": "Tổng đơn vị",
-      "lowStock": "SKU sắp hết",
-      "totalValue": "Tổng giá trị"
+      "todayIssues": "오늘의 출고 전표",
+      "totalUnits": "총 수량",
+      "lowStock": "부족 SKU",
+      "totalValue": "총 금액"
     },
     "form": {
-      "issueCode": "Mã phiếu",
-      "issueDate": "Ngày xuất",
-      "purpose": "Mục đích",
-      "staff": "Người nhận",
-      "note": "Ghi chú",
-      "items": "Mặt hàng",
-      "addItem": "Thêm mặt hàng",
-      "submit": "Lưu phiếu xuất"
+      "issueCode": "전표 번호",
+      "issueDate": "출고일",
+      "purpose": "목적",
+      "staff": "수령 직원",
+      "note": "비고",
+      "items": "품목",
+      "addItem": "품목 추가",
+      "submit": "출고 전표 저장"
     },
     "purpose": {
-      "service": "Dùng cho dịch vụ",
-      "sale": "Bán lẻ",
-      "transfer": "Chuyển kho",
-      "damage": "Hư hỏng / huỷ"
+      "service": "서비스 사용",
+      "sale": "소매 판매",
+      "transfer": "재고 이동",
+      "damage": "파손 / 폐기"
     },
     "columns": {
-      "code": "Mã phiếu",
-      "date": "Ngày",
-      "purpose": "Mục đích",
-      "staff": "Người nhận",
-      "items": "Mặt hàng",
-      "total": "Tổng",
-      "product": "Sản phẩm",
-      "qty": "Số lượng",
-      "unit": "ĐVT"
+      "code": "전표 번호",
+      "date": "일자",
+      "purpose": "목적",
+      "staff": "수령 직원",
+      "items": "품목",
+      "total": "합계",
+      "product": "상품",
+      "qty": "수량",
+      "unit": "단위"
     }
   },
   "roomCalendar": {
-    "title": "Lịch phòng",
-    "subtitle": "Lịch sử dụng phòng và giường theo ngày",
-    "today": "Hôm nay",
-    "prev": "Trước",
-    "next": "Sau",
+    "title": "룸 캘린더",
+    "subtitle": "일별 룸 및 베드 사용 일정",
+    "today": "오늘",
+    "prev": "이전",
+    "next": "다음",
     "legend": {
-      "available": "Trống",
-      "booked": "Đã đặt",
-      "in_use": "Đang dùng",
-      "cleaning": "Vệ sinh",
-      "maintenance": "Bảo trì"
+      "available": "사용 가능",
+      "booked": "예약됨",
+      "in_use": "사용 중",
+      "cleaning": "청소 중",
+      "maintenance": "정비 중"
     },
     "summary": {
-      "rooms": "Phòng",
-      "occupancy": "Tỷ lệ lấp đầy",
-      "current": "Đang sử dụng"
+      "rooms": "룸",
+      "occupancy": "점유율",
+      "current": "사용 중"
     }
   },
   "roomForm": {
-    "title": "Thêm phòng mới",
-    "subtitle": "Thiết lập phòng, giường và quy tắc sử dụng",
-    "save": "Lưu phòng",
-    "cancel": "Huỷ",
+    "title": "신규 룸 추가",
+    "subtitle": "룸, 베드 및 사용 규칙 설정",
+    "save": "룸 저장",
+    "cancel": "취소",
     "sections": {
-      "basic": "Thông tin cơ bản",
-      "basicHint": "Tên, tầng và loại phòng",
-      "gender": "Phân loại giới tính",
-      "genderHint": "Phòng phục vụ giới tính nào",
-      "beds": "Cấu hình giường",
-      "bedsHint": "Thêm và thiết lập từng giường trong phòng",
-      "services": "Dịch vụ cho phép",
-      "servicesHint": "Chọn loại dịch vụ có thể thực hiện trong phòng",
-      "rules": "Quy tắc sử dụng",
-      "rulesHint": "Giờ hoạt động và kích hoạt booking",
-      "preview": "Xem trước"
+      "basic": "기본 정보",
+      "basicHint": "이름, 층, 룸 유형",
+      "gender": "성별 구분",
+      "genderHint": "이 룸이 응대하는 성별",
+      "beds": "베드 구성",
+      "bedsHint": "룸 내 각 베드를 추가하고 설정",
+      "services": "허용 서비스",
+      "servicesHint": "이 룸에서 가능한 서비스 카테고리 선택",
+      "rules": "사용 규칙",
+      "rulesHint": "운영 시간 및 온라인 예약 활성화",
+      "preview": "미리보기"
     },
     "fields": {
-      "name": "Tên phòng",
-      "code": "Mã phòng",
-      "floor": "Tầng",
-      "type": "Loại phòng",
-      "description": "Mô tả",
-      "openTime": "Giờ mở cửa",
-      "closeTime": "Giờ đóng cửa",
-      "cleanupMin": "Thời gian dọn dẹp (phút)",
-      "minLeadMin": "Đặt trước tối thiểu (phút)",
-      "showOnline": "Hiển thị trong booking online",
-      "addBed": "Thêm giường",
-      "bedName": "Tên giường",
-      "bedDefaultStatus": "Trạng thái mặc định"
+      "name": "룸 이름",
+      "code": "룸 코드",
+      "floor": "층",
+      "type": "룸 유형",
+      "description": "설명",
+      "openTime": "오픈 시간",
+      "closeTime": "마감 시간",
+      "cleanupMin": "정리 시간 (분)",
+      "minLeadMin": "최소 사전 예약 (분)",
+      "showOnline": "온라인 예약에 노출",
+      "addBed": "베드 추가",
+      "bedName": "베드 이름",
+      "bedDefaultStatus": "기본 상태"
     },
     "gender": {
-      "any": "Mọi giới tính",
-      "female": "Chỉ nữ",
-      "male": "Chỉ nam"
+      "any": "모든 성별",
+      "female": "여성 전용",
+      "male": "남성 전용"
     }
   },
   "notification": {
-    "title": "Trung tâm thông báo",
-    "unreadCount": "{count} chưa đọc",
-    "markAllRead": "Đánh dấu tất cả đã đọc",
-    "settings": "Cài đặt thông báo",
+    "title": "알림 센터",
+    "unreadCount": "미확인 {count}건",
+    "markAllRead": "모두 읽음 처리",
+    "settings": "알림 설정",
     "filters": {
-      "all": "Tất cả",
-      "booking": "Booking",
-      "staff": "Nhân viên",
-      "inventory": "Kho",
-      "system": "Hệ thống"
+      "all": "전체",
+      "booking": "예약",
+      "staff": "직원",
+      "inventory": "재고",
+      "system": "시스템"
     },
-    "onlyUnread": "Chỉ hiển thị chưa đọc",
-    "empty": "Không có thông báo nào",
-    "markRead": "Đánh dấu đã đọc"
+    "onlyUnread": "미확인만 표시",
+    "empty": "알림이 없습니다",
+    "markRead": "읽음 처리"
   },
   "serviceOverview": {
-    "title": "Tổng quan dịch vụ",
-    "subtitle": "Quản lý liệu trình, gói và giá ở mọi chi nhánh.",
-    "create": "Tạo dịch vụ",
-    "import": "Nhập",
-    "export": "Xuất",
-    "min": "phút",
-    "searchPh": "Tìm theo tên hoặc mã dịch vụ...",
-    "filterCategoryAll": "Danh mục: Tất cả",
-    "filterStatusAll": "Trạng thái: Tất cả",
+    "title": "서비스 개요",
+    "subtitle": "지점 전반의 트리트먼트, 패키지, 가격을 관리합니다.",
+    "create": "서비스 생성",
+    "import": "가져오기",
+    "export": "내보내기",
+    "min": "분",
+    "searchPh": "서비스명 또는 코드로 검색...",
+    "filterCategoryAll": "카테고리: 전체",
+    "filterStatusAll": "상태: 전체",
     "kpi": {
-      "total": "Tổng dịch vụ",
-      "active": "Đang hoạt động",
-      "inactive": "Ngừng",
-      "mostBooked": "Đặt nhiều nhất",
-      "avgDuration": "Thời lượng TB"
+      "total": "전체 서비스",
+      "active": "운영 중",
+      "inactive": "중단",
+      "mostBooked": "최다 예약",
+      "avgDuration": "평균 소요 시간"
     },
     "cat": {
-      "massage": "Massage",
-      "facial": "Chăm sóc da",
-      "hair_removal": "Triệt lông",
-      "package": "Combo"
+      "massage": "마사지",
+      "facial": "페이셜",
+      "hair_removal": "제모",
+      "package": "패키지"
     },
     "status": {
-      "active": "Hoạt động",
-      "inactive": "Ngừng"
+      "active": "운영",
+      "inactive": "중단"
     },
     "cols": {
-      "name": "Tên dịch vụ",
-      "category": "Danh mục",
-      "duration": "Thời lượng",
-      "price": "Giá",
-      "staffReq": "KTV cần",
-      "popularity": "Độ phổ biến",
-      "status": "Trạng thái",
-      "actions": "Thao tác"
+      "name": "서비스명",
+      "category": "카테고리",
+      "duration": "소요 시간",
+      "price": "가격",
+      "staffReq": "필요 인력",
+      "popularity": "인기도",
+      "status": "상태",
+      "actions": "작업"
     }
   },
   "serviceList": {
-    "title": "Danh sách dịch vụ",
-    "subtitle": "Xem dạng thẻ với hình ảnh, đánh giá và mô tả ngắn.",
-    "create": "Tạo dịch vụ",
-    "min": "phút",
-    "searchPh": "Tìm dịch vụ...",
-    "filterAll": "Danh mục: Tất cả",
-    "branchesCount": "{count} chi nhánh",
+    "title": "서비스 카탈로그",
+    "subtitle": "이미지, 평점, 짧은 설명이 포함된 카드 보기.",
+    "create": "서비스 생성",
+    "min": "분",
+    "searchPh": "서비스 검색...",
+    "filterAll": "카테고리: 전체",
+    "branchesCount": "지점 {count}개",
     "cat": {
-      "massage": "Massage",
-      "facial": "Chăm sóc da",
-      "hair_removal": "Triệt lông",
-      "package": "Combo"
+      "massage": "마사지",
+      "facial": "페이셜",
+      "hair_removal": "제모",
+      "package": "패키지"
     },
     "sort": {
-      "popular": "Phổ biến nhất",
-      "name": "Tên A-Z",
-      "priceHigh": "Giá cao - thấp",
-      "newest": "Mới nhất"
+      "popular": "인기순",
+      "name": "이름 A-Z",
+      "priceHigh": "가격 높은순",
+      "newest": "최신순"
     },
     "status": {
-      "active": "Hoạt động",
-      "inactive": "Ngừng"
+      "active": "운영",
+      "inactive": "중단"
     }
   },
   "serviceCategories": {
-    "title": "Danh mục dịch vụ",
-    "subtitle": "Tổ chức dịch vụ theo nhóm để khách hàng dễ tìm.",
-    "newCategory": "Tạo danh mục",
-    "searchPh": "Tìm danh mục...",
+    "title": "서비스 카테고리",
+    "subtitle": "고객이 쉽게 찾을 수 있도록 서비스를 그룹화합니다.",
+    "newCategory": "카테고리 생성",
+    "searchPh": "카테고리 검색...",
     "kpi": {
-      "total": "Tổng danh mục",
-      "active": "Đang dùng",
-      "inactive": "Ngừng",
-      "uncategorized": "Chưa phân loại"
+      "total": "전체 카테고리",
+      "active": "운영 중",
+      "inactive": "중단",
+      "uncategorized": "미분류"
     },
     "cols": {
-      "name": "Tên danh mục",
-      "slug": "Mã URL",
-      "services": "Dịch vụ",
-      "active": "Đang bật",
-      "status": "Trạng thái",
-      "actions": "Thao tác"
+      "name": "카테고리명",
+      "slug": "URL 슬러그",
+      "services": "서비스",
+      "active": "활성",
+      "status": "상태",
+      "actions": "작업"
     },
     "status": {
-      "active": "Hoạt động",
-      "inactive": "Ngừng"
+      "active": "운영",
+      "inactive": "중단"
     }
   },
   "servicePackages": {
-    "title": "Gói combo dịch vụ",
-    "subtitle": "Tạo gói liệu trình, ưu đãi và combo bán kèm.",
-    "newCombo": "Tạo gói combo",
+    "title": "서비스 패키지 & 콤보",
+    "subtitle": "할인 트리트먼트 패키지로 서비스를 묶어 판매합니다.",
+    "newCombo": "패키지 생성",
     "kpi": {
-      "total": "Tổng gói",
-      "active": "Đang bán",
-      "draft": "Bản nháp",
-      "expiringSoon": "Sắp hết hạn"
+      "total": "전체 패키지",
+      "active": "판매 중",
+      "draft": "초안",
+      "expiringSoon": "만료 임박"
     },
-    "serviceCount": "Số dịch vụ",
-    "discount": "Giảm",
-    "comboPrice": "Giá combo",
-    "validUntil": "Hiệu lực đến",
-    "edit": "Chỉnh sửa",
-    "promote": "Đẩy bán",
+    "serviceCount": "서비스 수",
+    "discount": "할인",
+    "comboPrice": "콤보 가격",
+    "validUntil": "유효 기한",
+    "edit": "편집",
+    "promote": "프로모션",
     "audience": {
-      "label": "Đối tượng",
-      "all": "Tất cả",
-      "member": "Hội viên",
-      "vip": "Khách VIP"
+      "label": "대상",
+      "all": "전체",
+      "member": "회원",
+      "vip": "VIP"
     },
     "status": {
-      "active": "Đang bán",
-      "draft": "Nháp",
-      "expired": "Hết hạn"
+      "active": "판매 중",
+      "draft": "초안",
+      "expired": "만료"
     }
   },
   "serviceImport": {
-    "title": "Nhập & đồng bộ dịch vụ",
-    "subtitle": "Tải lên file CSV/Excel hoặc đồng bộ từ POS đối tác.",
-    "newImport": "Nhập mới",
-    "downloadTemplate": "Tải mẫu",
-    "history": "Lịch sử nhập",
+    "title": "서비스 가져오기 & 동기화",
+    "subtitle": "CSV/Excel 파일을 업로드하거나 파트너 POS와 동기화합니다.",
+    "newImport": "신규 가져오기",
+    "downloadTemplate": "템플릿 다운로드",
+    "history": "가져오기 이력",
     "methods": {
       "csv": {
-        "title": "Nhập CSV / Excel",
-        "desc": "Tải file mẫu, điền dữ liệu và upload lên hệ thống.",
-        "cta": "Bắt đầu"
+        "title": "CSV / Excel 가져오기",
+        "desc": "템플릿을 받아 데이터를 입력하고 시스템에 업로드합니다.",
+        "cta": "시작하기"
       },
       "api": {
-        "title": "Đồng bộ API",
-        "desc": "Kết nối POS như KiotViet, Misa để đồng bộ tự động.",
-        "cta": "Cấu hình"
+        "title": "API 동기화",
+        "desc": "KiotViet, Misa 같은 POS와 연결해 자동 동기화합니다.",
+        "cta": "설정"
       },
       "manual": {
-        "title": "Ánh xạ thủ công",
-        "desc": "Map cột dữ liệu giữa nguồn và Kaori trước khi nhập.",
-        "cta": "Mở mapper"
+        "title": "수동 매핑",
+        "desc": "가져오기 전 원본 컬럼을 Kaori 필드와 매핑합니다.",
+        "cta": "매퍼 열기"
       }
     },
     "quickUpload": {
-      "title": "Upload nhanh",
-      "desc": "Kéo thả file CSV / Excel vào đây hoặc bấm chọn file.",
-      "cta": "Chọn file"
+      "title": "빠른 업로드",
+      "desc": "CSV / Excel 파일을 끌어다 놓거나 클릭하여 선택하세요.",
+      "cta": "파일 선택"
     },
     "integrations": {
-      "title": "Tích hợp đang hoạt động",
-      "lastSync": "Đồng bộ cuối",
-      "connected": "Đã kết nối",
-      "notConnected": "Chưa kết nối",
-      "connect": "Kết nối"
+      "title": "활성 연동",
+      "lastSync": "마지막 동기화",
+      "connected": "연결됨",
+      "notConnected": "미연결",
+      "connect": "연결"
     },
     "source": {
       "csv": "CSV/Excel",
       "api": "API",
-      "manual": "Thủ công"
+      "manual": "수동"
     },
     "status": {
-      "completed": "Hoàn tất",
-      "partial": "Một phần",
-      "failed": "Lỗi"
+      "completed": "완료",
+      "partial": "부분",
+      "failed": "실패"
     },
     "cols": {
-      "file": "Tên file",
-      "source": "Nguồn",
-      "rows": "Bản ghi",
-      "success": "Thành công",
-      "failed": "Lỗi",
-      "user": "Người chạy",
-      "time": "Thời gian",
-      "status": "Trạng thái"
+      "file": "파일명",
+      "source": "소스",
+      "rows": "레코드",
+      "success": "성공",
+      "failed": "실패",
+      "user": "실행자",
+      "time": "시간",
+      "status": "상태"
     }
   },
   "serviceContent": {
-    "title": "Quản lý nội dung dịch vụ",
-    "subtitle": "Mô tả, lợi ích, FAQ và hình ảnh hiển thị cho khách.",
-    "newContent": "Soạn nội dung",
-    "translate": "Dịch tự động",
-    "contentList": "Nội dung đã có",
-    "quickEditor": "Soạn nhanh",
-    "addImage": "Thêm ảnh",
-    "preview": "Xem trước",
-    "publish": "Xuất bản",
+    "title": "서비스 콘텐츠 관리",
+    "subtitle": "고객에게 노출되는 설명, 혜택, FAQ, 이미지를 관리합니다.",
+    "newContent": "콘텐츠 작성",
+    "translate": "자동 번역",
+    "contentList": "기존 콘텐츠",
+    "quickEditor": "빠른 편집",
+    "addImage": "이미지 추가",
+    "preview": "미리보기",
+    "publish": "게시",
     "kpi": {
-      "total": "Tổng nội dung",
-      "published": "Đã đăng",
-      "draft": "Nháp",
-      "review": "Chờ duyệt",
-      "translation": "Tỷ lệ dịch"
+      "total": "전체 콘텐츠",
+      "published": "게시됨",
+      "draft": "초안",
+      "review": "검토 중",
+      "translation": "번역률"
     },
     "type": {
-      "description": "Mô tả",
-      "benefits": "Lợi ích",
-      "process": "Quy trình",
+      "description": "설명",
+      "benefits": "혜택",
+      "process": "프로세스",
       "faq": "FAQ"
     },
     "status": {
-      "published": "Đã đăng",
-      "draft": "Nháp",
-      "review": "Chờ duyệt"
+      "published": "게시됨",
+      "draft": "초안",
+      "review": "검토 중"
     },
     "cols": {
-      "title": "Tiêu đề",
-      "type": "Loại",
-      "lang": "Ngôn ngữ",
-      "status": "Trạng thái",
-      "updated": "Cập nhật",
-      "actions": "Thao tác"
+      "title": "제목",
+      "type": "유형",
+      "lang": "언어",
+      "status": "상태",
+      "updated": "수정일",
+      "actions": "작업"
     },
     "fields": {
-      "contentTitle": "Tiêu đề",
-      "titlePh": "VD: 5 lợi ích của triệt lông Diode",
-      "body": "Nội dung",
-      "bodyPh": "Soạn nội dung markdown..."
+      "contentTitle": "제목",
+      "titlePh": "예: 다이오드 제모의 5가지 장점",
+      "body": "본문",
+      "bodyPh": "마크다운으로 작성하세요..."
     }
   },
   "serviceAvailability": {
-    "title": "Quy tắc khả dụng",
-    "subtitle": "Xác định khung giờ, ngày và sức chứa cho từng dịch vụ.",
-    "newRule": "Tạo quy tắc",
-    "ruleList": "Quy tắc đang áp dụng",
-    "appliesTo": "Áp dụng cho",
-    "capacity": "Sức chứa",
+    "title": "서비스 가용성 규칙",
+    "subtitle": "서비스별 시간, 요일, 수용 인원을 정의합니다.",
+    "newRule": "규칙 생성",
+    "ruleList": "적용 중인 규칙",
+    "appliesTo": "적용 대상",
+    "capacity": "수용 인원",
     "kpi": {
-      "total": "Tổng quy tắc",
-      "active": "Đang chạy",
-      "paused": "Tạm dừng",
-      "exceptions": "Ngoại lệ",
-      "conflicts": "Xung đột"
+      "total": "전체 규칙",
+      "active": "운영 중",
+      "paused": "일시 중지",
+      "exceptions": "예외",
+      "conflicts": "충돌"
     },
     "type": {
-      "standard": "Tiêu chuẩn",
-      "premium": "Cao cấp",
-      "maintenance": "Bảo trì"
+      "standard": "스탠다드",
+      "premium": "프리미엄",
+      "maintenance": "정비"
     },
     "status": {
-      "active": "Hoạt động",
-      "paused": "Tạm dừng"
+      "active": "운영",
+      "paused": "일시 중지"
     },
     "builder": {
-      "title": "Tạo quy tắc mới",
-      "ruleName": "Tên quy tắc",
-      "ruleNamePh": "VD: Massage buổi sáng T2-T6",
-      "applyTo": "Áp dụng cho",
-      "allServices": "Tất cả dịch vụ",
-      "byCategory": "Theo danh mục",
-      "specific": "Dịch vụ cụ thể",
-      "from": "Từ",
-      "to": "Đến",
-      "capacity": "Sức chứa tối đa",
-      "save": "Lưu quy tắc"
+      "title": "신규 규칙 작성",
+      "ruleName": "규칙 이름",
+      "ruleNamePh": "예: 월-금 오전 마사지",
+      "applyTo": "적용 대상",
+      "allServices": "모든 서비스",
+      "byCategory": "카테고리별",
+      "specific": "특정 서비스",
+      "from": "시작",
+      "to": "종료",
+      "capacity": "최대 수용 인원",
+      "save": "규칙 저장"
     }
   },
   "serviceForm": {
-    "title": "Tạo dịch vụ mới",
-    "subtitle": "Khai báo thông tin cơ bản, giá, KTV và mô tả hiển thị.",
-    "cancel": "Huỷ",
-    "saveDraft": "Lưu nháp",
-    "publish": "Xuất bản",
-    "addTag": "Thêm tag",
+    "title": "신규 서비스 생성",
+    "subtitle": "기본 정보, 가격, 담당 직원, 고객 노출 콘텐츠를 설정합니다.",
+    "cancel": "취소",
+    "saveDraft": "초안 저장",
+    "publish": "게시",
+    "addTag": "태그 추가",
     "sections": {
-      "basic": "Thông tin cơ bản",
-      "pricing": "Giá & thời lượng",
-      "staff": "KTV & nguồn lực",
-      "media": "Hình ảnh & mô tả",
-      "advanced": "Cấu hình nâng cao",
-      "tags": "Nhãn"
+      "basic": "기본 정보",
+      "pricing": "가격 & 소요 시간",
+      "staff": "담당 직원 & 리소스",
+      "media": "이미지 & 설명",
+      "advanced": "고급 설정",
+      "tags": "태그"
     },
     "fields": {
-      "name": "Tên dịch vụ",
-      "code": "Mã nội bộ",
-      "category": "Danh mục",
-      "shortDesc": "Mô tả ngắn",
-      "shortDescPh": "Tóm tắt 1-2 câu hiển thị trên thẻ.",
-      "price": "Giá (VND)",
-      "discount": "Giảm giá %",
-      "duration": "Thời lượng (phút)",
-      "bufferTime": "Buffer giữa các slot (phút)",
-      "staffHint": "Chọn KTV được phép thực hiện dịch vụ này.",
-      "longDesc": "Mô tả chi tiết",
-      "longDescPh": "Liệu trình, lợi ích, lưu ý...",
-      "gender": "Giới tính áp dụng",
-      "minAge": "Tuổi tối thiểu"
+      "name": "서비스명",
+      "code": "내부 코드",
+      "category": "카테고리",
+      "shortDesc": "짧은 설명",
+      "shortDescPh": "카드에 표시되는 1-2문장 요약.",
+      "price": "가격 (VND)",
+      "discount": "할인 %",
+      "duration": "소요 시간 (분)",
+      "bufferTime": "슬롯 간 버퍼 (분)",
+      "staffHint": "이 서비스를 수행할 수 있는 직원을 선택하세요.",
+      "longDesc": "상세 설명",
+      "longDescPh": "트리트먼트, 혜택, 주의사항...",
+      "gender": "성별 제한",
+      "minAge": "최소 연령"
     },
     "cat": {
-      "massage": "Massage",
-      "facial": "Chăm sóc da",
-      "hair_removal": "Triệt lông",
-      "package": "Combo"
+      "massage": "마사지",
+      "facial": "페이셜",
+      "hair_removal": "제모",
+      "package": "패키지"
     },
     "gender": {
-      "any": "Mọi giới tính",
-      "female": "Chỉ nữ",
-      "male": "Chỉ nam"
+      "any": "모든 성별",
+      "female": "여성 전용",
+      "male": "남성 전용"
     },
     "flags": {
-      "requireRoom": "Yêu cầu phòng",
-      "allowOnline": "Cho phép đặt online",
-      "featured": "Hiển thị nổi bật"
+      "requireRoom": "룸 필요",
+      "allowOnline": "온라인 예약 허용",
+      "featured": "추천 서비스로 표시"
     },
     "media": {
-      "upload": "Tải ảnh đại diện",
-      "hint": "PNG / JPG, tối đa 5MB. Khuyến nghị 1200×800."
+      "upload": "대표 이미지 업로드",
+      "hint": "PNG / JPG, 최대 5MB. 권장 1200×800."
     }
   },
   "serviceDetail": {
-    "min": "phút",
-    "edit": "Chỉnh sửa",
-    "viewBookings": "Xem booking",
-    "description": "Mô tả dịch vụ",
-    "branchAvailability": "Tính khả dụng theo chi nhánh",
-    "assignedStaff": "KTV phụ trách",
-    "customerFeedback": "Đánh giá khách hàng",
-    "analytics": "Phân tích",
-    "relatedServices": "Dịch vụ liên quan",
-    "available": "Sẵn sàng",
-    "unavailable": "Không khả dụng",
-    "staffCount": "{count} KTV",
+    "min": "분",
+    "edit": "편집",
+    "viewBookings": "예약 보기",
+    "description": "서비스 설명",
+    "branchAvailability": "지점별 가용성",
+    "assignedStaff": "담당 직원",
+    "customerFeedback": "고객 후기",
+    "analytics": "분석",
+    "relatedServices": "관련 서비스",
+    "available": "사용 가능",
+    "unavailable": "사용 불가",
+    "staffCount": "직원 {count}명",
     "breadcrumb": {
-      "services": "Dịch vụ"
+      "services": "서비스"
     },
     "kpi": {
-      "bookings": "Tổng booking",
-      "revenue": "Doanh thu",
-      "completion": "Tỷ lệ hoàn tất",
-      "rating": "Đánh giá"
+      "bookings": "총 예약",
+      "revenue": "매출",
+      "completion": "완료율",
+      "rating": "평점"
     },
     "cat": {
-      "massage": "Massage",
-      "facial": "Chăm sóc da",
-      "hair_removal": "Triệt lông",
-      "package": "Combo"
+      "massage": "마사지",
+      "facial": "페이셜",
+      "hair_removal": "제모",
+      "package": "패키지"
     },
     "analyticsRow": {
-      "thisMonth": "Tháng này",
-      "repeatRate": "Khách quay lại",
-      "cancelRate": "Tỷ lệ huỷ"
+      "thisMonth": "이번 달",
+      "repeatRate": "재방문율",
+      "cancelRate": "취소율"
     }
   },
   "customerLoyalty": {
-    "subtitle": "Quản lý điểm thưởng",
-    "goldMember": "Thành viên Vàng",
-    "adjust": "Điều chỉnh điểm",
-    "redeem": "Đổi thưởng",
-    "history": "Lịch sử giao dịch",
-    "typeAll": "Loại: Tất cả",
+    "subtitle": "포인트 적립 관리",
+    "goldMember": "골드 회원",
+    "adjust": "포인트 조정",
+    "redeem": "포인트 사용",
+    "history": "거래 이력",
+    "typeAll": "유형: 전체",
     "type": {
-      "earned": "Tích điểm",
-      "redeemed": "Đã đổi",
-      "manual": "Điều chỉnh tay",
-      "expired": "Hết hạn"
+      "earned": "적립",
+      "redeemed": "사용",
+      "manual": "수동 조정",
+      "expired": "만료"
     },
     "cols": {
-      "date": "Ngày & ID",
-      "typeSource": "Loại & nguồn",
-      "change": "Thay đổi",
-      "balance": "Số dư sau",
-      "notes": "Ghi chú"
+      "date": "날짜 & ID",
+      "typeSource": "유형 & 출처",
+      "change": "변동",
+      "balance": "잔액",
+      "notes": "비고"
     },
-    "redeemFor10": "Đổi $10 giảm giá dịch vụ",
-    "managerDiscretion": "Quản lý duyệt",
-    "referralBonus": "Bonus giới thiệu khách - duyệt bởi Sarah M.",
-    "systemAuto": "Hệ thống tự động",
-    "expiredNote": "Điểm quá 12 tháng hết hạn",
-    "pts": "điểm",
-    "loyaltyCard": "Thẻ thành viên",
-    "availablePoints": "Điểm khả dụng",
-    "valueApprox": "≈ {value} giá trị",
-    "rewardCatalog": "Catalog phần thưởng",
-    "howEarned": "Cách tích điểm",
+    "redeemFor10": "$10 서비스 할인으로 사용",
+    "managerDiscretion": "매니저 승인",
+    "referralBonus": "고객 추천 보너스 - Sarah M. 승인",
+    "systemAuto": "시스템 자동",
+    "expiredNote": "12개월 경과로 포인트 만료",
+    "pts": "포인트",
+    "loyaltyCard": "멤버십 카드",
+    "availablePoints": "사용 가능 포인트",
+    "valueApprox": "≈ {value} 가치",
+    "rewardCatalog": "리워드 카탈로그",
+    "howEarned": "포인트 적립 방법",
     "rewards": {
-      "discount": "$10 giảm giá dịch vụ",
-      "applyAtCheckout": "Áp dụng khi thanh toán",
-      "essentialOil": "Tinh dầu miễn phí",
-      "retailProduct": "Sản phẩm bán lẻ",
-      "facial": "Facial miễn phí",
-      "facialDuration": "Dịch vụ 30 phút"
+      "discount": "$10 서비스 할인",
+      "applyAtCheckout": "결제 시 적용",
+      "essentialOil": "에센셜 오일 무료 추가",
+      "retailProduct": "리테일 제품",
+      "facial": "페이셜 무료 제공",
+      "facialDuration": "30분 서비스"
     },
     "rules": {
-      "standardRate": "Tỷ lệ chuẩn: 1 điểm / $4 dịch vụ",
-      "retailBonus": "Bonus retail: 2 điểm / $4 sản phẩm",
-      "expiry": "Điểm hết hạn sau 12 tháng tính từ ngày tích"
+      "standardRate": "기본 적립률: 서비스 $4당 1포인트",
+      "retailBonus": "리테일 보너스: 제품 $4당 2포인트",
+      "expiry": "포인트는 적립일로부터 12개월 후 만료"
     },
     "kpi": {
-      "balance": "Số dư hiện tại",
-      "totalEarned": "Tổng đã tích (vĩnh viễn)",
-      "totalRedeemed": "Tổng đã đổi",
-      "expiringSoon": "Sắp hết hạn",
-      "next30d": "30 ngày tới"
+      "balance": "현재 잔액",
+      "totalEarned": "누적 적립 (전체)",
+      "totalRedeemed": "총 사용",
+      "expiringSoon": "만료 임박",
+      "next30d": "향후 30일"
     }
   },
   "customerHealthNotes": {
-    "subtitle": "Hồ sơ sức khoẻ & ghi chú lâm sàng",
-    "editHealth": "Sửa thông tin sức khoẻ",
-    "addNote": "Thêm ghi chú",
-    "criticalAlerts": "Cảnh báo sức khoẻ quan trọng",
+    "subtitle": "건강 프로필 & 임상 노트",
+    "editHealth": "건강 정보 편집",
+    "addNote": "노트 추가",
+    "criticalAlerts": "주요 건강 경고",
     "alert": {
-      "allergy": "Dị ứng: {items}",
-      "condition": "Tình trạng: {item}"
+      "allergy": "알러지: {items}",
+      "condition": "상태: {item}"
     },
-    "skinType": "Loại da & tình trạng",
-    "medicalHistory": "Tiền sử y tế / chấn thương",
-    "lastIntakeUpdate": "Lần cập nhật gần nhất",
-    "clinicalNotes": "Ghi chú lâm sàng",
-    "categoryAll": "Loại: Tất cả",
+    "skinType": "피부 타입 & 상태",
+    "medicalHistory": "진료 / 부상 이력",
+    "lastIntakeUpdate": "최근 문진 업데이트",
+    "clinicalNotes": "임상 노트",
+    "categoryAll": "카테고리: 전체",
     "category": {
-      "allergy": "Dị ứng",
-      "injury": "Chấn thương",
-      "preference": "Sở thích",
-      "progress": "Tiến triển"
+      "allergy": "알러지",
+      "injury": "부상",
+      "preference": "선호도",
+      "progress": "경과"
     },
-    "byStaff": "Bởi {name}",
-    "contraindications": "Chống chỉ định & dị ứng",
-    "wellnessAttributes": "Thuộc tính chăm sóc",
-    "massagePressure": "Lực massage",
-    "sensitivities": "Nhạy cảm khác",
+    "byStaff": "{name} 작성",
+    "contraindications": "금기 사항 & 알러지",
+    "wellnessAttributes": "웰니스 속성",
+    "massagePressure": "마사지 강도",
+    "sensitivities": "기타 민감도",
     "pressure": {
-      "light": "Nhẹ",
-      "medium": "Vừa",
-      "strong": "Mạnh"
+      "light": "약하게",
+      "medium": "보통",
+      "strong": "강하게"
     },
     "conditions": {
-      "lowBP": "Huyết áp thấp",
-      "recentSurgery": "Phẫu thuật gần đây"
+      "lowBP": "저혈압",
+      "recentSurgery": "최근 수술 이력"
     },
     "mock": {
-      "allergyNote": "Khách phản ứng nhẹ với tinh dầu lavender, đã đổi sang tinh dầu cam.",
-      "injuryNote": "Khách báo đau lưng dưới, tránh ấn mạnh vùng L4-L5.",
-      "preferenceNote": "Thích nhạc thiền, ánh sáng tối. Trà sau liệu trình: trà gừng.",
-      "medicalHistory": "Phẫu thuật gối phải 2024, không bệnh nền",
-      "sensitivities": "Nhạy cảm với mùi hương mạnh"
+      "allergyNote": "라벤더 오일에 가벼운 반응 — 스위트 오렌지로 변경.",
+      "injuryNote": "허리 통증 호소, L4-L5 부위 강한 압박 금지.",
+      "preferenceNote": "명상 음악과 어두운 조명 선호. 시술 후 차: 생강차.",
+      "medicalHistory": "2024년 우측 무릎 수술, 만성 질환 없음",
+      "sensitivities": "강한 향에 민감"
     }
   },
   "customerCommunication": {
-    "title": "Giao tiếp khách hàng",
-    "subtitle": "Quản lý chiến dịch & tin nhắn đa kênh",
-    "sendMessage": "Gửi tin nhắn",
-    "createCampaign": "Tạo chiến dịch",
-    "campaigns": "Chiến dịch",
-    "quickSend": "Gửi nhanh",
-    "searchCustomer": "Tìm khách hàng",
-    "searchPlaceholder": "Nhập tên hoặc SĐT...",
-    "messageContent": "Nội dung tin nhắn",
-    "messagePlaceholder": "Soạn nội dung...",
-    "send": "Gửi",
+    "title": "고객 커뮤니케이션",
+    "subtitle": "멀티채널 캠페인 & 메시지 관리",
+    "sendMessage": "메시지 발송",
+    "createCampaign": "캠페인 생성",
+    "campaigns": "캠페인",
+    "quickSend": "빠른 발송",
+    "searchCustomer": "고객 검색",
+    "searchPlaceholder": "이름 또는 전화번호...",
+    "messageContent": "메시지 내용",
+    "messagePlaceholder": "메시지를 작성하세요...",
+    "send": "발송",
     "kpi": {
-      "sentToday": "Đã gửi hôm nay",
-      "activeCampaigns": "Chiến dịch đang chạy",
-      "deliveryRate": "Tỷ lệ gửi thành công",
-      "openRate": "Tỷ lệ mở (Email)",
-      "responseRate": "Tỷ lệ phản hồi / click"
+      "sentToday": "오늘 발송",
+      "activeCampaigns": "진행 중인 캠페인",
+      "deliveryRate": "발송 성공률",
+      "openRate": "오픈율 (이메일)",
+      "responseRate": "응답 / 클릭률"
     },
     "cols": {
-      "campaign": "Chiến dịch",
-      "channel": "Kênh",
-      "audience": "Đối tượng",
-      "sent": "Đã gửi",
-      "openRate": "Tỷ lệ mở",
-      "status": "Trạng thái"
+      "campaign": "캠페인",
+      "channel": "채널",
+      "audience": "대상",
+      "sent": "발송",
+      "openRate": "오픈율",
+      "status": "상태"
     },
     "channel": {
-      "label": "Kênh giao tiếp",
-      "email": "Email",
+      "label": "커뮤니케이션 채널",
+      "email": "이메일",
       "sms": "SMS",
       "zalo": "Zalo"
     },
     "audience": {
-      "allCustomers": "Tất cả khách",
+      "allCustomers": "전체 고객",
       "vip": "VIP",
-      "regulars": "Khách thường"
+      "regulars": "단골 고객"
     },
     "status": {
-      "active": "Đang chạy",
-      "scheduled": "Đã lên lịch",
-      "completed": "Hoàn thành"
+      "active": "진행 중",
+      "scheduled": "예약됨",
+      "completed": "완료"
     }
   },
   "customerMembership": {
-    "subtitle": "Gói dịch vụ & thẻ thành viên",
-    "useSession": "Dùng buổi",
-    "addPackage": "Thêm gói",
-    "activePackages": "Gói đang hoạt động",
-    "packageHistory": "Lịch sử gói",
-    "sessionUsage": "Sử dụng buổi",
-    "expiry": "Hết hạn",
-    "price": "Giá",
-    "validThru": "Hiệu lực đến",
-    "memberLevel": "Hạng thành viên",
-    "activeBenefits": "Quyền lợi đang có",
-    "ofTotal": "của {total}",
-    "allServices": "Mọi dịch vụ",
+    "subtitle": "서비스 패키지 & 멤버십",
+    "useSession": "세션 사용",
+    "addPackage": "패키지 추가",
+    "activePackages": "진행 중인 패키지",
+    "packageHistory": "패키지 이력",
+    "sessionUsage": "세션 사용 현황",
+    "expiry": "만료일",
+    "price": "가격",
+    "validThru": "유효 기간",
+    "memberLevel": "회원 등급",
+    "activeBenefits": "활성 혜택",
+    "ofTotal": "전체 {total} 중",
+    "allServices": "모든 서비스",
     "kpi": {
-      "activePackages": "Gói đang hoạt động",
-      "sessionsRemaining": "Buổi còn lại",
-      "expiredPackages": "Gói đã hết hạn",
-      "totalValue": "Tổng giá trị gói",
-      "membershipDiscount": "Giảm giá thành viên"
+      "activePackages": "진행 중인 패키지",
+      "sessionsRemaining": "잔여 세션",
+      "expiredPackages": "만료된 패키지",
+      "totalValue": "패키지 총 가치",
+      "membershipDiscount": "멤버십 할인"
     },
     "cols": {
-      "package": "Gói",
-      "price": "Giá",
-      "usage": "Sử dụng",
-      "endDate": "Ngày kết thúc",
-      "status": "Trạng thái"
+      "package": "패키지",
+      "price": "가격",
+      "usage": "사용량",
+      "endDate": "종료일",
+      "status": "상태"
     },
     "status": {
-      "active": "Đang hoạt động",
-      "expired": "Hết hạn",
-      "completed": "Hoàn thành"
+      "active": "진행 중",
+      "expired": "만료",
+      "completed": "완료"
     },
     "benefit": {
-      "discount": "10% giảm giá tất cả dịch vụ",
-      "priority": "Ưu tiên đặt lịch",
-      "birthday": "Quà sinh nhật đặc biệt",
-      "refer": "Thưởng giới thiệu khách"
+      "discount": "전체 서비스 10% 할인",
+      "priority": "우선 예약",
+      "birthday": "생일 특별 선물",
+      "refer": "추천 보상"
     }
   },
   "customerImportExport": {
-    "title": "Nhập / Xuất khách hàng",
-    "subtitle": "Import CSV/Excel hoặc export dữ liệu khách hàng",
-    "downloadTemplate": "Tải template",
-    "importSection": "Nhập dữ liệu",
-    "exportSection": "Xuất dữ liệu",
-    "dropZone": "Kéo file vào đây hoặc nhấp để chọn",
-    "supportedFormats": "Hỗ trợ CSV, XLSX (tối đa 10MB)",
-    "selectFile": "Chọn file",
-    "fieldMapping": "Mapping trường dữ liệu",
+    "title": "고객 가져오기 / 내보내기",
+    "subtitle": "CSV/Excel 가져오기 또는 고객 데이터 내보내기",
+    "downloadTemplate": "템플릿 다운로드",
+    "importSection": "데이터 가져오기",
+    "exportSection": "데이터 내보내기",
+    "dropZone": "파일을 끌어다 놓거나 클릭해 선택",
+    "supportedFormats": "CSV, XLSX 지원 (최대 10MB)",
+    "selectFile": "파일 선택",
+    "fieldMapping": "필드 매핑",
     "mapping": {
-      "source": "Trường gốc",
-      "target": "Trường đích"
+      "source": "원본 필드",
+      "target": "대상 필드"
     },
-    "previousJobs": "Lịch sử công việc",
+    "previousJobs": "작업 이력",
     "cols": {
       "id": "ID",
-      "type": "Loại",
-      "file": "File",
-      "rows": "Số dòng",
-      "status": "Trạng thái",
-      "date": "Ngày",
-      "by": "Người thực hiện"
+      "type": "유형",
+      "file": "파일",
+      "rows": "행 수",
+      "status": "상태",
+      "date": "일자",
+      "by": "작업자"
     },
     "type": {
-      "import": "Nhập",
-      "export": "Xuất"
+      "import": "가져오기",
+      "export": "내보내기"
     },
     "status": {
-      "success": "Thành công",
-      "failed": "Thất bại",
-      "partial": "Một phần"
+      "success": "성공",
+      "failed": "실패",
+      "partial": "부분"
     },
     "export": {
-      "dateRange": "Khoảng ngày (đăng ký)",
-      "segment": "Phân khúc khách hàng",
-      "allCustomers": "Tất cả khách hàng",
-      "format": "Định dạng file",
-      "run": "Xuất file"
+      "dateRange": "기간 (등록일 기준)",
+      "segment": "고객 세그먼트",
+      "allCustomers": "전체 고객",
+      "format": "파일 형식",
+      "run": "내보내기 실행"
     }
   },
   "customerBookingHistory": {
-    "subtitle": "Lịch sử & lịch sắp tới",
-    "upcoming": "Lịch hẹn sắp tới",
-    "viewDetail": "Xem chi tiết",
-    "history": "Lịch sử booking",
-    "amount": "Giá",
-    "every3w": "~3 tuần",
+    "subtitle": "방문 이력 & 예정 예약",
+    "upcoming": "예정 예약",
+    "viewDetail": "상세 보기",
+    "history": "예약 이력",
+    "amount": "금액",
+    "every3w": "약 3주",
     "kpi": {
-      "totalVisits": "Tổng lượt",
-      "completed": "Hoàn thành",
-      "cancelled": "Đã huỷ",
-      "noShows": "Không đến",
-      "avgFreq": "Tần suất TB",
-      "avgSpend": "Chi tiêu / lượt"
+      "totalVisits": "총 방문",
+      "completed": "완료",
+      "cancelled": "취소",
+      "noShows": "노쇼",
+      "avgFreq": "평균 방문 주기",
+      "avgSpend": "방문당 지출"
     },
     "filter": {
-      "all": "Tất cả",
-      "completed": "Hoàn thành",
-      "cancelled": "Đã huỷ",
-      "noShow": "Không đến"
+      "all": "전체",
+      "completed": "완료",
+      "cancelled": "취소",
+      "noShow": "노쇼"
     },
     "cols": {
-      "code": "Mã",
-      "date": "Ngày & giờ",
-      "service": "Dịch vụ",
-      "staff": "KTV",
-      "amount": "Số tiền",
-      "payment": "Thanh toán",
-      "status": "Trạng thái",
-      "actions": "Hành động"
+      "code": "코드",
+      "date": "날짜 & 시간",
+      "service": "서비스",
+      "staff": "테라피스트",
+      "amount": "금액",
+      "payment": "결제",
+      "status": "상태",
+      "actions": "작업"
     },
     "payment": {
-      "paid": "Đã thanh toán",
-      "unpaid": "Chưa thanh toán",
-      "refunded": "Đã hoàn"
+      "paid": "결제 완료",
+      "unpaid": "미결제",
+      "refunded": "환불됨"
     },
     "status": {
-      "completed": "Hoàn thành",
-      "cancelled": "Đã huỷ",
-      "noShow": "Không đến",
-      "upcoming": "Sắp tới"
+      "completed": "완료",
+      "cancelled": "취소",
+      "noShow": "노쇼",
+      "upcoming": "예정"
     }
   },
   "customerPaymentHistory": {
-    "subtitle": "Hoá đơn & thanh toán",
-    "issueRefund": "Hoàn tiền",
-    "newInvoice": "Tạo hoá đơn",
-    "history": "Lịch sử thanh toán",
+    "subtitle": "인보이스 & 결제 내역",
+    "issueRefund": "환불 처리",
+    "newInvoice": "인보이스 생성",
+    "history": "결제 이력",
     "kpi": {
-      "totalSpending": "Tổng chi tiêu",
-      "totalPayments": "Số lần thanh toán",
-      "totalRefunds": "Tổng đã hoàn",
-      "avgPayment": "Giá trị TB",
-      "preferredMethod": "Phương thức ưa dùng"
+      "totalSpending": "총 지출",
+      "totalPayments": "결제 횟수",
+      "totalRefunds": "총 환불",
+      "avgPayment": "평균 결제액",
+      "preferredMethod": "선호 결제 수단"
     },
     "filter": {
-      "all": "Tất cả"
+      "all": "전체"
     },
     "cols": {
-      "invoice": "Hoá đơn",
-      "date": "Ngày",
-      "type": "Loại",
-      "method": "Phương thức",
-      "bookingRef": "Booking",
-      "amount": "Số tiền",
-      "status": "Trạng thái"
+      "invoice": "인보이스",
+      "date": "일자",
+      "type": "유형",
+      "method": "결제 수단",
+      "bookingRef": "예약",
+      "amount": "금액",
+      "status": "상태"
     },
     "type": {
-      "payment": "Thanh toán",
-      "refund": "Hoàn tiền",
-      "partial": "Một phần",
-      "deposit": "Cọc"
+      "payment": "결제",
+      "refund": "환불",
+      "partial": "부분",
+      "deposit": "예치금"
     },
     "method": {
-      "card": "Thẻ",
-      "cash": "Tiền mặt",
-      "transfer": "Chuyển khoản",
+      "card": "카드",
+      "cash": "현금",
+      "transfer": "계좌이체",
       "momo": "MoMo"
     },
     "status": {
-      "success": "Thành công",
-      "refunded": "Đã hoàn",
-      "pending": "Đang chờ"
+      "success": "성공",
+      "refunded": "환불됨",
+      "pending": "대기"
     }
   },
   "customerSegments": {
-    "title": "Phân khúc & Tag",
-    "subtitle": "Quản lý phân khúc khách hàng và tag",
-    "createTag": "Tạo tag",
-    "createSegment": "Tạo phân khúc",
-    "segments": "Phân khúc",
-    "tags": "Tag",
-    "quickRule": "Quy tắc nhanh",
-    "ruleHint": "Định nghĩa rule và xem preview số khách phù hợp.",
-    "preview": "Xem trước",
-    "matchingCustomers": "Khách phù hợp",
-    "view": "Xem",
+    "title": "세그먼트 & 태그",
+    "subtitle": "고객 세그먼트 및 태그 관리",
+    "createTag": "태그 생성",
+    "createSegment": "세그먼트 생성",
+    "segments": "세그먼트",
+    "tags": "태그",
+    "quickRule": "간편 규칙",
+    "ruleHint": "규칙을 정의하고 매칭되는 고객을 미리 확인합니다.",
+    "preview": "미리보기",
+    "matchingCustomers": "매칭 고객",
+    "view": "보기",
     "kpi": {
-      "totalSegments": "Tổng phân khúc",
-      "totalTags": "Tổng tag",
-      "taggedCustomers": "Khách có tag",
-      "largestSegment": "Phân khúc lớn nhất",
-      "inactiveSegment": "Phân khúc không hoạt động"
+      "totalSegments": "전체 세그먼트",
+      "totalTags": "전체 태그",
+      "taggedCustomers": "태그된 고객",
+      "largestSegment": "최대 세그먼트",
+      "inactiveSegment": "비활성 세그먼트"
     },
     "cols": {
-      "segment": "Phân khúc",
-      "type": "Loại",
-      "count": "Số khách",
-      "trend": "Xu hướng",
-      "actions": "Hành động"
+      "segment": "세그먼트",
+      "type": "유형",
+      "count": "고객 수",
+      "trend": "추이",
+      "actions": "작업"
     },
     "type": {
-      "auto": "Tự động",
-      "manual": "Thủ công"
+      "auto": "자동",
+      "manual": "수동"
     }
   },
   "customerAnalytics": {
-    "title": "Phân tích khách hàng",
-    "subtitle": "Insight & xu hướng khách hàng",
-    "growth": "Tăng trưởng khách hàng",
-    "sources": "Nguồn khách",
-    "spendingTiers": "Phân tầng chi tiêu",
-    "topCustomers": "Top khách hàng (LTV)",
-    "retentionAnalysis": "Phân tích giữ chân",
-    "churnAnalysis": "Phân tích rời bỏ",
-    "avgVisits": "Lượt TB / khách",
-    "visitFrequency": "Tần suất ghé",
-    "every45d": "Mỗi 45 ngày",
-    "inactiveCustomers": "Khách không hoạt động",
-    "atRisk": "Có nguy cơ (>60d)",
-    "chartPlaceholder": "Biểu đồ 8 tuần gần nhất",
+    "title": "고객 분석",
+    "subtitle": "고객 인사이트 및 트렌드",
+    "growth": "고객 증가 추이",
+    "sources": "유입 경로",
+    "spendingTiers": "지출 구간",
+    "topCustomers": "상위 고객 (LTV)",
+    "retentionAnalysis": "리텐션 분석",
+    "churnAnalysis": "이탈 분석",
+    "avgVisits": "고객당 평균 방문",
+    "visitFrequency": "방문 주기",
+    "every45d": "45일에 한 번",
+    "inactiveCustomers": "비활성 고객",
+    "atRisk": "위험군 (>60일)",
+    "chartPlaceholder": "최근 8주 차트",
     "kpi": {
-      "totalDatabase": "Tổng database",
-      "newCustomers": "Khách mới",
-      "retention": "Tỷ lệ giữ chân",
-      "ltv": "LTV trung bình",
-      "avgPerVisit": "Chi tiêu / lượt",
-      "churn": "Tỷ lệ rời bỏ (>90d)"
+      "totalDatabase": "전체 DB",
+      "newCustomers": "신규 고객",
+      "retention": "리텐션율",
+      "ltv": "평균 LTV",
+      "avgPerVisit": "방문당 지출",
+      "churn": "이탈률 (>90일)"
     },
     "range": {
-      "30d": "30 ngày",
-      "90d": "90 ngày",
-      "year": "12 tháng"
+      "30d": "30일",
+      "90d": "90일",
+      "year": "12개월"
     },
     "cols": {
-      "customer": "Khách",
-      "visits": "Lượt",
+      "customer": "고객",
+      "visits": "방문",
       "ltv": "LTV"
     },
     "source": {
-      "direct": "Trực tiếp",
-      "referral": "Giới thiệu",
-      "social": "Mạng xã hội",
+      "direct": "직접 유입",
+      "referral": "추천",
+      "social": "소셜 미디어",
       "walkin": "Walk-in",
-      "other": "Khác"
+      "other": "기타"
     }
   },
   "customerForm": {
-    "title": "Tạo khách hàng mới",
-    "subtitle": "Nhập thông tin để tạo hồ sơ khách",
-    "save": "Lưu",
-    "cancel": "Huỷ",
+    "title": "신규 고객 생성",
+    "subtitle": "정보를 입력해 고객 프로필을 생성합니다",
+    "save": "저장",
+    "cancel": "취소",
     "section": {
-      "basic": "Thông tin cơ bản",
-      "contact": "Liên hệ",
-      "membership": "Thành viên & trạng thái",
-      "health": "Sức khoẻ & sở thích",
-      "crm": "CRM & marketing"
+      "basic": "기본 정보",
+      "contact": "연락처",
+      "membership": "멤버십 & 상태",
+      "health": "건강 & 선호도",
+      "crm": "CRM & 마케팅"
     },
     "field": {
-      "firstName": "Tên",
-      "lastName": "Họ",
-      "gender": "Giới tính",
-      "dob": "Ngày sinh",
-      "phone": "Số điện thoại",
-      "email": "Email",
-      "address": "Địa chỉ",
-      "membershipLevel": "Hạng thành viên",
-      "accountStatus": "Trạng thái",
-      "registrationBranch": "Chi nhánh đăng ký",
-      "preferredTherapist": "KTV ưa thích",
-      "preferredRoom": "Loại phòng",
-      "skinCondition": "Tình trạng da",
-      "allergies": "Dị ứng đã biết",
-      "referralSource": "Nguồn giới thiệu",
-      "notes": "Ghi chú nội bộ"
+      "firstName": "이름",
+      "lastName": "성",
+      "gender": "성별",
+      "dob": "생년월일",
+      "phone": "전화번호",
+      "email": "이메일",
+      "address": "주소",
+      "membershipLevel": "회원 등급",
+      "accountStatus": "계정 상태",
+      "registrationBranch": "등록 지점",
+      "preferredTherapist": "선호 테라피스트",
+      "preferredRoom": "선호 룸 유형",
+      "skinCondition": "피부 상태",
+      "allergies": "알려진 알러지",
+      "referralSource": "유입 경로",
+      "notes": "내부 메모"
     },
     "placeholder": {
       "firstName": "Nguyễn",
       "lastName": "Văn An",
-      "address": "Số nhà, đường, quận, thành phố",
-      "skinCondition": "Da hỗn hợp, nhạy cảm...",
-      "allergies": "Lavender, latex...",
-      "notes": "Lưu ý đặc biệt cho KTV..."
+      "address": "번지, 도로, 구, 시",
+      "skinCondition": "복합성, 민감성...",
+      "allergies": "라벤더, 라텍스...",
+      "notes": "테라피스트를 위한 특이사항..."
     },
     "gender": {
-      "female": "Nữ",
-      "male": "Nam",
-      "other": "Khác"
+      "female": "여성",
+      "male": "남성",
+      "other": "기타"
     },
     "level": {
-      "regular": "Thường",
-      "silver": "Bạc",
-      "gold": "Vàng",
-      "platinum": "Bạch kim"
+      "regular": "일반",
+      "silver": "실버",
+      "gold": "골드",
+      "platinum": "플래티넘"
     },
     "status": {
-      "active": "Hoạt động",
-      "inactive": "Không hoạt động",
-      "blocked": "Khoá"
+      "active": "활성",
+      "inactive": "비활성",
+      "blocked": "차단"
     },
     "room": {
-      "standard": "Chuẩn",
-      "couple": "Đôi",
+      "standard": "스탠다드",
+      "couple": "커플",
       "vip": "VIP"
     },
     "referral": {
-      "direct": "Trực tiếp",
-      "referral": "Giới thiệu",
-      "social": "Mạng xã hội",
+      "direct": "직접",
+      "referral": "추천",
+      "social": "소셜 미디어",
       "walkin": "Walk-in"
     },
     "duplicate": {
-      "title": "Số điện thoại có thể đã tồn tại",
-      "message": "Một khách hàng khác đang dùng số này. Hãy kiểm tra trước khi tiếp tục."
+      "title": "이미 등록된 전화번호일 수 있습니다",
+      "message": "다른 고객이 이 번호를 사용 중입니다. 계속 진행하기 전에 확인하세요."
     }
   },
   "staffOverview": {
-    "title": "Tổng quan nhân viên",
-    "subtitle": "Tình hình nhân sự & hiệu suất",
-    "viewAll": "Xem tất cả",
-    "addStaff": "Thêm nhân viên",
-    "workforceDistribution": "Phân bố vai trò",
-    "staffByBranch": "Nhân viên theo chi nhánh",
-    "todayStatus": "Tình trạng hôm nay",
-    "checkedIn": "Đã check-in",
-    "onLeaveToday": "Nghỉ hôm nay",
-    "recentActivity": "Hoạt động gần đây",
-    "topPerformers": "Top hiệu suất",
-    "thisMonth": "Tháng này",
-    "today": "Hôm nay",
+    "title": "직원 개요",
+    "subtitle": "인력 현황 & 성과",
+    "viewAll": "전체 보기",
+    "addStaff": "직원 추가",
+    "workforceDistribution": "인력 분포",
+    "staffByBranch": "지점별 직원",
+    "todayStatus": "오늘의 현황",
+    "checkedIn": "체크인",
+    "onLeaveToday": "오늘 휴무",
+    "recentActivity": "최근 활동",
+    "topPerformers": "최고 성과자",
+    "thisMonth": "이번 달",
+    "today": "오늘",
     "role": {
-      "therapist": "Kỹ thuật viên",
-      "receptionist": "Lễ tân",
-      "manager": "Quản lý",
-      "support": "Hỗ trợ"
+      "therapist": "테라피스트",
+      "receptionist": "리셉셔니스트",
+      "manager": "매니저",
+      "support": "지원"
     },
     "activity": {
-      "checkedIn": "Vừa check-in",
-      "completedShift": "Hoàn thành ca",
-      "onLeave": "Đăng ký nghỉ"
+      "checkedIn": "방금 체크인",
+      "completedShift": "근무 완료",
+      "onLeave": "휴무 신청"
     },
     "kpi": {
-      "totalStaff": "Tổng nhân viên",
-      "workingToday": "Làm việc hôm nay",
-      "onLeave": "Đang nghỉ",
-      "newThisMonth": "Mới tháng này"
+      "totalStaff": "전체 직원",
+      "workingToday": "오늘 근무",
+      "onLeave": "휴무 중",
+      "newThisMonth": "이번 달 신규"
     }
   }
 }

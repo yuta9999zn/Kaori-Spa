@@ -276,6 +276,59 @@
     "delete": "Delete",
     "view": "View"
   },
+  "report": {
+    "title": "Revenue Report",
+    "subtitle": "Monthly revenue, expense and profit summary",
+    "export": "Export Excel",
+    "monthShort": "M{month}",
+    "workingDays": "{days} working days",
+    "kpi": {
+      "total": "Total revenue",
+      "totalDelta": "+{value}% vs last month",
+      "services": "Services",
+      "servicesShare": "{pct}% of revenue",
+      "cosmetics": "Cosmetics",
+      "cosmeticsShare": "{pct}% of revenue",
+      "expenses": "Expenses",
+      "expensesShare": "{pct}% of revenue"
+    },
+    "sections": {
+      "dailyRevenue": "Daily revenue M{month}",
+      "chartHint": "Hover to see daily breakdown",
+      "pl": "Profit & Loss",
+      "paymentMix": "Payment methods",
+      "dailyLog": "Daily log",
+      "yearly": "Yearly overview {year}"
+    },
+    "pl": {
+      "revenue": "Revenue",
+      "servicesLine": "Services revenue",
+      "cosmeticsLine": "Cosmetics revenue",
+      "expenses": "Total expenses",
+      "profit": "Net profit"
+    },
+    "columns": {
+      "date": "Date",
+      "services": "Services",
+      "cosmetics": "Cosmetics",
+      "total": "Total"
+    },
+    "expense": {
+      "towels": "Laundry",
+      "supplies": "Consumables",
+      "rent": "Rent",
+      "marketing": "Marketing",
+      "utilities": "Utilities",
+      "salary": "Salary",
+      "other": "Other"
+    },
+    "payment": {
+      "cash": "Cash",
+      "transfer": "Bank transfer",
+      "company": "Company credit",
+      "card": "Card"
+    }
+  },
   "reportBranch": {
     "title": "Monthly Branch Report",
     "subtitle": "Revenue, expense and profit summary for the branch",

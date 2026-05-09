@@ -47,108 +47,108 @@
     "starter": "스타터",
     "professional": "프로",
     "enterprise": "엔터프라이즈",
-    "subtitle": "Quản lý gói nền tảng, theo dõi giới hạn sử dụng và cập nhật thông tin thanh toán.",
+    "subtitle": "플랫폼 구독 플랜을 관리하고 사용량 한도를 확인하며 결제 정보를 업데이트하세요.",
     "breadcrumb": {
-      "dashboard": "Tổng quan",
-      "settings": "Cài đặt"
+      "dashboard": "대시보드",
+      "settings": "설정"
     },
     "actions": {
-      "downloadInvoice": "Tải hoá đơn",
-      "upgrade": "Nâng cấp gói",
-      "cancel": "Huỷ đăng ký",
-      "changePlan": "Đổi gói",
-      "edit": "Chỉnh sửa"
+      "downloadInvoice": "인보이스 다운로드",
+      "upgrade": "플랜 업그레이드",
+      "cancel": "구독 취소",
+      "changePlan": "플랜 변경",
+      "edit": "편집"
     },
     "current": {
-      "activeBadge": "Đang hoạt động",
-      "perMonth": "mỗi tháng",
-      "nextBilling": "Ngày thanh toán tiếp theo",
-      "featuresTitle": "Tính năng của gói hiện tại",
+      "activeBadge": "활성 구독",
+      "perMonth": "월 단위",
+      "nextBilling": "다음 결제일",
+      "featuresTitle": "현재 플랜 기능",
       "features": {
-        "branches": "Tối đa {count} chi nhánh đang hoạt động",
-        "staff": "{count} tài khoản nhân viên",
-        "customers": "Số lượng khách hàng không giới hạn",
-        "analytics": "Báo cáo & phân tích nâng cao",
-        "support": "Hỗ trợ ưu tiên qua email"
+        "branches": "활성 지점 최대 {count}개",
+        "staff": "직원 계정 {count}개",
+        "customers": "고객 프로필 무제한",
+        "analytics": "고급 분석 & 리포트",
+        "support": "이메일 우선 지원"
       }
     },
     "usage": {
-      "title": "Mức sử dụng nền tảng",
-      "subtitle": "Tỷ lệ sử dụng hiện tại so với giới hạn của gói.",
-      "staff": "Tài khoản nhân viên",
-      "branches": "Chi nhánh đang hoạt động",
-      "storage": "Dung lượng lưu trữ",
-      "bookings": "Lịch hẹn trong tháng",
-      "unlimited": "Không giới hạn",
-      "scaleHint": "Sắp đạt giới hạn? Liên hệ đội thành công khách hàng để mở rộng tự động hoặc nhận ưu đãi doanh nghiệp."
+      "title": "플랫폼 사용량",
+      "subtitle": "현재 워크스페이스 한도 대비 사용률입니다.",
+      "staff": "직원 계정",
+      "branches": "활성 지점",
+      "storage": "에셋 저장 공간",
+      "bookings": "월간 예약 건수",
+      "unlimited": "무제한",
+      "scaleHint": "한도에 가까워졌나요? 고객 성공팀에 문의하여 인프라를 확장하거나 엔터프라이즈 할인을 받으세요."
     },
     "billing": {
-      "title": "Thông tin thanh toán",
-      "companyName": "Tên công ty",
-      "address": "Địa chỉ thanh toán",
-      "taxId": "Mã số thuế / VAT"
+      "title": "결제 정보",
+      "companyName": "회사명",
+      "address": "청구 주소",
+      "taxId": "사업자등록번호 / VAT"
     },
     "payment": {
-      "title": "Phương thức thanh toán",
-      "holder": "Chủ thẻ",
-      "expires": "Hết hạn",
-      "addBank": "Thêm chuyển khoản",
-      "updateCard": "Cập nhật thẻ"
+      "title": "결제 수단",
+      "holder": "카드 소유자",
+      "expires": "유효기간",
+      "addBank": "계좌이체 추가",
+      "updateCard": "카드 업데이트"
     },
     "invoices": {
-      "title": "Lịch sử hoá đơn",
+      "title": "인보이스 이력",
       "pdf": "PDF",
       "cols": {
-        "id": "Mã hoá đơn",
-        "date": "Ngày",
-        "amount": "Số tiền",
-        "status": "Trạng thái",
-        "action": "Thao tác"
+        "id": "인보이스 번호",
+        "date": "결제일",
+        "amount": "금액",
+        "status": "상태",
+        "action": "작업"
       },
       "status": {
-        "paid": "Đã thanh toán",
-        "pending": "Chờ thanh toán"
+        "paid": "결제 완료",
+        "pending": "결제 대기"
       }
     },
     "compare": {
-      "title": "Bảng giá nền tảng",
-      "subtitle": "Mở rộng quy mô spa với các tính năng được thiết kế để tăng trưởng.",
-      "monthly": "Theo tháng",
-      "yearly": "Theo năm (Tiết kiệm 20%)",
-      "currentBadge": "Gói hiện tại",
-      "active": "Đang dùng",
-      "downgrade": "Hạ gói",
-      "upgradeEnterprise": "Nâng cấp Doanh nghiệp"
+      "title": "플랫폼 요금제",
+      "subtitle": "성장에 최적화된 기능으로 스파 비즈니스의 규모를 확장하세요.",
+      "monthly": "월간 결제",
+      "yearly": "연간 (20% 할인)",
+      "currentBadge": "현재 플랜",
+      "active": "사용 중",
+      "downgrade": "다운그레이드",
+      "upgradeEnterprise": "엔터프라이즈로 업그레이드"
     },
     "tiers": {
       "starter": {
-        "price": "690.000 ₫",
+        "price": "690,000 ₫",
         "priceShort": "690K",
-        "tagline": "Phù hợp với kỹ thuật viên độc lập và spa một chi nhánh.",
-        "f1": "1 chi nhánh đang hoạt động",
-        "f2": "Tối đa 5 nhân viên",
-        "f3": "Trang đặt lịch tiêu chuẩn",
-        "f4": "Báo cáo cơ bản"
+        "tagline": "독립 테라피스트와 단일 지점 살롱에 적합합니다.",
+        "f1": "활성 지점 1개",
+        "f2": "직원 계정 최대 5개",
+        "f3": "기본 예약 페이지",
+        "f4": "기본 분석 리포트"
       },
       "professional": {
-        "price": "1.890.000 ₫",
+        "price": "1,890,000 ₫",
         "priceShort": "1.89M",
-        "tagline": "Tất cả những gì cần để vận hành chuỗi spa nhiều chi nhánh.",
-        "f1": "Tối đa 5 chi nhánh hoạt động",
-        "f2": "Tối đa 50 nhân viên",
-        "f3": "Cổng đặt lịch white-label",
-        "f4": "Báo cáo & phân tích nâng cao",
-        "f5": "Hỗ trợ ưu tiên qua email"
+        "tagline": "성장하는 다지점 스파 운영에 필요한 모든 기능.",
+        "f1": "활성 지점 최대 5개",
+        "f2": "직원 계정 최대 50개",
+        "f3": "화이트라벨 예약 포털",
+        "f4": "고급 분석 & 리포트",
+        "f5": "이메일 우선 지원"
       },
       "enterprise": {
-        "price": "4.790.000 ₫",
+        "price": "4,790,000 ₫",
         "priceShort": "4.79M",
-        "tagline": "Hạ tầng riêng cho chuỗi spa và franchise lớn.",
-        "f1": "Chi nhánh không giới hạn",
-        "f2": "Người dùng không giới hạn",
-        "f3": "Phát triển ứng dụng tuỳ chỉnh",
-        "f4": "Truy cập API & Webhook",
-        "f5": "Account Manager riêng 24/7"
+        "tagline": "대형 웰니스 프랜차이즈를 위한 전용 인프라.",
+        "f1": "지점 무제한",
+        "f2": "사용자 무제한",
+        "f3": "맞춤형 앱 개발",
+        "f4": "API & Webhook 접근",
+        "f5": "24/7 전담 어카운트 매니저"
       }
     }
   },

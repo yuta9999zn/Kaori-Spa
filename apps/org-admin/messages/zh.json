@@ -1,6 +1,12 @@
 {
-  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
-  "portal": { "name": "组织管理", "subtitle": "Organization Owner" },
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty"
+  },
+  "portal": {
+    "name": "组织管理",
+    "subtitle": "Organization Owner"
+  },
   "nav": {
     "dashboard": "总览",
     "branch": "门店",
@@ -15,272 +21,333 @@
   },
   "dashboard": {
     "title": "组织概览",
-    "kpi": { "branches": "门店", "staff": "员工", "customers": "客户", "revenue": "月营收" },
+    "kpi": {
+      "branches": "门店",
+      "staff": "员工",
+      "customers": "客户",
+      "revenue": "月营收"
+    },
     "branchSummary": "门店表现"
   },
   "branch": {
     "title": "门店",
     "create": "新建门店",
-    "columns": { "code": "编号", "name": "名称", "address": "地址", "manager": "店长", "status": "状态" }
+    "columns": {
+      "code": "编号",
+      "name": "名称",
+      "address": "地址",
+      "manager": "店长",
+      "status": "状态"
+    }
   },
   "member": {
     "title": "成员",
     "invite": "邀请成员",
-    "columns": { "name": "姓名", "email": "邮箱", "role": "角色", "scope": "范围", "status": "状态" }
-  },
-  "role": { "title": "权限矩阵", "subtitle": "配置角色 × 权限" },
-  "service": {
-    "title": "Cấu hình dịch vụ",
-    "subtitle": "Tuỳ biến dịch vụ theo từng chi nhánh: giá, thời lượng, sức chứa",
-    "applyAll": "Áp dụng cấu hình gốc cho tất cả",
-    "filter": { "all": "Tất cả trạng thái", "active": "Đang hoạt động", "inactive": "Tạm dừng" },
-    "base": { "service": "Tên dịch vụ", "category": "Nhóm dịch vụ", "price": "Giá gốc", "duration": "Thời lượng gốc" },
     "columns": {
-      "branch": "Chi nhánh",
-      "status": "Trạng thái",
-      "price": "Giá ghi đè",
-      "duration": "Thời lượng",
-      "staff": "Nhân viên",
-      "room": "Phòng",
-      "max": "Tối đa/ngày",
-      "updated": "Cập nhật",
-      "actions": "Thao tác"
+      "name": "姓名",
+      "email": "邮箱",
+      "role": "角色",
+      "scope": "范围",
+      "status": "状态"
+    }
+  },
+  "role": {
+    "title": "权限矩阵",
+    "subtitle": "配置角色 × 权限"
+  },
+  "service": {
+    "title": "服务配置",
+    "subtitle": "按门店自定义服务:价格、时长、容量",
+    "applyAll": "将基准设置应用到全部",
+    "filter": {
+      "all": "全部状态",
+      "active": "运行中",
+      "inactive": "已暂停"
     },
-    "actions": { "edit": "Sửa cấu hình" },
+    "base": {
+      "service": "服务名称",
+      "category": "服务分类",
+      "price": "基准价格",
+      "duration": "基准时长"
+    },
+    "columns": {
+      "branch": "门店",
+      "status": "状态",
+      "price": "价格覆盖",
+      "duration": "时长",
+      "staff": "技师要求",
+      "room": "房间",
+      "max": "日最大量",
+      "updated": "更新时间",
+      "actions": "操作"
+    },
+    "actions": {
+      "edit": "编辑配置"
+    },
     "context": {
-      "service": "Triệt lông toàn thân nữ",
-      "category": "Triệt lông công nghệ cao",
-      "price": "12.000.000 ₫",
-      "duration": "90 phút"
+      "service": "女士全身激光脱毛",
+      "category": "高端脱毛",
+      "price": "VND 12,000,000",
+      "duration": "90 分钟"
     }
   },
   "roleAssign": {
-    "title": "Gán vai trò",
-    "subtitle": "Phân vai trò cho người dùng theo phạm vi tổ chức hoặc chi nhánh",
-    "create": "Gán vai trò mới",
-    "filter": { "all": "Tất cả vai trò", "scopeAll": "Tất cả phạm vi", "search": "Tìm theo tên hoặc email…" },
+    "title": "角色分配",
+    "subtitle": "按组织或门店范围为用户分配角色",
+    "create": "新建分配",
+    "filter": {
+      "all": "全部角色",
+      "scopeAll": "全部范围",
+      "search": "按姓名或邮箱搜索…"
+    },
     "kpi": {
-      "users": "Người dùng đã phân vai trò",
-      "pending": "Lời mời chờ phản hồi",
-      "expiring": "Sắp hết hạn",
-      "branches": "Chi nhánh được phủ"
+      "users": "已分配用户",
+      "pending": "待确认邀请",
+      "expiring": "即将到期",
+      "branches": "覆盖门店"
     },
     "columns": {
-      "user": "Người dùng",
-      "role": "Vai trò",
-      "scope": "Phạm vi",
-      "assignedBy": "Người gán",
-      "assignedAt": "Thời điểm",
-      "expires": "Hết hạn",
-      "status": "Trạng thái",
-      "actions": "Thao tác"
+      "user": "用户",
+      "role": "角色",
+      "scope": "范围",
+      "assignedBy": "分配人",
+      "assignedAt": "分配时间",
+      "expires": "到期",
+      "status": "状态",
+      "actions": "操作"
     },
-    "status": { "active": "Đang dùng", "pending": "Chờ xác nhận", "expired": "Hết hạn" },
-    "actions": { "revoke": "Thu hồi", "extend": "Gia hạn" }
+    "status": {
+      "active": "生效中",
+      "pending": "待确认",
+      "expired": "已过期"
+    },
+    "actions": {
+      "revoke": "撤销",
+      "extend": "延长"
+    }
   },
   "permissionCheck": {
-    "title": "Kiểm tra quyền",
-    "subtitle": "Mô phỏng quyền của người dùng và truy vết các thay đổi quan trọng",
-    "simulate": "Mô phỏng người dùng",
+    "title": "权限检查",
+    "subtitle": "模拟用户权限并追踪关键 RBAC 事件",
+    "simulate": "模拟用户",
     "kpi": {
-      "changesToday": "Thay đổi quyền hôm nay",
-      "rolesModified": "Vai trò chỉnh sửa tuần này",
-      "assignments": "Lượt gán vai trò tuần",
-      "alerts": "Sự kiện cần xem xét"
+      "changesToday": "今日权限变更",
+      "rolesModified": "本周修改角色",
+      "assignments": "本周角色分配",
+      "alerts": "待审查事件"
     },
-    "form": { "user": "Người dùng", "branch": "Chi nhánh", "action": "Hành động cần kiểm tra", "submit": "Kiểm tra quyền" },
-    "result": { "allowed": "Được phép", "denied": "Bị từ chối", "trace": "Lý do" },
+    "form": {
+      "user": "用户",
+      "branch": "门店",
+      "action": "待测试动作",
+      "submit": "执行检查"
+    },
+    "result": {
+      "allowed": "允许",
+      "denied": "拒绝",
+      "trace": "原因"
+    },
     "columns": {
-      "time": "Thời điểm",
-      "actor": "Người thực hiện",
-      "event": "Sự kiện",
-      "target": "Vai trò / chi nhánh",
-      "description": "Mô tả",
+      "time": "时间",
+      "actor": "执行人",
+      "event": "事件",
+      "target": "角色 / 门店",
+      "description": "描述",
       "ip": "IP"
     }
   },
   "permissionMatrix": {
-    "title": "Ma trận quyền",
-    "subtitle": "Cấu hình quyền CRUD cho từng vai trò trên mỗi module",
-    "save": "Lưu thay đổi",
-    "reset": "Đặt lại mặc định",
-    "role": "Đang cấu hình vai trò",
-    "scope": "Phạm vi áp dụng",
-    "assigned": "Đã gán cho",
-    "users": "người dùng",
+    "title": "权限矩阵",
+    "subtitle": "为每个角色按模块配置 CRUD 权限",
+    "save": "保存修改",
+    "reset": "恢复默认",
+    "role": "正在配置角色",
+    "scope": "适用范围",
+    "assigned": "已分配给",
+    "users": "位用户",
     "groups": {
-      "operations": "Vận hành",
-      "marketing": "Marketing & CRM",
-      "analytics": "Báo cáo",
-      "tenant": "Quản trị tổ chức"
+      "operations": "运营",
+      "marketing": "营销与 CRM",
+      "analytics": "报表",
+      "tenant": "组织管理"
     },
     "columns": {
-      "module": "Module",
-      "view": "Xem",
-      "create": "Tạo",
-      "edit": "Sửa",
-      "delete": "Xoá",
-      "manage": "Quản lý",
-      "all": "Chọn tất cả"
+      "module": "模块",
+      "view": "查看",
+      "create": "创建",
+      "edit": "编辑",
+      "delete": "删除",
+      "manage": "管理",
+      "all": "全选"
     },
-    "summary": "Tóm tắt quyền",
-    "summaryDesc": "Người dùng có vai trò này sẽ truy cập được các module sau"
+    "summary": "权限摘要",
+    "summaryDesc": "拥有此角色的用户可访问以下模块"
   },
   "orgContent": {
-    "title": "Nội dung công ty",
-    "subtitle": "Quản lý trang giới thiệu, câu chuyện thương hiệu, lãnh đạo và nội dung báo chí của tổ chức.",
-    "options": "Tuỳ chọn",
-    "createPost": "Tạo bài công ty",
-    "search": "Tìm theo tiêu đề, slug…",
-    "advancedFilters": "Bộ lọc nâng cao",
-    "views": "lượt xem",
+    "title": "公司内容",
+    "subtitle": "管理组织的介绍页、品牌故事、领导团队及新闻内容。",
+    "options": "选项",
+    "createPost": "新建公司文章",
+    "search": "按标题、Slug 搜索…",
+    "advancedFilters": "高级筛选",
+    "views": "次浏览",
     "founderCeo": "Founder & CEO",
-    "hrDept": "Phòng Nhân sự",
-    "prTeam": "Đội PR",
-    "externalLink": "Liên kết ngoài",
-    "unpublished": "Chưa xuất bản",
-    "viewAll": "Xem tất cả",
+    "hrDept": "人力资源部",
+    "prTeam": "公关团队",
+    "externalLink": "外部链接",
+    "unpublished": "未发布",
+    "viewAll": "查看全部",
     "kpi": {
-      "totalPages": "Tổng trang",
-      "published": "Đã xuất bản",
-      "drafts": "Bản nháp",
-      "press": "Bài báo chí",
-      "awards": "Giải thưởng"
+      "totalPages": "页面总数",
+      "published": "已发布",
+      "drafts": "草稿",
+      "press": "媒体文章",
+      "awards": "奖项"
     },
     "filter": {
-      "typeAll": "Loại nội dung: Tất cả",
-      "statusAll": "Trạng thái: Tất cả",
-      "dateAny": "Thời gian: Bất kỳ",
-      "last7": "7 ngày qua",
-      "last30": "30 ngày qua"
+      "typeAll": "内容类型:全部",
+      "statusAll": "状态:全部",
+      "dateAny": "时间:不限",
+      "last7": "最近 7 天",
+      "last30": "最近 30 天"
     },
     "type": {
-      "story": "Câu chuyện thương hiệu",
-      "leader": "Hồ sơ lãnh đạo",
-      "press": "Bài báo chí",
-      "award": "Giải thưởng / Chứng nhận"
+      "story": "品牌故事",
+      "leader": "领导简介",
+      "press": "媒体文章",
+      "award": "奖项 / 认证"
     },
     "status": {
-      "published": "Đã xuất bản",
-      "draft": "Bản nháp",
-      "scheduled": "Đã lên lịch",
-      "archived": "Lưu trữ"
+      "published": "已发布",
+      "draft": "草稿",
+      "scheduled": "已排期",
+      "archived": "已归档"
     },
     "cols": {
-      "title": "Tiêu đề & chi tiết",
-      "contentType": "Loại nội dung",
-      "author": "Tác giả",
-      "status": "Trạng thái",
-      "dateMetrics": "Ngày & chỉ số",
-      "actions": "Thao tác"
+      "title": "标题与详情",
+      "contentType": "内容类型",
+      "author": "作者",
+      "status": "状态",
+      "dateMetrics": "日期与指标",
+      "actions": "操作"
     },
     "actions": {
-      "preview": "Xem trước",
-      "edit": "Chỉnh sửa",
-      "analytics": "Phân tích",
-      "delete": "Xoá"
+      "preview": "预览",
+      "edit": "编辑",
+      "analytics": "分析",
+      "delete": "删除"
     },
     "pagination": {
-      "showing": "Hiển thị {from} đến {to} trong {total} trang"
+      "showing": "显示第 {from} 到 {to} 条,共 {total} 条"
     }
   },
   "branchReport": {
-    "title": "Báo cáo chi nhánh",
-    "subtitle": "Theo dõi hiệu suất hằng ngày và hằng tuần của một chi nhánh cụ thể.",
-    "branchLabel": "Spa Quận 1",
-    "export": "Xuất báo cáo",
-    "viewAll": "Xem tất cả",
+    "title": "门店报表",
+    "subtitle": "监控某一门店的日度与周度业绩。",
+    "branchLabel": "第一郡 Spa",
+    "export": "导出报表",
+    "viewAll": "查看全部",
     "breadcrumb": {
-      "dashboard": "Tổng quan",
-      "analytics": "Phân tích"
+      "dashboard": "总览",
+      "analytics": "分析"
     },
     "range": {
-      "today": "Hôm nay",
-      "last7": "7 ngày qua",
-      "last30": "30 ngày qua",
-      "custom": "Khoảng tuỳ chọn…"
+      "today": "今日",
+      "last7": "最近 7 天",
+      "last30": "最近 30 天",
+      "custom": "自定义区间…"
     },
     "kpi": {
-      "revenue": "Doanh thu hôm nay",
-      "bookings": "Lịch hẹn hôm nay",
-      "customers": "Khách hôm nay",
-      "staff": "Nhân viên đang làm",
+      "revenue": "今日收入",
+      "bookings": "今日预约",
+      "customers": "今日客户",
+      "staff": "在岗员工",
       "delta": "{value}%",
-      "stable": "Ổn định",
-      "utilization": "{value}% sử dụng",
-      "slotsRemaining": "Còn {count} khung giờ trống",
-      "newReturning": "{newCount} mới / {returningCount} quay lại",
-      "staffSplit": "{therapists} kỹ thuật viên / {reception} lễ tân"
+      "stable": "稳定",
+      "utilization": "利用率 {value}%",
+      "slotsRemaining": "剩余 {count} 个时段",
+      "newReturning": "{newCount} 新客 / {returningCount} 回头",
+      "staffSplit": "{therapists} 技师 / {reception} 前台"
     },
     "charts": {
-      "revenueTitle": "Xu hướng doanh thu",
-      "revenueSubtitle": "Hiệu suất theo ngày trong khoảng đã chọn.",
-      "roomTitle": "Hiệu suất phòng",
-      "roomSubtitle": "Tỷ lệ phòng trị liệu được sử dụng hôm nay.",
-      "hourlyTitle": "Lịch hẹn theo giờ",
-      "hourlySubtitle": "Phân bổ lịch hẹn trong ngày.",
-      "placeholder": "Biểu đồ sẽ kết nối khi analytics-service có dữ liệu."
+      "revenueTitle": "收入趋势",
+      "revenueSubtitle": "所选区间内的逐日表现。",
+      "roomTitle": "房间利用率",
+      "roomSubtitle": "今日护理房的占用率。",
+      "hourlyTitle": "分时预约",
+      "hourlySubtitle": "一天内预约的分布情况。",
+      "placeholder": "analytics-service 提供数据后图表将自动接入。"
     },
     "slots": {
-      "title": "Khung giờ phổ biến",
-      "subtitle": "Khoảng thời gian khách đặt lịch nhiều nhất.",
-      "low": "Vắng",
-      "med": "Trung bình",
-      "high": "Đông",
-      "peak": "Cao điểm"
+      "title": "热门时段",
+      "subtitle": "客户预约最多的时段。",
+      "low": "冷清",
+      "med": "一般",
+      "high": "繁忙",
+      "peak": "高峰"
     },
     "mix": {
-      "massage": "Massage ({percent}%)",
-      "facial": "Chăm sóc da ({percent}%)"
+      "massage": "按摩 ({percent}%)",
+      "facial": "皮肤护理 ({percent}%)"
     },
     "servicePerf": {
-      "title": "Hiệu suất dịch vụ",
-      "subtitle": "Dịch vụ được đặt nhiều nhất hôm nay.",
+      "title": "服务表现",
+      "subtitle": "今日预约最多的服务。",
       "cols": {
-        "service": "Tên dịch vụ",
-        "bookings": "Lịch hẹn",
-        "revenue": "Doanh thu"
+        "service": "服务名称",
+        "bookings": "预约",
+        "revenue": "收入"
       }
     },
     "staffPerf": {
-      "title": "Hiệu suất nhân viên",
-      "subtitle": "Năng suất kỹ thuật viên tại chi nhánh này.",
+      "title": "员工业绩",
+      "subtitle": "本门店的技师生产力。",
       "cols": {
-        "name": "Tên nhân viên",
-        "services": "Dịch vụ",
-        "revenue": "Doanh thu",
-        "rating": "Đánh giá"
+        "name": "员工姓名",
+        "services": "服务数",
+        "revenue": "收入",
+        "rating": "评分"
       }
     }
   },
   "content": {
-    "title": "Nội dung chi nhánh",
-    "subtitle": "Quản lý bài viết, khuyến mãi, sự kiện và trang SEO theo từng chi nhánh",
-    "create": "Tạo bài chi nhánh",
-    "branchSelector": "Đang xem",
+    "title": "门店内容",
+    "subtitle": "按门店管理文章、促销、活动与 SEO 页面",
+    "create": "新建门店文章",
+    "branchSelector": "正在查看",
     "kpi": {
-      "posts": "Tổng bài viết",
-      "published": "Đã xuất bản",
-      "scheduled": "Đã lên lịch",
-      "promotions": "Khuyến mãi đang chạy",
-      "events": "Sự kiện sắp tới"
+      "posts": "文章总数",
+      "published": "已发布",
+      "scheduled": "已排期",
+      "promotions": "进行中促销",
+      "events": "即将到来的活动"
     },
-    "filter": { "search": "Tìm theo tiêu đề hoặc từ khoá…", "type": "Loại nội dung", "status": "Trạng thái", "date": "Thời gian" },
+    "filter": {
+      "search": "按标题或关键词搜索…",
+      "type": "内容类型",
+      "status": "状态",
+      "date": "时间"
+    },
     "type": {
-      "promotion": "Khuyến mãi",
-      "event": "Sự kiện",
-      "announcement": "Thông báo",
-      "article": "Bài viết",
-      "seo": "Trang SEO"
+      "promotion": "促销",
+      "event": "活动",
+      "announcement": "公告",
+      "article": "文章",
+      "seo": "SEO 页面"
     },
-    "status": { "published": "Đã xuất bản", "draft": "Bản nháp", "scheduled": "Đã lên lịch", "archived": "Lưu trữ" },
+    "status": {
+      "published": "已发布",
+      "draft": "草稿",
+      "scheduled": "已排期",
+      "archived": "已归档"
+    },
     "columns": {
-      "title": "Tiêu đề",
-      "type": "Loại",
-      "branch": "Chi nhánh",
-      "status": "Trạng thái",
-      "metrics": "Ngày & lượt xem",
-      "actions": "Thao tác"
+      "title": "标题",
+      "type": "类型",
+      "branch": "门店",
+      "status": "状态",
+      "metrics": "日期与浏览量",
+      "actions": "操作"
     }
   }
 }
