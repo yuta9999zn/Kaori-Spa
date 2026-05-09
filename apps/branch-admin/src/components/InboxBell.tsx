@@ -4,24 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import { Bell, Check, CheckCheck, Loader2 } from 'lucide-react';
 import { api, ApiError } from '@/lib/api';
 import { cn } from '@/lib/cn';
+import {
+  markAllRead as markAllReadApi,
+  markRead as markReadApi,
+  type NotificationDto,
+  type NotificationPagedResult
+} from '@/lib/hooks';
 
-interface NotifItem {
-  id: string;
-  kind: string;
-  title: string;
-  body: string | null;
-  severity: 'info' | 'warn' | 'danger' | 'success';
-  deepLink: string | null;
-  createdAt: string;
-  unread: boolean;
-}
-
-interface InboxRes { items: NotifItem[]; total: number; unread: number; }
-
-const SEVERITY_BG: Record<string, string> = {
+const SEVERITY_BG: Record<NotificationDto['severity'], string> = {
   info:    'bg-blue-100 text-blue-700',
-  warn:    'bg-amber-100 text-amber-700',
-  danger:  'bg-rose-100 text-rose-700',
+  warning: 'bg-amber-100 text-amber-700',
+  error:   'bg-rose-100 text-rose-700',
   success: 'bg-emerald-100 text-emerald-700'
 };
 
@@ -38,7 +31,7 @@ function timeAgo(iso: string) {
 
 export default function InboxBell() {
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<NotifItem[]>([]);
+  const [items, setItems] = useState<NotificationDto[]>([]);
   const [unread, setUnread] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,9 +50,12 @@ export default function InboxBell() {
     setLoading(true);
     setError(null);
     try {
-      const res = await api<InboxRes>('/v1/notifications?size=20');
-      setItems(res.items);
-      setUnread(res.unread);
+      const [page, count] = await Promise.all([
+        api<NotificationPagedResult>('/v1/notifications?size=20'),
+        api<{ count: number }>('/v1/notifications/unread-count')
+      ]);
+      setItems(page.items);
+      setUnread(count.count);
     } catch (e) {
       setError((e as ApiError).message);
     } finally {
@@ -73,18 +69,19 @@ export default function InboxBell() {
     return () => clearInterval(id);
   }, []);
 
-  const markRead = async (id: string) => {
+  const handleMarkRead = async (id: string) => {
     try {
-      await api(`/v1/notifications/${id}/read`, { method: 'POST' });
-      setItems(s => s.map(n => n.id === id ? { ...n, unread: false } : n));
+      await markReadApi(id);
+      setItems(s => s.map(n => n.id === id ? { ...n, readAt: n.readAt ?? new Date().toISOString() } : n));
       setUnread(u => Math.max(0, u - 1));
     } catch { /* ignore */ }
   };
 
-  const markAll = async () => {
+  const handleMarkAll = async () => {
     try {
-      await api('/v1/notifications/read-all', { method: 'POST' });
-      setItems(s => s.map(n => ({ ...n, unread: false })));
+      await markAllReadApi();
+      const now = new Date().toISOString();
+      setItems(s => s.map(n => n.readAt ? n : { ...n, readAt: now }));
       setUnread(0);
     } catch { /* ignore */ }
   };
@@ -109,7 +106,7 @@ export default function InboxBell() {
           <header className="flex items-center justify-between px-4 py-3 border-b border-brand-cream bg-brand-cream/30">
             <h3 className="font-serif text-sm tracking-widest text-brand-textmain">THÔNG BÁO</h3>
             {unread > 0 && (
-              <button onClick={markAll} className="flex items-center gap-1 text-xs text-brand-gold hover:underline">
+              <button onClick={handleMarkAll} className="flex items-center gap-1 text-xs text-brand-gold hover:underline">
                 <CheckCheck className="h-3 w-3" /> Đánh dấu đã đọc
               </button>
             )}
@@ -126,38 +123,44 @@ export default function InboxBell() {
               </p>
             ) : (
               <ul className="divide-y divide-brand-cream/60">
-                {items.map(n => (
-                  <li key={n.id}>
-                    <button
-                      onClick={() => { markRead(n.id); if (n.deepLink) window.location.href = n.deepLink; }}
-                      className={cn(
-                        'flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-brand-cream/30',
-                        n.unread && 'bg-brand-gold/5'
-                      )}
-                    >
-                      <span className={cn(
-                        'flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0 text-[10px] font-medium uppercase',
-                        SEVERITY_BG[n.severity]
-                      )}>
-                        {n.kind.split('.')[1]?.charAt(0).toUpperCase() ?? 'N'}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline justify-between gap-2">
-                          <p className={cn('text-sm truncate', n.unread ? 'font-medium' : 'text-brand-textmuted')}>
-                            {n.title}
-                          </p>
-                          <span className="text-[10px] text-brand-textmuted whitespace-nowrap">
-                            {timeAgo(n.createdAt)}
-                          </span>
+                {items.map(n => {
+                  const isUnread = n.readAt == null;
+                  return (
+                    <li key={n.id}>
+                      <button
+                        onClick={() => {
+                          if (isUnread) void handleMarkRead(n.id);
+                          if (n.link) window.location.href = n.link;
+                        }}
+                        className={cn(
+                          'flex w-full items-start gap-3 px-4 py-3 text-left transition hover:bg-brand-cream/30',
+                          isUnread && 'bg-brand-gold/5'
+                        )}
+                      >
+                        <span className={cn(
+                          'flex h-8 w-8 items-center justify-center rounded-full flex-shrink-0 text-[10px] font-medium uppercase',
+                          SEVERITY_BG[n.severity]
+                        )}>
+                          {n.type.split('.')[1]?.charAt(0).toUpperCase() ?? 'N'}
+                        </span>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <p className={cn('text-sm truncate', isUnread ? 'font-medium' : 'text-brand-textmuted')}>
+                              {n.title}
+                            </p>
+                            <span className="text-[10px] text-brand-textmuted whitespace-nowrap">
+                              {timeAgo(n.createdAt)}
+                            </span>
+                          </div>
+                          {n.body && <p className="text-xs text-brand-textmuted truncate mt-0.5">{n.body}</p>}
                         </div>
-                        {n.body && <p className="text-xs text-brand-textmuted truncate mt-0.5">{n.body}</p>}
-                      </div>
-                      {n.unread && (
-                        <Check className="h-3 w-3 text-brand-gold flex-shrink-0 mt-1" />
-                      )}
-                    </button>
-                  </li>
-                ))}
+                        {isUnread && (
+                          <Check className="h-3 w-3 text-brand-gold flex-shrink-0 mt-1" />
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

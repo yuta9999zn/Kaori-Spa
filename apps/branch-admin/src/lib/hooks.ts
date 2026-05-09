@@ -615,3 +615,52 @@ export function useContentPosts(args: UseContentPostsArgs = {}) {
     return api<PagedResult<ContentPostListItem>>(`/v1/content?${params}`);
   }, [type ?? '', status ?? '', q ?? '', page, size]);
 }
+
+// ─── Notifications ─────────────────────────────────────────────────────────
+// Per-user inbox served by notification-service (InboxController).
+// Endpoints all live under /v1/notifications and are scoped to the caller's
+// user id via TenantContext on the backend.
+
+export interface NotificationDto {
+  id: string;
+  type: string;
+  severity: 'info' | 'warning' | 'error' | 'success';
+  title: string;
+  body: string | null;
+  link: string | null;
+  readAt: string | null;
+  createdAt: string;
+}
+
+export interface NotificationPagedResult {
+  items: NotificationDto[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export function useNotifications(args: { unreadOnly?: boolean; page?: number; size?: number } = {}) {
+  const { unreadOnly = false, page = 0, size = 20 } = args;
+  return useFetch<NotificationPagedResult>(() => {
+    const params = new URLSearchParams({
+      unreadOnly: String(unreadOnly),
+      page: String(page),
+      size: String(size)
+    });
+    return api<NotificationPagedResult>(`/v1/notifications?${params}`);
+  }, [unreadOnly, page, size]);
+}
+
+export function useUnreadCount() {
+  return useFetch<{ count: number }>(() =>
+    api<{ count: number }>('/v1/notifications/unread-count')
+  );
+}
+
+export function markRead(id: string): Promise<void> {
+  return api<void>(`/v1/notifications/${id}/mark-read`, { method: 'POST' });
+}
+
+export function markAllRead(): Promise<void> {
+  return api<void>('/v1/notifications/mark-all-read', { method: 'POST' });
+}
