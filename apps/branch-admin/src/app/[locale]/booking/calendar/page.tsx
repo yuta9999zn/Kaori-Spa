@@ -1,4 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import WeekCalendar from './WeekCalendar';
 
 export default async function CalendarPage({
@@ -8,5 +10,11 @@ export default async function CalendarPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <WeekCalendar />;
+  const subNavItems = await getSubNavItems('booking');
+  return (
+    <>
+      <SubNav items={subNavItems} />
+      <WeekCalendar />
+    </>
+  );
 }

@@ -1562,5 +1562,81 @@
       "onLeave": "休假中",
       "newThisMonth": "本月新增"
     }
+  },
+  "subNav": {
+    "booking": {
+      "list": "Danh sách",
+      "calendar": "Lịch tuần",
+      "new": "Tạo mới",
+      "waitlist": "Hàng chờ",
+      "history": "Lịch sử",
+      "rules": "Quy tắc",
+      "timeslots": "Khung giờ",
+      "settings": "Cài đặt",
+      "payment": "Thanh toán",
+      "reschedule": "Đổi lịch",
+      "conflicts": "Xung đột",
+      "analytics": "Phân tích"
+    },
+    "customer": {
+      "list": "Danh sách",
+      "new": "Thêm khách",
+      "segments": "Phân khúc",
+      "loyalty": "Tích điểm",
+      "membership": "Thành viên",
+      "healthNotes": "Hồ sơ sức khoẻ",
+      "communication": "Giao tiếp",
+      "bookingHistory": "Lịch sử booking",
+      "paymentHistory": "Lịch sử thanh toán",
+      "importExport": "Nhập / Xuất",
+      "analytics": "Phân tích"
+    },
+    "service": {
+      "catalog": "Catalog",
+      "overview": "Tổng quan",
+      "list": "Danh sách",
+      "new": "Tạo dịch vụ",
+      "categories": "Danh mục",
+      "packages": "Gói combo",
+      "content": "Nội dung",
+      "availability": "Khả dụng",
+      "import": "Nhập / đồng bộ"
+    },
+    "staff": {
+      "overview": "Tổng quan",
+      "list": "Danh sách",
+      "new": "Thêm nhân viên",
+      "profile": "Hồ sơ",
+      "skills": "Kỹ năng",
+      "performance": "Hiệu suất",
+      "shifts": "Phân ca",
+      "attendance": "Chấm công",
+      "payroll": "Lương"
+    },
+    "report": {
+      "main": "Báo cáo tháng",
+      "branch": "Chi nhánh",
+      "daily": "Báo cáo ngày",
+      "staffPerformance": "Hiệu suất nhân viên",
+      "treatments": "Liệu trình",
+      "bookingAnalysis": "Phân tích booking",
+      "customerAnalysis": "Phân tích khách"
+    },
+    "content": {
+      "list": "Bài viết",
+      "new": "Tạo bài",
+      "seo": "SEO",
+      "media": "Thư viện media"
+    },
+    "inventory": {
+      "main": "Tổng quan",
+      "in": "Nhập kho",
+      "out": "Xuất kho"
+    },
+    "room": {
+      "main": "Phòng & giường",
+      "calendar": "Lịch phòng",
+      "new": "Thêm phòng"
+    }
   }
 }

@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { Save, X, AlertTriangle } from 'lucide-react';
 
 export default async function CustomerNewPage({
@@ -8,12 +10,14 @@ export default async function CustomerNewPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('customer');
   const t = await getTranslations('customerForm');
 
   // TODO(Phase B): wire form submission to backend when endpoint ships
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain">{t('title')}</h1>

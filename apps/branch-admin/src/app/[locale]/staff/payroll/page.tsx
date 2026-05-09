@@ -1,4 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import PayrollTable from './PayrollTable';
 
 export default async function PayrollPage({
@@ -8,5 +10,11 @@ export default async function PayrollPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <PayrollTable />;
+  const subNavItems = await getSubNavItems('staff');
+  return (
+    <>
+      <SubNav items={subNavItems} />
+      <PayrollTable />
+    </>
+  );
 }

@@ -1,5 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import InventoryView from './InventoryView';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 
 export default async function InventoryPage({
   params
@@ -8,5 +10,11 @@ export default async function InventoryPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <InventoryView />;
+  const items = await getSubNavItems('inventory');
+  return (
+    <>
+      <SubNav items={items} />
+      <InventoryView />
+    </>
+  );
 }

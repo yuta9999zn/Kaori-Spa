@@ -1,5 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import ServiceView from './ServiceView';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 
 export default async function ServicePage({
   params
@@ -8,5 +10,11 @@ export default async function ServicePage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ServiceView />;
+  const items = await getSubNavItems('service');
+  return (
+    <>
+      <SubNav items={items} />
+      <ServiceView />
+    </>
+  );
 }

@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { Sparkles, Check, X, Plus, Search } from 'lucide-react';
 
 // TODO(Phase B): wire to backend `GET /v1/staff/skills?branchId=...`
@@ -26,10 +28,12 @@ export default async function StaffSkillsPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('staff');
   const t = await getTranslations('staffSkills');
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain flex items-center gap-2">

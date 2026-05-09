@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import {
   CalendarDays, Download, TrendingUp, Calendar, UserPlus, Receipt, Wallet
 } from 'lucide-react';
@@ -35,6 +37,7 @@ export default async function ReportDailyPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('report');
   const t = await getTranslations('reportDaily');
 
   const revenue = TRANSACTIONS.reduce((s, r) => s + r.amount, 0);
@@ -45,6 +48,7 @@ export default async function ReportDailyPage({
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain flex items-center gap-3">

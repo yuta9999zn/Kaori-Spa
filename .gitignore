@@ -27,7 +27,8 @@ poetry.lock
 node_modules/
 .next/
 .turbo/
-out/
+/out/
+apps/*/out/
 .pnpm-store/
 *.tsbuildinfo
 next-env.d.ts

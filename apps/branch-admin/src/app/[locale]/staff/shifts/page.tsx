@@ -1,4 +1,6 @@
 import { setRequestLocale } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import ShiftManager from './ShiftManager';
 
 export default async function ShiftsPage({
@@ -8,5 +10,11 @@ export default async function ShiftsPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <ShiftManager />;
+  const subNavItems = await getSubNavItems('staff');
+  return (
+    <>
+      <SubNav items={subNavItems} />
+      <ShiftManager />
+    </>
+  );
 }

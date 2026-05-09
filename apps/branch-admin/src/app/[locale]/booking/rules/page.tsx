@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { ScrollText, Save, RotateCcw, ShieldCheck, AlertOctagon, Workflow } from 'lucide-react';
 
 export default async function BookingRulesPage({
@@ -8,6 +10,7 @@ export default async function BookingRulesPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('booking');
   const t = await getTranslations('bookingRules');
 
   // TODO(Phase B): wire to backend when endpoint ships
@@ -20,6 +23,7 @@ export default async function BookingRulesPage({
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain flex items-center gap-3">

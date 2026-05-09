@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { Save, Eye, Upload, Tag, Image as ImageIcon, CalendarClock, Search } from 'lucide-react';
 
 export default async function ContentFormPage({
@@ -8,10 +10,12 @@ export default async function ContentFormPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('content');
   const t = await getTranslations('contentForm');
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain">{t('title')}</h1>

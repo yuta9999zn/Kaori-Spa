@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { CalendarClock, MoreVertical } from 'lucide-react';
 
 type Booking = {
@@ -18,6 +20,7 @@ export default async function CustomerBookingHistoryPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('customer');
   const t = await getTranslations('customerBookingHistory');
 
   // TODO(Phase B): wire to backend when endpoint ships
@@ -31,6 +34,7 @@ export default async function CustomerBookingHistoryPage({
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-end lg:justify-between">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-full bg-brand-ivory border-2 border-brand-cream flex items-center justify-center font-serif text-xl text-brand-textmain">JD</div>

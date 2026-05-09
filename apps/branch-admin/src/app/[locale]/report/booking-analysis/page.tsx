@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { BarChart3, FileSpreadsheet, Calendar, CheckCircle2, XCircle, Percent, TrendingUp, Wallet } from 'lucide-react';
 
 // TODO(Phase B): wire to backend - replace with /v1/reports/booking-analysis endpoint.
@@ -43,6 +45,7 @@ export default async function ReportBookingAnalysisPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('report');
   const t = await getTranslations('reportBookingAnalysis');
 
   const total = VOLUME.reduce((s, x) => s + x, 0);
@@ -57,6 +60,7 @@ export default async function ReportBookingAnalysisPage({
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain flex items-center gap-3">

@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { Edit2, Star, Calendar, Clock, MapPin, Users, TrendingUp, ChevronLeft } from 'lucide-react';
 
 const VND = (n: number) =>
@@ -11,6 +13,7 @@ export default async function ServiceDetailPage({
 }) {
   const { locale, id } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('service');
   const t = await getTranslations('serviceDetail');
 
   // TODO(Phase B): wire to backend when endpoint ships
@@ -51,6 +54,7 @@ export default async function ServiceDetailPage({
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <div className="text-xs text-brand-textmuted mb-3 inline-flex items-center gap-2">
         <ChevronLeft className="h-3 w-3" />
         <a className="hover:text-brand-gold cursor-pointer">{t('breadcrumb.services')}</a>

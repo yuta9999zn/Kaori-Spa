@@ -1562,5 +1562,81 @@
       "onLeave": "On leave",
       "newThisMonth": "New this month"
     }
+  },
+  "subNav": {
+    "booking": {
+      "list": "List",
+      "calendar": "Calendar",
+      "new": "New",
+      "waitlist": "Waitlist",
+      "history": "History",
+      "rules": "Rules",
+      "timeslots": "Time slots",
+      "settings": "Settings",
+      "payment": "Payment",
+      "reschedule": "Reschedule",
+      "conflicts": "Conflicts",
+      "analytics": "Analytics"
+    },
+    "customer": {
+      "list": "List",
+      "new": "Add customer",
+      "segments": "Segments",
+      "loyalty": "Loyalty",
+      "membership": "Membership",
+      "healthNotes": "Health notes",
+      "communication": "Communication",
+      "bookingHistory": "Booking history",
+      "paymentHistory": "Payment history",
+      "importExport": "Import / Export",
+      "analytics": "Analytics"
+    },
+    "service": {
+      "catalog": "Catalog",
+      "overview": "Overview",
+      "list": "List",
+      "new": "New service",
+      "categories": "Categories",
+      "packages": "Packages",
+      "content": "Content",
+      "availability": "Availability",
+      "import": "Import / sync"
+    },
+    "staff": {
+      "overview": "Overview",
+      "list": "List",
+      "new": "Add staff",
+      "profile": "Profile",
+      "skills": "Skills",
+      "performance": "Performance",
+      "shifts": "Shifts",
+      "attendance": "Attendance",
+      "payroll": "Payroll"
+    },
+    "report": {
+      "main": "Monthly report",
+      "branch": "Branch",
+      "daily": "Daily report",
+      "staffPerformance": "Staff performance",
+      "treatments": "Treatments",
+      "bookingAnalysis": "Booking analysis",
+      "customerAnalysis": "Customer analysis"
+    },
+    "content": {
+      "list": "Posts",
+      "new": "New post",
+      "seo": "SEO",
+      "media": "Media library"
+    },
+    "inventory": {
+      "main": "Overview",
+      "in": "Stock in",
+      "out": "Stock out"
+    },
+    "room": {
+      "main": "Rooms & beds",
+      "calendar": "Room calendar",
+      "new": "Add room"
+    }
   }
 }

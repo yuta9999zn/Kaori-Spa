@@ -1,5 +1,7 @@
 import { setRequestLocale } from 'next-intl/server';
 import BookingList from './BookingList';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 
 export default async function BookingsPage({
   params
@@ -8,5 +10,11 @@ export default async function BookingsPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <BookingList />;
+  const items = await getSubNavItems('booking');
+  return (
+    <>
+      <SubNav items={items} />
+      <BookingList />
+    </>
+  );
 }

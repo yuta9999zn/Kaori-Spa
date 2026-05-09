@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { Save, X, Plus, Bed, Settings, ShieldCheck, Sparkles } from 'lucide-react';
 
 export default async function RoomFormPage({
@@ -8,11 +10,13 @@ export default async function RoomFormPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('room');
   const t = await getTranslations('roomForm');
   const tRoom = await getTranslations('room');
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain">{t('title')}</h1>

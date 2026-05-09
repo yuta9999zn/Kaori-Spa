@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { Search, Download, Plus, FileText, Activity, AlertTriangle, Award, Eye } from 'lucide-react';
 
 type SeoStatus = 'good' | 'warning' | 'critical';
@@ -30,6 +32,7 @@ export default async function ContentSeoPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('content');
   const t = await getTranslations('contentSeo');
 
   const total = PAGES.length;
@@ -41,6 +44,7 @@ export default async function ContentSeoPage({
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain flex items-center gap-3">

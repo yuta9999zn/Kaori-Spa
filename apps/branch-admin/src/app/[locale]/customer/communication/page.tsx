@@ -1,4 +1,6 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
+import { SubNav } from '@/components/SubNav';
+import { getSubNavItems } from '@/components/subNavItems';
 import { Send, Megaphone, Mail, MessageSquare, Phone } from 'lucide-react';
 
 type Campaign = {
@@ -18,6 +20,7 @@ export default async function CustomerCommunicationPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const subNavItems = await getSubNavItems('customer');
   const t = await getTranslations('customerCommunication');
 
   // TODO(Phase B): wire to backend when endpoint ships
@@ -29,6 +32,7 @@ export default async function CustomerCommunicationPage({
 
   return (
     <>
+      <SubNav items={subNavItems} />
       <header className="flex flex-col gap-4 mb-6 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="font-serif text-3xl text-brand-textmain">{t('title')}</h1>
