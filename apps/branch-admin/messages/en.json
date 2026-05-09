@@ -230,5 +230,424 @@
     "edit": "Edit",
     "delete": "Delete",
     "view": "View"
+  },
+  "reportBranch": {
+    "title": "Monthly Branch Report",
+    "subtitle": "Revenue, expense and profit summary for the branch",
+    "exportPdf": "Export PDF",
+    "exportExcel": "Export Excel",
+    "monthLabel": "{month}/{year}",
+    "kpi": {
+      "revenue": "Revenue",
+      "expense": "Expense",
+      "profit": "Profit",
+      "margin": "Gross margin"
+    },
+    "sections": {
+      "revenueByService": "Revenue by service group",
+      "topStaff": "Top staff contributors",
+      "expenseBreakdown": "Expense breakdown",
+      "monthly": "12-month revenue"
+    },
+    "columns": {
+      "category": "Category",
+      "amount": "Amount",
+      "share": "Share",
+      "staff": "Staff",
+      "bookings": "Bookings",
+      "revenue": "Revenue"
+    }
+  },
+  "reportDaily": {
+    "title": "Daily Report",
+    "subtitle": "Detailed daily revenue and activity",
+    "datePicker": "Pick date",
+    "exportPdf": "Export PDF",
+    "kpi": {
+      "revenue": "Today's revenue",
+      "bookings": "Bookings",
+      "newCustomers": "New customers",
+      "avgTicket": "Avg ticket"
+    },
+    "sections": {
+      "hourlyRevenue": "Hourly revenue",
+      "transactionLog": "Transaction log",
+      "shiftSummary": "Shift summary",
+      "cashflow": "Cashflow"
+    },
+    "columns": {
+      "time": "Time",
+      "code": "Code",
+      "customer": "Customer",
+      "service": "Service",
+      "staff": "Staff",
+      "amount": "Amount",
+      "method": "Method"
+    }
+  },
+  "reportStaffPerformance": {
+    "title": "Staff Performance",
+    "subtitle": "Compare staff revenue, services performed and commission",
+    "exportExcel": "Export Excel",
+    "kpi": {
+      "totalRevenue": "Total revenue",
+      "totalBookings": "Total services",
+      "topStaff": "Top performer",
+      "avgRating": "Avg rating",
+      "totalCommission": "Commission paid"
+    },
+    "sections": {
+      "trend": "Performance trend",
+      "ranking": "Leaderboard",
+      "serviceBreakdown": "Service breakdown"
+    },
+    "columns": {
+      "rank": "Rank",
+      "staff": "Staff",
+      "revenue": "Revenue",
+      "bookings": "Sessions",
+      "rating": "Rating",
+      "commission": "Commission"
+    }
+  },
+  "reportTreatments": {
+    "title": "Treatments & Combos",
+    "subtitle": "Track customer treatment progress and combo revenue",
+    "addCombo": "Add combo",
+    "kpi": {
+      "activeTreatments": "Active treatments",
+      "completedThisMonth": "Completed this month",
+      "expiringSoon": "Expiring soon",
+      "totalRevenue": "Treatment revenue"
+    },
+    "sections": {
+      "ongoing": "Ongoing treatments",
+      "comboCatalog": "Combo catalog"
+    },
+    "columns": {
+      "code": "Code",
+      "customer": "Customer",
+      "combo": "Combo",
+      "progress": "Progress",
+      "remaining": "Remaining",
+      "expiry": "Expires",
+      "status": "Status"
+    },
+    "status": {
+      "active": "Active",
+      "completed": "Completed",
+      "expiring": "Expiring",
+      "paused": "Paused"
+    }
+  },
+  "reportBookingAnalysis": {
+    "title": "Booking Analysis",
+    "subtitle": "Deep dive into booking volume, conversion and source",
+    "exportExcel": "Export Excel",
+    "kpi": {
+      "totalBookings": "Total bookings",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "conversion": "Conversion rate",
+      "totalRevenue": "Revenue",
+      "avgValue": "Avg value"
+    },
+    "sections": {
+      "volume": "Booking volume",
+      "peakHours": "Peak hours",
+      "popularServices": "Popular services",
+      "staffUtilization": "Staff utilization",
+      "funnel": "Conversion funnel",
+      "source": "Revenue by source"
+    },
+    "columns": {
+      "service": "Service",
+      "count": "Count",
+      "share": "Share",
+      "revenue": "Revenue",
+      "staff": "Staff",
+      "utilization": "Utilization"
+    },
+    "funnel": {
+      "viewed": "Viewed",
+      "started": "Started",
+      "submitted": "Submitted",
+      "confirmed": "Confirmed",
+      "completed": "Completed"
+    }
+  },
+  "reportCustomerAnalysis": {
+    "title": "Customer Analysis",
+    "subtitle": "Customer segments, retention and lifetime value",
+    "exportExcel": "Export Excel",
+    "kpi": {
+      "total": "Total customers",
+      "new": "New customers",
+      "returning": "Returning",
+      "ltv": "Avg LTV",
+      "avgTicket": "Avg ticket",
+      "retention": "Retention"
+    },
+    "sections": {
+      "growth": "Customer growth",
+      "acquisition": "Acquisition sources",
+      "spendingTiers": "Spending tiers",
+      "topCustomers": "Top customers (LTV)",
+      "retention": "Retention analysis",
+      "churn": "Churn analysis"
+    },
+    "columns": {
+      "rank": "Rank",
+      "customer": "Customer",
+      "visits": "Visits",
+      "ltv": "LTV"
+    }
+  },
+  "contentSeo": {
+    "title": "SEO Hub",
+    "subtitle": "Track SEO score, keywords and pages that need attention",
+    "exportPdf": "Export PDF",
+    "newPage": "New page",
+    "kpi": {
+      "totalPages": "Total pages",
+      "avgScore": "Avg SEO score",
+      "issues": "Pages with issues",
+      "topRanking": "Top ranking",
+      "monthlyVisits": "Monthly visits"
+    },
+    "sections": {
+      "scoreTrend": "SEO score trend",
+      "topKeywords": "Top keywords",
+      "pages": "Tracked pages"
+    },
+    "columns": {
+      "page": "Page",
+      "score": "Score",
+      "keyword": "Keyword",
+      "rank": "Rank",
+      "visits": "Visits",
+      "status": "Status"
+    },
+    "status": {
+      "good": "Good",
+      "warning": "Needs work",
+      "critical": "Critical"
+    }
+  },
+  "contentForm": {
+    "title": "Create / Edit Post",
+    "subtitle": "Compose content, add media, configure SEO and publish",
+    "save": "Save draft",
+    "publish": "Publish",
+    "preview": "Preview",
+    "fields": {
+      "titlePlaceholder": "Enter post title...",
+      "contentPlaceholder": "Start writing...",
+      "postType": "Post type",
+      "targetService": "Target service",
+      "category": "Category",
+      "tags": "Tags",
+      "slug": "Slug / URL",
+      "metaTitle": "Meta title",
+      "metaDesc": "Meta description",
+      "featured": "Featured image",
+      "scheduledAt": "Scheduled at",
+      "author": "Author"
+    },
+    "sections": {
+      "publish": "Publish",
+      "media": "Images & media",
+      "taxonomy": "Taxonomy",
+      "seo": "SEO",
+      "scheduling": "Scheduling & author"
+    },
+    "postType": {
+      "news": "News",
+      "service": "Service post",
+      "product": "Product post",
+      "blog": "Blog"
+    }
+  },
+  "contentMedia": {
+    "title": "Media Library",
+    "subtitle": "Manage shared images, videos and digital assets",
+    "upload": "Upload",
+    "newFolder": "New folder",
+    "search": "Search by file name...",
+    "kpi": {
+      "totalAssets": "Total assets",
+      "totalSize": "Storage used",
+      "images": "Images",
+      "videos": "Videos",
+      "documents": "Documents"
+    },
+    "sections": {
+      "folders": "Folders",
+      "assets": "Assets"
+    },
+    "filters": {
+      "all": "All",
+      "image": "Image",
+      "video": "Video",
+      "document": "Document"
+    },
+    "details": {
+      "title": "Asset details",
+      "name": "Name",
+      "type": "Type",
+      "size": "Size",
+      "uploadedAt": "Uploaded",
+      "uploadedBy": "Uploaded by"
+    }
+  },
+  "inventoryIn": {
+    "title": "Inventory In",
+    "subtitle": "Create receipts and record stock arrivals",
+    "newReceipt": "New receipt",
+    "kpi": {
+      "todayReceipts": "Today's receipts",
+      "totalValue": "Total value",
+      "totalUnits": "Total units",
+      "suppliers": "Suppliers"
+    },
+    "form": {
+      "supplier": "Supplier",
+      "receiptCode": "Receipt code",
+      "receiptDate": "Receipt date",
+      "note": "Note",
+      "items": "Items",
+      "addItem": "Add item",
+      "submit": "Save receipt"
+    },
+    "columns": {
+      "code": "Code",
+      "supplier": "Supplier",
+      "date": "Date",
+      "items": "Items",
+      "total": "Total",
+      "status": "Status",
+      "product": "Product",
+      "qty": "Qty",
+      "unit": "Unit",
+      "unitPrice": "Unit price",
+      "subtotal": "Subtotal"
+    },
+    "status": {
+      "draft": "Draft",
+      "pending": "Pending",
+      "received": "Received"
+    }
+  },
+  "inventoryOut": {
+    "title": "Inventory Out",
+    "subtitle": "Issue stock for service use, retail or transfer",
+    "newIssue": "New issue",
+    "kpi": {
+      "todayIssues": "Today's issues",
+      "totalUnits": "Total units",
+      "lowStock": "Low-stock SKUs",
+      "totalValue": "Total value"
+    },
+    "form": {
+      "issueCode": "Issue code",
+      "issueDate": "Issue date",
+      "purpose": "Purpose",
+      "staff": "Staff",
+      "note": "Note",
+      "items": "Items",
+      "addItem": "Add item",
+      "submit": "Save issue"
+    },
+    "purpose": {
+      "service": "Service use",
+      "sale": "Retail sale",
+      "transfer": "Stock transfer",
+      "damage": "Damage / write-off"
+    },
+    "columns": {
+      "code": "Code",
+      "date": "Date",
+      "purpose": "Purpose",
+      "staff": "Staff",
+      "items": "Items",
+      "total": "Total",
+      "product": "Product",
+      "qty": "Qty",
+      "unit": "Unit"
+    }
+  },
+  "roomCalendar": {
+    "title": "Room Calendar",
+    "subtitle": "Daily schedule of rooms and beds",
+    "today": "Today",
+    "prev": "Prev",
+    "next": "Next",
+    "legend": {
+      "available": "Available",
+      "booked": "Booked",
+      "in_use": "In use",
+      "cleaning": "Cleaning",
+      "maintenance": "Maintenance"
+    },
+    "summary": {
+      "rooms": "Rooms",
+      "occupancy": "Occupancy",
+      "current": "In use"
+    }
+  },
+  "roomForm": {
+    "title": "Add new room",
+    "subtitle": "Configure room, beds and usage rules",
+    "save": "Save room",
+    "cancel": "Cancel",
+    "sections": {
+      "basic": "Basic info",
+      "basicHint": "Name, floor and room type",
+      "gender": "Gender",
+      "genderHint": "Which gender does this room serve",
+      "beds": "Bed configuration",
+      "bedsHint": "Add and configure each bed",
+      "services": "Allowed services",
+      "servicesHint": "Choose service categories that can be performed here",
+      "rules": "Usage rules",
+      "rulesHint": "Operating hours and online booking flag",
+      "preview": "Preview"
+    },
+    "fields": {
+      "name": "Room name",
+      "code": "Room code",
+      "floor": "Floor",
+      "type": "Room type",
+      "description": "Description",
+      "openTime": "Open time",
+      "closeTime": "Close time",
+      "cleanupMin": "Cleanup time (min)",
+      "minLeadMin": "Min booking lead (min)",
+      "showOnline": "Show in online booking",
+      "addBed": "Add bed",
+      "bedName": "Bed name",
+      "bedDefaultStatus": "Default status"
+    },
+    "gender": {
+      "any": "Any",
+      "female": "Female only",
+      "male": "Male only"
+    }
+  },
+  "notification": {
+    "title": "Notification Center",
+    "unreadCount": "{count} unread",
+    "markAllRead": "Mark all as read",
+    "settings": "Notification settings",
+    "filters": {
+      "all": "All",
+      "booking": "Bookings",
+      "staff": "Staff",
+      "inventory": "Inventory",
+      "system": "System"
+    },
+    "onlyUnread": "Only unread",
+    "empty": "No notifications",
+    "markRead": "Mark as read"
   }
 }

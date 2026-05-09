@@ -1,6 +1,12 @@
 {
-  "brand": { "platform": "Kaori", "tenant": "Natural Beauty" },
-  "portal": { "name": "店舗管理", "subtitle": "Branch Manager" },
+  "brand": {
+    "platform": "Kaori",
+    "tenant": "Natural Beauty"
+  },
+  "portal": {
+    "name": "店舗管理",
+    "subtitle": "Branch Manager"
+  },
   "nav": {
     "dashboard": "ダッシュボード",
     "booking": "予約",
@@ -72,15 +78,30 @@
       "points": "ポイント",
       "spent": "合計"
     },
-    "segments": { "vip": "VIP", "regular": "常連", "new": "新規", "dormant": "休眠" }
+    "segments": {
+      "vip": "VIP",
+      "regular": "常連",
+      "new": "新規",
+      "dormant": "休眠"
+    }
   },
   "shift": {
     "title": "シフト管理",
     "subtitle": "月次シフト — 早番 / 遅番 / ロング / 休み",
-    "month": "月", "year": "年",
-    "prev": "前", "next": "次", "today": "本日",
-    "save": "保存", "saved": "保存しました", "stats": "集計",
-    "type": { "SANG": "早番", "TOI": "遅番", "FULL": "ロング", "NGHI": "休み" },
+    "month": "月",
+    "year": "年",
+    "prev": "前",
+    "next": "次",
+    "today": "本日",
+    "save": "保存",
+    "saved": "保存しました",
+    "stats": "集計",
+    "type": {
+      "SANG": "早番",
+      "TOI": "遅番",
+      "FULL": "ロング",
+      "NGHI": "休み"
+    },
     "typeFull": {
       "SANG": "早番 (09:00-15:00)",
       "TOI": "遅番 (15:00-21:00)",
@@ -92,11 +113,21 @@
   "attendance": {
     "title": "勤怠",
     "subtitle": "本日のチェックイン/アウト",
-    "checkIn": "出勤", "checkOut": "退勤",
-    "expected": "予定", "in": "入", "out": "出", "worked": "勤務", "minutes": "分",
+    "checkIn": "出勤",
+    "checkOut": "退勤",
+    "expected": "予定",
+    "in": "入",
+    "out": "出",
+    "worked": "勤務",
+    "minutes": "分",
     "status": {
-      "scheduled": "予定", "present": "定時", "late": "遅刻",
-      "absent": "欠勤", "early_out": "早退", "off": "休み", "no_shift": "シフトなし"
+      "scheduled": "予定",
+      "present": "定時",
+      "late": "遅刻",
+      "absent": "欠勤",
+      "early_out": "早退",
+      "off": "休み",
+      "no_shift": "シフトなし"
     }
   },
   "room": {
@@ -108,9 +139,23 @@
     "capacity": "収容数",
     "beds": "ベッド",
     "noBeds": "このルームにはベッドがありません",
-    "type": { "normal": "通常", "vip": "VIP", "couple": "カップル", "laser": "レーザー" },
-    "bedType": { "standard": "スタンダード", "massage": "マッサージ", "laser": "レーザー", "vip": "VIP" },
-    "status": { "active": "稼働中", "maintenance": "メンテナンス", "retired": "停止" }
+    "type": {
+      "normal": "通常",
+      "vip": "VIP",
+      "couple": "カップル",
+      "laser": "レーザー"
+    },
+    "bedType": {
+      "standard": "スタンダード",
+      "massage": "マッサージ",
+      "laser": "レーザー",
+      "vip": "VIP"
+    },
+    "status": {
+      "active": "稼働中",
+      "maintenance": "メンテナンス",
+      "retired": "停止"
+    }
   },
   "service": {
     "title": "サービス",
@@ -230,5 +275,424 @@
     "edit": "編集",
     "delete": "削除",
     "view": "表示"
+  },
+  "reportBranch": {
+    "title": "Tổng hợp tháng",
+    "subtitle": "Báo cáo doanh thu, chi phí và lợi nhuận của chi nhánh trong tháng",
+    "exportPdf": "Xuất PDF",
+    "exportExcel": "Xuất Excel",
+    "monthLabel": "Tháng {month}/{year}",
+    "kpi": {
+      "revenue": "Doanh thu",
+      "expense": "Chi phí",
+      "profit": "Lợi nhuận",
+      "margin": "Biên LN gộp"
+    },
+    "sections": {
+      "revenueByService": "Doanh thu theo nhóm dịch vụ",
+      "topStaff": "Top nhân viên đóng góp",
+      "expenseBreakdown": "Cơ cấu chi phí",
+      "monthly": "Doanh thu 12 tháng"
+    },
+    "columns": {
+      "category": "Danh mục",
+      "amount": "Số tiền",
+      "share": "Tỷ trọng",
+      "staff": "Nhân viên",
+      "bookings": "Lượt",
+      "revenue": "Doanh thu"
+    }
+  },
+  "reportDaily": {
+    "title": "Báo cáo ngày",
+    "subtitle": "Chi tiết doanh thu và hoạt động trong ngày",
+    "datePicker": "Chọn ngày",
+    "exportPdf": "Xuất PDF",
+    "kpi": {
+      "revenue": "Doanh thu hôm nay",
+      "bookings": "Số booking",
+      "newCustomers": "Khách mới",
+      "avgTicket": "TB/đơn"
+    },
+    "sections": {
+      "hourlyRevenue": "Doanh thu theo giờ",
+      "transactionLog": "Nhật ký giao dịch",
+      "shiftSummary": "Tổng kết ca",
+      "cashflow": "Dòng tiền"
+    },
+    "columns": {
+      "time": "Giờ",
+      "code": "Mã",
+      "customer": "Khách",
+      "service": "Dịch vụ",
+      "staff": "KTV",
+      "amount": "Giá trị",
+      "method": "Phương thức"
+    }
+  },
+  "reportStaffPerformance": {
+    "title": "Hiệu suất nhân viên",
+    "subtitle": "So sánh doanh thu, lượt phục vụ và hoa hồng theo nhân viên",
+    "exportExcel": "Xuất Excel",
+    "kpi": {
+      "totalRevenue": "Tổng doanh thu",
+      "totalBookings": "Tổng lượt phục vụ",
+      "topStaff": "Nhân viên dẫn đầu",
+      "avgRating": "Đánh giá TB",
+      "totalCommission": "Hoa hồng đã trả"
+    },
+    "sections": {
+      "trend": "Xu hướng hiệu suất",
+      "ranking": "Bảng xếp hạng",
+      "serviceBreakdown": "Phân bổ theo dịch vụ"
+    },
+    "columns": {
+      "rank": "Hạng",
+      "staff": "Nhân viên",
+      "revenue": "Doanh thu",
+      "bookings": "Lượt",
+      "rating": "Đánh giá",
+      "commission": "Hoa hồng"
+    }
+  },
+  "reportTreatments": {
+    "title": "Theo dõi liệu trình & combo",
+    "subtitle": "Quản lý tiến độ liệu trình của khách hàng và doanh thu combo",
+    "addCombo": "Thêm combo mới",
+    "kpi": {
+      "activeTreatments": "Liệu trình đang hoạt động",
+      "completedThisMonth": "Hoàn tất trong tháng",
+      "expiringSoon": "Sắp hết hạn",
+      "totalRevenue": "Doanh thu liệu trình"
+    },
+    "sections": {
+      "ongoing": "Liệu trình đang chạy",
+      "comboCatalog": "Danh mục combo"
+    },
+    "columns": {
+      "code": "Mã",
+      "customer": "Khách",
+      "combo": "Combo",
+      "progress": "Tiến độ",
+      "remaining": "Còn lại",
+      "expiry": "Hết hạn",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "active": "Đang dùng",
+      "completed": "Hoàn tất",
+      "expiring": "Sắp hết",
+      "paused": "Tạm dừng"
+    }
+  },
+  "reportBookingAnalysis": {
+    "title": "Phân tích booking",
+    "subtitle": "Phân tích sâu về lượng booking, tỷ lệ chuyển đổi và nguồn",
+    "exportExcel": "Xuất Excel",
+    "kpi": {
+      "totalBookings": "Tổng booking",
+      "completed": "Hoàn tất",
+      "cancelled": "Huỷ",
+      "conversion": "Tỷ lệ chuyển đổi",
+      "totalRevenue": "Doanh thu",
+      "avgValue": "Giá trị TB"
+    },
+    "sections": {
+      "volume": "Khối lượng booking",
+      "peakHours": "Khung giờ cao điểm",
+      "popularServices": "Dịch vụ phổ biến",
+      "staffUtilization": "Sử dụng nhân lực",
+      "funnel": "Phễu chuyển đổi",
+      "source": "Doanh thu theo nguồn"
+    },
+    "columns": {
+      "service": "Dịch vụ",
+      "count": "Số lượng",
+      "share": "Tỷ trọng",
+      "revenue": "Doanh thu",
+      "staff": "Nhân viên",
+      "utilization": "Sử dụng"
+    },
+    "funnel": {
+      "viewed": "Lượt xem",
+      "started": "Bắt đầu",
+      "submitted": "Gửi đặt",
+      "confirmed": "Xác nhận",
+      "completed": "Hoàn tất"
+    }
+  },
+  "reportCustomerAnalysis": {
+    "title": "Phân tích khách hàng",
+    "subtitle": "Phân khúc, giữ chân và LTV của khách hàng",
+    "exportExcel": "Xuất Excel",
+    "kpi": {
+      "total": "Tổng khách",
+      "new": "Khách mới",
+      "returning": "Khách quay lại",
+      "ltv": "LTV TB",
+      "avgTicket": "Đơn TB",
+      "retention": "Giữ chân"
+    },
+    "sections": {
+      "growth": "Tăng trưởng khách",
+      "acquisition": "Nguồn khách",
+      "spendingTiers": "Phân khúc chi tiêu",
+      "topCustomers": "Top khách (LTV)",
+      "retention": "Phân tích giữ chân",
+      "churn": "Phân tích rời bỏ"
+    },
+    "columns": {
+      "rank": "Hạng",
+      "customer": "Khách hàng",
+      "visits": "Số lần",
+      "ltv": "LTV"
+    }
+  },
+  "contentSeo": {
+    "title": "Trung tâm SEO",
+    "subtitle": "Theo dõi điểm SEO, từ khoá và trang cần tối ưu",
+    "exportPdf": "Xuất PDF",
+    "newPage": "Trang mới",
+    "kpi": {
+      "totalPages": "Tổng số trang",
+      "avgScore": "Điểm SEO TB",
+      "issues": "Trang có vấn đề",
+      "topRanking": "Xếp hạng đầu",
+      "monthlyVisits": "Truy cập/tháng"
+    },
+    "sections": {
+      "scoreTrend": "Xu hướng điểm SEO",
+      "topKeywords": "Top từ khoá",
+      "pages": "Trang đang theo dõi"
+    },
+    "columns": {
+      "page": "Trang",
+      "score": "Điểm",
+      "keyword": "Từ khoá",
+      "rank": "Hạng",
+      "visits": "Lượt truy cập",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "good": "Tốt",
+      "warning": "Cần cải thiện",
+      "critical": "Kém"
+    }
+  },
+  "contentForm": {
+    "title": "Tạo / sửa bài viết",
+    "subtitle": "Soạn nội dung, gắn ảnh, cấu hình SEO và xuất bản",
+    "save": "Lưu nháp",
+    "publish": "Xuất bản",
+    "preview": "Xem trước",
+    "fields": {
+      "titlePlaceholder": "Nhập tiêu đề bài viết...",
+      "contentPlaceholder": "Bắt đầu viết nội dung...",
+      "postType": "Loại bài",
+      "targetService": "Dịch vụ liên quan",
+      "category": "Danh mục",
+      "tags": "Tags",
+      "slug": "Slug / URL",
+      "metaTitle": "Meta title",
+      "metaDesc": "Meta description",
+      "featured": "Ảnh đại diện",
+      "scheduledAt": "Lịch xuất bản",
+      "author": "Tác giả"
+    },
+    "sections": {
+      "publish": "Xuất bản",
+      "media": "Ảnh & Media",
+      "taxonomy": "Phân loại",
+      "seo": "Tối ưu SEO",
+      "scheduling": "Lịch & tác giả"
+    },
+    "postType": {
+      "news": "Tin tức",
+      "service": "Bài dịch vụ",
+      "product": "Bài sản phẩm",
+      "blog": "Blog"
+    }
+  },
+  "contentMedia": {
+    "title": "Thư viện media",
+    "subtitle": "Quản lý ảnh, video và tài sản số dùng chung",
+    "upload": "Tải lên",
+    "newFolder": "Thư mục mới",
+    "search": "Tìm theo tên file...",
+    "kpi": {
+      "totalAssets": "Tổng tài sản",
+      "totalSize": "Dung lượng",
+      "images": "Ảnh",
+      "videos": "Video",
+      "documents": "Tài liệu"
+    },
+    "sections": {
+      "folders": "Thư mục",
+      "assets": "Tài sản"
+    },
+    "filters": {
+      "all": "Tất cả",
+      "image": "Ảnh",
+      "video": "Video",
+      "document": "Tài liệu"
+    },
+    "details": {
+      "title": "Chi tiết tài sản",
+      "name": "Tên",
+      "type": "Loại",
+      "size": "Kích thước",
+      "uploadedAt": "Tải lên",
+      "uploadedBy": "Người tải"
+    }
+  },
+  "inventoryIn": {
+    "title": "Nhập kho",
+    "subtitle": "Tạo phiếu nhập, ghi nhận hàng nhập từ nhà cung cấp",
+    "newReceipt": "Phiếu nhập mới",
+    "kpi": {
+      "todayReceipts": "Phiếu nhập hôm nay",
+      "totalValue": "Tổng giá trị",
+      "totalUnits": "Tổng đơn vị",
+      "suppliers": "Nhà cung cấp"
+    },
+    "form": {
+      "supplier": "Nhà cung cấp",
+      "receiptCode": "Mã phiếu",
+      "receiptDate": "Ngày nhập",
+      "note": "Ghi chú",
+      "items": "Mặt hàng",
+      "addItem": "Thêm mặt hàng",
+      "submit": "Lưu phiếu nhập"
+    },
+    "columns": {
+      "code": "Mã phiếu",
+      "supplier": "Nhà cung cấp",
+      "date": "Ngày",
+      "items": "Mặt hàng",
+      "total": "Tổng",
+      "status": "Trạng thái",
+      "product": "Sản phẩm",
+      "qty": "Số lượng",
+      "unit": "ĐVT",
+      "unitPrice": "Đơn giá",
+      "subtotal": "Thành tiền"
+    },
+    "status": {
+      "draft": "Nháp",
+      "pending": "Chờ duyệt",
+      "received": "Đã nhập"
+    }
+  },
+  "inventoryOut": {
+    "title": "Xuất kho / sử dụng vật tư",
+    "subtitle": "Ghi nhận xuất hàng cho dịch vụ, bán lẻ hoặc chuyển kho",
+    "newIssue": "Phiếu xuất mới",
+    "kpi": {
+      "todayIssues": "Phiếu xuất hôm nay",
+      "totalUnits": "Tổng đơn vị",
+      "lowStock": "SKU sắp hết",
+      "totalValue": "Tổng giá trị"
+    },
+    "form": {
+      "issueCode": "Mã phiếu",
+      "issueDate": "Ngày xuất",
+      "purpose": "Mục đích",
+      "staff": "Người nhận",
+      "note": "Ghi chú",
+      "items": "Mặt hàng",
+      "addItem": "Thêm mặt hàng",
+      "submit": "Lưu phiếu xuất"
+    },
+    "purpose": {
+      "service": "Dùng cho dịch vụ",
+      "sale": "Bán lẻ",
+      "transfer": "Chuyển kho",
+      "damage": "Hư hỏng / huỷ"
+    },
+    "columns": {
+      "code": "Mã phiếu",
+      "date": "Ngày",
+      "purpose": "Mục đích",
+      "staff": "Người nhận",
+      "items": "Mặt hàng",
+      "total": "Tổng",
+      "product": "Sản phẩm",
+      "qty": "Số lượng",
+      "unit": "ĐVT"
+    }
+  },
+  "roomCalendar": {
+    "title": "Lịch phòng",
+    "subtitle": "Lịch sử dụng phòng và giường theo ngày",
+    "today": "Hôm nay",
+    "prev": "Trước",
+    "next": "Sau",
+    "legend": {
+      "available": "Trống",
+      "booked": "Đã đặt",
+      "in_use": "Đang dùng",
+      "cleaning": "Vệ sinh",
+      "maintenance": "Bảo trì"
+    },
+    "summary": {
+      "rooms": "Phòng",
+      "occupancy": "Tỷ lệ lấp đầy",
+      "current": "Đang sử dụng"
+    }
+  },
+  "roomForm": {
+    "title": "Thêm phòng mới",
+    "subtitle": "Thiết lập phòng, giường và quy tắc sử dụng",
+    "save": "Lưu phòng",
+    "cancel": "Huỷ",
+    "sections": {
+      "basic": "Thông tin cơ bản",
+      "basicHint": "Tên, tầng và loại phòng",
+      "gender": "Phân loại giới tính",
+      "genderHint": "Phòng phục vụ giới tính nào",
+      "beds": "Cấu hình giường",
+      "bedsHint": "Thêm và thiết lập từng giường trong phòng",
+      "services": "Dịch vụ cho phép",
+      "servicesHint": "Chọn loại dịch vụ có thể thực hiện trong phòng",
+      "rules": "Quy tắc sử dụng",
+      "rulesHint": "Giờ hoạt động và kích hoạt booking",
+      "preview": "Xem trước"
+    },
+    "fields": {
+      "name": "Tên phòng",
+      "code": "Mã phòng",
+      "floor": "Tầng",
+      "type": "Loại phòng",
+      "description": "Mô tả",
+      "openTime": "Giờ mở cửa",
+      "closeTime": "Giờ đóng cửa",
+      "cleanupMin": "Thời gian dọn dẹp (phút)",
+      "minLeadMin": "Đặt trước tối thiểu (phút)",
+      "showOnline": "Hiển thị trong booking online",
+      "addBed": "Thêm giường",
+      "bedName": "Tên giường",
+      "bedDefaultStatus": "Trạng thái mặc định"
+    },
+    "gender": {
+      "any": "Mọi giới tính",
+      "female": "Chỉ nữ",
+      "male": "Chỉ nam"
+    }
+  },
+  "notification": {
+    "title": "Trung tâm thông báo",
+    "unreadCount": "{count} chưa đọc",
+    "markAllRead": "Đánh dấu tất cả đã đọc",
+    "settings": "Cài đặt thông báo",
+    "filters": {
+      "all": "Tất cả",
+      "booking": "Booking",
+      "staff": "Nhân viên",
+      "inventory": "Kho",
+      "system": "Hệ thống"
+    },
+    "onlyUnread": "Chỉ hiển thị chưa đọc",
+    "empty": "Không có thông báo nào",
+    "markRead": "Đánh dấu đã đọc"
   }
 }
