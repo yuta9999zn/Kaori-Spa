@@ -10,7 +10,8 @@ import { ApiError } from '@/lib/api';
 
 export default function PermissionMatrixView() {
   const t = useTranslations('permissionMatrix');
-  const { data: roles, loading: rolesLoading, error: rolesError } = useRoles();
+  const { data: rolesPage, loading: rolesLoading, error: rolesError } = useRoles();
+  const roles = rolesPage?.items;
   const { data: permissions, loading: permsLoading, error: permsError } = usePermissions();
 
   const [selectedRoleId, setSelectedRoleId] = useState<string>('');

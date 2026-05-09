@@ -4,6 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.kaori.spa.auth.domain.Role;
@@ -45,14 +48,25 @@ public class RoleController {
 
     public record PermissionMatrixReq(@NotNull List<String> permissionCodes) {}
 
+    public record PagedResult<T>(List<T> items, long total, int page, int size) {}
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER')")
-    // TODO(round-8): paginate if a tenant ever defines >100 custom roles.
-    // Today every tenant has <30 roles (system + a few custom) so this is safe.
-    public ApiResponse<List<RoleDto>> list(@RequestParam(required = false) String scope) {
+    public ApiResponse<PagedResult<RoleDto>> list(
+            @RequestParam(required = false) String scope,
+            @RequestParam(required = false) String q,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size
+    ) {
         UUID tenantId = TenantContext.requireTenantId();
-        List<Role> roles = roleService.list(tenantId, scope);
-        return ApiResponse.ok(roles.stream().map(this::toDto).toList());
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        Page<Role> result = roleService.listPaged(
+                tenantId, scope, q,
+                PageRequest.of(safePage, safeSize, Sort.by("createdAt").descending())
+        );
+        List<RoleDto> items = result.getContent().stream().map(this::toDto).toList();
+        return ApiResponse.ok(new PagedResult<>(items, result.getTotalElements(), safePage, safeSize));
     }
 
     @PostMapping

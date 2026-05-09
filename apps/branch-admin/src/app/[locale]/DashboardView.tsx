@@ -17,7 +17,8 @@ export default function DashboardView({ locale }: { locale: string }) {
   const today = new Date();
   const { data: daily, loading: dailyLoading } = useDailyRevenue(today.getFullYear(), today.getMonth() + 1);
   const { data: top, loading: topLoading } = useTopServices('month', 4);
-  const { data: staff } = useStaff();
+  const { data: staffPage } = useStaff();
+  const staff = staffPage?.items;
   const { data: attendance } = useAttendance();
 
   // Derive KPIs.

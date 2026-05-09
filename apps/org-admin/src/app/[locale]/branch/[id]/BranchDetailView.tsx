@@ -59,7 +59,7 @@ export default function BranchDetailView({ branchId }: { branchId: string }) {
   if (error) {
     return <div className="py-20 text-center text-sm text-rose-600">{error.message}</div>;
   }
-  const branch = (data ?? []).find(b => b.id === branchId);
+  const branch = (data?.items ?? []).find(b => b.id === branchId);
   if (!branch) {
     return (
       <div className="py-20 text-center text-sm text-brand-textmuted">

@@ -1,5 +1,7 @@
 package vn.kaori.spa.auth.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +28,22 @@ public interface UserRoleRepository extends JpaRepository<UserRole, UserRole.Id>
     List<UserRole> search(@Param("userId") UUID userId,
                           @Param("orgId") UUID orgId,
                           @Param("branchId") UUID branchId);
+
+    /**
+     * Paged variant of {@link #search}. Returns assignments matching all
+     * non-null filters. Sorting is the responsibility of the caller via
+     * {@link Pageable}.
+     */
+    @Query("""
+        SELECT ur FROM UserRole ur
+        WHERE (:userId   IS NULL OR ur.userId = :userId)
+          AND (:orgId    IS NULL OR ur.scopeOrgId = :orgId)
+          AND (:branchId IS NULL OR ur.scopeBranchId = :branchId)
+    """)
+    Page<UserRole> searchPaged(@Param("userId") UUID userId,
+                               @Param("orgId") UUID orgId,
+                               @Param("branchId") UUID branchId,
+                               Pageable pageable);
 
     @Modifying
     @Transactional

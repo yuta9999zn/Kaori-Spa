@@ -24,9 +24,10 @@ function pickName(name: Record<string, string>) {
 export default function BranchList() {
   const t = useTranslations('branch');
   const { data, error, loading } = useBranches();
+  const items = data?.items ?? [];
 
-  const rows = data && data.length > 0
-    ? data.map(b => ({
+  const rows = items.length > 0
+    ? items.map(b => ({
         code: b.code,
         name: pickName(b.name) || b.code,
         address: pickName(b.address),

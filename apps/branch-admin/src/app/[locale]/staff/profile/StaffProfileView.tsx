@@ -45,7 +45,7 @@ export default function StaffProfileView() {
   if (error) {
     return <div className="py-20 text-center text-sm text-rose-600">{error.message}</div>;
   }
-  const staff: StaffDto | undefined = data?.[0];
+  const staff: StaffDto | undefined = data?.items?.[0];
   if (!staff) {
     return (
       <div className="py-20 text-center text-sm text-brand-textmuted">

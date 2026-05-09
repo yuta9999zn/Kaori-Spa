@@ -10,6 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import vn.kaori.spa.shared.logging.MdcFilter;
 import vn.kaori.spa.shared.security.TenantContext;
 
 import java.io.IOException;
@@ -47,6 +48,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 TenantContext.set(new TenantContext.Principal(
                         tenantId, orgId, branchId, userId, locale, roles, perms
                 ));
+                // Surface tenant / user IDs into the SLF4J MDC so every log
+                // line emitted while handling this request is tagged with them.
+                MdcFilter.stampPrincipal();
 
                 var authorities = roles.stream()
                         .map(r -> new SimpleGrantedAuthority("ROLE_" + r))

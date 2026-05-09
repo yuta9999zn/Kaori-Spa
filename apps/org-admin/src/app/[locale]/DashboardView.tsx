@@ -28,8 +28,8 @@ export default function DashboardView() {
 
   const loading = branchesQ.loading && reportQ.loading && leaderQ.loading;
 
-  const branchCount = branchesQ.data?.length ?? 2;
-  const branches = branchesQ.data ?? [];
+  const branchCount = branchesQ.data?.total ?? 2;
+  const branches = branchesQ.data?.items ?? [];
 
   const totalRevenue = (reportQ.data?.byBranch ?? []).reduce(
     (s, r) => s + Number(r.revenue || 0), 0

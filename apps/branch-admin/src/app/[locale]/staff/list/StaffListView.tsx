@@ -26,7 +26,7 @@ export default function StaffListView() {
   const [status, setStatus] = useState<'' | StatusKey>('');
 
   const rows = useMemo(() => {
-    const all = data ?? [];
+    const all = data?.items ?? [];
     return all.filter(s => {
       // TODO(Phase B): backend `StaffDto.active` is bool; on_leave is not a real
       // status yet — treat any inactive as "inactive" only.
@@ -123,7 +123,7 @@ export default function StaffListView() {
           {t('paginationSummary', {
             from: rows.length === 0 ? 0 : 1,
             to: rows.length,
-            total: data?.length ?? 0
+            total: data?.total ?? 0
           })}
         </div>
       </div>

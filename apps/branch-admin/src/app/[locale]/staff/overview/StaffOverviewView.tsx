@@ -38,7 +38,7 @@ export default function StaffOverviewView() {
   const { data: staff, loading: loadingStaff, error: errorStaff } = useStaff();
   const { data: attendance, loading: loadingAtt, error: errorAtt } = useAttendance(today);
 
-  const staffList: StaffDto[] = staff ?? [];
+  const staffList: StaffDto[] = staff?.items ?? [];
   const attendanceRows: AttendanceRow[] = attendance ?? [];
   const loading = loadingStaff || loadingAtt;
   const error = errorStaff || errorAtt;

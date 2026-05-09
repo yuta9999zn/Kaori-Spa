@@ -53,9 +53,28 @@ export interface CreateOrgInput {
   primaryLocale?: string;
 }
 
-/** GET /v1/orgs — list all organizations under the current tenant. */
-export function useOrgs() {
-  return useFetch<OrgDto[]>(() => api<OrgDto[]>('/v1/orgs'));
+/** Generic paged-result envelope used by the tenant-admin BE endpoints. */
+export interface PagedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export interface UseOrgsArgs {
+  q?: string;
+  page?: number;
+  size?: number;
+}
+
+/** GET /v1/orgs — paged list of organizations under the current tenant. */
+export function useOrgs(args: UseOrgsArgs = {}) {
+  const { q, page = 0, size = 50 } = args;
+  return useFetch<PagedResult<OrgDto>>(() => {
+    const params = new URLSearchParams({ page: String(page), size: String(size) });
+    if (q && q.trim().length > 0) params.set('q', q.trim());
+    return api<PagedResult<OrgDto>>(`/v1/orgs?${params}`);
+  }, [q ?? '', page, size]);
 }
 
 export function createOrg(input: CreateOrgInput) {
@@ -127,8 +146,10 @@ export interface TenantOverview {
 
 export function useTenantOverview() {
   return useFetch<TenantOverview>(async () => {
-    const orgs = await api<OrgDto[]>('/v1/orgs');
-    return { orgCount: orgs.length, orgs };
+    // Pull a generous first page; tenant-admin overview shows a small "recent
+    // orgs" preview, so the first 50 are plenty. Total comes from the envelope.
+    const paged = await api<PagedResult<OrgDto>>('/v1/orgs?page=0&size=50');
+    return { orgCount: paged.total, orgs: paged.items };
   });
 }
 

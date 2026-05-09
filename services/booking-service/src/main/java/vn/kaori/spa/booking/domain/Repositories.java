@@ -32,6 +32,27 @@ public final class Repositories {
     public interface StaffRepository extends JpaRepository<Staff, UUID> {
         List<Staff> findAllByTenantIdAndBranchIdAndActiveTrue(UUID tenantId, UUID branchId);
         Optional<Staff> findByBranchIdAndCode(UUID branchId, String code);
+
+        /**
+         * Paged staff search for branch-admin /v1/staff. Only active rows are
+         * returned (matches the legacy unpaged query). {@code q} is a
+         * case-insensitive LIKE against {@code code}, {@code fullName} or
+         * {@code nickname}.
+         */
+        @Query("""
+            SELECT s FROM Staff s
+            WHERE s.tenantId = :tenantId
+              AND s.branchId = :branchId
+              AND s.active = true
+              AND (:q IS NULL
+                   OR LOWER(s.code) LIKE LOWER(CONCAT('%', :q, '%'))
+                   OR LOWER(s.fullName) LIKE LOWER(CONCAT('%', :q, '%'))
+                   OR LOWER(COALESCE(s.nickname, '')) LIKE LOWER(CONCAT('%', :q, '%')))
+        """)
+        Page<Staff> findPaged(@Param("tenantId") UUID tenantId,
+                              @Param("branchId") UUID branchId,
+                              @Param("q") String q,
+                              Pageable pageable);
     }
 
     public interface StaffShiftRepository extends JpaRepository<StaffShift, UUID> {

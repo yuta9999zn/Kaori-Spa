@@ -78,7 +78,7 @@ export default function ContentList() {
   const rows = data?.items ?? [];
   const total = data?.total ?? 0;
   const lastPage = total > 0 ? Math.ceil(total / PAGE_SIZE) - 1 : 0;
-  const branchById = new Map((branches ?? []).map(b => [b.id, b]));
+  const branchById = new Map((branches?.items ?? []).map(b => [b.id, b]));
 
   const safeTypeLabel = (typ: string): string => {
     if ((TYPE_OPTIONS as readonly string[]).includes(typ)) {
@@ -125,7 +125,7 @@ export default function ContentList() {
               className="bg-transparent text-brand-textmain outline-none"
             >
               <option value="">{locale === 'vi' ? 'Tất cả chi nhánh' : 'All branches'}</option>
-              {(branches ?? []).map(b => (
+              {(branches?.items ?? []).map(b => (
                 <option key={b.id} value={b.id}>
                   {b.code} · {b.name[locale] ?? b.name.vi ?? b.name.en ?? b.code}
                 </option>

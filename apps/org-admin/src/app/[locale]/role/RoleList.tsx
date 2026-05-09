@@ -7,7 +7,7 @@ import { useRoles } from '@/lib/hooks';
 export default function RoleList() {
   const t = useTranslations('role');
   const { data, loading, error } = useRoles();
-  const rows = data ?? [];
+  const rows = data?.items ?? [];
 
   return (
     <>

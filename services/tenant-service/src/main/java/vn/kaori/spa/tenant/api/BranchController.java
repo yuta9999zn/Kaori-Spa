@@ -3,6 +3,9 @@ package vn.kaori.spa.tenant.api;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +42,26 @@ public class BranchController {
             String directionsUrl
     ) {}
 
+    public record PagedResult<T>(List<T> items, long total, int page, int size) {}
+
     @GetMapping
     @PreAuthorize("hasRole('ORG_OWNER') or hasRole('TENANT_OWNER') or hasRole('BRANCH_MANAGER')")
-    // TODO(round-8): paginate. Returns all branches for an org — typical N is
-    // small (<100) but unbounded in principle. Switch to PagedResult when the
-    // tenant-admin /branches table consumes it.
-    public ApiResponse<List<BranchDto>> list(@PathVariable UUID orgId) {
+    public ApiResponse<PagedResult<BranchDto>> list(
+            @PathVariable UUID orgId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(required = false) String q
+    ) {
         UUID tid = TenantContext.requireTenantId();
-        return ApiResponse.ok(repo.findAllByTenantIdAndOrgId(tid, orgId).stream().map(this::toDto).toList());
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        String trimmedQ = (q == null || q.isBlank()) ? null : q.trim();
+        Page<Branch> result = repo.findPaged(
+                tid, orgId, trimmedQ,
+                PageRequest.of(safePage, safeSize, Sort.by("createdAt").descending())
+        );
+        List<BranchDto> items = result.getContent().stream().map(this::toDto).toList();
+        return ApiResponse.ok(new PagedResult<>(items, result.getTotalElements(), safePage, safeSize));
     }
 
     @PostMapping

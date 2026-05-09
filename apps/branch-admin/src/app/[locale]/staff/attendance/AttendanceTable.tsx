@@ -39,7 +39,8 @@ export default function AttendanceTable() {
   const t = useTranslations('attendance');
   const today = new Date().toISOString().slice(0, 10);
   const { data, error, refetch, loading } = useAttendance(today);
-  const { data: staffList } = useStaff();
+  const { data: staffPage } = useStaff();
+  const staffList = staffPage?.items;
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [selectedStaff, setSelectedStaff] = useState<string>('');
 

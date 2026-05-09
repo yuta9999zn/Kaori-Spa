@@ -20,3 +20,11 @@ management:
     web:
       exposure:
         include: health,info,metrics,prometheus
+
+logging:
+  level:
+    root: INFO
+    vn.kaori.spa: DEBUG
+  pattern:
+    # MDC fields (tenantId, userId, traceId, requestId) populated by MdcFilter + JwtAuthFilter.
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} [tenantId=%X{tenantId:-} userId=%X{userId:-} traceId=%X{traceId:-} reqId=%X{requestId:-} %X{method:-} %X{path:-}] - %msg%n'

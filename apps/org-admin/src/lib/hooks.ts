@@ -50,11 +50,27 @@ export interface BranchDto {
   active: boolean;
 }
 
-export function useBranches(orgId: string = ORG_ID) {
-  return useFetch<BranchDto[]>(
-    () => api<BranchDto[]>(`/v1/orgs/${orgId}/branches`),
-    [orgId]
-  );
+/** Generic paged-result envelope used by the org-admin BE endpoints. */
+export interface PagedResult<T> {
+  items: T[];
+  total: number;
+  page: number;
+  size: number;
+}
+
+export interface UseBranchesArgs {
+  q?: string;
+  page?: number;
+  size?: number;
+}
+
+export function useBranches(orgId: string = ORG_ID, args: UseBranchesArgs = {}) {
+  const { q, page = 0, size = 20 } = args;
+  return useFetch<PagedResult<BranchDto>>(() => {
+    const params = new URLSearchParams({ page: String(page), size: String(size) });
+    if (q && q.trim().length > 0) params.set('q', q.trim());
+    return api<PagedResult<BranchDto>>(`/v1/orgs/${orgId}/branches?${params}`);
+  }, [orgId, q ?? '', page, size]);
 }
 
 // ─── Vouchers ────────────────────────────────────────────────────────────────
@@ -298,11 +314,25 @@ export interface UpdateRoleInput {
   permissionCodes?: string[];
 }
 
-export function useRoles(scope?: RoleScope) {
-  return useFetch<RoleDto[]>(
-    () => api<RoleDto[]>(scope ? `/v1/roles?scope=${scope}` : '/v1/roles'),
-    [scope ?? '']
-  );
+export interface UseRolesArgs {
+  scope?: RoleScope;
+  q?: string;
+  page?: number;
+  size?: number;
+}
+
+export function useRoles(scope?: RoleScope | UseRolesArgs) {
+  // Accept either a bare scope string (legacy callers) or a full args bag.
+  const args: UseRolesArgs = typeof scope === 'string' || scope === undefined
+    ? { scope }
+    : scope;
+  const { scope: scopeFilter, q, page = 0, size = 50 } = args;
+  return useFetch<PagedResult<RoleDto>>(() => {
+    const params = new URLSearchParams({ page: String(page), size: String(size) });
+    if (scopeFilter) params.set('scope', scopeFilter);
+    if (q && q.trim().length > 0) params.set('q', q.trim());
+    return api<PagedResult<RoleDto>>(`/v1/roles?${params}`);
+  }, [scopeFilter ?? '', q ?? '', page, size]);
 }
 
 export function createRole(input: CreateRoleInput) {
@@ -388,17 +418,19 @@ export interface UserRoleFilter {
   userId?: string;
   orgId?: string;
   branchId?: string;
+  page?: number;
+  size?: number;
 }
 
 export function useUserRoles(filter: UserRoleFilter = {}) {
-  return useFetch<UserRoleDto[]>(() => {
-    const qs = new URLSearchParams();
-    if (filter.userId) qs.set('userId', filter.userId);
-    if (filter.orgId) qs.set('orgId', filter.orgId);
-    if (filter.branchId) qs.set('branchId', filter.branchId);
-    const suffix = qs.toString();
-    return api<UserRoleDto[]>(`/v1/user-roles${suffix ? `?${suffix}` : ''}`);
-  }, [filter.userId ?? '', filter.orgId ?? '', filter.branchId ?? '']);
+  const { userId, orgId, branchId, page = 0, size = 50 } = filter;
+  return useFetch<PagedResult<UserRoleDto>>(() => {
+    const qs = new URLSearchParams({ page: String(page), size: String(size) });
+    if (userId) qs.set('userId', userId);
+    if (orgId) qs.set('orgId', orgId);
+    if (branchId) qs.set('branchId', branchId);
+    return api<PagedResult<UserRoleDto>>(`/v1/user-roles?${qs}`);
+  }, [userId ?? '', orgId ?? '', branchId ?? '', page, size]);
 }
 
 export interface AssignRoleInput {

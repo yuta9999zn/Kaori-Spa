@@ -4,6 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,13 +39,26 @@ public class StaffController {
 
     public record SkillReq(@NotBlank String serviceCode, int skillLevel) {}
 
+    public record PagedResult<T>(List<T> items, long total, int page, int size) {}
+
     @GetMapping
     @PreAuthorize("hasAnyRole('BRANCH_MANAGER','ORG_OWNER','TENANT_OWNER','RECEPTIONIST')")
-    // TODO(round-8): paginate if any branch ever exceeds ~200 active staff.
-    // Today every branch caps out at <50 active therapists so this is safe.
-    public ApiResponse<List<StaffDto>> list(@RequestParam UUID tenantId, @RequestParam UUID branchId) {
-        return ApiResponse.ok(staffRepo.findAllByTenantIdAndBranchIdAndActiveTrue(tenantId, branchId)
-                .stream().map(this::toDto).toList());
+    public ApiResponse<PagedResult<StaffDto>> list(
+            @RequestParam UUID tenantId,
+            @RequestParam UUID branchId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(required = false) String q
+    ) {
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        String trimmedQ = (q == null || q.isBlank()) ? null : q.trim();
+        Page<Staff> result = staffRepo.findPaged(
+                tenantId, branchId, trimmedQ,
+                PageRequest.of(safePage, safeSize, Sort.by("createdAt").descending())
+        );
+        List<StaffDto> items = result.getContent().stream().map(this::toDto).toList();
+        return ApiResponse.ok(new PagedResult<>(items, result.getTotalElements(), safePage, safeSize));
     }
 
     @PostMapping

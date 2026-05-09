@@ -17,7 +17,8 @@ export default function ReportBranchView() {
 
   const { data: daily, loading: loadingDaily, error: errorDaily } = useDailyRevenue(year, month);
   const { data: topServices, loading: loadingTop } = useTopServices('month', 5);
-  const { data: staff, loading: loadingStaff } = useStaff();
+  const { data: staffPage, loading: loadingStaff } = useStaff();
+  const staff = staffPage?.items;
 
   const loading = loadingDaily || loadingTop || loadingStaff;
 

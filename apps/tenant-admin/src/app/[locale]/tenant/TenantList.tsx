@@ -25,7 +25,7 @@ const CREATED_AT_PLACEHOLDER = '—';
 
 export default function TenantList({ labels: t }: { labels: Labels }) {
   const { data, loading, error } = useOrgs();
-  const rows: OrgDto[] = data ?? [];
+  const rows: OrgDto[] = data?.items ?? [];
 
   return (
     <>

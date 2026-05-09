@@ -14,7 +14,7 @@ export default function RoleAssignView() {
   const [busy, setBusy] = useState<string | null>(null);
   const [revokeError, setRevokeError] = useState<string | null>(null);
 
-  const rows = data ?? [];
+  const rows = data?.items ?? [];
 
   const distinctRoles = useMemo(
     () => Array.from(new Set(rows.map(r => r.roleCode))).sort(),

@@ -3,6 +3,9 @@ package vn.kaori.spa.tenant.api;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -46,14 +49,25 @@ public class OrgController {
             String slug
     ) {}
 
+    public record PagedResult<T>(List<T> items, long total, int page, int size) {}
+
     @GetMapping
     @PreAuthorize("hasRole('TENANT_OWNER') or hasRole('SUPER_ADMIN')")
-    // TODO(round-8): paginate. Currently returns the full list of orgs for the
-    // tenant; safe at small N (typical tenant has <50 orgs) but unbounded in
-    // theory. Switch to PagedResult<OrgDto> when the FE switcher consumes it.
-    public ApiResponse<List<OrgDto>> list() {
+    public ApiResponse<PagedResult<OrgDto>> list(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(required = false) String q
+    ) {
         UUID tid = TenantContext.requireTenantId();
-        return ApiResponse.ok(repo.findAllByTenantId(tid).stream().map(this::toDto).toList());
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        String trimmedQ = (q == null || q.isBlank()) ? null : q.trim();
+        Page<Organization> result = repo.findPaged(
+                tid, trimmedQ,
+                PageRequest.of(safePage, safeSize, Sort.by("createdAt").descending())
+        );
+        List<OrgDto> items = result.getContent().stream().map(this::toDto).toList();
+        return ApiResponse.ok(new PagedResult<>(items, result.getTotalElements(), safePage, safeSize));
     }
 
     @GetMapping("/{code}")

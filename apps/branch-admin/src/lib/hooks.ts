@@ -387,11 +387,24 @@ export interface StaffDto {
   roleInBranch: string; active: boolean;
 }
 
-export function useStaff() {
-  return useFetch<StaffDto[]>(() => {
-    const params = new URLSearchParams({ tenantId: ctx.tenantId, branchId: ctx.branchId });
-    return api<StaffDto[]>(`/v1/staff?${params}`);
-  });
+export interface UseStaffArgs {
+  q?: string;
+  page?: number;
+  size?: number;
+}
+
+export function useStaff(args: UseStaffArgs = {}) {
+  const { q, page = 0, size = 50 } = args;
+  return useFetch<PagedResult<StaffDto>>(() => {
+    const params = new URLSearchParams({
+      tenantId: ctx.tenantId,
+      branchId: ctx.branchId,
+      page: String(page),
+      size: String(size)
+    });
+    if (q && q.trim().length > 0) params.set('q', q.trim());
+    return api<PagedResult<StaffDto>>(`/v1/staff?${params}`);
+  }, [q ?? '', page, size]);
 }
 
 // ─── Reports ───────────────────────────────────────────────────────────────

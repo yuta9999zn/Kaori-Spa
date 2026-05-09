@@ -4,6 +4,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -57,18 +60,29 @@ public class UserRoleController {
             UUID scopeBranchId
     ) {}
 
+    public record PagedResult<T>(List<T> items, long total, int page, int size) {}
+
     @GetMapping
     @PreAuthorize("hasAnyRole('ORG_OWNER','TENANT_OWNER')")
-    // TODO(round-8): paginate. Filtered by (userId, orgId, branchId) so result
-    // sets are usually small, but a tenant-wide call (no filters) could grow
-    // unbounded. Switch to PagedResult once the FE consumes it.
-    public ApiResponse<List<UserRoleDto>> list(@RequestParam(required = false) UUID userId,
-                                                @RequestParam(required = false) UUID orgId,
-                                                @RequestParam(required = false) UUID branchId) {
+    public ApiResponse<PagedResult<UserRoleDto>> list(
+            @RequestParam(required = false) UUID userId,
+            @RequestParam(required = false) UUID orgId,
+            @RequestParam(required = false) UUID branchId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size
+    ) {
         UUID tenantId = TenantContext.requireTenantId();
-        List<UserRole> assignments = userRoleRepo.search(userId, orgId, branchId);
-        if (assignments.isEmpty()) return ApiResponse.ok(List.of());
-        return ApiResponse.ok(toDtos(assignments, tenantId));
+        int safePage = Math.max(page, 0);
+        int safeSize = Math.min(Math.max(size, 1), 100);
+        Page<UserRole> result = userRoleRepo.searchPaged(
+                userId, orgId, branchId,
+                PageRequest.of(safePage, safeSize, Sort.by("grantedAt").descending())
+        );
+        if (result.getContent().isEmpty()) {
+            return ApiResponse.ok(new PagedResult<>(List.of(), result.getTotalElements(), safePage, safeSize));
+        }
+        List<UserRoleDto> dtos = toDtos(result.getContent(), tenantId);
+        return ApiResponse.ok(new PagedResult<>(dtos, result.getTotalElements(), safePage, safeSize));
     }
 
     @PostMapping

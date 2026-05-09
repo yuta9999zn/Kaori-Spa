@@ -3,6 +3,8 @@ package vn.kaori.spa.auth.rbac;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +46,12 @@ public class RoleService {
             return roleRepo.findAllByTenantIdAndScope(tenantId, scopeFilter);
         }
         return roleRepo.findAllByTenantId(tenantId);
+    }
+
+    public Page<Role> listPaged(UUID tenantId, String scopeFilter, String q, Pageable pageable) {
+        String scope = (scopeFilter == null || scopeFilter.isBlank()) ? null : scopeFilter;
+        String trimmedQ = (q == null || q.isBlank()) ? null : q.trim();
+        return roleRepo.findPaged(tenantId, scope, trimmedQ, pageable);
     }
 
     public Role get(UUID id, UUID tenantId) {

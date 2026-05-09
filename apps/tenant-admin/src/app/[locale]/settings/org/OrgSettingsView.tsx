@@ -7,6 +7,7 @@ import { useOrgs, type OrgDto } from '@/lib/hooks';
 export default function OrgSettingsView() {
   const t = useTranslations('orgSettings');
   const { data, error, loading } = useOrgs();
+  const items: OrgDto[] = data?.items ?? [];
 
   return (
     <>
@@ -40,11 +41,11 @@ export default function OrgSettingsView() {
           <div className="p-8 text-center">
             <Loader2 className="mx-auto h-5 w-5 animate-spin text-brand-textmuted" />
           </div>
-        ) : (data?.length ?? 0) === 0 ? (
+        ) : items.length === 0 ? (
           <p className="p-8 text-sm text-brand-textmuted text-center">{t('list.empty')}</p>
         ) : (
           <ul className="divide-y divide-brand-cream/60">
-            {data!.map(o => <OrgRow key={o.id} org={o} />)}
+            {items.map(o => <OrgRow key={o.id} org={o} />)}
           </ul>
         )}
       </section>

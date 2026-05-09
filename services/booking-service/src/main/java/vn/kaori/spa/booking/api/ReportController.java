@@ -43,25 +43,27 @@ public class ReportController {
             @RequestParam LocalDate from,
             @RequestParam LocalDate to
     ) {
+        // Read from the daily-revenue MV (refreshed hourly by MvRefreshScheduler).
+        // Pre-aggregated to one row per (tenant, branch, day) — much cheaper
+        // than scanning the raw bookings ⨝ booking_items join. Trade-off: data
+        // may be up to ~1 hour stale; "today" can miss the most recent hour
+        // of activity. Acceptable for revenue dashboards.
         var q = em.createNativeQuery("""
-            SELECT (i.start_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date AS day,
-                   COALESCE(SUM(i.price), 0)                          AS revenue,
-                   COUNT(DISTINCT i.booking_id)                       AS bookings
-            FROM booking.booking_items i
-            JOIN booking.bookings b ON b.id = i.booking_id
-            WHERE b.tenant_id = :tenantId
-              AND (:branchId IS NULL OR b.branch_id = :branchId)
-              AND b.status IN ('done', 'in_progress', 'confirmed')
-              AND i.start_at >= :from
-              AND i.start_at <  :toExclusive
-              AND i.cancelled_at IS NULL
+            SELECT day,
+                   SUM(revenue)         AS revenue,
+                   SUM(bookings_count)  AS bookings
+            FROM booking.report_daily_revenue_mv
+            WHERE tenant_id = :tenantId
+              AND (:branchId IS NULL OR branch_id = :branchId)
+              AND day >= :from
+              AND day <= :to
             GROUP BY day
             ORDER BY day
             """)
             .setParameter("tenantId", tenantId)
             .setParameter("branchId", branchId)
-            .setParameter("from", from.atStartOfDay())
-            .setParameter("toExclusive", to.plusDays(1).atStartOfDay());
+            .setParameter("from", from)
+            .setParameter("to", to);
 
         List<Object[]> rows = q.getResultList();
         return ApiResponse.ok(rows.stream().map(r -> new DailyRevenue(
@@ -122,25 +124,30 @@ public class ReportController {
     ) {
         // Cap so a careless caller can't ask for the full service catalog.
         int safeLimit = Math.min(Math.max(limit, 1), 100);
+        // Read from the top-services MV (refreshed hourly). Buckets are
+        // monthly, so we filter by every month that OVERLAPS the requested
+        // [from, to] window — this is the standard granularity trade-off for
+        // a monthly rollup. For exact sub-month ranges callers should use
+        // the analytics-service / ClickHouse pipeline once available.
+        LocalDate fromMonth = from.withDayOfMonth(1);
+        LocalDate toMonth = to.withDayOfMonth(1);
         List<Object[]> rows = em.createNativeQuery("""
-            SELECT i.service_code,
-                   COUNT(*)                AS times,
-                   COALESCE(SUM(i.price),0) AS revenue
-            FROM booking.booking_items i
-            JOIN booking.bookings b ON b.id = i.booking_id
-            WHERE b.tenant_id = :tenantId
-              AND (:branchId IS NULL OR b.branch_id = :branchId)
-              AND b.status IN ('done', 'in_progress')
-              AND i.cancelled_at IS NULL
-              AND i.start_at >= :from AND i.start_at < :toExclusive
-            GROUP BY i.service_code
+            SELECT service_code,
+                   SUM(times)   AS times,
+                   SUM(revenue) AS revenue
+            FROM booking.report_top_services_mv
+            WHERE tenant_id = :tenantId
+              AND (:branchId IS NULL OR branch_id = :branchId)
+              AND month >= :fromMonth
+              AND month <= :toMonth
+            GROUP BY service_code
             ORDER BY revenue DESC
             LIMIT :lim
             """)
             .setParameter("tenantId", tenantId)
             .setParameter("branchId", branchId)
-            .setParameter("from", from.atStartOfDay())
-            .setParameter("toExclusive", to.plusDays(1).atStartOfDay())
+            .setParameter("fromMonth", fromMonth)
+            .setParameter("toMonth", toMonth)
             .setParameter("lim", safeLimit)
             .getResultList();
 
